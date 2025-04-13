@@ -1,0 +1,40 @@
+# === Python / Django ===
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+*.pot
+*.pyc
+db.sqlite3
+.env
+
+# Django migrations
+**/migrations/
+!**/migrations/__init__.py
+
+# === Node / React ===
+node_modules/
+dist/
+build/
+.vite/
+.env.local
+.env.*.local
+
+# === VS Code ===
+.vscode/
+
+# === macOS ===
+.DS_Store
+
+# === Coverage / Testing ===
+coverage/
+htmlcov/
+*.cover
+*.py,cover
+
+# === Docker (Optional) ===
+*.pid
+*.tar
+docker-compose.override.yml
+.env.docker
