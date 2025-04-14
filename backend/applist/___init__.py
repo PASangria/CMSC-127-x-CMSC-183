@@ -1,1 +1,0 @@
-# applist/__init__.py
