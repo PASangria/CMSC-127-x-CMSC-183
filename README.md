@@ -65,7 +65,7 @@ Docker setup is currently under development. For now, please use virtual environ
 osa/
 ├── backend/
 │   ├── OSA/          # Django project root
-│   ├── applist/      # Your Django apps
+│   ├── users/        # app directory for registering and logging in users
 │   └── manage.py
 │   └── requirements.txt
 ├── frontend/
