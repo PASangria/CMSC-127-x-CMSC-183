@@ -70,20 +70,8 @@ const LoginModal = () => {
           />
         </div>
 
-        <div>
-          <label>
-            <input type="checkbox" /> Remember me
-          </label>
-        </div>
-
         <button type="submit">Log In</button>
       </form>
-
-      <div>
-        <Link to="/forgot-password">Forgot password?</Link>
-        <br />
-        <Link to="/signup">Don't have an account? Sign Up</Link>
-      </div>
     </div>
   );
 };
