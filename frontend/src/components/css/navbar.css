@@ -1,0 +1,96 @@
+/* Navbar container */
+.nav {
+    position: sticky; /* Keep it fixed at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it stays above other content */
+    padding: 40px 20px;
+    display: flex;
+    justify-content: space-between; /* Space out the logo and navigation */
+    align-items: center;
+    box-sizing: border-box;
+    height: 60px;
+    background-color: #7B1113;
+    color: #FFFFFF;
+}
+
+/* Logo section */
+.headerLogo {
+    display: flex;
+    align-items: center;
+    margin-left: 2%;
+}
+
+.headerPhoto img {
+    height: 45px; /* Adjust logo size */
+    margin-right: 10px; /* Space between logo and name */
+}
+
+.headerLogoName {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.headerLogoName .nameUp{
+    font-size: 12px;
+    margin: 0;
+    font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.headerLogoName .nameDown{
+    font-size: 26px;
+    margin: 0;
+    font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.navigation {
+    padding-right: 30px;
+}
+
+/* Navigation section */
+.navigation ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px; 
+}
+
+.navigation a,
+.navigation button {
+    text-decoration: none;
+    color: #FFF;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navigation button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .navigation ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navigation li {
+        margin-bottom: 10px;
+    }
+}

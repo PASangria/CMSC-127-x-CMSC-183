@@ -1,77 +1,76 @@
-import React, { useEffect, useState } from 'react';
+// components/LoginModal.jsx
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { getCookie } from "../api/getCookie";
+import { X } from "react-feather";
+import FormField from './FormField';
+import ErrorMessage from './ErrorMessage';
+import { useLogin } from '../hooks/useLogin';
+import './css/loginModal.css';
+import SubmitButton from './SubmitButton';
 
-const LoginModal = () => {
+const LoginModal = ({ toggleModal }) => {
   const navigate = useNavigate();
+  const { login, error, loading } = useLogin();
 
-  const [csrfToken, setCsrfToken] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetch("http://localhost:8000/api/users/csrf/", {
-      credentials: "include",
-    });
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    fetch('http://localhost:8000/api/users/login/', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCookie("csrftoken"), 
-      },
-      credentials: 'include',
-      body: JSON.stringify({ username, password })
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Login failed');
-        }
-        return response.json();
-      })
-      .then(() => {
-        navigate('/user');
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Username or password is incorrect.');
-      });
+    const result = await login(username, password);
+    if (result) {
+      navigate('/user');
+    }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
+    <div className="modal-overlay">
+      <div className="login-modal relative">
+        {/* Close Button */}
+        <div className="absolute top-2 right-2 z-10">
+          <button
+            onClick={toggleModal}
+            className="p-1 rounded-full text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-600 transition duration-150 close-button"
+            aria-label="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        
+        <h2 className="login-header">Login</h2>
+        
+        {/* Login Form */}
+        <form onSubmit={handleSubmit}>
+          {error && <ErrorMessage message={error} />}
+          <FormField
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
-            autoFocus
+            placeholder="Username"
+            name="username"
+            required={true}
           />
-        </div>
-
-        <div>
-          <label>Password:</label>
-          <input
+          <FormField
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            placeholder="Password"
+            name="password"
+            required={true}
           />
-        </div>
 
-        <button type="submit">Log In</button>
-      </form>
+          <SubmitButton
+            loading={loading}
+            text="Log In"
+            loadingText="Logging in..."
+          />
+
+          <div className="extra-links">
+            <Link to="#">Forgot password?</Link>
+            <a href="/signup">{"Don't have an account? Sign Up"}</a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

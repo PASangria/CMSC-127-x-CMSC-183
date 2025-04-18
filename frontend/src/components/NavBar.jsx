@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/upmin-logo.svg'; 
 import LoginModal from './LoginModal'; 
+import './css/navbar.css'; 
 
 export default function Navbar() {
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -12,30 +15,30 @@ export default function Navbar() {
             <nav className="nav">
                 <div className="headerLogo">
                     <div className="headerPhoto">
-                        {/* Logo here */}
+                        <img src={logo} alt="UP Min Logo" />
                     </div>
                     <div className="headerLogoName">
-                        <div className="nameUp">
-                            <h2>University of the Philippines</h2>
-                        </div>
-                        <div className="nameDown">
-                            <h1>MINDANAO</h1>
-                        </div>
+                        <h2  className="nameUp">University of the Philippines</h2>
+                        <h1 className="nameDown">MINDANAO</h1>
+                    </div>
                     </div>
                     <div className="navigation">
                         <ul>
-                            <li><a href="/">HOME</a></li>
-                            <li><a href="/FAQ">FAQ</a></li>
-                            <li><a href="/forms">FORMS</a></li>
+                            <li> 
+                                <Link to="/">HOME</Link>
+                            </li>
+                            <li>
+                                <Link to="/faq">FAQ</Link>
+                            </li>
+                            <li><Link to="/forms">FORMS</Link></li>
                             <li><button onClick={openLoginModal} className="link-button">LOGIN</button></li>
-                            <li><a href="/signup">SIGNUP</a></li>
+                            <li><Link to="/signup">SIGNUP</Link></li>
                         </ul>
                     </div>
-                </div>
             </nav>
 
             {/* Modal rendered conditionally */}
-            {showLoginModal && <LoginModal onClose={closeLoginModal} />}
+            {showLoginModal && <LoginModal toggleModal={closeLoginModal} />}
         </>
     );
 }
