@@ -1,11 +1,18 @@
+import json
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
-
-from .serializers import RegisterSerializer, LoginSerializer
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
+from django.views.decorators.http import require_POST
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.permissions import IsAuthenticated
+from django.views.decorators.csrf import ensure_csrf_cookie
+from .serializers import RegisterSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
+from rest_framework.authentication import SessionAuthentication
+
 
 User = get_user_model()
 
@@ -39,24 +46,39 @@ class VerifyEmailView(APIView):
             'message': 'Email already verified.'
         }, status=status.HTTP_200_OK)
 
+def get_csrf(request):
+    csrf_token = get_token(request)  # This gets the CSRF token
+    return JsonResponse({'csrfToken': csrf_token})
+
 class LoginView(APIView):
+    authentication_classes = [SessionAuthentication]
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            'user': RegisterSerializer(user).data
-        })
+        data = request.data
+        username = data.get("username")
+        password = data.get("password")
 
-class UserDetailView(generics.RetrieveAPIView):
-    serializer_class = RegisterSerializer
-    permission_classes = [permissions.IsAuthenticated]
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            return JsonResponse({"detail": "Invalid credentials"}, status=400)
 
-    def get_object(self):
-        return self.request.user
+        login(request, user)
+        return JsonResponse({"message": "Login successful"}, status=200)
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
+    
+class LogoutView(APIView):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        logout(request)  
+        return JsonResponse({'message': 'Logged out successfully'}, status=200)

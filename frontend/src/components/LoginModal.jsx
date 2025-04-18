@@ -1,94 +1,91 @@
-  import React, { useEffect, useState } from 'react';
-  import { getCSRFToken } from '../api/auth'; // Ensure you have this API call to get the CSRF token.
-  import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { getCookie } from "../api/getCookie";
 
-  const LoginModal = () => {
-    const [csrfToken, setCsrfToken] = useState('');
-    const [studentNumber, setStudentNumber] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+const LoginModal = () => {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      getCSRFToken().then(setCsrfToken).catch(console.error);
-    }, []);
+  const [csrfToken, setCsrfToken] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-    
-      // Validate the student number format manually before sending it
-      const studentNumberPattern = /^\d{4}-\d{5}$/;
-      if (!studentNumberPattern.test(studentNumber)) {
-        setError('Invalid student number format. Use the format 2024-32466');
-        return;
-      }
-    
-      if (!csrfToken) {
-        setError('CSRF token is missing. Please try again.');
-        return;
-      }
-    
-      try {
-        const res = await fetch('http://localhost:8000/api/users/login/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-          },
-          credentials: 'include',
-          body: JSON.stringify({ studentNumber, password }),
-        });
-    
-        if (res.ok) {
-          navigate('/user');
-        } else {
-          const errorData = await res.json();
-          setError(errorData.detail || 'Login failed');
+  useEffect(() => {
+    fetch("http://localhost:8000/api/users/csrf/", {
+      credentials: "include",
+    });
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    fetch('http://localhost:8000/api/users/login/', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"), 
+      },
+      credentials: 'include',
+      body: JSON.stringify({ username, password })
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Login failed');
         }
-      } catch (err) {
-        console.error('Login error:', err.message);
-        setError('An error occurred. Please try again.');
-      }
-    };    
-
-    return (
-      <div className="login-modal">
-        <h2>Login</h2>
-
-        <form onSubmit={handleSubmit} noValidate>
-          {/* Display error if present */}
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-
-          <div className="form-group">
-            <label htmlFor="studentNumber">Student Number:</label>
-            <input
-              type="text"
-              id="studentNumber"
-              name="studentNumber"
-              value={studentNumber}
-              onChange={(e) => setStudentNumber(e.target.value)}
-              required
-              pattern="^\d{4}-\d{5}$" // Optional HTML pattern validation
-              title="Please enter a valid student number in the format 2024-32466"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button type="submit">Log In</button>
-        </form>
-      </div>
-    );
+        return response.json();
+      })
+      .then(() => {
+        navigate('/user');
+      })
+      .catch((err) => {
+        console.error(err);
+        setError('Username or password is incorrect.');
+      });
   };
 
-  export default LoginModal;
+  return (
+    <div>
+      <h2>Login</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            autoFocus
+          />
+        </div>
+
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label>
+            <input type="checkbox" /> Remember me
+          </label>
+        </div>
+
+        <button type="submit">Log In</button>
+      </form>
+
+      <div>
+        <Link to="/forgot-password">Forgot password?</Link>
+        <br />
+        <Link to="/signup">Don't have an account? Sign Up</Link>
+      </div>
+    </div>
+  );
+};
+
+export default LoginModal;
