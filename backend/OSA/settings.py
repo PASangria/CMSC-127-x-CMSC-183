@@ -172,5 +172,14 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'celeszhaianna@gmail.com'  # Use a real Gmail address
+EMAIL_HOST_PASSWORD = 'cmgantrxrcfjnrms'  # NOT your Gmail password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 # Custom User Model Settings
 AUTH_USER_MODEL = 'users.User'

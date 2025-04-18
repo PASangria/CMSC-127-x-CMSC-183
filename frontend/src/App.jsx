@@ -1,7 +1,7 @@
 // src/App.js
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Import BrowserRouter as Router
-import UserList from '../components/UserList';
-import AddUser from '../components/AddUser'; // Import AddUser component
+import HomePage from '../';
+
 
 function App() {
   return (
@@ -9,8 +9,7 @@ function App() {
       <div className="App">
         <h1>Guidance Counselor System</h1>
         <Routes>
-          <Route path="/" element={<UserList />} />  {/* Home Page */}
-          <Route path="/add" element={<AddUser />} /> {/* Add User Page */}
+          <Route path="/" element={<HomePage />} />  {/* Home Page */}
         </Routes>
       </div>
     </Router>
