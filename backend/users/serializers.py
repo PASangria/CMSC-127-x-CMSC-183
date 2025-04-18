@@ -20,11 +20,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Create an inactive user
         user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            is_active=False  # User starts inactive
-        )
+        username=validated_data['username'],
+        email=validated_data['email'],
+        password=validated_data['password'],
+        is_active=False
+    )
         
         # Send verification email with backend URL since the frontend is not deployed yet
         verification_url = f"http://127.0.0.1:8000/api/users/verify/{user.verification_token}"
