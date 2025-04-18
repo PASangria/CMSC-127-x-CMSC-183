@@ -8,7 +8,7 @@ import { useLogin } from '../hooks/useLogin';
 import './css/loginModal.css';
 import SubmitButton from './SubmitButton';
 
-const LoginModal = ({ toggleModal }) => {
+const LoginModal = ({ toggleModal, role }) => {
   const navigate = useNavigate();
   const { login, error, loading } = useLogin();
 
@@ -17,11 +17,21 @@ const LoginModal = ({ toggleModal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await login(username, password);
+    
+    // You can pass the role to the login logic if needed
+    const result = await login(username, password, role); 
+    
     if (result) {
-      navigate('/user');
+      // Redirect based on role
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/user');
+      }
     }
   };
+
+  const roleLabel = role === 'admin' ? 'Admin' : 'Student';
 
   return (
     <div className="modal-overlay">
@@ -37,7 +47,7 @@ const LoginModal = ({ toggleModal }) => {
           </button>
         </div>
         
-        <h2 className="login-header">Login</h2>
+        <h2 className="login-header">Login as {roleLabel}</h2>
         
         {/* Login Form */}
         <form onSubmit={handleSubmit}>

@@ -67,3 +67,8 @@
     margin-bottom: 1rem;
   }
   
+  @media (max-width: 48rem) {
+    .login-modal{
+        width: 20em;
+    }
+  }
