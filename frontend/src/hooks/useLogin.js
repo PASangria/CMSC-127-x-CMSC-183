@@ -6,13 +6,12 @@ export const useLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Ensure CSRF is fetched before logging in
     fetch("http://localhost:8000/api/users/csrf/", {
       credentials: "include",
     });
   }, []);
 
-  const login = async (username, password) => {
+  const login = async (username, password, role) => {
     setLoading(true);
     setError('');
 
@@ -24,16 +23,23 @@ export const useLogin = () => {
           "X-CSRFToken": getCookie("csrftoken"),
         },
         credentials: 'include',
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, role }),
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Login failed');
       }
 
-      return await response.json(); // Optional: return user/token/etc.
+      const data = await response.json();
+
+      // 🔐 Save auth info to localStorage
+      localStorage.setItem("is_superuser", data.is_superuser);
+      localStorage.setItem("username", data.username);
+
+      return data;
     } catch (err) {
-      setError('Username or password is incorrect.');
+      setError(err.message || 'Username or password is incorrect.');
       console.error(err);
     } finally {
       setLoading(false);

@@ -31,19 +31,20 @@
 .headerLogoName {
     display: flex;
     flex-direction: column;
-    font-family: 'Times New Roman', Times, serif;
 }
 
 .headerLogoName .nameUp {
-    font-size: 0.75rem; /* 12px */
+    font-size: 0.77rem; /* 12px */
     margin: 0;
     font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .headerLogoName .nameDown {
     font-size: 1.625rem; /* 26px */
     margin: 0;
     font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .navigation {
