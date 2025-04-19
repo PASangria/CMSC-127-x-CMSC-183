@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import "./css/Modal.css";
 
-const SignUp = () => {
+const RegisterModal = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,43 +52,48 @@ const SignUp = () => {
 };
 
   return (
-    <div className="form-container">
-      <h2>Create an Account</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          required
-        />
-        <br />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <br />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
+    <div className="modal-container">
+      <div className="modal-content">
+        <h2>Create an Account</h2>
+        <form onSubmit={handleSubmit} className="modal-form">
+          <div className="form-group">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit" className="submit-button">Sign Up</button>
+        </form>
 
-      {message && (
-        <div className={`message ${isError ? "error" : "success"}`}>
-          {message}
-        </div>
-      )}
+        {message && (
+          <div className={`message ${isError ? "error" : "success"}`}>
+            {message}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default SignUp;
+export default RegisterModal;

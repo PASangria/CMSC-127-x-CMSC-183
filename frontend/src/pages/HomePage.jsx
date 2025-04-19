@@ -1,17 +1,19 @@
-// frontend/src/pages/HomePage/index.jsx
+// frontend/src/pages/HomePage.jsx
 import React from 'react';
-import NavBar from '../components/NavBar';
+import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
-import "./css_pages/pages.css"
+import RegisterModal from '../components/RegisterModal';
+import "./HomePage.css"
 
-
-export const HomePage = () => {
+const HomePage = () => {
   return (
-    <div>
-      <NavBar />
-      <h1>Welcome to the Home Page</h1>
-      <RegisterModal />
-      <Footer /> 
+    <div className="home-container">
+      <Navbar />
+      <main className="home-content">
+        <h1>Welcome to the Home Page</h1>
+        <RegisterModal />
+      </main>
+      <Footer />
       <div className="homeBackground"></div>
     </div>
   );
