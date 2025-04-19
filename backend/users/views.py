@@ -50,21 +50,44 @@ def get_csrf(request):
     csrf_token = get_token(request)  # This gets the CSRF token
     return JsonResponse({'csrfToken': csrf_token})
 
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import SessionAuthentication
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+
+
 class LoginView(APIView):
     authentication_classes = [SessionAuthentication]
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         data = request.data
         username = data.get("username")
         password = data.get("password")
+        role = data.get("role")  # 'admin' or 'student'
+
+        if not all([username, password, role]):
+            return JsonResponse({"detail": "Username, password, and role are required."}, status=400)
 
         user = authenticate(request, username=username, password=password)
         if user is None:
             return JsonResponse({"detail": "Invalid credentials"}, status=400)
 
+        if role == 'admin' and not user.is_superuser:
+            return JsonResponse({"detail": "You are not authorized to log in as an admin."}, status=403)
+
+        if role == 'student' and user.is_superuser:
+            return JsonResponse({"detail": "Admins must log in through the admin portal."}, status=403)
+
         login(request, user)
-        return JsonResponse({"message": "Login successful"}, status=200)
+
+        return JsonResponse({
+            "message": "Login successful",
+            "username": user.username,
+            "is_superuser": user.is_superuser
+        }, status=200)
+
 
 
 class UserProfileView(APIView):

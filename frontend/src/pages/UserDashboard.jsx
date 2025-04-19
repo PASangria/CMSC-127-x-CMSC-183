@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LogoutButton from "../components/LogoutButton"
 
-const UserPage = () => {
+export const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,5 +43,3 @@ const UserPage = () => {
     </div>
   );
 };
-
-export default UserPage;

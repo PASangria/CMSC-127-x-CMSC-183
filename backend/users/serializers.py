@@ -41,26 +41,36 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
-    
+    role = serializers.CharField()  # Add this
+
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
-        
+        role = data.get('role')
+
         if username and password:
             user = authenticate(username=username, password=password)
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError("Please verify your email first.")
-                if not user.is_verified:
+                if hasattr(user, 'is_verified') and not user.is_verified:
                     raise serializers.ValidationError("Email verification pending.")
+
+                # Role-based logic
+                if role == 'admin' and not user.is_superuser:
+                    raise serializers.ValidationError("User is not authorized as admin.")
+                elif role == 'student' and user.is_superuser:
+                    raise serializers.ValidationError("Admins must log in as admin.")
+
                 data['user'] = user
             else:
-                raise serializers.ValidationError("Unable to log in with provided credentials.")
+                raise serializers.ValidationError("Invalid credentials.")
         else:
             raise serializers.ValidationError("Must include username and password.")
-            
+
         return data
-  
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
