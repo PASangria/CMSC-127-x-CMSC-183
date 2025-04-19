@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/NavBar';
+import LogoutButton from "../components/LogoutButton"
 
 export const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -33,12 +33,12 @@ export const AdminDashboard = () => {
 
   return (
     <div>
-      <Navbar />
       {error && <p>{error}</p>}
       <h2>Welcome, {user.first_name} {user.last_name}!</h2>
       <p><strong>Student Number:</strong> {user.username}</p> {/* Assuming 'username' is the student number */}
       <p><strong>Email:</strong> {user.email}</p>
 
+      <LogoutButton setUser={setUser} />
     
     </div>
   );

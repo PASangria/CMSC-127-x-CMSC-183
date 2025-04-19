@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import LogoutButton from "../components/LogoutButton"
+import LogoutButton from "../components/LogoutButton"
 
 export const UserPage = () => {
   const [user, setUser] = useState(null);
@@ -37,6 +37,8 @@ export const UserPage = () => {
       <h2>Welcome, {user.first_name} {user.last_name}!</h2>
       <p><strong>Student Number:</strong> {user.username}</p> {/* Assuming 'username' is the student number */}
       <p><strong>Email:</strong> {user.email}</p>
+
+      <LogoutButton setUser={setUser} />
     
     </div>
   );

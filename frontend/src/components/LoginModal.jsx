@@ -4,22 +4,19 @@ import { useNavigate, Link } from 'react-router-dom';
 import { X } from "react-feather";
 import FormField from './FormField';
 import ErrorMessage from './ErrorMessage';
+import { useLogin } from '../hooks/useLogin';
 import './css/loginModal.css';
 import SubmitButton from './SubmitButton';
-import { useContext } from 'react';
-import { AuthContext } from "../context/AuthContext";
 
 const LoginModal = ({ toggleModal, role }) => {
-  const { login, loading, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { login, error, loading } = useLogin();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     
     // You can pass the role to the login logic if needed
     const result = await login(username, password, role); 

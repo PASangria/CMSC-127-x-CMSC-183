@@ -137,9 +137,6 @@ SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
 
-
-
-
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Your frontend URL
 ]

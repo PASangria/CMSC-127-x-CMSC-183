@@ -10,8 +10,9 @@ export const HomePage = () => {
     <div>
       <NavBar />
       <h1>Welcome to the Home Page</h1>
-      <div className="homeBackground"></div>
+      <RegisterModal />
       <Footer /> 
+      <div className="homeBackground"></div>
     </div>
   );
 };

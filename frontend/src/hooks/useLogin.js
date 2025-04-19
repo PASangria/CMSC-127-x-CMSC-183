@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCookie } from '../apiAuth/getCookie';
+import { getCookie } from '../api/getCookie';
 
 export const useLogin = () => {
   const [error, setError] = useState('');
