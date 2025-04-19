@@ -1,17 +1,18 @@
-// frontend/src/pages/HomePage/index.jsx
 import React from 'react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
-import "./css_pages/pages.css"
-
+import "./css_pages/HomePage.css";
 
 export const HomePage = () => {
   return (
-    <div>
+    <div className="home-container">
       <NavBar />
-      <h1>Welcome to the Home Page</h1>
+      <div className="hero-section">
+        <h1 className="hero-title">Welcome to the  <span className="highlighted-text">Office of Student Affairs</span> Digital Platform</h1>
+        <button className="hero-button">Know More</button>
+      </div>
       <div className="homeBackground"></div>
-      <Footer /> 
+      <Footer />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css'; // Import CSS for styling
+import './css/footer.css'; // Import CSS for styling
 import logo from '../assets/UPMin_logo.png'; // Adjust the path to your logo file
 
 const Footer = () => {
@@ -54,6 +54,13 @@ const Footer = () => {
           </ul>
         </div>
       </div>
+
+      <div className="social-icons">
+        <a href="#"><i className="fab fa-facebook"></i></a>
+        <a href="#"><i className="fab fa-twitter"></i></a>
+        <a href="#"><i className="fab fa-instagram"></i></a>
+      </div>
+
       <div className="footer-bottom">
         <p>&copy; 2025 University of the Philippines Mindanao. All rights reserved.</p>
       </div>
