@@ -5,7 +5,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.5); /* optional dark background */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,7 +29,7 @@
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     text-align: left;
-    position: relative; /* Allow absolute positioning for close button */
+    position: relative; 
   }
   
   /* Close button styles (Positioned inside .login-modal) */

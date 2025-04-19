@@ -12,6 +12,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .serializers import RegisterSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import SessionAuthentication
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
 
 
 User = get_user_model()
@@ -57,6 +60,37 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 
 
+# class LoginView(APIView):
+#     authentication_classes = [SessionAuthentication]
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         data = request.data
+#         username = data.get("username")
+#         password = data.get("password")
+#         role = data.get("role")  # 'admin' or 'student'
+
+#         if not all([username, password, role]):
+#             return JsonResponse({"detail": "Username, password, and role are required."}, status=400)
+
+#         user = authenticate(request, username=username, password=password)
+#         if user is None:
+#             return JsonResponse({"detail": "Invalid credentials"}, status=400)
+
+#         if role == 'admin' and not user.is_superuser:
+#             return JsonResponse({"detail": "You are not authorized to log in as an admin."}, status=403)
+
+#         if role == 'student' and user.is_superuser:
+#             return JsonResponse({"detail": "Admins must log in through the admin portal."}, status=403)
+
+#         login(request, user)
+
+#         return JsonResponse({
+#             "message": "Login successful",
+#             "username": user.username,
+#             "is_superuser": user.is_superuser
+#         }, status=200)
+
 class LoginView(APIView):
     authentication_classes = [SessionAuthentication]
     permission_classes = [AllowAny]
@@ -67,28 +101,30 @@ class LoginView(APIView):
         password = data.get("password")
         role = data.get("role")  # 'admin' or 'student'
 
+        # Check if all required fields are provided
         if not all([username, password, role]):
-            return JsonResponse({"detail": "Username, password, and role are required."}, status=400)
+            return JsonResponse({"detail": "Username, password, and role are required."}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Authenticate user
         user = authenticate(request, username=username, password=password)
         if user is None:
-            return JsonResponse({"detail": "Invalid credentials"}, status=400)
+            return JsonResponse({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # Role-based checks
         if role == 'admin' and not user.is_superuser:
-            return JsonResponse({"detail": "You are not authorized to log in as an admin."}, status=403)
+            return JsonResponse({"detail": "You are not authorized to log in as an admin."}, status=status.HTTP_403_FORBIDDEN)
 
         if role == 'student' and user.is_superuser:
-            return JsonResponse({"detail": "Admins must log in through the admin portal."}, status=403)
+            return JsonResponse({"detail": "Admins must log in through the admin portal."}, status=status.HTTP_403_FORBIDDEN)
 
+        # Log in the user
         login(request, user)
 
         return JsonResponse({
             "message": "Login successful",
             "username": user.username,
             "is_superuser": user.is_superuser
-        }, status=200)
-
-
+        }, status=status.HTTP_200_OK)
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -105,3 +141,15 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)  
         return JsonResponse({'message': 'Logged out successfully'}, status=200)
+    
+@login_required
+def user_dashboard(request):
+    if request.user.is_superuser:
+        return JsonResponse({"message": "Admins are not allowed on user dashboard"}, status=403)
+    return JsonResponse({"message": "Welcome to the User Dashboard"})
+
+@login_required
+def admin_dashboard(request):
+    if not request.user.is_superuser:
+        return JsonResponse({"message": "You are not an admin"}, status=403)
+    return JsonResponse({"message": "Welcome to the Admin Dashboard"})
