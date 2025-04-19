@@ -35,7 +35,6 @@ export default function Navbar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Check login modal from URL
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         if (params.get("showLogin") === "true") {
@@ -47,6 +46,7 @@ export default function Navbar() {
         setSelectedRole(role);
         setShowDropdown(false);
         setShowLoginModal(true);
+        setIsMenuOpen(false);
     };
 
     const handleLogout = () => {

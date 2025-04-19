@@ -1,13 +1,27 @@
-import React from 'react';
-import './SideNav.css';
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
+import './sideNav.css';
 
-const SideNav_student = ({ user }) => {
+const SideNav_student = () => {
+  const { user } = useContext(AuthContext); // Access user from AuthContext
+
+  if (!user) {
+    // Show a loading or fallback state if the user is not authenticated yet
+    return (
+      <div className="side-navigator">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="side-navigator">
       <div className="avatar-section">
-        <div className="avatar">{user.name[0]}</div>
+        <div className="avatar">
+          {user.first_name?.charAt(0)}{user.last_name?.charAt(0)}
+        </div>
         <div className="user-info">
-          <h4>{user.name}</h4>
+          <h4>{user.first_name} {user.last_name}</h4>
           <p>{user.email}</p>
         </div>
       </div>

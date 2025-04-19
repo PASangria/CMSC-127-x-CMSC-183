@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/NavBar';
+import SideNav_admin from '../components/SideNav_admin';
+import Footer from '../components/Footer';
 
 export const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -34,11 +36,8 @@ export const AdminDashboard = () => {
   return (
     <div>
       <Navbar />
-      {error && <p>{error}</p>}
-      <h2>Welcome, {user.first_name} {user.last_name}!</h2>
-      <p><strong>Student Number:</strong> {user.username}</p> {/* Assuming 'username' is the student number */}
-      <p><strong>Email:</strong> {user.email}</p>
-
+      <SideNav_admin />
+      <Footer />
     
     </div>
   );

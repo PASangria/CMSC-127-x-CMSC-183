@@ -1,4 +1,3 @@
-// components/LoginModal.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { X } from "react-feather";
@@ -16,23 +15,39 @@ const LoginModal = ({ toggleModal, role }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    // You can pass the role to the login logic if needed
-    const result = await login(username, password, role); 
-    
+    setUsernameError(false);
+    setPasswordError(false);
+  
+    let hasError = false;
+  
+    if (!username) {
+      setUsernameError(true);
+      hasError = true;
+    }
+  
+    if (!password) {
+      setPasswordError(true);
+      hasError = true;
+    }
+  
+    if (hasError) return;
+  
+    const result = await login(username, password, role);
+  
     if (result) {
-      // Redirect based on role
-      if (role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/user');
-      }
+      navigate(role === 'admin' ? '/admin' : '/user');
+    } else {
+      setError('Invalid username or password.');
     }
   };
+  
 
   const roleLabel = role === 'admin' ? 'Admin' : 'Student';
 
@@ -55,22 +70,26 @@ const LoginModal = ({ toggleModal, role }) => {
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           {error && <ErrorMessage message={error} />}
+          
           <FormField
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-            name="username"
-            required={true}
-          />
-          <FormField
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            name="password"
-            required={true}
-          />
+          label="Student Number"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          name="username"
+          required={true}
+          error={usernameError}
+        />
+
+        <FormField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          required={true}
+          error={passwordError}
+        />
 
           <SubmitButton
             loading={loading}

@@ -93,6 +93,8 @@
 
 .dropdown-icon{
     margin-left: 8px;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease; 
 }
 
 .dropdown-wrapper {
@@ -142,17 +144,27 @@
     background-color: #560a0b;
 }
 
-/* Responsive design for smaller screens */
+.link-button.active .dropdown-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease; 
+}
+
 @media (max-width: 48rem) {
     .nav {
         padding: 1rem;
         height: fit-content;
         flex-direction: column;
-        align-items: stretch; /* fills width */
+        align-items: stretch; 
         margin: 0;
     }
 
-    /* New wrapper for top bar */
+    .dropdown-wrapper .link-button{
+        margin: 0 auto;
+    }
+    .dropdown-menu{
+        position: unset;
+    }
+    
     .nav-top {
         display: flex;
         justify-content: space-between; 
