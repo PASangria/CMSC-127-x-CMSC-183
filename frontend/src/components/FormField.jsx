@@ -1,23 +1,22 @@
+// components/FormField.jsx
 import React from 'react';
-import './css/formfield.css';
+import './css/formfield.css'; // We'll style it here
 
-const FormField = ({ label, type = "text", value, onChange, name, required, error }) => {
-  const isFilled = value && value.trim().length > 0;
+const FormField = ({ label, type = "text", value, onChange, name, required, placeholder }) => {
+  const isFilled = value && value.length > 0;
 
   return (
-    <div className={`form-group ${error ? 'error' : ''}`}>
+    <div className="form-group">
       <input
         type={type}
         value={value}
         onChange={onChange}
         name={name}
         required={required}
-        className={`form-input ${isFilled ? 'filled' : ''}`}
+        className={isFilled ? 'filled' : ''}
+        placeholder={placeholder}
       />
       <label className={isFilled ? 'active' : ''}>{label}</label>
-
-      {/* Show error message only when there's an error */}
-      {error && <div className="error-message">This field is required</div>}
     </div>
   );
 };
