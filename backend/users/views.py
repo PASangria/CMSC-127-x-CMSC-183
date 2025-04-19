@@ -2,70 +2,49 @@ import json
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import ensure_csrf_cookie
-from .serializers import RegisterSerializer, UserProfileSerializer, LoginSerializer, EmailVerificationSerializer, UserSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import SessionAuthentication
-from forms.models import Student
-from django.core.mail import send_mail
-from django.conf import settings
-import uuid
 
 
 User = get_user_model()
 
-class EmailVerificationView(APIView):
-    permission_classes = [AllowAny]
+class RegisterView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
-        if User.objects.filter(email=email).exists():
-            return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"message": "Email is available"}, status=status.HTTP_200_OK)
-
-class RegisterView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            verification_token = str(uuid.uuid4())
-            user.verification_token = verification_token
-            user.save()
-            
-            # Send verification email
-            verification_link = f"{settings.FRONTEND_URL}/verify-email/{verification_token}"
-            send_mail(
-                'Verify your email',
-                f'Click the link to verify your email: {verification_link}',
-                settings.EMAIL_HOST_USER,
-                [user.email],
-                fail_silently=False,
-            )
-            
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        return Response({
+            'message': 'Registration successful. Please check your email to verify your account.',
+            'user': RegisterSerializer(user).data
+        }, status=status.HTTP_201_CREATED)
 
 class VerifyEmailView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, token):
-        try:
-            user = User.objects.get(verification_token=token)
+        user = get_object_or_404(User, verification_token=token)
+        if not user.is_active:
+            user.is_active = True
             user.is_verified = True
-            user.verification_token = None
             user.save()
-            return Response({"message": "Email verified successfully"}, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response({"error": "Invalid verification token"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({
+                'message': 'Email verified successfully. You can now log in.'
+            }, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'Email already verified.'
+        }, status=status.HTTP_200_OK)
 
 def get_csrf(request):
     csrf_token = get_token(request)  # This gets the CSRF token
@@ -79,23 +58,6 @@ from django.http import JsonResponse
 
 
 class LoginView(APIView):
-<<<<<<< HEAD
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data['user']
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'user': UserSerializer(user).data
-            })
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class UserProfileView(generics.RetrieveUpdateAPIView):
-=======
     authentication_classes = [SessionAuthentication]
     permission_classes = [AllowAny]
 
@@ -129,22 +91,17 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 class UserProfileView(APIView):
->>>>>>> e357808b7992b501e2de7b86061b5352599e5f52
     permission_classes = [IsAuthenticated]
-    serializer_class = UserSerializer
 
-    def get_object(self):
-        return self.request.user
+    def get(self, request):
+        user = request.user
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data)
     
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        try:
-            refresh_token = request.data.get('refresh')
-            if refresh_token:
-                token = RefreshToken(refresh_token)
-                token.blacklist()
-            return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        logout(request)  
+        return JsonResponse({'message': 'Logged out successfully'}, status=200)
