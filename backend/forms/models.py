@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 class PhoneNumber(models.Model):
     PHONE_TYPE_CHOICES = [
@@ -24,6 +25,8 @@ class Address(models.Model):
     province = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.house_number} {self.street}, {self.city}, {self.zip_code}"
@@ -64,8 +67,8 @@ class Student(models.Model):
         # Add more...
     ]
 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student_profile')
     student_number = models.CharField(max_length=10, unique=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     family_name = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank=True, null=True)
@@ -75,10 +78,18 @@ class Student(models.Model):
     birth_rank = models.PositiveIntegerField()
     birthdate = models.DateField()
     birth_place = models.CharField(max_length=200)
-    permanent_address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
+    permanent_address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='permanent_resident')
+    current_address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='current_resident')
     college = models.CharField(max_length=100, choices=COLLEGE_CHOICES)
     current_year_level = models.IntegerField(choices=YEAR_LEVEL_CHOICES)
     degree_program = models.CharField(max_length=100, choices=DEGREE_PROGRAM_CHOICES)
+    course = models.CharField(max_length=100)
+    year_level = models.CharField(max_length=20)
+    contact_number = models.CharField(max_length=20)
+    emergency_contact = models.CharField(max_length=100)
+    emergency_contact_number = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.student_number} - {self.first_name} {self.family_name}"
+        return f"{self.user.get_full_name()} ({self.student_number})"

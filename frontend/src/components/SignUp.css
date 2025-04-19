@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.signup-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.signup-header {
+  background-color: #c0c0c0;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.2rem;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.sign-up-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border-style: solid;
+  border-color: #000;
+  border-width: 1px;
+}
+
+.signup-content {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 4rem);
+}
+
+.signup-sidebar {
+  flex: 0 0 300px;
+}
+
+.project-info {
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.project-info::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #666;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z'/%3E%3C/svg%3E") no-repeat center;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z'/%3E%3C/svg%3E") no-repeat center;
+}
+
+.signup-sidebar h1 {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2.75rem;
+  font-weight: 500;
+  padding: 1rem;
+  border-radius: 4px;
+  display: inline-block;
+  color: #333;
+}
+
+.signup-form {
+  flex: 1;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.signup-form h2 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+}
+
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row.three-columns {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.helper-text {
+  color: #000;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  text-align: left;
+}
+
+.birthdate-group {
+  margin: 1.5rem 0;
+}
+
+.birthdate-label,
+.address-label {
+  text-align: left;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.birthdate-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.birthdate-inputs .form-group {
+  margin-bottom: 0;
+}
+
+.birthdate-inputs input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fff;
+}
+
+.birthdate-inputs input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+/* Remove spinner buttons from number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.address-section {
+  margin: 1.5rem 0;
+}
+
+.next-button {
+  background-color: #2196f3;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 30%;
+  margin-top: 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.next-button:hover {
+  background-color: #1976d2;
+}
+
+/*
+.error-field {
+  border-color: #ff0000 !important;
+}
+*/
+
+.error-text {
+  color: #ff0000;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Required field markers */
+input::placeholder,
+select::placeholder {
+  color: #666;
+}
+
+[placeholder*="*"]::placeholder {
+  color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .signup-content {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .signup-sidebar {
+    max-width: 100%;
+  }
+
+  .form-row,
+  .form-row.three-columns,
+  .birthdate-inputs {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+} 
