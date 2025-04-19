@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import LogoutButton from "../components/LogoutButton"
 
-export const UserPage = () => {
+export const AdminDashboard = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

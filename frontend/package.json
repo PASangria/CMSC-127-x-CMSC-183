@@ -9,10 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "axios": "^1.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.0"
+=======
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-feather": "^2.0.10",
+    "react-router-dom": "^7.5.0"
+>>>>>>> e357808b7992b501e2de7b86061b5352599e5f52
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

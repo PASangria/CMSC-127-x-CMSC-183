@@ -1,0 +1,74 @@
+/* Ensure the modal overlay covers the full screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.5); /* optional dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .login-header {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    padding-bottom: 10px ;
+    font-size: 25px;
+  }
+  
+  /* Center the modal */
+  .login-modal {
+    background-color: white;
+    padding: 2rem;
+    width: 100%;
+    max-width: 425px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    position: relative; /* Allow absolute positioning for close button */
+  }
+  
+  /* Close button styles (Positioned inside .login-modal) */
+  .login-modal .close-button {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    padding: 0.5rem;
+    background-color: transparent;
+    border: none;
+    color: gray;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+
+  .login-modal .close-button:hover{
+    color:darkgray;
+  }
+  
+  .extra-links {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  
+  .extra-links a {
+    display: block;
+    color: #004085;
+    margin-top: 0.25rem;
+    text-decoration: none;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  
+  @media (max-width: 48rem) {
+    .login-modal{
+        width: 20em;
+    }
+  }
