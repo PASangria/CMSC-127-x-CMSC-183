@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import '../components/css/SideNav.css';
+import './css/sideNav.css';
 
 const SideNav_admin = () => {
   const { user, loading } = useContext(AuthContext);

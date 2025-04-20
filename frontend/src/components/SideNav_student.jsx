@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
-import '../components/css/SideNav.css';
+import './css/sideNav.css';
 
 const SideNav_student = () => {
   const { user } = useContext(AuthContext); // Access user from AuthContext
