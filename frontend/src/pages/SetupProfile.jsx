@@ -5,7 +5,7 @@ import FormField from '../components/FormField';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 
-export const SetupProfile = () => {
+export const SetUpProfile = () => {
   const [formData, setFormData] = useState({
     lastName: '',
     firstName: '',

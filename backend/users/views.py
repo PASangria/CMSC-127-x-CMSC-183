@@ -44,13 +44,11 @@ class VerifyEmailView(APIView):
             user.is_verified = True
             user.save()
 
-        login(request, user)
-
-        return redirect("http://localhost:5173/setup-profile") 
+        return redirect("http://localhost:5173/verified") 
 
 
 def get_csrf(request):
-    csrf_token = get_token(request)  # This gets the CSRF token
+    csrf_token = get_token(request)
     return JsonResponse({'csrfToken': csrf_token})
 
 from rest_framework.views import APIView

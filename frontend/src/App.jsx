@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { HomePage, UserDashboard, SignUp, SetupProfile } from "./pages";
+import { HomePage, UserDashboard, SignUp, SetUpProfile, VerifiedPage } from "./pages";
 import { AdminDashboard } from "./admin-pages";
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
+import { MoreVertical } from "react-feather";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
           }
         />
 
+        <Route path="/verified" element={<VerifiedPage />} />
+
         {/* User dashboard, block access for admins */}
         <Route
           path="/user"
@@ -43,7 +46,7 @@ function App() {
           path="/setup-profile"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <SetupProfile />
+              <SetUpProfile />
             </ProtectedRoute>
           }
         />
