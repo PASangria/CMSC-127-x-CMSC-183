@@ -18,38 +18,38 @@ const LoginModal = ({ toggleModal, role }) => {
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setUsernameError(false);
     setPasswordError(false);
-  
+
     let hasError = false;
-  
+
     if (!username) {
       setUsernameError(true);
       hasError = true;
     }
-  
+
     if (!password) {
       setPasswordError(true);
       hasError = true;
     }
-  
+
     if (hasError) return;
-  
+
     const result = await login(username, password, role);
-  
+
     if (result) {
       navigate(role === 'admin' ? '/admin' : '/user');
     } else {
       setError('Invalid username or password.');
     }
   };
-  
 
+  // Conditionally set the label based on the role
   const roleLabel = role === 'admin' ? 'Admin' : 'Student';
+  const usernameLabel = role === 'admin' ? 'Admin Username' : 'Student Number';
 
   return (
     <div className="modal-overlay">
@@ -64,32 +64,33 @@ const LoginModal = ({ toggleModal, role }) => {
             <X size={20} />
           </button>
         </div>
-        
+
         <h2 className="login-header">Login as {roleLabel}</h2>
-        
+
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           {error && <ErrorMessage message={error} />}
-          
-          <FormField
-          label="Student Number"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          name="username"
-          required={true}
-          error={usernameError}
-        />
 
-        <FormField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          name="password"
-          required={true}
-          error={passwordError}
-        />
+          {/* Use role-dependent label for the username field */}
+          <FormField
+            label={usernameLabel}
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            required={true}
+            error={usernameError}
+          />
+
+          <FormField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            required={true}
+            error={passwordError}
+          />
 
           <SubmitButton
             loading={loading}

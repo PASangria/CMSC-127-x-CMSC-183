@@ -74,12 +74,11 @@ export default function Navbar() {
 
                 <div className={`navigation ${isMenuOpen ? 'open' : ''}`}>
                     <ul>
-                        <li><Link to="/">HOME</Link></li>
-                        <li><Link to="/faq">FAQ</Link></li>
-                        <li><Link to="/forms">FORMS</Link></li>
-
                         {!isAuthenticated ? (
                             <>
+                                <li><Link to="/">HOME</Link></li>
+                                <li><Link to="/faq">FAQ</Link></li>
+                                <li><Link to="/forms">FORMS</Link></li>
                                 <div className="dropdown-wrapper" ref={dropdownRef}>
                                     <button 
                                         onClick={() => setShowDropdown(prev => !prev)} 
@@ -97,6 +96,14 @@ export default function Navbar() {
                                 <li><Link to="/signup">SIGNUP</Link></li>
                             </>
                         ) : (
+                            <>
+                            <li>
+                            <Link to={user?.is_superuser ? '/admin' : '/user'}>
+                                {user?.is_superuser ? 'Admin Dashboard' : 'User Dashboard'}
+                            </Link>
+                            </li>
+                            <li><Link to="/faq">FAQ</Link></li>
+                            <li><Link to="/forms">FORMS</Link></li>
                             <div className="dropdown-wrapper" ref={userDropdownRef}>
                                <button
                                     onClick={() => setShowUserDropdown(prev => !prev)} 
@@ -110,6 +117,7 @@ export default function Navbar() {
                                     </div>
                                 )}
                             </div>
+                        </>
                         )}
                     </ul>
                 </div>

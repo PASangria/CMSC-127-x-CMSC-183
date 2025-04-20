@@ -38,16 +38,16 @@ class VerifyEmailView(APIView):
 
     def get(self, request, token):
         user = get_object_or_404(User, verification_token=token)
+
         if not user.is_active:
             user.is_active = True
             user.is_verified = True
             user.save()
-            return Response({
-                'message': 'Email verified successfully. You can now log in.'
-            }, status=status.HTTP_200_OK)
-        return Response({
-            'message': 'Email already verified.'
-        }, status=status.HTTP_200_OK)
+
+        login(request, user)
+
+        return redirect("http://localhost:5173/setup-profile") 
+
 
 def get_csrf(request):
     csrf_token = get_token(request)  # This gets the CSRF token

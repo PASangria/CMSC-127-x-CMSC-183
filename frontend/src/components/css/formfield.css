@@ -42,11 +42,11 @@
  
  .form-input:focus + label,
  .form-input.filled + label {
-   top: -5px;
+   top: -7px;
    font-size: 11px;
    color: #1976D2;
    transform: none;
-   padding: 0;
+   padding: 1px;
  }
  
  /* Focus border */

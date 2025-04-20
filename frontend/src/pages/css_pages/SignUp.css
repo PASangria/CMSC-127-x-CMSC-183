@@ -1,0 +1,93 @@
+/* SignUp.css */
+.signUp-container {
+    display: flex;
+    height: 80vh;
+  }
+  
+  /* .signUpLeft {
+    width: 50%;
+    background-color: #7B1113; /* You can change this to any color you like
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+  } */
+
+  .signUpRight {
+    width: 100%;
+    padding: 40px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .form-container{
+    margin: 0 auto;
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Add responsiveness for smaller screens */
+  @media (max-width: 768px) {
+    .signUp-container {
+      flex-direction: column;
+    }
+  
+    .signUpLeft, .signUpRight {
+      width: 100%;
+      padding: 20px;
+    }
+  }
+  
