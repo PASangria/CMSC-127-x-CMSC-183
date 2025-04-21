@@ -7,20 +7,12 @@
   font-family: Arial, sans-serif;
 }
 
-.signup-container {
+.setup-container {
   min-height: 100vh;
   background-color: #f5f5f5;
 }
 
-.sign-up-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border-style: solid;
-  border-color: #000;
-  border-width: 1px;
-}
-
-.signup-content {
+.setup-content {
   display: flex;
   padding: 2rem;
   gap: 2rem;
@@ -29,7 +21,7 @@
   min-height: calc(100vh - 4rem);
 }
 
-.signup-sidebar {
+.setup-sidebar {
   flex: 0 0 300px;
 }
 
@@ -52,7 +44,7 @@
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z'/%3E%3C/svg%3E") no-repeat center;
 }
 
-.signup-sidebar h1 {
+.setup-sidebar h1 {
   font-family: 'Roboto Mono', monospace;
   font-size: 2.75rem;
   font-weight: 500;
@@ -62,7 +54,7 @@
   color: #333;
 }
 
-.signup-form {
+.setup-form {
   flex: 1;
   background-color: #fff;
   padding: 2rem;
@@ -70,7 +62,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.signup-form h2 {
+.setup-form h2 {
   font-size: 1.2rem;
   font-weight: normal;
   color: #333;
@@ -225,12 +217,12 @@ select::placeholder {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .signup-content {
+  .setup-content {
     flex-direction: column;
     padding: 1.5rem;
   }
 
-  .signup-sidebar {
+  .setup-sidebar {
     max-width: 100%;
   }
 
@@ -240,4 +232,4 @@ select::placeholder {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-} 
+}

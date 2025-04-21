@@ -96,6 +96,6 @@
 }
 
 .homeBackground {
-  height: 50px; /* acts as a visual buffer before the footer */
-  background-color: #7d0c0c; /* same maroon as footer/nav */
+  height: 50px;
+  background-color: #7B1113;
 }

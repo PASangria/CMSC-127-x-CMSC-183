@@ -31,10 +31,11 @@
 .headerLogoName {
     display: flex;
     flex-direction: column;
+    margin-left: 0.3rem;
 }
 
 .headerLogoName .nameUp {
-    font-size: 0.77rem; /* 12px */
+    font-size: 0.77rem;
     margin: 0;
     font-weight: normal;
     font-family: 'Times New Roman', Times, serif;
@@ -42,7 +43,7 @@
 }
 
 .headerLogoName .nameDown {
-    font-size: 1.625rem; /* 26px */
+    font-size: 1.625rem; 
     margin: 0;
     font-weight: normal;
     font-family: 'Times New Roman', Times, serif;

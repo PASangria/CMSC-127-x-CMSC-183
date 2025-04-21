@@ -41,6 +41,9 @@ class RegisterView(generics.CreateAPIView):
             'user': RegisterSerializer(user).data
         }, status=status.HTTP_201_CREATED)
 
+from django.http import JsonResponse
+from django.shortcuts import redirect
+
 class VerifyEmailView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -52,11 +55,12 @@ class VerifyEmailView(APIView):
             user.is_verified = True
             user.save()
 
-        return redirect("http://localhost:5173/verified") 
+        # Redirect to the 'VerifiedPage' with a success message
+        return redirect("http://localhost:5173/verified?status=verified")
 
 
 def get_csrf(request):
-    csrf_token = get_token(request)
+    csrf_token = get_token(request)  # This gets the CSRF token
     return JsonResponse({'csrfToken': csrf_token})
 
 from rest_framework.views import APIView
