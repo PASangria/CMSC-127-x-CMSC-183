@@ -38,6 +38,7 @@
     margin: 0;
     font-weight: normal;
     font-family: 'Times New Roman', Times, serif;
+    color: #FFFFFF;
 }
 
 .headerLogoName .nameDown {
@@ -147,7 +148,6 @@
     background-color: #58514fc5;
     color: #ffffff;
     border: none;
-    font-weight: bold;
     cursor: pointer;
     margin-top: 1rem;
     border-radius: 30px;

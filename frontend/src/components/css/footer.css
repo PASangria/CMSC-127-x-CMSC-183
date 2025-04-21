@@ -90,6 +90,10 @@
     margin-top: 2rem;
 }
 
+.footer-bottom p {
+    color: #ffffff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .footer-header {

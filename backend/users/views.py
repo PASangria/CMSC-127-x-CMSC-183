@@ -20,14 +20,22 @@ from django.shortcuts import redirect
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            # log serializer errors to console for debugging
+            print("Serializer validation errors:", serializer.errors)
+            raise e
+
         user = serializer.save()
-        
+
         return Response({
             'message': 'Registration successful. Please check your email to verify your account.',
             'user': RegisterSerializer(user).data
