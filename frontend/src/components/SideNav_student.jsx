@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom'; // Import the Link component
 import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
 import './css/sideNav.css';
 
@@ -29,10 +30,18 @@ const SideNav_student = () => {
         <input type="text" placeholder="Search..." />
       </div>
       <div className="nav-buttons">
-        <button>My Profile</button>
-        <button>Dashboard</button>
-        <button>Submitted Forms</button>
-        <button>Privacy Setting</button>
+        <Link to="/myprofile">
+          <button>My Profile</button>
+        </Link>
+        <Link to="/user">
+          <button>Dashboard</button>
+        </Link>
+        <Link to="/submitted-forms">
+          <button>Submitted Forms</button>
+        </Link>
+        <Link to="/privacy-setting">
+          <button>Privacy Setting</button>
+        </Link>
       </div>
     </div>
   );

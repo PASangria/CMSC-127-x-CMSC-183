@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./css_pages/setUp.css";
+import "../pages/css_pages/setUp.css";
 import FormField from '../components/FormField'; 
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';

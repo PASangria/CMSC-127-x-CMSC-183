@@ -1,1 +1,7 @@
 export * from "./AdminDashboard"
+export * from "./AdminBIS"
+export * from "./AdminReferral"
+export * from "./AdminReports"
+export * from "./AdminSCIF"
+export * from "./AdminStudentList"
+export * from "./AdminSystemSetting"

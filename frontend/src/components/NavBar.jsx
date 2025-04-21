@@ -78,7 +78,7 @@ export default function Navbar() {
                             <>
                                 <li><Link to="/">HOME</Link></li>
                                 <li><Link to="/faq">FAQ</Link></li>
-                                <li><Link to="/forms">FORMS</Link></li>
+                                <li><Link to="/public-forms">FORMS</Link></li>
                                 <div className="dropdown-wrapper" ref={dropdownRef}>
                                     <button 
                                         onClick={() => setShowDropdown(prev => !prev)} 
@@ -103,7 +103,7 @@ export default function Navbar() {
                             </Link>
                             </li>
                             <li><Link to="/faq">FAQ</Link></li>
-                            <li><Link to="/forms">FORMS</Link></li>
+                            <li><Link to="/public-forms">FORMS</Link></li>
                             <div className="dropdown-wrapper" ref={userDropdownRef}>
                                <button
                                     onClick={() => setShowUserDropdown(prev => !prev)} 

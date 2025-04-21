@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import './css/sideNav.css';
 
 const SideNav_admin = () => {
@@ -33,19 +34,35 @@ const SideNav_admin = () => {
       </div>
 
       <div className="nav-buttons">
-        <button>Dashboard</button>
-        <button>Student</button>
+        {/* Add Links to the buttons */}
+        <Link to="/admin">
+          <button>Dashboard</button>
+        </Link>
+        <Link to="/admin-student-list">
+          <button>Student</button>
+        </Link>
 
         <div className="dropdown">
           <button className="dropdown-button">Record Management</button>
           <div className="dropdown-content">
-            <button>Option 1</button>
-            <button>Option 2</button>
+            <Link to="/admin-bis-list">
+              <button>Basic Information Sheet</button>
+            </Link>
+            <Link to="/admin-scif-list">
+              <button>Student Cumulative Information</button>
+            </Link>
+            <Link to="/admin-referral-list">
+              <button>Referral Form</button>
+            </Link>
           </div>
         </div>
 
-        <button>Report Analytics</button>
-        <button>System Settings</button>
+        <Link to="/admin-reports">
+          <button>Report Analytics</button>
+        </Link>
+        <Link to="/admin-system-settings">
+          <button>System Settings</button>
+        </Link>
       </div>
     </div>
   );
