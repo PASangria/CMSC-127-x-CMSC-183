@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OSA/admin.py
 from django.contrib import admin
 from .models import *
@@ -128,3 +129,9 @@ class CollegeAwardAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
+=======
+from django.contrib import admin
+from .models import Student
+
+admin.site.register(Student)
+>>>>>>> parent of 3d98cd7 (removed backend folder)
