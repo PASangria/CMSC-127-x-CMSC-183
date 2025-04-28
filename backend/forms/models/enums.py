@@ -11,11 +11,6 @@ class YearLevelEnum(models.TextChoices):
     THIRD_YEAR = '3rd Year', '3rd Year'
     FOURTH_YEAR = '4th Year', '4th Year'
     FIFTH_YEAR = '5th Year', '5th Year'
-    
-class SemesterEnum(models.TextChoices):
-    FIRST = "1", "First Semester"
-    SECOND = "2", "Second Semester"
-    MIDYEAR = "M", "Midyear"
 
 class DegreeProgramEnum(models.TextChoices):
     BS_ARCHITECTURE = 'BS Architecture', 'BS Architecture'

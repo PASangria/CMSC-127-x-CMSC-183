@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from .student import Student
-from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum 
 
 
 class Preferences(models.Model):
@@ -53,7 +52,7 @@ class StudentSupport(models.Model):
         Custom validation to enforce the conditional fields.
         """
         # If support type is 'Other', other_notes is required
-        if self.support.support_name == 'Others' and not self.other_notes:
+        if self.support.support_name == 'Other' and not self.other_notes:
             raise ValidationError({'other_notes': 'This field is required when "Other" support is selected.'})
 
         # If support type is 'Scholarship', other_scholarship is required
@@ -68,7 +67,7 @@ class StudentSupport(models.Model):
         return f"Support for Student {self.student_number}"
 
 class SocioEconomicStatus(models.Model):
-    student_number = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student_number = models.ForeignKey('Student', on_delete=models.CASCADE) 
     has_scholarship = models.BooleanField() 
     scholarships = models.TextField(blank=True, null=True) 
     scholarship_privileges = models.TextField(blank=True, null=True) 
