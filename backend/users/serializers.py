@@ -2,22 +2,15 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.core.mail import send_mail
 from django.conf import settings
-<<<<<<< HEAD
-=======
 from django.core.exceptions import ValidationError
 import uuid
->>>>>>> parent of 3d98cd7 (removed backend folder)
 
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):  
     class Meta:
         model = User
-<<<<<<< HEAD
-        fields = ('email', 'password')
-=======
         fields = ('first_name', 'last_name', 'username', 'email', 'password')
->>>>>>> parent of 3d98cd7 (removed backend folder)
         extra_kwargs = {'password': {'write_only': True}}   
         
     def validate_email(self, value):
@@ -28,12 +21,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Create an inactive user
         user = User.objects.create_user(
-<<<<<<< HEAD
-=======
         first_name=validated_data['first_name'],
         last_name=validated_data['last_name'],
         username=validated_data['username'],
->>>>>>> parent of 3d98cd7 (removed backend folder)
         email=validated_data['email'],
         password=validated_data['password'],
         is_active=False
@@ -51,8 +41,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         
         return user
 
-<<<<<<< HEAD
-=======
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -91,4 +79,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'is_superuser']
->>>>>>> parent of 3d98cd7 (removed backend folder)
