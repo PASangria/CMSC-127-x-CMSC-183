@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import RegisterView, VerifyEmailView
 from . import views
+from .views import test_connection
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('verify/<uuid:token>/', VerifyEmailView.as_view(), name='verify-email'),
+    path('test/', test_connection),
 ]
