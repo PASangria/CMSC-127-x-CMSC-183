@@ -1,46 +1,63 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { CheckCircle, AlertCircle } from 'react-feather'; // Add AlertCircle for unverified users
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import './css_pages/VerifiedPage.css';
-import { AuthContext } from '../context/AuthContext';
 
 export const VerifiedPage = () => {
-  const [message, setMessage] = useState('');
+  const { uid, token } = useParams();
+  const [message, setMessage] = useState('Verifying your email...');
   const [icon, setIcon] = useState(<CheckCircle className="check-icon" size={80} />); // Default icon is CheckCircle
   const location = useLocation();
-  const navigate = useNavigate();
-  const { user, isAuthenticated } = useContext(AuthContext);  
+  const navigate = useNavigate(); 
 
   useEffect(() => {
-    if (isAuthenticated) {
-      setMessage('Your email has been verified, and you are now logged in. Continue exploring your account!');
-      setIcon(<CheckCircle className="check-icon" size={80} />); // Use check icon for verified user
-      return;  
-    }
+    const verifyEmail = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/auth/users/activation/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ uid, token }),
+        });
 
-    // Get query params from the URL
-    const urlParams = new URLSearchParams(location.search);
-    const status = urlParams.get('status');
+        if (response.ok) {
+          setMessage('Your email has been verified! You can now log in.');
+          setIcon(<CheckCircle className="check-icon" size={80} />);
+        } else {
+          setMessage('Verification failed. The link may be invalid or expired.');
+          setIcon(<AlertCircle className="alert-icon" size={80} />);
+        }
+      } catch (error) {
+        setMessage('An error occurred during verification.');
+        setIcon(<AlertCircle className="alert-icon" size={80} />);
+      }
+    };
 
-    // Show the appropriate message based on verification status
-    if (status === 'verified') {
-      setMessage('Your email address has been verified! Please log in to continue and start using your account.');
-      setIcon(<CheckCircle className="check-icon" size={80} />); 
-    } else {
-      setMessage("Looks like you're not verified yet. Check your inbox for the verification link and complete your sign-up!");
-      setIcon(<AlertCircle className="alert-icon" size={80} />); 
+    if (uid && token) {
+      verifyEmail();
     }
-  }, [location.search, isAuthenticated, navigate]);
+  }, [uid, token]);
+
+  
 
   return (
     <div>
       <Navbar />
       <div className="verified-page">
         <div className="content-container">
-          {icon} {/* Render the dynamic icon */}
+          {icon} 
           <h2>{message}</h2>
+          {message.includes("verified") && (
+          <button
+            onClick={() => navigate('/')}
+            className="continue-button"
+          >
+            Continue to Login
+          </button>
+          )}
         </div>
       </div>
       <Footer />

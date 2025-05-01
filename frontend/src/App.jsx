@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
 import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage } from "./pages";
 import { AdminDashboard, AdminBIS, AdminSCIF, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports } from "./admin-pages";
 import { UserDashboard, SetUpProfile, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
 import { MoreVertical } from "react-feather";
+import Test from "./App";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
           }
         />
 
-        <Route path="/verified" element={<VerifiedPage />} />
+        <Route path="/verify/:uid/:token" element={<VerifiedPage />} />
 
         {/* User dashboard, block access for admins */}
         <Route
@@ -138,6 +139,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
+        <Route path="/test/*" element={<Test />} />
       </Routes>
     </div>
   );

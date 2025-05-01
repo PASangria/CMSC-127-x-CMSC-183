@@ -5,19 +5,15 @@ import "./css_pages/SignUp.css"
 import Footer from "../components/Footer";
 
 export const SignUp = () => {
-  const [first_name, setFname] = useState("");
-  const [last_name, setLname] = useState('');
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [formErrors, setFormErrors] = useState({
-    first_name: false,
-    last_name: false,
-    username: false,
     email: false,
     password: false,
+    rePassword: false,
   });
 
   // Handle form submission
@@ -31,18 +27,6 @@ export const SignUp = () => {
     const errors = {};
     let hasError = false;
 
-    if (!first_name) {
-      errors.first_name = true;
-      hasError = true;
-    }
-    if (!last_name) {
-      errors.last_name = true;
-      hasError = true;
-    }
-    if (!username) {
-      errors.username = true;
-      hasError = true;
-    }
     if (!email) {
       errors.email = true;
       hasError = true;
@@ -51,37 +35,56 @@ export const SignUp = () => {
       errors.password = true;
       hasError = true;
     }
+    if (!rePassword) {
+      errors.rePassword = true;
+      hasError = true;
+    }
 
     // If there are errors, update the state and stop submission
     if (hasError) {
-      setFormErrors(errors);
+      setFormErrors({
+        email: !email,
+        password: !password,
+        rePassword: !(rePassword),
+      });
+      return;
+    }
+
+    if (password !== rePassword) {
+      setMessage("Passwords do not match.");
+      setIsError(true);
       return;
     }
 
     const userData = {
-      first_name,
-      last_name,
-      username,
       email,
       password,
+      re_password: rePassword,
     };
 
+    console.log(userData);
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/users/register/", {
+      const response = await fetch("http://127.0.0.1:8000/auth/users/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userData),
       });
-
+    
       const data = await response.json();
-
+    
       if (response.ok) {
         setMessage(data.message || "Registration successful! Please check your email to verify your account.");
         setIsError(false);
       } else {
-        setMessage(data.detail || "Something went wrong. Please try again.");
+        const errorMessages = Object.entries(data)
+          .map(([field, messages]) =>
+            `${field}: ${Array.isArray(messages) ? messages.join(", ") : messages}`
+          )
+          .join(" ");
+        setMessage(errorMessages || "Something went wrong. Please try again.");
         setIsError(true);
       }
     } catch (error) {
@@ -89,7 +92,9 @@ export const SignUp = () => {
       setMessage("An error occurred. Please try again later.");
       setIsError(true);
     }
-  };
+  }
+    
+      
 
   return (
     <div>
@@ -100,35 +105,6 @@ export const SignUp = () => {
         <div className="form-container">
             <h2>Create Account</h2>
             <form onSubmit={handleSubmit}>
-            <div className="form-row">
-                <FormField
-                    label="Last Name"
-                    type="text"
-                    value={last_name}
-                    onChange={(e) => setLname(e.target.value)}
-                    name="last_name"
-                    required={true}
-                    error={formErrors.last_name}
-                />
-                <FormField
-                    label="First Name"
-                    type="text"
-                    value={first_name}
-                    onChange={(e) => setFname(e.target.value)}
-                    name="first_name"
-                    required={true}
-                    error={formErrors.first_name}
-                />
-            </div>
-            <FormField
-                label="Student Number"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                name="username"
-                required={true}
-                error={formErrors.username}
-            />
             <FormField
                 label="Email"
                 type="email"
@@ -147,6 +123,16 @@ export const SignUp = () => {
                 required={true}
                 error={formErrors.password}
             />
+            <FormField
+              label="Confirm Password"
+              type="password"
+              value={rePassword}
+              onChange={(e) => setRePassword(e.target.value)}
+              name="rePassword"
+              required={true}
+              error={formErrors.rePassword}
+            />
+
             <button type="submit">Sign Up</button>
             </form>
 
