@@ -1,42 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import Navbar from '../components/NavBar';
 import SideNav_admin from '../components/SideNav_admin';
 import Footer from '../components/Footer';
 
 export const AdminDashboard = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/users/profile/', {
-      credentials: 'include',  // Ensure cookies (like session cookies) are sent
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Not authenticated');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setUser(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('You are not authenticated. Redirecting to the home page...');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 3000); // Redirect after 3 seconds
-      });
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
+  const {user} = useContext(AuthContext);
+  if (!user) {
+    return <Navigate to="/" replace />
+  }
+ 
 
   return (
     <div>
       <Navbar />
       <SideNav_admin />
+      {user && <p>Welcome, {user.email}!</p>}
       <Footer />
     
     </div>

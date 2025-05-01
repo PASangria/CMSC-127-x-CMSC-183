@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+from datetime import timedelta
 
 load_dotenv()  
 
@@ -41,6 +42,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+if os.environ.get('DJANGO_ENV') == 'development':
+    SITE_URL = 'http://localhost:5173'
+else:
+    SITE_URL = 'https://your-production-domain.com'
 
 # Application definition
 
@@ -53,6 +58,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
+    'djoser',
     'users',
     'forms',
 ]
@@ -159,9 +167,19 @@ CORS_ALLOW_HEADERS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', 
     ],
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',), 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
 }
 
 # Default primary key field type
@@ -170,3 +188,40 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+DOMAIN = 'localhost:5173' 
+SITE_NAME = 'Counseling and Testing Section - University of the Philippines Mindanao'
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'verify/{uid}/{token}',
+    'EMAIL': {
+        'VERIFICATION': {
+            'ENABLED': True,
+            'FROM_EMAIL': 'celeszhaianna@gmail.com',  # Change to UP mail when in production
+            'SUBJECT': 'Verify your email address',
+            'MESSAGE': 'Please click the following link to verify your email address: {url}',
+        },
+    },
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+         'user_create': 'users.serializers.CustomUserCreateSerializer',
+    },
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'SET_PASSWORD_RETYPE': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SEND_PASSWORD_RESET_EMAIL': True,
+    'ACTIVATION_EMAIL': 'users.email.CustomActivationEmail',
+    'PASSWORD_RESET_EMAIL': 'users.email.CustomPasswordResetEmail',
+    
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'celeszhaianna@gmail.com'  
+EMAIL_HOST_PASSWORD = 'cmgantrxrcfjnrms'  
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

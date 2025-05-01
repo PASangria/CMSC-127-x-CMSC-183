@@ -1,55 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { X } from "react-feather";
 import FormField from './FormField';
-import ErrorMessage from './ErrorMessage';
 import './css/loginModal.css';
 import SubmitButton from './SubmitButton';
-import { useContext } from 'react';
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from '../context/AuthContext';
 
 const LoginModal = ({ toggleModal, role }) => {
-  const { login, loading, isAuthenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const [username, setUsername] = useState('');
+  const {login} = useContext(AuthContext);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setUsernameError(false);
-    setPasswordError(false);
-
-    let hasError = false;
-
-    if (!username) {
-      setUsernameError(true);
-      hasError = true;
+    const success = await login(email, password);
+    if (success) {
+      
     }
+    
+  }
 
-    if (!password) {
-      setPasswordError(true);
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    const result = await login(username, password, role);
-
-    if (result) {
-      navigate(role === 'admin' ? '/admin' : '/user');
-    } else {
-      setError('Invalid username or password.');
-    }
-  };
-
-  // Conditionally set the label based on the role
   const roleLabel = role === 'admin' ? 'Admin' : 'Student';
-  const usernameLabel = role === 'admin' ? 'Admin Username' : 'Student Number';
 
   return (
     <div className="modal-overlay">
@@ -69,17 +40,15 @@ const LoginModal = ({ toggleModal, role }) => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
-          {error && <ErrorMessage message={error} />}
 
           {/* Use role-dependent label for the username field */}
           <FormField
-            label={usernameLabel}
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            name="username"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            name="email"
             required={true}
-            error={usernameError}
           />
 
           <FormField
@@ -89,11 +58,9 @@ const LoginModal = ({ toggleModal, role }) => {
             onChange={(e) => setPassword(e.target.value)}
             name="password"
             required={true}
-            error={passwordError}
           />
 
           <SubmitButton
-            loading={loading}
             text="Log In"
             loadingText="Logging in..."
           />

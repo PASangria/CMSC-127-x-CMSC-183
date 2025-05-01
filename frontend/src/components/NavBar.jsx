@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
+import { AuthContext } from '../context/AuthContext'; 
 import logo from '../assets/upmin-logo.svg'; 
 import LoginModal from './LoginModal'; 
 import './css/navbar.css'; 
 import { ChevronDown } from 'react-feather';
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated } = useContext(AuthContext);  // Accessing AuthContext
+    const { user, logout, isAuthenticated, refreshToken } = useContext(AuthContext);  
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [selectedRole, setSelectedRole] = useState(null);
@@ -50,8 +50,8 @@ export default function Navbar() {
     };
 
     const handleLogout = () => {
-        logout();  // Using the logout function from AuthContext
-        navigate('/');  // Redirecting to home after logout
+        logout(navigate);  
+        setIsMenuOpen(false); 
     };
 
     return (
@@ -97,27 +97,27 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                            <li>
-                            <Link to={user?.is_superuser ? '/admin' : '/user'}>
-                                {user?.is_superuser ? 'Admin Dashboard' : 'User Dashboard'}
-                            </Link>
-                            </li>
-                            <li><Link to="/faq">FAQ</Link></li>
-                            <li><Link to="/public-forms">FORMS</Link></li>
-                            <div className="dropdown-wrapper" ref={userDropdownRef}>
-                               <button
-                                    onClick={() => setShowUserDropdown(prev => !prev)} 
-                                    className={`link-button ${showUserDropdown ? 'active' : ''}`} >
-                                    {`HELLO, ${user?.username || 'Account'}`}
-                                    <ChevronDown className='dropdown-icon'/>
-                                </button>
-                                {showUserDropdown && (
-                                    <div className="dropdown-menu">
-                                        <div className='dropdown-choice' onClick={handleLogout}>Logout</div> 
-                                    </div>
-                                )}
-                            </div>
-                        </>
+                                <li>
+                                    <Link to={user?.is_superuser ? '/admin' : '/user'}>
+                                        {user?.is_superuser ? 'Admin Dashboard' : 'User Dashboard'}
+                                    </Link>
+                                </li>
+                                <li><Link to="/faq">FAQ</Link></li>
+                                <li><Link to="/public-forms">FORMS</Link></li>
+                                <div className="dropdown-wrapper" ref={userDropdownRef}>
+                                    <button
+                                        onClick={() => setShowUserDropdown(prev => !prev)} 
+                                        className={`link-button ${showUserDropdown ? 'active' : ''}`} >
+                                        {`HELLO, ${user?.username || 'Account'}`}
+                                        <ChevronDown className='dropdown-icon'/>
+                                    </button>
+                                    {showUserDropdown && (
+                                        <div className="dropdown-menu">
+                                            <div className='dropdown-choice' onClick={handleLogout}>Logout</div> 
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         )}
                     </ul>
                 </div>
