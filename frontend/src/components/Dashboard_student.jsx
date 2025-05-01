@@ -1,7 +1,7 @@
 import React from 'react';
 import SideNav_student from './SideNav_student'; // Ensure this path and component are correct
 import DataTable from './DataTable';
-import './Dashboard_student.css';
+import './css/Dashboard_student.css';
 
 const Dashboard = () => {
   const user = {

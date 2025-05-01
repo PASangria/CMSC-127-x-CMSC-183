@@ -1,0 +1,196 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.form-body {
+    background-color: #E5E5E5;
+    min-height: 100vh; /* Full height */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-card {
+    height: auto;
+    min-height: 320px;
+    background-color: white;
+    border-radius: 16px;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0;
+}
+  
+.form-card:hover {
+    background-color: maroon;
+    color: white;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+  
+.form-card:hover .circle {
+    background-color: white;
+}
+  
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+  
+.card-text {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+}
+  
+.form-card:hover .card-text {
+    height: auto;
+    opacity: 1;
+    transform: translateY(0);
+}
+  
+.card-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: transform 0.3s ease;
+}
+  
+.form-card:hover .card-title {
+    transform: translateY(-8px);
+}
+  
+.card-desc {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+}
+  
+.form-card:hover .card-desc {
+    color: white;
+}
+  
+.form-card button {
+    align-self: flex-start;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, color 0.3s;
+}
+  
+button.disabled {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+}
+  
+button.active {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+  
+button.active:active {
+    background-color: white;
+    color: maroon;
+    border: 1px solid maroon;
+}
+  
+.form-card:nth-child(1) { animation-delay: 0.2s; }
+.form-card:nth-child(2) { animation-delay: 0.4s; }
+.form-card:nth-child(3) { animation-delay: 0.6s; }
+  
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.form-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* slightly wider cards */
+    gap: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+
+.form-body-content {
+    flex: 1;
+    width: 100%;
+    max-width: 1440px; /* LIMIT for super-wide screens */
+    margin: 0 auto;
+    padding: 2rem 4vw; /* Restore responsive horizontal padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+
+.form-header {
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.circle {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: maroon;
+}
+
+@media (max-width: 768px) {
+    .form-cards-container {
+        gap: 1.25rem;
+        padding: 1.5rem 0;
+    }
+}
+
+.form-header-line {
+    height: 20px;
+    width: 150px; /* Slightly longer than 'Forms' heading */
+    background-color: maroon;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+
+.form-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Optional: prevent the text from shrinking the H1 */
+.form-header-top h1 {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Force the paragraph to stay right and wrap nicely */
+.form-header-top p {
+    margin: 0;
+    color: #333;
+    font-size: 1rem;
+    max-width: 400px; /* adjust based on how wide you want */
+    text-align: right;
+    flex-grow: 1;
+    align-self: flex-start;
+}
