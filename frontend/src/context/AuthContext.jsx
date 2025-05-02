@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import * as jwt_Decode from "jwt-decode"; 
-
+ 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {

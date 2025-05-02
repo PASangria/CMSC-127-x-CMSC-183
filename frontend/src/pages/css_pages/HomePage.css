@@ -32,13 +32,13 @@
   z-index: -1;
 }
 
-.hero-title,
 .hero-button {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Optima', sans-serif;
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-family: 'Helvica', sans-serif;
+  font-size: 2.5rem;
   max-width: 900px;
   line-height: 1.2;
   font-weight: bold;
@@ -48,8 +48,26 @@
   opacity: 0;
 }
 
+.hero-subtitle {
+  font-size: 2rem; /* smaller than highlighted-text (4rem) */
+  font-weight: 700;
+  color: #7B1113;
+  font-family: 'Helvica', sans-serif;
+  letter-spacing: 0.5px;
+  text-shadow:
+    -1px -1px 0 #ffffff,
+     1px -1px 0 #ffffff,
+    -1px  1px 0 #ffffff,
+     1px  1px 0 #ffffff;
+  filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.3));
+  margin-top: 0;
+  margin-bottom: 25px;
+  opacity: 0;
+  animation: fadeInUp 1.2s ease-out forwards;
+}
+
 .highlighted-text {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Helvica', sans-serif;
   font-size: 4rem;
   font-weight: 900;
   color: #7B1113;
