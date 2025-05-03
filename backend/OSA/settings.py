@@ -193,8 +193,7 @@ DOMAIN = 'localhost:5173'
 SITE_NAME = 'Counseling and Testing Section - University of the Philippines Mindanao'
 
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'verify/{uid}/{token}',
     'EMAIL': {
         'VERIFICATION': {
