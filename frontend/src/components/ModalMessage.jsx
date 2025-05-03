@@ -1,34 +1,44 @@
 import React from 'react';
 import './css/ModalMessage.css';
-import { useNavigate } from 'react-router-dom';
 
-const ModalMessage = ({ message, onClose }) => {
-  const navigate = useNavigate();
-
-  const handleLogin = () => {
-    onClose();
-    navigate('/login');
-  };
-
-  const handleSignup = () => {
-    onClose();
-    navigate('/signup');
-  };
-
+const ModalMessage = ({
+  title = 'Access Restricted',
+  message,
+  onClose,
+  showCloseButton = true,
+  buttons = [], // array of { label: string, onClick: function, className?: string }
+  footer = null, // new optional prop for additional content (e.g. signup prompt)
+}) => {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <h2>Access Restricted</h2>
-        <p>{message}</p>
+        {title && <h2>{title}</h2>}
+        {message && <p>{message}</p>}
 
-        <button onClick={handleLogin} className="login-btn">Log In</button>
+        {buttons.length > 0 && (
+          <div className="modal-buttons">
+            {buttons.map((btn, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  btn.onClick?.();
+                  onClose?.();
+                }}
+                className={btn.className || 'modal-default-btn'}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+        )}
 
-        <p className="signup-text">
-          Don't have an account yet?{' '}
-          <span className="signup-link" onClick={handleSignup}>Sign Up</span>.
-        </p>
+        {footer && <div className="modal-footer">{footer}</div>}
 
-        <button className="close-btn" onClick={onClose}>×</button>
+        {showCloseButton && (
+          <button className="close-btn" onClick={onClose}>
+            ×
+          </button>
+        )}
       </div>
     </div>
   );

@@ -94,9 +94,34 @@ export const FormPublicPage = () => {
 
       {showModal && (
         <ModalMessage
+          title="Access Restricted"
           message="You need to log in to access this form."
           onClose={() => setShowModal(false)}
-          openLoginModal={() => setShowLoginModal(true)}
+          buttons={[
+            {
+              label: 'Log In',
+              onClick: () => {
+                setShowModal(false);
+                navigate('/login');
+              },
+              className: 'login-btn',
+            },
+          ]}
+          footer={
+            <p className="signup-text">
+              Don't have an account yet?{' '}
+              <span
+                className="signup-link"
+                onClick={() => {
+                  setShowModal(false);
+                  navigate('/signup');
+                }}
+              >
+                Sign Up
+              </span>
+              .
+            </p>
+          }
         />
       )}
 
