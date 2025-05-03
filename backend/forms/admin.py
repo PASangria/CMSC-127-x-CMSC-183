@@ -1,6 +1,6 @@
 # OSA/admin.py
 from django.contrib import admin
-from .models import Student, Address, CollegeEnum, YearLevelEnum, DegreeProgramEnum, PhilippineRegionEnum, Preferences, Support, StudentSupport, SocioEconomicStatus, PresentScholasticStatus
+from .models import *
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):

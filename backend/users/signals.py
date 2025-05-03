@@ -20,5 +20,4 @@ def assign_group(user):
             group = Group.objects.get(name='student')
         user.groups.add(group)
     except Group.DoesNotExist:
-        # If the group doesn't exist, log the error or handle it
         logger.error(f"Group {user.role} does not exist.")

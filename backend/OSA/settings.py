@@ -200,12 +200,12 @@ DJOSER = {
             'ENABLED': True,
             'FROM_EMAIL': 'celeszhaianna@gmail.com',  # Change to UP mail when in production
             'SUBJECT': 'Verify your email address',
-            'MESSAGE': 'Please click the following link to verify your email address: {url}',
+            'MESSAGE': 'Please click the following link to verify your email address: {SITE_URL}/verify/{uid}/{token}',
         },
     },
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
-         'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
     },
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
@@ -224,3 +224,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'celeszhaianna@gmail.com'  
 EMAIL_HOST_PASSWORD = 'cmgantrxrcfjnrms'  
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+

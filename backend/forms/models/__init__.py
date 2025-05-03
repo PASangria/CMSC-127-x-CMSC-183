@@ -1,4 +1,14 @@
 from .student import Student
 from .address import Address
-from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, PhilippineRegionEnum
+from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, PhilippineRegionEnum, SemesterEnum
 from .BIS import Preferences, Support, StudentSupport, SocioEconomicStatus, PresentScholasticStatus
+from .award import Award, CollegeAward
+from .familydata import Parent, Sibling, Guardian, FamilyData
+from .graduation import Graduation, GraduateStudent
+from .guidance_notes import GuidanceSpecialistNotes
+from .healthData import HealthData
+from .organization import Organization, Membership
+from .other_personal_data import PersonalityTraits, FamilyRelationship, CounselingInformation, PrivacyConsent
+from .psychometric import PsychometricData
+from .scholarship import Scholarship
+from .schoolRecord import SchoolAddress, School, PreviousSchoolRecord
