@@ -2,6 +2,10 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 import uuid
 
+class Role(models.TextChoices):
+    ADMIN = 'admin', 'Administrator'
+    STUDENT = 'student', 'Student'
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """Create and return a regular user with an email and password."""
@@ -22,13 +26,12 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.STUDENT)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
-    verification_token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []  
     objects = CustomUserManager()
