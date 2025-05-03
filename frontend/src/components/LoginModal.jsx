@@ -66,7 +66,7 @@ const LoginModal = ({ toggleModal, role }) => {
           />
 
           <div className="extra-links">
-            <Link to="#">Forgot password?</Link>
+            <Link to="/forgot-password">Forgot password?</Link>
             <a href="/signup">{"Don't have an account? Sign Up"}</a>
           </div>
         </form>

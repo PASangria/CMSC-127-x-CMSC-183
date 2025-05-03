@@ -26,7 +26,7 @@ export const ResetPassword = () => {
 
             setMessage('Password has been reset successfully.');
             setError('');
-            setTimeout(() => navigate('/login'), 3000); // redirect to login
+            setTimeout(() => navigate('/'), 3000); 
         } catch (err) {
             console.error(err.response?.data);
             setError('Invalid link or password. Please try again.');

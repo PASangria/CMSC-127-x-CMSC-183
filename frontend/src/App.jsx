@@ -7,6 +7,8 @@ import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
 import { MoreVertical } from "react-feather";
 import Test from "./App";
+import { ResetPassword } from "./pages/ResetPassword";
+import { ForgotPassword } from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -140,6 +142,8 @@ function App() {
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
         <Route path="/test/*" element={<Test />} />
+        <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </div>
   );
