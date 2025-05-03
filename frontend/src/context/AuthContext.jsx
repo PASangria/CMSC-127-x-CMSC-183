@@ -1,13 +1,13 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import { useNavigate } from "react-router-dom";
-import * as jwt_Decode from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
  
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [role, setRole] = useState(null);
 
   const isTokenExpired = (token) => {
     try {
@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
   };
+
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setError(null);
     try {
-      const response = await fetch('http://localhost:8000/auth/jwt/create/', {
+      const response = await fetch('http://127.0.0.1:8000/auth/token/', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

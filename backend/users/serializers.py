@@ -1,10 +1,13 @@
+from django.dispatch import receiver
 from rest_framework import serializers
-from django.contrib.auth import get_user_model, authenticate
-from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer
-from django.conf import settings
 from .models import Role 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+from .models import CustomUser
+from .signals import assign_group
+from django.db.models.signals import post_save
 
 User = get_user_model()
 
@@ -25,3 +28,20 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         if not value.endswith('@gmail.com'):
             raise serializers.ValidationError("Email must be a university email.")
         return value
+    
+    
+    
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        user = self.user
+        data['role'] = user.role  
+
+        return data
+
+@receiver(post_save, sender=CustomUser)
+def assign_group_on_user_creation(sender, instance, created, **kwargs):
+    if created:
+        assign_group(instance)
