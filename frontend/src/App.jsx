@@ -9,6 +9,7 @@ import { MoreVertical } from "react-feather";
 import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
 
         {/* User dashboard, block access for admins */}
         <Route
-          path="/user"
+          path="/student"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <UserDashboard />
@@ -141,6 +142,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/test/*" element={<Test />} />
         <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

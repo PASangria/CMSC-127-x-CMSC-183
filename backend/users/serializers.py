@@ -33,13 +33,12 @@ class CustomUserCreateSerializer(UserCreateSerializer):
     
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        data = super().validate(attrs)
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['role'] = user.role  
+        return token
 
-        user = self.user
-        data['role'] = user.role  
-
-        return data
 
 @receiver(post_save, sender=CustomUser)
 def assign_group_on_user_creation(sender, instance, created, **kwargs):

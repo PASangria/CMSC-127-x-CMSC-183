@@ -2,11 +2,11 @@ GET http://localhost:8000/auth/users/me HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MDQ5MTI5LCJpYXQiOjE3NDYwNDg4MjksImp0aSI6ImIwNjU5MDMwMGRkNTQ2ZmM4MjY2ZjQ1YzBiNzgxOTUxIiwidXNlcl9pZCI6MX0.g74XwdBQ4227DkTr91kJ7JgAlPBxClti9topbvBwcXo
 
 ###
-POST http://localhost:8000/auth/jwt/create/ HTTP/1.1
+POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
 Content-Type:  application/json
 
 {
-    "email": "presapplesang@gmail.com",
+    "email": "celeszhaianna@gmail.com",
     "password": "lunalovegood"
 }
 

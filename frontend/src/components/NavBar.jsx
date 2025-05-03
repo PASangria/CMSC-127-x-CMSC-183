@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext'; 
 import logo from '../assets/upmin-logo.svg'; 
-import LoginModal from './LoginModal'; 
 import './css/navbar.css'; 
 import { ChevronDown } from 'react-feather';
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated, refreshToken } = useContext(AuthContext);  
+    const { user, logout, isAuthenticated, hasRole } = useContext(AuthContext);  
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
-    const [selectedRole, setSelectedRole] = useState(null);
-    const [showLoginModal, setShowLoginModal] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const location = useLocation();
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const userDropdownRef = useRef(null);
@@ -35,22 +31,14 @@ export default function Navbar() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        if (params.get("showLogin") === "true") {
-            setShowLoginModal(true);
-        }
-    }, [location.search]);
-
     const handleRoleClick = (role) => {
-        setSelectedRole(role);
+        navigate(`/login?role=${role}`);
         setShowDropdown(false);
-        setShowLoginModal(true);
         setIsMenuOpen(false);
     };
 
     const handleLogout = () => {
-        logout(navigate);  
+        logout(navigate);
         setIsMenuOpen(false); 
     };
 
@@ -95,15 +83,22 @@ export default function Navbar() {
                                 </div>
                                 <li><Link to="/signup">SIGNUP</Link></li>
                             </>
-                        ) : (
+                        )  : (
                             <>
-                                <li>
-                                    <Link to={user?.is_superuser ? '/admin' : '/user'}>
-                                        {user?.is_superuser ? 'Admin Dashboard' : 'User Dashboard'}
-                                    </Link>
-                                </li>
+                                {/* Conditional rendering based on user role */}
+                                {hasRole('admin') && (
+                                    <li>
+                                        <Link to="/admin">Admin Dashboard</Link>
+                                    </li>
+                                )}
+                                {hasRole('student') && (
+                                    <li>
+                                        <Link to="/student">User Dashboard</Link>
+                                    </li>
+                                )}
                                 <li><Link to="/faq">FAQ</Link></li>
                                 <li><Link to="/public-forms">FORMS</Link></li>
+    
                                 <div className="dropdown-wrapper" ref={userDropdownRef}>
                                     <button
                                         onClick={() => setShowUserDropdown(prev => !prev)} 
@@ -122,13 +117,6 @@ export default function Navbar() {
                     </ul>
                 </div>
             </nav>
-
-            {showLoginModal && (
-                <LoginModal
-                    role={selectedRole}
-                    toggleModal={() => setShowLoginModal(false)}
-                />
-            )}
         </>
-    );
+    )
 }

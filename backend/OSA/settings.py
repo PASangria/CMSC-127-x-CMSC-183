@@ -206,6 +206,7 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
         'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'token_obtain_pair': 'users.serializers.CustomTokenObtainPairSerializer',
     },
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
