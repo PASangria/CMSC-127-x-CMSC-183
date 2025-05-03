@@ -1,17 +1,21 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import PropTypes from 'prop-types';
 import { jwtDecode } from "jwt-decode";
- 
+
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-  const [role, setRole] = useState(null);
+  const [role, setRole] = useState(() => {
+    // Check for saved role in localStorage (or decide to extract from token if needed)
+    const savedRole = localStorage.getItem('role');
+    return savedRole !== null ? savedRole : null;
+  });
 
   const isTokenExpired = (token) => {
     try {
-      const decoded = jwtDecode(token); 
+      const decoded = jwtDecode(token);
       const currentTime = Date.now() / 1000;
       return decoded.exp < currentTime;
     } catch (error) {
@@ -20,10 +24,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const setRoleFromToken = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      const userRole = decoded.role; 
+      setRole(userRole);
+      localStorage.setItem('role', userRole); 
+    } catch (error) {
+      console.error("Error decoding token for role:", error);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token && !isTokenExpired(token)) {
+      setRoleFromToken(token);  // Set the role when token is valid
       const fetchUserData = async () => {
         try {
           const userResponse = await fetch('http://localhost:8000/auth/users/me/', {
@@ -35,13 +50,15 @@ export const AuthProvider = ({ children }) => {
             const userData = await userResponse.json();
             setUser(userData);
           } else {
-            localStorage.removeItem('access_token'); // Remove only the access_token
+            localStorage.removeItem('access_token');
             setUser(null);
+            setRole(null);
           }
         } catch (error) {
           console.error('Error fetching user data', error);
           localStorage.removeItem('access_token');
           setUser(null);
+          setRole(null);
         }
       };
 
@@ -49,6 +66,7 @@ export const AuthProvider = ({ children }) => {
     } else {
       localStorage.removeItem('access_token');
       setUser(null);
+      setRole(null);
     }
   }, []);
 
@@ -64,12 +82,17 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Logout failed');
       }
 
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+      
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      localStorage.removeItem("role"); 
 
       setUser(null);
+      setRole(null);
       console.log('Logout success');
-      navigate('/');
     } catch (error) {
       console.error('Logout failed', error);
     }
@@ -78,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setError(null);
     try {
-      const response = await fetch('http://127.0.0.1:8000/auth/token/', {
+      const response = await fetch('http://localhost:8000/api/users/auth/jwt/create/', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -91,6 +114,8 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.access) {
         localStorage.setItem('access_token', data.access);
+        setRoleFromToken(data.access);  // Extract the role from the token
+
         const userResponse = await fetch('http://localhost:8000/auth/users/me/', {
           method: "GET",
           headers: { 'Authorization': `Bearer ${data.access}`, 'Content-Type': 'application/json' },
@@ -133,6 +158,20 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (data.access) {
         localStorage.setItem('access_token', data.access);
+        setRoleFromToken(data.access);  // Extract the role from the new token
+
+        const userResponse = await fetch('http://localhost:8000/auth/users/me/', {
+          method: "GET",
+          headers: { 'Authorization': `Bearer ${data.access}`, 'Content-Type': 'application/json' },
+        });
+
+        if (!userResponse.ok) {
+          throw new Error('Failed to fetch user details');
+        }
+
+        const userData = await userResponse.json();
+        setUser(userData);
+
         return true;
       }
     } catch (error) {
@@ -141,8 +180,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const hasRole = (requiredRole) => {
+    return role === requiredRole;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, refreshToken, error, isAuthenticated }}>
+    <AuthContext.Provider value={{
+      user,
+      role,
+      login,
+      logout,
+      refreshToken,
+      error,
+      isAuthenticated,
+      hasRole,
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -150,4 +202,9 @@ export const AuthProvider = ({ children }) => {
 
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
+};
+
+// Custom hook to use AuthContext
+export const useAuth = () => {
+  return useContext(AuthContext);
 };
