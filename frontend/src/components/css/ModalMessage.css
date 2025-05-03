@@ -102,3 +102,22 @@
     }
   }
   
+
+  .modal-footer {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .signup-link {
+    color: #800000;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+  }
+  
+  .signup-link:hover {
+    color: #a00000;
+  }
+  
