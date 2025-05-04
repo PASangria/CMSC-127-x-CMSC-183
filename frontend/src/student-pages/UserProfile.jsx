@@ -3,86 +3,103 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import SideNav_student from '../components/SideNav_student';
 import Footer from '../components/Footer';
-import DashboardTable from '../components/DashboardTable';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
-import '../pages/css_pages/userDashboard.css'
+import '../pages/css_pages/userDashboard.css';
 
 export const UserProfile = () => {
-  const {user, isAuthenticated } = useContext(AuthContext);
-  const [isProfileComplete, setIsProfileComplete] = useState(null); // Start with null for loading state
+  const { isAuthenticated } = useContext(AuthContext);
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login'); // Redirect to login if not authenticated
-    } else {
-      // Fetch user profile details
-      fetch('http://localhost:8000/api/users/profile/', {
-        credentials: 'include',  // Ensure cookies (like session cookies) are sent
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Not authenticated');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          setIsProfileComplete(data?.profile?.is_completed);
-          setLoading(false); // Once data is fetched, set loading to false
-        })
-        .catch((err) => {
-          console.error(err);
-          setError('You are not authenticated. Redirecting to the home page...');
-          setTimeout(() => {
-            window.location.href = '/';
-          }, 3000); // Redirect after 3 seconds
-        });
+      navigate('/login');
+      return;
     }
+
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      setError('You are not authenticated. Redirecting...');
+      return;
+    }
+
+    fetch('http://localhost:8000/api/forms/student/profile/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          if (res.status === 404) {
+            setError('Student profile not found.');
+            setLoading(false);
+            return null;
+          }
+          throw new Error('Profile fetch failed.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          setProfileData(data);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError('Error fetching profile. Please try again.');
+        setLoading(false);
+      });
   }, [isAuthenticated, navigate]);
 
   const handleCompleteProfile = () => {
     navigate('/setup-profile');
   };
 
-  if (loading) {
-    return <Loader />;  // Show loading spinner while fetching the user data
-  }
+  if (loading) return <Loader />;
 
   if (error) {
-    return <div>{error}</div>;  // Show error message if something went wrong
+    return (
+      <div className="error-message">
+        <p>{error}</p>
+        <button onClick={handleCompleteProfile} className="btn-complete-profile">
+          Complete Your Profile
+        </button>
+      </div>
+    );
   }
 
   return (
     <div>
       <Navbar />
       <SideNav_student />
-      <div className='profile-content'>
-          <h1>My Profile</h1>
-
-          {isProfileComplete === null ? (
-            <p>Loading...</p> // Show loading state if isProfileComplete is null
-          ) : isProfileComplete ? (
-            // If profile is complete, show read-only profile information
-            <div className="profile-info">
-              <h2>Profile Information</h2>
-              <p><strong>Name:</strong> {user?.profile?.name}</p>
-              <p><strong>Email:</strong> {user?.profile?.email}</p>
-              <p><strong>Phone:</strong> {user?.profile?.phone}</p>
-              {/* Display other profile fields */}
-            </div>
-          ) : (
-            // If profile is not complete, prompt to complete profile
-            <div className="profile-incomplete">
-              <p>Your profile is incomplete. Please complete it to continue using all features.</p>
-              <button onClick={handleCompleteProfile} className="btn-complete-profile">
-                Complete Your Profile
-              </button>
-            </div>
-          )}
-        </div>
+      <div className="profile-content">
+        <h1>My Profile</h1>
+        {profileData ? (
+          <div className="profile-info">
+            <h2>Profile Information</h2>
+            <p><strong>Student Number:</strong> {profileData.student_number}</p>
+            <p><strong>Name:</strong> {profileData.first_name} {profileData.middle_name} {profileData.last_name}</p>
+            <p><strong>Nickname:</strong> {profileData.nickname}</p>
+            <p><strong>Sex:</strong> {profileData.sex}</p>
+            <p><strong>Religion:</strong> {profileData.religion}</p>
+            <p><strong>Birthdate:</strong> {profileData.birthdate}</p>
+            <p><strong>Birthplace:</strong> {profileData.birthplace}</p>
+            <p><strong>Contact Number:</strong> {profileData.contact_number}</p>
+            <p><strong>College:</strong> {profileData.college}</p>
+            <p><strong>Program:</strong> {profileData.degree_program}</p>
+            <p><strong>Year Level:</strong> {profileData.current_year_level}</p>
+            <p><strong>Profile Complete:</strong> {profileData.is_complete ? 'Yes' : 'No'}</p>
+          </div>
+        ) : (
+          <p>No profile data available.</p>
+        )}
+      </div>
       <Footer />
     </div>
   );

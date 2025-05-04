@@ -9,6 +9,7 @@ import { AuthContext } from '../context/AuthContext';
 export const SetUpProfile = () => {
   const { user, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
+  const token = localStorage.getItem('access_token');
   
   const [formData, setFormData] = useState({
     family_name: '',
@@ -22,21 +23,20 @@ export const SetUpProfile = () => {
     birth_place: '',
     landline_number: '',
     mobile_number: '',
-    college: 'CSM',
+    student_number: '',
+    college: '',
     degree_program: '',
     current_year_level: '',
     permanent_region: '',
     permanent_province: '',
-    permanent_municipality: '',
-    permanent_city: '',
+    permanent_city_municipality: '',
     permanent_barangay: '',
     permanent_address_line_1: '',
     permanent_address_line_2: '',
     permanent_zip_code: '',
     up_region: '',
     up_province: '',
-    up_municipality: '',
-    up_city: '',
+    up_city_municipality: '',
     up_barangay: '',
     up_address_line_1: '',
     up_address_line_2: '',
@@ -67,17 +67,15 @@ export const SetUpProfile = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login'); // Redirect to login if user is not authenticated
-    } else {
-      // Assuming you fetch user profile data (like name) if necessary
-      if (user?.profile?.is_completed) {
-        setFormData({
-          ...user.profile, // Populate form data with existing profile data if available
-        });
-      }
-      setLoading(false); // Set loading to false once user is authenticated and data is loaded
-    }
+    const fetchStudentProfile = async () => {
+      if (!isAuthenticated) {
+        navigate('/login?role=student'); 
+      } 
+
+      setLoading(false); 
+    };
+
+    fetchStudentProfile();
   }, [isAuthenticated, user, navigate]);
 
   const handleSameAsPermanentToggle = () => {
@@ -89,8 +87,7 @@ export const SetUpProfile = () => {
         ...prev,
         up_region: prev.permanent_region,
         up_province: prev.permanent_province,
-        up_municipality: prev.permanent_municipality,
-        up_city: prev.permanent_city,
+        up_city_municipality: prev.permanent_city_municipality,
         up_barangay: prev.permanent_barangay,
         up_address_line_1: prev.permanent_address_line_1,
         up_address_line_2: prev.permanent_address_line_2,
@@ -110,62 +107,70 @@ export const SetUpProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Format birthdate
     const birthdate = `${formData.birthYear}-${String(formData.birthMonth).padStart(2, '0')}-${String(formData.birthDay).padStart(2, '0')}`;
   
     const payload = {
-      ...formData,
-      birthdate,
+      student_number: formData.student_number,
+      college: formData.college,
+      current_year_level: formData.current_year_level,
+      degree_program: formData.degreeProgram,
+      last_name: formData.family_name,
+      first_name: formData.first_name,
+      middle_name: formData.middle_name,
+      nickname: formData.nickname,
+      sex: formData.sex,
+      birth_rank: formData.birth_rank,
+      birthdate: birthdate,
+      birthplace: formData.birth_place,
+      contact_number: formData.mobile_number,
+      landline_number: formData.landline_number,
+      religion: formData.religion,
       permanent_address: {
-        region: formData.permanent_region,
-        province: formData.permanent_province,
-        municipality: formData.permanent_municipality,
-        city: formData.permanent_city,
-        barangay: formData.permanent_barangay,
         address_line_1: formData.permanent_address_line_1,
         address_line_2: formData.permanent_address_line_2,
+        barangay: formData.permanent_barangay,
+        city_municipality: formData.permanent_city_municipality,
+        province: formData.permanent_province,
+        region: formData.permanent_region,
         zip_code: formData.permanent_zip_code,
       },
-      up_address: {
-        region: formData.up_region,
-        province: formData.up_province,
-        municipality: formData.up_municipality,
-        city: formData.up_city,
-        barangay: formData.up_barangay,
+      address_while_in_up: {
         address_line_1: formData.up_address_line_1,
         address_line_2: formData.up_address_line_2,
+        barangay: formData.up_barangay,
+        city_municipality: formData.up_city_municipality,
+        province: formData.up_province,
+        region: formData.up_region,
         zip_code: formData.up_zip_code,
       },
+      is_complete: true
     };
-
+  
     try {
-      if (!isAuthenticated) {
-        setError('User not authenticated');
-        return;
-      }
-
-      setLoading(true); 
-
-      const response = await fetch("http://localhost:8000/api/forms/students/", {
+      setLoading(true);
+      const response = await fetch("http://localhost:8000/api/forms/student/profile/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
         },
-        credentials: 'include',  
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
-
-      if (!response.ok) throw new Error("Failed to submit form");
-
+  
+      if (!response.ok) throw new Error("Failed to submit profile");
+  
       const result = await response.json();
-      console.log("Submitted successfully:", result);
+      console.log("Profile submitted successfully:", result);
       setLoading(false);
     } catch (error) {
-      setLoading(false); 
-      setError(error.message); 
+      setLoading(false);
+      setError(error.message);
       console.error("Submission error:", error);
     }
   };
+  
+  
 
   // Handle loading and error messages
   if (loading) {
@@ -187,6 +192,51 @@ export const SetUpProfile = () => {
           <form onSubmit={handleSubmit}>
             <h1>SET UP YOUR PROFILE</h1>  {/* Updated header */}
             <h2 align="left">Personal Information</h2>
+            <div className="form-row">
+                <div className="form-group">
+                  <FormField
+                    label="Student Number *"
+                    name="student_number"
+                    value={formData.student_number}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <select name="current_year_level" value={formData.current_year_level} onChange={handleChange} required>
+                    <option value="">Year</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                  </select>
+                </div>
+              </div>
+            <div className="form-row">
+                <div className="form-group">
+                  <select name="college" value={formData.college} onChange={handleChange} required>
+                    <option value="">College/Department</option>
+                    <option value="CSM">CSM</option>
+                    <option value="CHSS">CHSS</option>
+                    <option value="SOM">SOM</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <select name="degreeProgram" value={formData.degreeProgram} onChange={handleChange} required>
+                    <option value="">Degree Program</option>
+                    <option value="BA Communication and Media Arts">BA Communication and Media Arts</option>
+                    <option value="BA English">BA English</option>
+                    <option value="BS Anthropology">BS Anthropology</option>
+                    <option value="BS Applied Mathematics">BS Applied Mathematics</option>
+                    <option value="BS Architecture">BS Architecture</option>
+                    <option value="BS Biology">BS Biology</option>
+                    <option value="BS Computer Science">BS Computer Science</option>
+                    <option value="BS Data Science">BS Data Science</option>
+                    <option value="BS Food Technology">BS Food Technology</option>
+                    <option value="BS Sports Science">BS Sports Science</option>
+                  </select>
+                </div>
+              </div>
             <div className='form-container'>
               <div className="form-row">
                 <div className="form-group">
@@ -379,18 +429,9 @@ export const SetUpProfile = () => {
                 <div className="form-row three-columns">
                   <div className="form-group">
                     <FormField
-                      label="Municipality*"
-                      name="permanent_municipality"
-                      value={formData.permanent_municipality}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <FormField
-                      label="City*"
-                      name="permanent_city"
-                      value={formData.permanent_city}
+                      label="City/Municipality*"
+                      name="permanent_city_municipality"
+                      value={formData.permanent_city_municipality}
                       onChange={handleChange}
                       required
                     />
@@ -434,7 +475,7 @@ export const SetUpProfile = () => {
                   <div className="form-group">
                     <FormField
                       label="Address Line 1*"
-                      name="up_address_line_2"
+                      name="up_address_line_1"
                       value={formData.up_address_line_1}
                       onChange={handleChange}
                       required
@@ -485,24 +526,13 @@ export const SetUpProfile = () => {
                 </div>
 
                 <div className="form-row three-columns">
-                  <div className="form-group">
+                <div className="form-group">
                     <FormField
-                      label="Municipality*"
-                      name="up_municipality"
-                      value={formData.up_municipality}
+                      label="City/Municipality*"
+                      name="permanent_city_municipality"
+                      value={formData.permanent_city_municipality}
                       onChange={handleChange}
                       required
-                      disabled={sameAsPermanent}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <FormField
-                      label="City*"
-                      name="up_city"
-                      value={formData.up_city}
-                      onChange={handleChange}
-                      required
-                      disabled={sameAsPermanent}
                     />
                   </div>
                   <div className="form-group">
@@ -529,42 +559,6 @@ export const SetUpProfile = () => {
                       disabled={sameAsPermanent}
                     />
                   </div>
-                </div>
-              </div>
-
-
-              <div className="form-row three-columns">
-                <div className="form-group">
-                  <select name="college" value={formData.college} onChange={handleChange} required>
-                    <option value="">College/Department</option>
-                    <option value="CSM">CSM</option>
-                    <option value="CHSS">CHSS</option>
-                    <option value="SOM">SOM</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <select name="degreeProgram" value={formData.degreeProgram} onChange={handleChange} required>
-                    <option value="">Degree Program</option>
-                    <option value="BA Communication and Media Arts">BA Communication and Media Arts</option>
-                    <option value="BA English">BA English</option>
-                    <option value="BS Anthropology">BS Anthropology</option>
-                    <option value="BS Applied Mathematics">BS Applied Mathematics</option>
-                    <option value="BS Architecture">BS Architecture</option>
-                    <option value="BS Biology">BS Biology</option>
-                    <option value="BS Computer Science">BS Computer Science</option>
-                    <option value="BS Data Science">BS Data Science</option>
-                    <option value="BS Food Technology">BS Food Technology</option>
-                    <option value="BS Sports Science">BS Sports Science</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <select name="current_year_level" value={formData.current_year_level} onChange={handleChange} required>
-                    <option value="">Year</option>
-                    <option value="1">1st Year</option>
-                    <option value="2">2nd Year</option>
-                    <option value="3">3rd Year</option>
-                    <option value="4">4th Year</option>
-                  </select>
                 </div>
               </div>
 

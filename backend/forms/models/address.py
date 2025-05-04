@@ -10,5 +10,8 @@ class Address(models.Model):
     region = models.CharField(max_length=100, choices=PhilippineRegionEnum.choices)
     zip_code = models.CharField(max_length=10)
 
+    class Meta:
+         unique_together = ('address_line_1', 'barangay', 'city_municipality', 'province', 'region', 'zip_code')
+
     def __str__(self):
         return f'{self.address_line_1}, {self.barangay}, {self.city_municipality}, {self.province}'
