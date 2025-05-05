@@ -6,6 +6,7 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [profileData, setProfileData] = useState(null);
   const [error, setError] = useState(null);
   const [role, setRole] = useState(() => {
     // Check for saved role in localStorage (or decide to extract from token if needed)
@@ -49,16 +50,29 @@ export const AuthProvider = ({ children }) => {
           if (userResponse.ok) {
             const userData = await userResponse.json();
             setUser(userData);
+
+            const profileResponse = await fetch('http://localhost:8000/api/forms/student/profile/', {
+              method: "GET",
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            });
+
+            if (profileResponse.ok) {
+              const profileData = await profileResponse.json();
+              setProfileData(profileData); 
+            }
+
           } else {
             localStorage.removeItem('access_token');
             setUser(null);
             setRole(null);
+            setProfileData(null);
           }
         } catch (error) {
           console.error('Error fetching user data', error);
           localStorage.removeItem('access_token');
           setUser(null);
           setRole(null);
+          setProfileData(null);
         }
       };
 
@@ -67,6 +81,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('access_token');
       setUser(null);
       setRole(null);
+      setProfileData(null);
     }
   }, []);
 
@@ -92,6 +107,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser(null);
       setRole(null);
+      setProfileData(null);
       console.log('Logout success');
     } catch (error) {
       console.error('Logout failed', error);
@@ -188,6 +204,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       user,
       role,
+      profileData,
       login,
       logout,
       refreshToken,

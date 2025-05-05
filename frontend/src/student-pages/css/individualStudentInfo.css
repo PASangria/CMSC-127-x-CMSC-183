@@ -1,0 +1,43 @@
+.student_profile_wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .left-student-profile {
+    flex: 1;
+    max-width: 300px;
+    min-width: 250px;
+  }
+  
+  .right-student-profile {
+    flex: 2;
+    min-width: 300px;
+  }
+  
+  .bigger_avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    background-color: #1976D2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .student_side_educ_info {
+    margin-bottom: 20px;
+  }
+  
+  .student_side_educ_info p {
+    margin: 4px 0;
+    font-family: Arial, sans-serif;
+  }
+  

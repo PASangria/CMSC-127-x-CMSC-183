@@ -5,3 +5,7 @@
 .profile-incomplete{
     display: block;
 }
+
+.protected_pages{
+    display: flex;
+}

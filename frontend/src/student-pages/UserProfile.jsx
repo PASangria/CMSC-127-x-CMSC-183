@@ -5,7 +5,8 @@ import SideNav_student from '../components/SideNav_student';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
-import '../pages/css_pages/userDashboard.css';
+import StudentSideInfo from './IndividualStudent';
+import './css/userDashboard.css';
 
 export const UserProfile = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -77,28 +78,18 @@ export const UserProfile = () => {
   return (
     <div>
       <Navbar />
-      <SideNav_student />
-      <div className="profile-content">
-        <h1>My Profile</h1>
-        {profileData ? (
-          <div className="profile-info">
-            <h2>Profile Information</h2>
-            <p><strong>Student Number:</strong> {profileData.student_number}</p>
-            <p><strong>Name:</strong> {profileData.first_name} {profileData.middle_name} {profileData.last_name}</p>
-            <p><strong>Nickname:</strong> {profileData.nickname}</p>
-            <p><strong>Sex:</strong> {profileData.sex}</p>
-            <p><strong>Religion:</strong> {profileData.religion}</p>
-            <p><strong>Birthdate:</strong> {profileData.birthdate}</p>
-            <p><strong>Birthplace:</strong> {profileData.birthplace}</p>
-            <p><strong>Contact Number:</strong> {profileData.contact_number}</p>
-            <p><strong>College:</strong> {profileData.college}</p>
-            <p><strong>Program:</strong> {profileData.degree_program}</p>
-            <p><strong>Year Level:</strong> {profileData.current_year_level}</p>
-            <p><strong>Profile Complete:</strong> {profileData.is_complete ? 'Yes' : 'No'}</p>
-          </div>
-        ) : (
-          <p>No profile data available.</p>
-        )}
+        <div class="protected_pages">
+        <SideNav_student />
+        <div className="profile-content">
+          <h1>My Profile</h1>
+          {profileData ? (
+            <>
+            <StudentSideInfo profileData={profileData} />
+            </>
+          ) : (
+            <p>No profile data available.</p>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import DashboardTable from '../components/DashboardTable';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
-import '../pages/css_pages/userDashboard.css'
+import './css/userDashboard.css'
 
 export const UserDashboard = () => {
 
