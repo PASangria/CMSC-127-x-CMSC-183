@@ -4,10 +4,14 @@ import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
 import './css/sideNav.css';
 
 const SideNav_student = () => {
-  const { user } = useContext(AuthContext); // Access user from AuthContext
+  const { user, profileData } = useContext(AuthContext);
+
+  const firstName = profileData?.first_name || user?.first_name || 'First';
+  const lastName = profileData?.last_name || user?.last_name || 'Last';
+  const email = user?.email || 'user@example.com';
+
 
   if (!user) {
-    // Show a loading or fallback state if the user is not authenticated yet
     return (
       <div className="side-navigator">
         <p>Loading...</p>
@@ -19,10 +23,10 @@ const SideNav_student = () => {
     <div className="side-navigator">
       <div className="avatar-section">
         <div className="avatar">
-          {user.first_name?.charAt(0)}{user.last_name?.charAt(0)}
+          {firstName.charAt(0)}{lastName.charAt(0)}
         </div>
         <div className="user-info">
-          <h4>{user.first_name} {user.last_name}</h4>
+          <h4>{firstName} {lastName}</h4>
           <p>{user.email}</p>
         </div>
       </div>
@@ -33,7 +37,7 @@ const SideNav_student = () => {
         <Link to="/myprofile">
           <button>My Profile</button>
         </Link>
-        <Link to="/user">
+        <Link to="/student">
           <button>Dashboard</button>
         </Link>
         <Link to="/submitted-forms">

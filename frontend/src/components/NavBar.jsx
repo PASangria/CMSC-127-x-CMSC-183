@@ -6,10 +6,11 @@ import './css/navbar.css';
 import { ChevronDown } from 'react-feather';
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated, hasRole } = useContext(AuthContext);  
+    const { user, logout, isAuthenticated, hasRole, profileData } = useContext(AuthContext);  
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const nickname = profileData?.nickname || 'User';
 
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
@@ -103,7 +104,7 @@ export default function Navbar() {
                                     <button
                                         onClick={() => setShowUserDropdown(prev => !prev)} 
                                         className={`link-button ${showUserDropdown ? 'active' : ''}`} >
-                                        {`HELLO, ${user?.username || 'Account'}`}
+                                        {`HELLO, ${nickname}`}
                                         <ChevronDown className='dropdown-icon'/>
                                     </button>
                                     {showUserDropdown && (
