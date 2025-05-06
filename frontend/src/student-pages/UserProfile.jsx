@@ -1,73 +1,65 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import SideNav_student from '../components/SideNav_student';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
+import { useApiRequest } from '../context/ApiRequestContext'; 
 import StudentSideInfo from './IndividualStudent';
 import './css/userDashboard.css';
 
 export const UserProfile = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  const [profileData, setProfileData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { isAuthenticated, profileData } = useContext(AuthContext);
+  const { request } = useApiRequest(); 
+  const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
+    const fetchProfileData = async () => {
+      if (isAuthenticated) {
+        try {
+          const res = await request('http://localhost:8000/api/forms/student/profile/', { method: 'GET' });
 
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      setError('You are not authenticated. Redirecting...');
-      return;
-    }
-
-    fetch('http://localhost:8000/api/forms/student/profile/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          if (res.status === 404) {
-            setError('Student profile not found.');
-            setLoading(false);
-            return null;
+          if (!res.ok) {
+            throw new Error('Failed to fetch profile data');
           }
-          throw new Error('Profile fetch failed.');
+
+          const data = await res.json();
+          setProfile(data);
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
         }
-        return res.json();
-      })
-      .then((data) => {
-        if (data) {
-          setProfileData(data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Error fetching profile. Please try again.');
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchProfileData();
+  }, [isAuthenticated, request]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login?role=student');
+    }
   }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const handleCompleteProfile = () => {
     navigate('/setup-profile');
   };
 
-  if (loading) return <Loader />;
+  // If the profile data is not yet available, show the loader
+  if (profile === null) {
+    return <Loader />;
+  }
 
-  if (error) {
+  // If the profile exists but is empty, prompt the user to complete their profile
+  if (Object.keys(profile).length === 0) {
     return (
       <div className="error-message">
-        <p>{error}</p>
+        <p>No profile data available.</p>
         <button onClick={handleCompleteProfile} className="btn-complete-profile">
           Complete Your Profile
         </button>
@@ -78,17 +70,11 @@ export const UserProfile = () => {
   return (
     <div>
       <Navbar />
-        <div class="protected_pages">
+      <div className="protected_pages">
         <SideNav_student />
         <div className="profile-content">
           <h1>My Profile</h1>
-          {profileData ? (
-            <>
-            <StudentSideInfo profileData={profileData} />
-            </>
-          ) : (
-            <p>No profile data available.</p>
-          )}
+          <StudentSideInfo profileData={profile} />
         </div>
       </div>
       <Footer />

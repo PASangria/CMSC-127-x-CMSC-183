@@ -4,12 +4,11 @@ import './css/individualStudentInfo.css'
 
 const StudentSideInfo = ({ profileData }) => {
   if (!profileData) {
-    return <div>Loading...</div>;  // You can customize this part to show a loading indicator
+    return <div>Loading...</div>; 
   }
 
   const { first_name, last_name, student_number, current_year_level, degree_program, college } = profileData;
   
-  // Using first letter of first and last name for avatar
   const firstName = first_name || "N/A";
   const lastName = last_name || "N/A";
 

@@ -6,11 +6,11 @@ import './css/navbar.css';
 import { ChevronDown } from 'react-feather';
 
 export default function Navbar() {
-    const { user, logout, isAuthenticated, hasRole, profileData } = useContext(AuthContext);  
+    const { user, logout, isAuthenticated, role, profileData, loading } = useContext(AuthContext);  
     const [showDropdown, setShowDropdown] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const nickname = profileData?.nickname || 'User';
+    const nickname = profileData?.nickname ?? 'User';
 
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
@@ -18,7 +18,6 @@ export default function Navbar() {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-    // Detect outside clicks for dropdowns
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -42,6 +41,19 @@ export default function Navbar() {
         logout(navigate);
         setIsMenuOpen(false); 
     };
+
+    if (loading) {
+        return (
+          <nav className="nav">
+            <div className='nav-top'>
+              <div className="headerLogo">
+                <img src={logo} alt="UP Min Logo" />
+              </div>
+              <p className="navbar-loading">Loading...</p>
+            </div>
+          </nav>
+        );
+      }
 
     return (
         <>
@@ -87,12 +99,12 @@ export default function Navbar() {
                         )  : (
                             <>
                                 {/* Conditional rendering based on user role */}
-                                {hasRole('admin') && (
+                                {role == 'admin' && (
                                     <li>
                                         <Link to="/admin">Admin Dashboard</Link>
                                     </li>
                                 )}
-                                {hasRole('student') && (
+                                {role == 'student' && (
                                     <li>
                                         <Link to="/student">User Dashboard</Link>
                                     </li>
