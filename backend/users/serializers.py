@@ -29,9 +29,6 @@ class CustomUserCreateSerializer(UserCreateSerializer):
             raise serializers.ValidationError("Email must be a university email.")
         return value
     
-    
-    
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
