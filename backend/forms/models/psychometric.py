@@ -2,7 +2,7 @@ from django.db import models
 from .student import Student
 
 class PsychometricData(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='psychometric_data')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,  to_field='student_number', related_name='psychometric_data')
     testing_date = models.DateField(verbose_name="Date of Testing")
     test_name = models.CharField(max_length=100, verbose_name="Name of Test")
     raw_score = models.CharField(max_length=20, verbose_name="Raw Score")
