@@ -5,7 +5,7 @@ from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum
 
 
 class Preferences(models.Model):
-    student_number = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     influence = models.CharField(max_length=255)  
     reason_for_enrolling = models.TextField() 
     transfer_plans = models.BooleanField(default=False)  
@@ -39,7 +39,7 @@ class Support(models.Model):
         return self.support_name
 
 class StudentSupport(models.Model):
-    student_number = models.ForeignKey('Student', on_delete=models.CASCADE)  
+    student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)  
     support = models.ForeignKey(Support, on_delete=models.CASCADE) 
     other_notes = models.TextField(blank=True, null=True) 
     other_scholarship = models.TextField(blank=True, null=True) 
@@ -68,7 +68,7 @@ class StudentSupport(models.Model):
         return f"Support for Student {self.student_number}"
 
 class SocioEconomicStatus(models.Model):
-    student_number = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     has_scholarship = models.BooleanField() 
     scholarships = models.TextField(blank=True, null=True) 
     scholarship_privileges = models.TextField(blank=True, null=True) 
@@ -93,7 +93,7 @@ class SocioEconomicStatus(models.Model):
         return f"Socio-Economic Status for Student {self.student_number}"
 
 class PresentScholasticStatus(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     intended_course = models.CharField(max_length=255)
     first_choice_course = models.CharField(max_length=255)
     admitted_course = models.CharField(max_length=255)

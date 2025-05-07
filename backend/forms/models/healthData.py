@@ -3,7 +3,7 @@ from django.db import models
 from .student import Student
 
 class HealthData(models.Model):
-    student_number = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student_number = models.ForeignKey('Student',  to_field='student_number', on_delete=models.CASCADE)
     health_condition = models.CharField(max_length=20, choices=[('excellent', 'Excellent'), ('very_good', 'Very Good'), ('good', 'Good'), ('poor', 'Poor')])
     height = models.FloatField()
     weight = models.FloatField()

@@ -2,7 +2,7 @@ from django.db import models
 from .student import Student
 
 class GuidanceSpecialistNotes(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='guidance_notes')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, to_field='student_number', related_name='guidance_notes')
     notes = models.TextField(verbose_name="Guidance Services Specialist Notes")
     date_added = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, null=True, limit_choices_to={'is_staff': True})

@@ -10,6 +10,7 @@ import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import LoginPage from "./pages/LoginPage";
+import MultiStepForm from "./forms/SetupProfile.jsx/SetupProfile";
 
 function App() {
   return (
@@ -58,7 +59,7 @@ function App() {
           path="/setup-profile"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <SetUpProfile />
+              <MultiStepForm />
             </ProtectedRoute>
           }
         />

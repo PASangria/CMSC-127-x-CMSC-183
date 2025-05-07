@@ -11,7 +11,7 @@ class Organization(models.Model):
         return self.name
 
 class Membership(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     semester = models.CharField(
         max_length=10,

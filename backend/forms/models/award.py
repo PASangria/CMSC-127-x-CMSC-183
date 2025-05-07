@@ -12,7 +12,7 @@ class Award(models.Model):
 
 
 class CollegeAward(models.Model):
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     award = models.ForeignKey('Award', on_delete=models.CASCADE)
     semester = semester = models.CharField(
         max_length=10,

@@ -1,0 +1,183 @@
+/* Background Rectangle */
+.background-rectangle {
+    position: absolute;
+    width: 100%;
+    height: 19.3125em; /* 309px / 16px */
+    left: 0; /* Align with the left edge */
+    top: 0; /* Adjust if necessary, this may be fine to position as you prefer */
+    background: #7B1113;
+    z-index: 0; /* Behind everything else */
+  }
+  
+  /* Content Wrapper */
+  .content-wrapper {
+    display: flex;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 6.25em; /* 100px / 16px */
+    min-height: calc(100vh - 7.5em); /* 120px / 16px */
+    justify-content: flex-start; /* Align items at the top */
+  }
+  
+  /* Main Step Form */
+  .mainStepForm {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 62.25em; /* 996px / 16px */
+    z-index: 2;
+    margin-top: 1.875em; /* 30px / 16px */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column; /* Stack form elements */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .main-form-info {
+    padding-bottom: 1.25em; /* 20px / 16px */
+  }
+  
+  /* Title and Subtitle */
+  .main-form-title,
+  .main-form-subtitle {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: #FFFFFF;
+  }
+  
+  /* Form Card */
+  .main-form-card {
+    background: #FFFFFF;
+    border-radius: 0.9375em; /* 15px / 16px */
+    padding: 2em; /* 32px / 16px */
+    box-sizing: border-box;
+    width: 62.25em; /* 996px / 16px */
+    z-index: 2;
+    box-shadow: 0px 0px 0.625em rgba(0, 0, 0, 0.1); /* 10px / 16px */
+    margin: 0 auto;
+  }
+  
+  /* Progress Bar */
+  .progress-bar {
+    padding: 0.625em; /* 10px / 16px */
+    padding-bottom: 1.25em; /* 20px / 16px */
+  }
+  
+  /* Buttons */
+  .main-form-buttons {
+    display: flex;
+    justify-content: center; /* Center buttons */
+    gap: 1em; /* 16px / 16px */
+    margin-top: 1.25em; /* 20px / 16px */
+  }
+  
+  .btn-primary, .btn-secondary {
+    width: 5.25em; /* 84px / 16px */
+    height: 2.625em; /* 42px / 16px */
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.9375em; /* 15px / 16px */
+    line-height: 1.625em; /* 26px / 16px */
+    letter-spacing: 0.028875em; /* 0.46px / 16px */
+    text-transform: uppercase;
+    border-radius: 0.9375em; /* 15px / 16px */
+    box-shadow: 0px 0.0625em 0.3125em rgba(0, 0, 0, 0.12),  /* 5px / 16px */
+                0px 0.125em 0.125em rgba(0, 0, 0, 0.14),  /* 2px / 16px */
+                0px 0.1875em 0.0625em -0.125em rgba(0, 0, 0, 0.2); /* 3px / 16px */
+  }
+  
+  .btn-primary {
+    background: #1976D2;
+    color: #FFFFFF;
+  }
+  
+  .btn-secondary {
+    background: #7E7E7E;
+    color: #FFFFFF;
+  }
+  
+  .step-title {
+    color: #7B1113;
+    padding-bottom: 1.25em; /* 20px / 16px */
+  }
+  
+  /* Media Queries for Responsive Design */
+  
+  /* For devices smaller than 768px (Tablets and below) */
+  @media (max-width: 48em) { /* 768px / 16px */
+    .mainStepForm {
+      width: 90%; /* Adjust width for smaller devices */
+      margin-top: 1.25em; /* 20px / 16px */
+    }
+  
+    .main-form-card {
+      width: 100%; /* Allow the form card to take full width */
+      padding: 1.25em; /* 20px / 16px */
+    }
+  
+    .main-form-title {
+      font-size: 1.75em; /* 28px / 16px */
+    }
+  
+    .main-form-subtitle {
+      font-size: 1em; /* 16px / 16px */
+    }
+  
+    .progress-bar {
+      padding: 0.5em; /* 8px / 16px */
+    }
+  
+    .btn-primary, .btn-secondary {
+      width: 4.375em; /* 70px / 16px */
+      height: 2.1875em; /* 35px / 16px */
+      font-size: 0.875em; /* 14px / 16px */
+    }
+  
+    .main-form-buttons {
+      gap: 0.625em; /* 10px / 16px */
+      flex-direction: column; /* Stack buttons vertically */
+    }
+  }
+  
+  /* For devices smaller than 480px (Mobile devices) */
+  @media (max-width: 30em) { /* 480px / 16px */
+    .background-rectangle {
+      height: 15.625em; /* 250px / 16px */
+    }
+  
+    .mainStepForm {
+      width: 100%; /* Full width for mobile */
+      margin-top: 0.625em; /* 10px / 16px */
+    }
+  
+    .main-form-title {
+      font-size: 1.5em; /* 24px / 16px */
+    }
+  
+    .main-form-subtitle {
+      font-size: 0.875em; /* 14px / 16px */
+    }
+  
+    .main-form-card {
+      padding: 1em; /* 16px / 16px */
+    }
+  
+    .progress-bar {
+      padding: 0.3125em; /* 5px / 16px */
+    }
+  
+    .btn-primary, .btn-secondary {
+      width: 3.75em; /* 60px / 16px */
+      height: 1.875em; /* 30px / 16px */
+      font-size: 0.75em; /* 12px / 16px */
+    }
+  
+    .main-form-buttons {
+      gap: 0.5em; /* 8px / 16px */
+      flex-direction: column; /* Stack buttons vertically */
+    }
+  }
+  
