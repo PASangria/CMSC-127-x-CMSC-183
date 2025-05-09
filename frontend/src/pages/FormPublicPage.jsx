@@ -11,7 +11,7 @@ export const FormPublicPage = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext); // Check if user is logged in
+  const { user } = useContext(AuthContext);
 
   const handleCardClick = (form) => {
     if (form === 'referral') {

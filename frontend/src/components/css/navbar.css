@@ -97,6 +97,11 @@
     cursor: pointer;
 }
 
+.headerLogo{
+    text-decoration: none;
+    color: #FFF;
+}
+
 /* Hamburger icon styling */
 .hamburger {
     display: none;

@@ -26,6 +26,17 @@ function App() {
           }
         />
 
+        <Route
+          path="/login"
+          element={
+            <PublicOnlyRoute>
+              <LoginPage />
+            </PublicOnlyRoute>
+          }
+        />
+
+        
+
         {/* Signup should only be accessible if NOT logged in */}
         <Route
           path="/signup"
@@ -143,7 +154,6 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/test/*" element={<Test />} />
         <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

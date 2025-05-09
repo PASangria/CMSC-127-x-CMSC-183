@@ -59,7 +59,7 @@ export default function Navbar() {
         <>
             <nav className="nav">
                 <div className='nav-top'>
-                    <div className="headerLogo">
+                    <Link to="/" className="headerLogo">
                         <div className="headerPhoto">
                             <img src={logo} alt="UP Min Logo" />
                         </div>
@@ -67,7 +67,7 @@ export default function Navbar() {
                             <h2 className="nameUp">University of the Philippines</h2>
                             <h1 className="nameDown">MINDANAO</h1>
                         </div>
-                    </div>
+                    </Link>
                     <div className="hamburger" onClick={toggleMenu}>
                         &#9776;
                     </div>
