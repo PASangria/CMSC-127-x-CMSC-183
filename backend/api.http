@@ -1,5 +1,5 @@
 GET http://localhost:8000/auth/users/me HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NTY0MDMxLCJpYXQiOjE3NDY1NjM5NzEsImp0aSI6IjI1NTU3Nzk0Y2QwMDQ1ZDE4OWI0Y2Y4MjQxYjdjNDIxIiwidXNlcl9pZCI6NSwicm9sZSI6InN0dWRlbnQifQ.67pGeSkm8if0uZWkB7Ryp23j9D6Q05hd0dzaXmRrUc4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA0ODc4LCJpYXQiOjE3NDY4MDQ1NzgsImp0aSI6ImE3OTVlOGUwY2I5ZDQ4OTE4OWZiMTViMTYxNzFlMmY0IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.9l49OLTQlYFlbi-ZCvR0NgRdeeW7gAyl0-6Gf10Iocg
 
 ###
 POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
@@ -15,7 +15,7 @@ POST http://localhost:8000/auth/jwt/refresh/ HTTP/1.1
 Content-Type:  application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NjExMjc5MSwiaWF0IjoxNzQ2MDI2MzkxLCJqdGkiOiI1Njk4MjFlMjVjNmE0NTcxYjE4NzllNGM1YTRkMjNjNCIsInVzZXJfaWQiOjF9.DijYFP3l0dlqFg_xoGI0WV1v_WgKNmeOomp0NMqFD10"
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Njg5MTUwNywiaWF0IjoxNzQ2ODA1MTA3LCJqdGkiOiIzMGM5YzIxMzg2NDg0OWRlYjEzZGZjZGIxNzZiNDczMSIsInVzZXJfaWQiOjMsInJvbGUiOiJzdHVkZW50In0.uK30IwgagJSLGR-ZUo2-kx7TltEE3Nua0q2Mk2tqhaA"
 }
 
 ###
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 GET http://localhost:8000/api/forms/student/profile HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MzY0NDEwLCJpYXQiOjE3NDYzNjQxMTAsImp0aSI6IjllN2NmZmJhNGM2MjQ2OWE4ZTYwOTVkNTE1ZDk3OWViIiwidXNlcl9pZCI6NCwicm9sZSI6InN0dWRlbnQifQ.9tnjY4C3296ikXrdf3jGUSmiT7ZVVyjz_L_A-GTQFcA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA0MDQ1LCJpYXQiOjE3NDY4MDM3NDUsImp0aSI6ImE0ZTNmZmNkYzU0ZTRjMDJiOGVhZTE5ODljOGMwNjFlIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.VDsxwsQp7Hkn06aHmD_pF76wbG8erYhzHXI-6B5jwkA
 
 ###
 POST http://localhost:8000/api/forms/student/profile/create/ HTTP/1.1
@@ -76,3 +76,39 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
   "is_complete": true
 }
 
+###
+
+GET http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA0MDQ1LCJpYXQiOjE3NDY4MDM3NDUsImp0aSI6ImE0ZTNmZmNkYzU0ZTRjMDJiOGVhZTE5ODljOGMwNjFlIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.VDsxwsQp7Hkn06aHmD_pF76wbG8erYhzHXI-6B5jwkA
+
+### 📝 Step 1: Save Preferences in Draft Mode
+POST http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODAzMTE5LCJpYXQiOjE3NDY4MDI4MTksImp0aSI6IjNmZTljM2I0MzM0ZjRlZDQ4ZDA5MDg3M2JjOTNhNzI5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.t5_5MofIEIJyOvak_DbutcenYqFtStYgHpi5oB6kaoQ
+
+{
+  "influence": "Family recommendation",
+  "reason_for_enrolling": "It has a good reputation",
+  "transfer_plans": true,
+  "transfer_reason": "I want to shift to a school closer to home",
+  "shift_plans": true,
+  "planned_shift_degree": "BS Computer Engineering",
+  "reason_for_shifting": "Stronger interest in engineering",
+  "submission_id": 1,
+}
+
+###
+PATCH http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA0ODc4LCJpYXQiOjE3NDY4MDQ1NzgsImp0aSI6ImE3OTVlOGUwY2I5ZDQ4OTE4OWZiMTViMTYxNzFlMmY0IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.9l49OLTQlYFlbi-ZCvR0NgRdeeW7gAyl0-6Gf10Iocg
+
+{
+ "student_support": {
+  "submission": 1,
+  "support": ["scholarship", "gov_funded"], 
+  "other_notes": "Student has some additional notes about the support.",
+  "other_scholarship": "This is a scholarship from the government.",
+  "combination_notes": "This student is receiving support from multiple sources."
+}
+}
