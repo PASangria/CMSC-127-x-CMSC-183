@@ -56,9 +56,10 @@ const PersonalInfoForm = ({ formData, setFormData, step }) => {
 
       <div className="form-row">
         <div className="form-group">
-          <label>Sex*</label>
           <select name="sex" value={formData.sex} onChange={handleChange} required>
-            <option value="">Select</option>
+          <option value="" disabled>
+             Sex *
+          </option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
@@ -98,7 +99,7 @@ const PersonalInfoForm = ({ formData, setFormData, step }) => {
         <div className="birthdate-inputs">
           <div className="form-group">
             <select name="birthMonth" value={formData.birthMonth} onChange={handleChange} required>
-              <option value="">Month</option>
+              <option value="" disabled>Month</option>
               {[...Array(12).keys()].map(i => (
                 <option key={i + 1} value={i + 1}>
                   {new Date(2025, i).toLocaleString('default', { month: 'long' })}
@@ -108,7 +109,7 @@ const PersonalInfoForm = ({ formData, setFormData, step }) => {
           </div>
           <div className="form-group">
             <select name="birthDay" value={formData.birthDay} onChange={handleChange} required>
-              <option value="">Day</option>
+              <option value="" disabled>Day</option>
               {[...Array(31).keys()].map(i => (
                 <option key={i + 1} value={i + 1}>{i + 1}</option>
               ))}
@@ -116,7 +117,7 @@ const PersonalInfoForm = ({ formData, setFormData, step }) => {
           </div>
           <div className="form-group">
             <select name="birthYear" value={formData.birthYear} onChange={handleChange} required>
-              <option value="">Year</option>
+              <option value="" disabled>Year</option>
               {[...Array(100).keys()].map(i => (
                 <option key={2025 - i} value={2025 - i}>{2025 - i}</option>
               ))}

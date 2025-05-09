@@ -3,13 +3,13 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const PublicOnlyRoute = ({ children }) => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, role } = useContext(AuthContext);
 
   if (isAuthenticated) {
-    if (user?.is_superuser) {
+    if (role == 'admin') {
       return <Navigate to="/admin" />;
     }
-    return <Navigate to="/user" />;
+    return <Navigate to="/student" />;
   }
 
   return children;
