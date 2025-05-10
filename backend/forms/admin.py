@@ -21,15 +21,23 @@ class PreferencesAdmin(admin.ModelAdmin):
 # Register Support model
 @admin.register(Support)
 class SupportAdmin(admin.ModelAdmin):
-    list_display = ('support_id', 'support_name')
-    search_fields = ('support_name',)
+    list_display = ('code',)  # Add any fields you'd like to display in the admin list view
+    search_fields = ('code',)  # Allow search by code
 
 # Register StudentSupport model
 @admin.register(StudentSupport)
 class StudentSupportAdmin(admin.ModelAdmin):
-    list_display = ('student_number', 'support', 'other_notes', 'other_scholarship')
-    search_fields = ('student_number__student_number', 'support__support_name')
+    # Display fields in the list view
+    list_display = ('student_number', 'display_support', 'other_notes', 'other_scholarship', 'combination_notes')
 
+    # Search functionality
+    search_fields = ('student_number__student_number', 'support__code')  # Use 'code' for the search, not the related field name
+
+    # Custom method to display the human-readable support value
+    def display_support(self, obj):
+        return ", ".join([support.get_code_display() for support in obj.support.all()])
+    display_support.short_description = 'Support' 
+    
 # Register SocioEconomicStatus model
 @admin.register(SocioEconomicStatus)
 class SocioEconomicStatusAdmin(admin.ModelAdmin):
@@ -41,3 +49,9 @@ class PresentScholasticStatusAdmin(admin.ModelAdmin):
     list_display = ('student', 'intended_course', 'first_choice_course', 'admitted_course', 'next_plan')
     search_fields = ('student__first_name', 'student__last_name', 'intended_course', 'first_choice_course')
 
+@admin.register(Submission)
+class SubmissionAdmin(admin.ModelAdmin):
+    list_display = ('student', 'form_type', 'status', 'created_at', 'submitted_on')
+    list_filter = ('form_type', 'status', 'created_at')
+    search_fields = ('student__id', 'student__first_name', 'student__last_name')
+    ordering = ('-created_at',)

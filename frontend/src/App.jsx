@@ -10,7 +10,9 @@ import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import LoginPage from "./pages/LoginPage";
-import MultiStepForm from "./forms/SetupProfile.jsx/SetupProfile";
+import MultiStepForm from "./forms/SetupProfile/SetupProfile";
+import BISForm from "./forms/BIS/BIS";
+import Testing from "./forms/SetupProfile/TestingPage";
 
 function App() {
   return (
@@ -71,6 +73,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <MultiStepForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/basic-information-sheet"
+          element={
+            <ProtectedRoute requireAdmin={false} requireUser={true}>
+              <BISForm />
             </ProtectedRoute>
           }
         />
@@ -154,7 +164,7 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
-        <Route path="/test/*" element={<Test />} />
+        <Route path="/test" element={<Testing />} />
         <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>

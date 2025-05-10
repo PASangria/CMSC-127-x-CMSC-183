@@ -72,10 +72,37 @@
     gap: 1em; /* 16px / 16px */
     margin-top: 1.25em; /* 20px / 16px */
   }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 101; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-height: 70vh; 
+  overflow-y: auto; 
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+}
+
+
   
   .btn-primary, .btn-secondary {
-    width: 5.25em; /* 84px / 16px */
-    height: 2.625em; /* 42px / 16px */
+    width: 5.25em;
+    height: 2.625em;
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 500;
@@ -88,6 +115,18 @@
                 0px 0.125em 0.125em rgba(0, 0, 0, 0.14),  /* 2px / 16px */
                 0px 0.1875em 0.0625em -0.125em rgba(0, 0, 0, 0.2); /* 3px / 16px */
   }
+
+  .modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  z-index: 1;
+}
+
   
   .btn-primary {
     background: #1976D2;
