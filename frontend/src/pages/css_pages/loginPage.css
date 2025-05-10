@@ -21,16 +21,15 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  height: calc(100vh - 80px); /* assuming NavBar height is 80px */
   position: relative;
   z-index: 1;
-  padding: 0; /* REMOVE padding */
-  gap: 0;     /* REMOVE gap */
+  padding: 30px 70px; /* consistent internal spacing */
+  gap: 0;
 }
 
 /* Left section */
 .login__left {
-  width:40%;
+  width:90%;
   padding: 4rem; /* consistent internal spacing */
   color: white;
   font-family: 'Optima', sans-serif;

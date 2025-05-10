@@ -10,10 +10,17 @@ import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import LoginPage from "./pages/LoginPage";
+<<<<<<< Updated upstream
+import MultiStepForm from "./forms/SetupProfile.jsx/SetupProfile";
+=======
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+>>>>>>> Stashed changes
 
 function App() {
   return (
     <div className="App">
+      <ToastContainer position="top-center" autoClose={3000} />
       <Routes>
         {/* HomePage restricted for logged-in users */}
         <Route
@@ -24,6 +31,17 @@ function App() {
             </PublicOnlyRoute>
           }
         />
+
+        <Route
+          path="/login"
+          element={
+            <PublicOnlyRoute>
+              <LoginPage />
+            </PublicOnlyRoute>
+          }
+        />
+
+        
 
         {/* Signup should only be accessible if NOT logged in */}
         <Route
@@ -58,7 +76,7 @@ function App() {
           path="/setup-profile"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <SetUpProfile />
+              <MultiStepForm />
             </ProtectedRoute>
           }
         />
@@ -142,7 +160,6 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/test/*" element={<Test />} />
         <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

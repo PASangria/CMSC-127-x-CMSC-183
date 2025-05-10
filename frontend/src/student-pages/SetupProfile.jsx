@@ -152,11 +152,11 @@ export const SetUpProfile = () => {
   
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8000/api/forms/student/profile/create/", {
+  
+      const response = await apiRequest("http://localhost:8000/api/forms/student/profile/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
         },
         credentials: 'include',
         body: JSON.stringify(payload),

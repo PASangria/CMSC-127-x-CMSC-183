@@ -32,7 +32,7 @@ class Graduation(models.Model):
 
 class GraduateStudent(models.Model):
     graduation = models.ForeignKey(Graduation, on_delete=models.CASCADE)
-    student_number = models.OneToOneField('Student', on_delete=models.CASCADE)
+    student_number = models.OneToOneField('Student', to_field='student_number', on_delete=models.CASCADE)
     honors_received = models.TextField(blank=True, null=True)
 
     class Meta:

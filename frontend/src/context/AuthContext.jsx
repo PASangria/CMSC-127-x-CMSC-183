@@ -106,11 +106,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    removeToken();
-    removeRefreshToken();
-    setRole(null);
+  const logout = (navigate) => {
+    // Clear localStorage and context states
+    removeToken();  // Clear token from local storage or cookies
     setUser(null);
+    setRole(null);
+    setProfileData(null);
+    setLoading(false);
+  
+    // Redirect to home
+    if (navigate) {
+      navigate('/');
+    }
   };
 
   return (

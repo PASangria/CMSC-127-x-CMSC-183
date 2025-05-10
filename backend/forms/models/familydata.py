@@ -25,13 +25,12 @@ class Sibling(models.Model):
     company_school = models.CharField(max_length=255, null=True, blank=True)
     educational_attainment = models.CharField(max_length=255)
     students = models.ManyToManyField('Student', related_name='siblings')
-
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
 
 class Guardian(models.Model):
-    student = models.OneToOneField('Student', on_delete=models.CASCADE)
+    student = models.OneToOneField('Student', to_field='student_number', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     contact_no = PhoneNumberField()
@@ -43,7 +42,7 @@ class Guardian(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 class FamilyData(models.Model):
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, related_name='family_data')
+    student = models.OneToOneField(Student, to_field='student_number', on_delete=models.CASCADE, related_name='family_data')
     mother = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.SET_NULL, related_name='children_mother')
     father = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.SET_NULL, related_name='children_father')
     guardian = models.ForeignKey(Guardian, null=True, blank=True, on_delete=models.SET_NULL)

@@ -106,6 +106,11 @@
     transform: scale(1.05);
   }
 
+.headerLogo{
+    text-decoration: none;
+    color: #FFF;
+}
+
 /* Hamburger icon styling */
 .hamburger {
     display: none;
@@ -118,33 +123,63 @@
 .link-button{
     display: flex;
     align-items: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
+.link-button:hover,
+.link-button.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Dropdown menu styling */
 .dropdown-icon{
     margin-left: 8px;
-    transform: rotate(0deg);
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
-.dropdown-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  
+/* Dropdown Button active state */
+.link-button.active {
+    background-color: #a00000; /* Maroon color for active state */
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
 
-  .dropdown-menu {
+
+/* Dropdown Menu */
+.dropdown-menu {
     position: absolute;
     top: 35px;
-    right: 0px;
-    background-color: white;
-    color: black;
-    padding: 0rem 1rem 0.7rem 1rem;
-    border: 1px solid transparent;
+    right: 0;
+    background-color: #fff;
+    color: #333;
+    padding: 1rem;
     border-radius: 0.5rem;
     z-index: 999;
     min-width: 200px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show the dropdown menu */
+.dropdown-wrapper.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
   .dropdown-menu > div {
@@ -153,23 +188,58 @@
   }
 
 
-  .dropdown-choice {
-    width: 100%;
+/* Dropdown Choices */
+.dropdown-choice {
     background-color: #58514fc5;
-    color: #ffffff;
+    color: #fff;
     border: none;
     cursor: pointer;
-    margin-top: 1rem;
     border-radius: 0.5rem;
     font-family: Arial, Helvetica, sans-serif;
     padding: 0.5rem 1rem;
     transition: all 0.3s ease-in-out;
-  }
+    text-align: center;
+    margin-top: 0.5rem;
+}
   
-  .dropdown-choice:hover {
+.dropdown-choice:hover {
     background-color: #7B1113; /* Slightly transparent maroon */
-    transform: scale(1.05); /* Floating feel */
+    transform: scale(1.05); /* Floating effect */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Improved Avatar for User Dropdown */
+.user-info-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.user-info-dropdown .avatar {
+    background-color: #7B1113;
+    color: #fff;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.user-info-dropdown div p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-info-dropdown div p:nth-child(2) {
+    font-size: 0.875rem;
+    color: #666;
 }
 
 /* Responsive design for smaller screens */
@@ -212,15 +282,18 @@
 
     .navigation.open {
         display: flex;
-        justify-content: center;
     }
 
     .navigation ul {
         flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 0;
-        margin: 0;
+        align-items: flex-start;
+        background-color: #7B1113;
+        width: 100%;
+        padding: 1rem;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: flex;
     }
 
     .navigation li {
@@ -233,4 +306,19 @@
         display: flex;
         align-items: center;
     }
+
+    .dropdown-menu {
+        min-width: 100%;
+    }
+    .dropdown-choice {
+        width: 100%;
+    }
+}
+
+.dropdown-icon {
+    transition: transform 0.3s ease;
+}
+  
+.dropdown-icon.rotate {
+    transform: rotate(180deg);
 }
