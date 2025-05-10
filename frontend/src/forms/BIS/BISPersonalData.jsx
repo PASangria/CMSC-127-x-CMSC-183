@@ -1,68 +1,71 @@
 import React from 'react';
 
 const BISPersonalData = ({ data, updateData }) => {
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    updateData({ ...data, [name]: value });
-  };
-
   return (
-    <div className="step-form">
-      <h2 className="step-title">Personal Data</h2>
-      <label>
-        Surname:
-        <input
-          type="text"
-          name="surname"
-          value={data.surname || ''}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        First Name:
-        <input
-          type="text"
-          name="firstName"
-          value={data.firstName || ''}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Middle Name:
-        <input
-          type="text"
-          name="middleName"
-          value={data.middleName || ''}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Nickname:
-        <input
-          type="text"
-          name="nickname"
-          value={data.nickname || ''}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Year:
-        <input
-          type="text"
-          name="year"
-          value={data.year || ''}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Program/Course:
-        <input
-          type="text"
-          name="programCourse"
-          value={data.programCourse || ''}
-          onChange={handleChange}
-        />
-      </label>
+    <div className="form-section">
+      <h2 className="step-title">PERSONAL DATA</h2>
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">Surname:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.surname}
+            onChange={(e) => updateData({ surname: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">First Name:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.firstName}
+            onChange={(e) => updateData({ firstName: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">Middle Name:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.middleName}
+            onChange={(e) => updateData({ middleName: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Nickname:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.nickname}
+            onChange={(e) => updateData({ nickname: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">Year:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.year}
+            onChange={(e) => updateData({ year: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Program/Course:</label>
+          <input
+            type="text"
+            className="form-input"
+            value={data.programCourse}
+            onChange={(e) => updateData({ programCourse: e.target.value })}
+          />
+        </div>
+      </div>
     </div>
   );
 };

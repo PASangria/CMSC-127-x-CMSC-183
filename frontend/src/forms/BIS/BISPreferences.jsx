@@ -11,7 +11,7 @@ const BISPreferences = ({ data, updateData }) => {
 
   return (
     <div className="form-section">
-      <h2 className="form-title">School Preferences</h2>
+      <h2 className="step-title">SCHOOL PREFERENCES</h2>
 
       <div className="form-group">
         <input
@@ -32,7 +32,7 @@ const BISPreferences = ({ data, updateData }) => {
           onChange={handleChange}
           placeholder=" "
         />
-        <label>Reasons for enrolling in this campus</label>
+        <label>Indicate the reason/s of enrolling in this campus (UP Mindanao): </label>
       </div>
 
       <div className="form-group checkbox-group">
@@ -92,6 +92,29 @@ const BISPreferences = ({ data, updateData }) => {
           />
           <label>Why?</label>
         </div>
+      </div>
+      
+      {/* Missing Fields */}
+      <div className="form-group">
+        <input
+          type="text"
+          name="degree_program"
+          value={data.degree_program || ''}
+          onChange={handleChange}
+          placeholder=" "
+        />
+        <label>If yes, what degree program?</label>
+      </div>
+
+      <div className="form-group">
+        <input
+          type="text"
+          name="reason_for_degree"
+          value={data.reason_for_degree || ''}
+          onChange={handleChange}
+          placeholder=" "
+        />
+        <label>Why?</label>
       </div>
     </div>
   );
