@@ -1,29 +1,70 @@
-import React, { useContext } from 'react';
-import FormField from '../../components/FormField';
-import '../SetupProfile/css/multistep.css'
-import DisplayField from '../../components/DisplayField';
+import React from 'react';
 
-const BISPersonalData = ({ profileData }) => {
-    if (!profileData) return <div>Loading...</div>;
+const BISPersonalData = ({ data, updateData }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    updateData({ ...data, [name]: value });
+  };
 
-    return (
-        <div className='form-container'>
-            <h2 className='step-title'>Personal Data</h2>
-            <div className='form-row'>
-                <div className='form-group'><DisplayField label="First Name" value={profileData.first_name} /></div>
-                <div className='form-group'><DisplayField label="Last Name" value={profileData.last_name} /></div>
-            </div>
-            <div className='form-row'>
-                <div className='form-group'><DisplayField label="Middle Name" value={profileData.middle_name} /></div>
-                <div className='form-group'><DisplayField label="Nickname" value={profileData.nickname} /></div>
-            </div>
-            <div className='form-row'>
-                <div className='form-group'><DisplayField label="Year" value={profileData.current_year_level} /></div>
-                <div className='form-group'><DisplayField label="Degree Program" value={profileData.degree_program} /></div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="step-form">
+      <h2 className="step-title">Personal Data</h2>
+      <label>
+        Surname:
+        <input
+          type="text"
+          name="surname"
+          value={data.surname || ''}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        First Name:
+        <input
+          type="text"
+          name="firstName"
+          value={data.firstName || ''}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Middle Name:
+        <input
+          type="text"
+          name="middleName"
+          value={data.middleName || ''}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Nickname:
+        <input
+          type="text"
+          name="nickname"
+          value={data.nickname || ''}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Year:
+        <input
+          type="text"
+          name="year"
+          value={data.year || ''}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Program/Course:
+        <input
+          type="text"
+          name="programCourse"
+          value={data.programCourse || ''}
+          onChange={handleChange}
+        />
+      </label>
+    </div>
+  );
 };
-
 
 export default BISPersonalData;
