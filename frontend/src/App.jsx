@@ -10,6 +10,8 @@ import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import LoginPage from "./pages/LoginPage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MultiStepForm from "./forms/SetupProfile/SetupProfile";
 import BISForm from "./forms/BIS/BIS";
 import Testing from "./forms/SetupProfile/TestingPage";
@@ -17,6 +19,7 @@ import Testing from "./forms/SetupProfile/TestingPage";
 function App() {
   return (
     <div className="App">
+      <ToastContainer position="top-center" autoClose={3000} />
       <Routes>
         {/* HomePage restricted for logged-in users */}
         <Route

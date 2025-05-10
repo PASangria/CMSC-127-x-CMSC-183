@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@mui/icons-material": "^7.1.0",
     "js-cookie": "^3.0.5",
-    "react-feather": "^2.0.10"
+    "react-feather": "^2.0.10",
+    "react-toastify": "^11.0.5"
   }
 }
