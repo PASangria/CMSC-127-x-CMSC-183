@@ -160,8 +160,8 @@
 /* Dropdown Menu */
 .dropdown-menu {
     position: absolute;
-    top: 35px;
-    right: 0;
+    top: 50px;
+    right: 33px;
     background-color: #fff;
     color: #333;
     padding: 1rem;
