@@ -1,20 +1,14 @@
-import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage } from "./pages";
+import LoginPage from "./pages/LoginPage";
 import { AdminDashboard, AdminBIS, AdminSCIF, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports } from "./admin-pages";
 import { UserDashboard, SetUpProfile, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
-import { MoreVertical } from "react-feather";
-import Test from "./App";
-import { ResetPassword } from "./pages/ResetPassword";
-import { ForgotPassword } from "./pages/ForgotPassword";
-import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import MultiStepForm from "./forms/SetupProfile/SetupProfile";
-import BISForm from "./forms/BIS/BIS";
-import Testing from "./forms/SetupProfile/TestingPage";
+import BISForms from "./components/BISForms";
 
 function App() {
   return (
@@ -39,8 +33,6 @@ function App() {
             </PublicOnlyRoute>
           }
         />
-
-        
 
         {/* Signup should only be accessible if NOT logged in */}
         <Route
@@ -75,15 +67,15 @@ function App() {
           path="/setup-profile"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <MultiStepForm />
+              <SetUpProfile />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/basic-information-sheet"
+          path="/forms/basic"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <BISForm />
+              <BISForms />
             </ProtectedRoute>
           }
         />
@@ -162,14 +154,10 @@ function App() {
           }
         />
 
-
         {/* Fallback for unauthorized access */}
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
-        <Route path="/test" element={<Testing />} />
-        <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </div>
   );
