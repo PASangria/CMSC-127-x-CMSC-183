@@ -12,7 +12,7 @@ import PreviewModal from './PreviewForm';
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [step, setStep] = useState(5); 
+    const [step, setStep] = useState(1); 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
 

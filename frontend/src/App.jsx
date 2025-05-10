@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import MultiStepForm from "./forms/SetupProfile/SetupProfile";
 import BISForm from "./forms/BIS/BIS";
 import Testing from "./forms/SetupProfile/TestingPage";
+import { AdminStudentView } from "./admin-pages/AdminStudentView";
 
 function App() {
   return (
@@ -80,7 +81,7 @@ function App() {
           }
         />
         <Route
-          path="/basic-information-sheet"
+          path="/forms/basic-information-sheet"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <BISForm />
@@ -118,6 +119,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
               <AdminStudentList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/students/:studentId"
+          element={
+            <ProtectedRoute requireAdmin={true} requireUser={false}>
+              <AdminStudentView  />
             </ProtectedRoute>
           }
         />

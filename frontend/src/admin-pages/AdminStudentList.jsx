@@ -6,9 +6,11 @@ import SideNav_admin from '../components/SideNav_admin';
 import { useApiRequest } from '../context/ApiRequestContext';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/UIButton';
+import "./css/studentList.css"
+import { useNavigate } from 'react-router-dom';
 
 export const AdminStudentList = () => {
-
+  const navigate = useNavigate();
   const { request } = useApiRequest();
   const { role, loading, isAuthenticated, User } = useAuth();
   const [students, setStudents] = useState([]);
@@ -32,39 +34,40 @@ export const AdminStudentList = () => {
   if (loading) return <div>Loading...</div>;
   if (role !== 'admin') return <div>Access denied. Admins only.</div>;
 
-
+  const handleViewStudent = (student) => {
+    navigate(`/admin/students/${student.student_number}`);
+  };
     return (
-    <div>
-      <Navbar />
-      <SideNav_admin />
-      <h1>Student List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Student Name</th>
-            <th>Year-Degree Program</th>
-            <th>UP Mail</th>
-            <th>Actions</th>
+  <div>
+    <Navbar />
+    <div className='admin-student-list'>
+    <h1>Student List</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Year-Degree Program</th>
+          <th>UP Mail</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {students.map(student => (
+          <tr key={student.student_number}>
+            <td data-label="Student Name">{student.first_name} {student.last_name}</td>
+            <td data-label="Year-Degree Program">{student.current_year_level}-{student.degree_program}</td>
+            <td data-label="UP Mail">{student.email}</td>
+            <td data-label="Actions">
+              <Button variant="secondary" onClick={() => handleViewStudent(student)}>
+                View
+              </Button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {students.map(student => (
-            <tr key={student.student_number}>
-              <td>{student.first_name} {student.last_name}</td>
-              <td>{student.current_year_level}-{student.degree_program}</td>
-              <td>{student.email}</td>
-              <td>
-                 <Button variant="secondary" onClick={() => handleViewStudent(student)}>
-                  View
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Footer />
+        ))}
+      </tbody>
+    </table>
     </div>
-  );
+    <Footer />
+  </div>
+);
 };
-
-export default AdminStudentList;

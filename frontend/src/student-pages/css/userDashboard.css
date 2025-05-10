@@ -1,28 +1,75 @@
-.profile-container{
-    display: flex;
+/* Overall page padding and layout */
+.protected_pages {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  min-height: 80vh;
+  background-color: #f4f4f4;
+  box-sizing: border-box;
 }
 
-.profile-incomplete{
-    display: block;
+/* Main content area */
+.profile-content {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.protected_pages{
-    display: flex;
+/* Title */
+.profile-content h1 {
+  font-size: 2rem;
+  color: #7B1113;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
 }
 
-.fade-in-up {
-    animation: fadeInUp 1s ease-out forwards;
-    opacity: 0;
+/* Error message container */
+.error-message {
+  background-color: #fff3f3;
+  border: 1px solid #ffa1a1;
+  color: #b30000;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+/* Button to complete profile */
+.btn-complete-profile {
+  margin-top: 1rem;
+  background-color: #7B1113;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-  
+
+.btn-complete-profile:hover {
+  background-color: #a3161a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .protected_pages {
+    padding: 1rem;
+  }
+
+  .profile-content {
+    padding: 1.5rem;
+  }
+
+  .profile-content h1 {
+    font-size: 1.5rem;
+  }
+}

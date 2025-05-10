@@ -28,7 +28,7 @@ export const FormPublicPage = () => {
     {
       title: 'Basic Information Sheet',
       desc: 'Brief details for student registration.',
-      id: 'basic',
+      id: 'basic-information-sheet',
       bg: 'white',
     },
     {

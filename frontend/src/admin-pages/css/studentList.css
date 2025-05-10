@@ -1,0 +1,102 @@
+/* Container */
+.admin-student-list {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+/* Heading */
+.admin-student-list h1 {
+  text-align: center;
+  color: #7B1113;
+  margin-bottom: 2rem;
+}
+
+/* Table */
+.admin-student-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Table Headers */
+.admin-student-list th {
+  background-color: #7B1113;
+  color: #fff;
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* Table Rows */
+.admin-student-list td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Row hover */
+.admin-student-list tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Button styling */
+.admin-student-list button {
+  background-color: #58514f;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.admin-student-list button:hover {
+  background-color: #7B1113;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .admin-student-list table,
+  .admin-student-list thead,
+  .admin-student-list tbody,
+  .admin-student-list th,
+  .admin-student-list td,
+  .admin-student-list tr {
+    display: block;
+  }
+
+  .admin-student-list th {
+    display: none;
+  }
+
+  .admin-student-list td {
+    position: relative;
+    padding-left: 50%;
+    margin-bottom: 1rem;
+    border-bottom: none;
+  }
+
+  .admin-student-list td::before {
+    position: absolute;
+    top: 0.75rem;
+    left: 1rem;
+    font-weight: bold;
+    color: #555;
+    content: attr(data-label);
+    white-space: nowrap;
+  }
+
+  .admin-student-list tbody tr {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+  }
+}

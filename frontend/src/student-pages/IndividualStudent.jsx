@@ -7,7 +7,7 @@ const StudentSideInfo = ({ profileData }) => {
     return <div>Loading...</div>; 
   }
 
-  const { first_name, last_name, student_number, current_year_level, degree_program, college } = profileData;
+  const { first_name, last_name, student_number, current_year_level, degree_program, college, email } = profileData;
   
   const firstName = first_name || "N/A";
   const lastName = last_name || "N/A";
@@ -47,48 +47,73 @@ const StudentSideInfo = ({ profileData }) => {
         <p>------------------------------</p>
         <strong>College:</strong>
       </div>
+
+      <div className="student_side_educ_info">
+        <p>{email}</p>
+        <p>------------------------------</p>
+        <strong>UP Mail:</strong>
+      </div>
       </div>
       <div className='right-student-profile'>
         <div className='student-personal-info'>
             <div className='info-group'>
             <p><strong>PERSONAL INFORMATION</strong></p>
-            <div style={{ maxWidth: '400px' }}>
-                <DisplayField label="First Name" value={profileData.first_name} />
-                <DisplayField label="Last Name" value={profileData.last_name} />
+            <div>
+              <div className='form-row three-columns'>
+                <div className='form-group'><DisplayField label="First Name" value={profileData.first_name} /></div>
+                <div className='form-group'><DisplayField label="Last Name" value={profileData.last_name} /></div>
+                <DisplayField label="Middle Name" value={profileData.middle_name} />
+                
+              </div>
+              <div className='form-row three-columns'>
                 <DisplayField label="Nickname" value={profileData.nickname} />
                 <DisplayField label="Sex" value={profileData.sex} />
                 <DisplayField label="Religion" value={profileData.religion} />
+              </div>
+              <div className='form-row three-columns'>
                 <DisplayField label="Birthdate" value={profileData.birthdate} />
-                <DisplayField label="Birthplace" value={profileData.birthplace} />
+                <DisplayField label="Birth Place" value={profileData.birthplace} />
+                <DisplayField label="Birth Rank" value={profileData.birth_rank} />
+              </div>
+              <div className='form-row'>
                 <DisplayField label="Contact Number" value={profileData.contact_number} />
-
-                <h3>Permanent Address</h3>
+                <DisplayField label="Landline Number" value={profileData.landline_number || "None"} />
+              </div>  
+                <p><strong>PERMANENT ADDRESS</strong></p>
                 <DisplayField label="Address Line 1" value={profileData.permanent_address.address_line_1} />
                 {profileData.permanent_address.address_line_2 && (
-                    <DisplayField label="Address Line 2" value={profileData.permanent_address.address_line_2} />
+                <DisplayField label="Address Line 2" value={profileData.permanent_address.address_line_2 || "None"} />
                 )}
-                <DisplayField
-                    label="Barangay / Municipality"
-                    value={`${profileData.permanent_address.barangay}, ${profileData.permanent_address.city_municipality}`}
-                />
-                <DisplayField
-                    label="Province / Region / Zip"
-                    value={`${profileData.permanent_address.province}, ${profileData.permanent_address.region} ${profileData.permanent_address.zip_code}`}
-                />
+                <div className='form-row'>
+                  <DisplayField
+                      label="Barangay"
+                      value={`${profileData.permanent_address.barangay}`}
+                  />
+                  <DisplayField label="City/Municipality" value={`${profileData.permanent_address.city_municipality}`}></DisplayField>
+                </div>
+                <div className='form-row three-columns'>
+                  <DisplayField label="Province" value={`${profileData.permanent_address.province}`}></DisplayField>
+                  <DisplayField label="Region" value={`${profileData.permanent_address.region}`}></DisplayField>
+                  <DisplayField label="ZIP code" value={`${profileData.permanent_address.zip_code}`}></DisplayField>
+                </div>
 
-                <h3>Address While in UP</h3>
+                <p><strong>ADDRESS WHILE IN UP</strong></p>
                 <DisplayField label="Address Line 1" value={profileData.address_while_in_up.address_line_1} />
-                {profileData.address_while_in_up.address_line_2 && (
-                    <DisplayField label="Address Line 2" value={profileData.address_while_in_up.address_line_2} />
+                {profileData.permanent_address.address_line_2 && (
+                <DisplayField label="Address Line 2" value={profileData.address_while_in_up.address_line_2 || "None"} />
                 )}
-                <DisplayField
-                    label="Barangay / Municipality"
-                    value={`${profileData.address_while_in_up.barangay}, ${profileData.address_while_in_up.city_municipality}`}
-                />
-                <DisplayField
-                    label="Province / Region / Zip"
-                    value={`${profileData.address_while_in_up.province}, ${profileData.address_while_in_up.region} ${profileData.address_while_in_up.zip_code}`}
-                />
+                <div className='form-row'>
+                  <DisplayField
+                      label="Barangay"
+                      value={`${profileData.address_while_in_up.barangay}`}
+                  />
+                  <DisplayField label="City/Municipality" value={`${profileData.address_while_in_up.city_municipality}`}></DisplayField>
+                </div>
+                <div className='form-row three-columns'>
+                  <DisplayField label="Province" value={`${profileData.address_while_in_up.province}`}></DisplayField>
+                  <DisplayField label="Region" value={`${profileData.address_while_in_up.region}`}></DisplayField>
+                  <DisplayField label="ZIP code" value={`${profileData.address_while_in_up.zip_code}`}></DisplayField>
+                </div>
             </div>
             </div>
         </div>

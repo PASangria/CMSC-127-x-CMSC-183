@@ -104,6 +104,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA3MTc3LCJpYXQiOjE3NDY4MDUxMDcsImp0aSI6IjQ5Y2QwMWRhMzAzMTQzY2VhZDc5NDNlOGVlMzZmOWNjIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.5w0I1AZctOCYUBhFGe3cayJbaERKBm9bpuBaIZRQ0ok
 
 {
+  "preferences": {
+
+  }
   "scholastic_status": {
     "intended_course": "BS Computer Science",
     "first_choice_course": "BS Computer Science",
@@ -118,4 +121,8 @@ POST http://localhost:8000/api/forms/finalize/1/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODA2ODA5LCJpYXQiOjE3NDY4MDUxMDcsImp0aSI6IjFjZWIwOTMxYzE4NTQ1MDk5M2M4MWY4NjNmOTMxY2NhIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.TvaQSBr_zt9BEfRu3I0BfUQhCrX8ntgKjagaZUcZdkE
 
-{}
+{
+  "socioeconomic": {
+    
+  }
+}
