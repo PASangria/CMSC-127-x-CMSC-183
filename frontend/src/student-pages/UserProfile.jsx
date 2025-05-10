@@ -77,7 +77,6 @@ export const UserProfile = () => {
       <div>
       <Navbar />
       <div className="protected_pages">
-        <SideNav_student />
       <div className="error-message">
         <p>No profile data available.</p>
         <button onClick={handleCompleteProfile} className="btn-complete-profile">
@@ -94,7 +93,6 @@ export const UserProfile = () => {
     <div>
       <Navbar />
       <div className="protected_pages">
-        <SideNav_student />
         <div className="profile-content">
           <h1>My Profile</h1>
           <StudentSideInfo profileData={profile} />

@@ -167,10 +167,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
 .address-section {
   margin: 1.5rem 0;
 }
