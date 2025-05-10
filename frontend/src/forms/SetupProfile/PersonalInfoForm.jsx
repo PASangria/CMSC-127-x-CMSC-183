@@ -1,7 +1,6 @@
 import React from 'react';
 import FormField from '../../components/FormField'; // Adjust path as needed
 import './css/multistep.css'
-import ProgressBar from '../../components/ProgressBar';
 
 const PersonalInfoForm = ({ formData, setFormData, step }) => {
   const handleChange = (e) => {

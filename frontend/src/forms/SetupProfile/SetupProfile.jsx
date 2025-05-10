@@ -7,13 +7,15 @@ import { apiRequest } from '../../utils/apiUtils';
 import Navbar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import ProgressBar from '../../components/ProgressBar';
+import PreviewModal from './PreviewForm';
 
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(5); 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
- 
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
+
    const [formData, setFormData] = useState({
       // Personal Information
       family_name: '',
@@ -84,8 +86,9 @@ const MultiStepForm = () => {
   };
 
   const handlePreview = () => {
-    // Implement preview logic
+    setIsPreviewOpen(true);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -217,6 +220,9 @@ const MultiStepForm = () => {
                             <button className="btn-primary" onClick={handlePreview}>
                                 Preview
                             </button>
+                            {isPreviewOpen && (
+                              <PreviewModal data={formData} onClose={() => setIsPreviewOpen(false)} />
+                            )}
                             <button className="btn-submit" onClick={handleSubmit}>
                                 Submit
                             </button>
