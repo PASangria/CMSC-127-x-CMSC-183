@@ -1,4 +1,5 @@
 import React from 'react';
+import '../SetupProfile/css/multistep.css';
 
 const BISCertify = ({ data, updateData }) => {
   const handleChange = (e) => {

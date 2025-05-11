@@ -1,4 +1,5 @@
 import React from 'react';
+import '../SetupProfile/css/multistep.css';
 
 const BISPresentScholastic = ({ data, updateData }) => {
   const handleChange = (e) => {

@@ -14,6 +14,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MultiStepForm from "./forms/SetupProfile/SetupProfile";
 import BISForm from "./forms/BIS/BIS";
+import SCIF from "./forms/SCIF/SCIF";
 import Testing from "./forms/SetupProfile/TestingPage";
 import { AdminStudentView } from "./admin-pages/AdminStudentView";
 
@@ -85,6 +86,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <BISForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forms/cumulative"
+          element={
+            <ProtectedRoute requireAdmin={false} requireUser={true}>
+              <SCIF/>
             </ProtectedRoute>
           }
         />

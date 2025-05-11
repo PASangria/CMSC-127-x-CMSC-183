@@ -1,4 +1,5 @@
 import React from 'react';
+import '../SetupProfile/css/multistep.css';
 
 const BISSocioeconomic = ({ data, updateData }) => {
   const handleChange = (e) => {
@@ -115,7 +116,7 @@ const BISSocioeconomic = ({ data, updateData }) => {
       </div>
 
       <div className="form-row full-width">
-        <label className="form-label">What do you spend much?</label>
+        <label className="form-label">What do you spend much?</label> 
         <input
           type="text"
           className="form-input"

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../SetupProfile/css/multistep.css';
 
 const BISPreferences = ({ data, updateData }) => {
   const handleChange = (e) => {
@@ -121,3 +122,4 @@ const BISPreferences = ({ data, updateData }) => {
 };
 
 export default BISPreferences;
+  
