@@ -1,5 +1,5 @@
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
-import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage } from "./pages";
+import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage, ChangePassword } from "./pages";
 import { AdminDashboard, AdminBIS, AdminSCIF, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports } from "./admin-pages";
 import { UserDashboard, SetUpProfile, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
 import ProtectedRoute from './components/ProtectedRoute';
@@ -100,7 +100,7 @@ function App() {
           path="/privacy-setting"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <UserPrivacySetting />
+              <ChangePassword />
             </ProtectedRoute>
           }
         />
@@ -166,7 +166,7 @@ function App() {
           path="/admin-system-settings"
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
-              <AdminSystemSettings />
+              <ChangePassword />
             </ProtectedRoute>
           }
         />
