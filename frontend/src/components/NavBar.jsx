@@ -21,6 +21,8 @@ export default function Navbar() {
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -51,18 +53,34 @@ export default function Navbar() {
         setShowDropdown(false);
     };
 
-        const handleLogout = () => {
-            setLogoutDialogOpen(true); // Open confirmation modal
-            setIsMenuOpen(false);      // Close menu
-        };
+    const handleLogout = () => {
+        setLogoutDialogOpen(true);
+        setIsMenuOpen(false);
+    };
 
-        const confirmLogout = () => {
-            logout(navigate);  
-            toast.success("You have been logged out!");
-            setLogoutDialogOpen(false);  
-        };
+    const confirmLogout = () => {
+        logout(navigate);
+        toast.success("You have been logged out!");
+        setLogoutDialogOpen(false);
+    };
 
-        const isDashboard = location.pathname.startsWith('/student') || location.pathname.startsWith('/admin');
+    const handleHomeClick = () => {
+        navigate('/'); // Navigate to Home
+    };
+
+    const handleFaqClick = () => {
+        navigate('/faq'); // Navigate to FAQ page
+    };
+
+    const handleFormsClick = () => {
+        navigate('/public-forms'); // Navigate to Forms page
+    };
+
+    const handleSignupClick = () => {
+        navigate('/signup'); // Navigate to Sign Up page
+    };
+
+    const isDashboard = location.pathname.startsWith('/student') || location.pathname.startsWith('/admin');
 
     if (loading) {
         return (
@@ -90,76 +108,112 @@ export default function Navbar() {
                             <h1 className="nameDown">MINDANAO</h1>
                         </div>
                     </Link>
+
+                    {/* Mobile Hamburger (visible only when user is logged out and on mobile) */}
+                    {!isAuthenticated && isMobile && (
+                        <button className="hamburger" onClick={() => setIsMenuOpen(prev => !prev)}>
+                            ☰
+                        </button>
+                    )}
                 </div>
 
-                {isMobile && (
+                {/* Navigation Menu for Logged Out Users */}
+                {!isAuthenticated && !isMobile && (
                     <div className="navigation">
                         <ul>
-                            {!isAuthenticated ? (
-                                <>
-                                    <li><Link to="/">HOME</Link></li>
-                                    <li><Link to="/faq">FAQ</Link></li>
-                                    <li><Link to="/public-forms">FORMS</Link></li>
-                                    <div className={`dropdown-wrapper ${showDropdown ? 'active' : ''}`} ref={dropdownRef}>
-                                        <button onClick={() => setShowDropdown(prev => !prev)} className="link-button">
-                                            LOGIN
-                                        </button>
-                                        {showDropdown && (
-                                            <div className="dropdown-menu">
-                                                <div className='dropdown-choice' onClick={() => handleRoleClick('student')}>As Student</div>
-                                                <div className='dropdown-choice' onClick={() => handleRoleClick('admin')}>As Admin</div>
-                                            </div>
-                                        )}
+                            <button onClick={handleHomeClick} className="link-button">HOME</button>
+                            <button onClick={handleFaqClick} className="link-button">FAQ</button>
+                            <button onClick={handleFormsClick} className="link-button">FORMS</button>
+                            <div className={`dropdown-wrapper ${showDropdown ? 'active' : ''}`} ref={dropdownRef}>
+                                <button onClick={() => setShowDropdown(prev => !prev)} className="link-button">
+                                    LOGIN
+                                </button>
+                                {showDropdown && (
+                                    <div className="dropdown-menu">
+                                        <div className='dropdown-choice' onClick={() => handleRoleClick('student')}>As Student</div>
+                                        <div className='dropdown-choice' onClick={() => handleRoleClick('admin')}>As Admin</div>
                                     </div>
-                                    <li><Link to="/signup">SIGNUP</Link></li>
-                                </>
-                            ) : (
-                                <>
-                                    <li>
-                                        <Link to={role === 'admin' ? "/admin" : "/student"}>
-                                            <Home />
+                                )}
+                            </div>
+                            <button onClick={handleSignupClick} className="link-button">SIGN UP</button>
+                        </ul>
+                    </div>
+                )}
+
+                {/* Mobile Navigation for Logged-Out Users */}
+                {!isAuthenticated && isMobile && isMenuOpen && (
+                    <div className="navigation">
+                        <ul>
+                            <li><Link to="/" className="link-button">HOME</Link></li>
+                            <li><Link to="/faq" className="link-button">FAQ</Link></li>
+                            <li><Link to="/public-forms" className="link-button">FORMS</Link></li>
+                            <li>
+                                <button onClick={() => setShowDropdown(prev => !prev)} className="link-button">
+                                    LOGIN
+                                </button>
+                                {showDropdown && (
+                                    <div className="dropdown-menu">
+                                        <Link to="/login?role=student">
+                                            <div className='dropdown-choice'>As Student</div>
                                         </Link>
-                                    </li>
-                                    <li className={`dropdown-wrapper ${showUserDropdown ? 'active' : ''}`} ref={userDropdownRef}>
-                                        <button onClick={() => setShowUserDropdown(prev => !prev)} className="link-button">
-                                            <User className='dropdown-icon' />
-                                            <span className='user-label'>{fullName}</span>
-                                            <ChevronDown className={`dropdown-icon ${showUserDropdown ? 'rotate' : ''}`} />
-                                        </button>
-                                        {showUserDropdown && (
-                                            <div className="dropdown-menu user-dropdown">
-                                                <div className="user-info-dropdown">
-                                                    <div className="avatar">{fullName.charAt(0)}</div>
-                                                    <div>
-                                                        <p>{fullName}</p>
-                                                        {idNumber && <p>ID: {idNumber}</p>}
-                                                    </div>
-                                                </div>
-                                                {role === 'student' && (
-                                                    <>
-                                                        <Link to="/myprofile"><div className='dropdown-choice'>My Profile</div></Link>
-                                                        <Link to="/public-forms"><div className='dropdown-choice'>Forms</div></Link>
-                                                        <Link to="/submitted-forms"><div className='dropdown-choice'>Submitted Forms</div></Link>
-                                                        <Link to="/privacy-setting"><div className='dropdown-choice'>Privacy Setting</div></Link>
-                                                    </>
-                                                )}
-                                                {role === 'admin' && (
-                                                    <>
-                                                        <Link to="/admin"><div className='dropdown-choice'>Dashboard</div></Link>
-                                                        <Link to="/admin-student-list"><div className='dropdown-choice'>Student List</div></Link>
-                                                        <Link to="/admin-bis-list"><div className='dropdown-choice'>Basic Info Sheet</div></Link>
-                                                        <Link to="/admin-scif-list"><div className='dropdown-choice'>Student Cumulative Info</div></Link>
-                                                        <Link to="/admin-referral-list"><div className='dropdown-choice'>Referral Form</div></Link>
-                                                        <Link to="/admin-reports"><div className='dropdown-choice'>Report Analytics</div></Link>
-                                                        <Link to="/admin-system-settings"><div className='dropdown-choice'>System Settings</div></Link>
-                                                    </>
-                                                )}
-                                                <div className='dropdown-choice' onClick={handleLogout}>Logout</div>
+                                        <Link to="/login?role=admin">
+                                            <div className='dropdown-choice'>As Admin</div>
+                                        </Link>
+                                    </div>
+                                )}
+                            </li>
+                            <li><Link to="/signup" className="link-button">SIGN UP</Link></li>
+                        </ul>
+                    </div>
+                )}
+
+                {/* Navigation Menu for Logged-In Users */}
+                {isAuthenticated && isMobile && (
+                    <div className="navigation">
+                        <ul>
+                            <li>
+                                <Link to={role === 'admin' ? "/admin" : "/student"}>
+                                    <Home />
+                                </Link>
+                            </li>
+                            <li className={`dropdown-wrapper ${showUserDropdown ? 'active' : ''}`} ref={userDropdownRef}>
+                                <button onClick={() => setShowUserDropdown(prev => !prev)} className="link-button">
+                                    <User className='dropdown-icon' />
+                                    <span className='user-label'>{fullName}</span>
+                                    <ChevronDown className={`dropdown-icon ${showUserDropdown ? 'rotate' : ''}`} />
+                                </button>
+                                {showUserDropdown && (
+                                    <div className="dropdown-menu user-dropdown">
+                                        <div className="user-info-dropdown">
+                                            <div className="avatar">{fullName.charAt(0)}</div>
+                                            <div>
+                                                <p>{fullName}</p>
+                                                {idNumber && <p>ID: {idNumber}</p>}
                                             </div>
+                                        </div>
+                                        {role === 'student' && (
+                                            <>
+                                                <Link to="/myprofile"><div className='dropdown-choice'>My Profile</div></Link>
+                                                <Link to="/public-forms"><div className='dropdown-choice'>Forms</div></Link>
+                                                <Link to="/submitted-forms"><div className='dropdown-choice'>Submitted Forms</div></Link>
+                                                <Link to="/privacy-setting"><div className='dropdown-choice'>Privacy Setting</div></Link>
+                                            </>
                                         )}
-                                    </li>
-                                </>
-                            )}
+                                        {role === 'admin' && (
+                                            <>
+                                                <Link to="/admin"><div className='dropdown-choice'>Dashboard</div></Link>
+                                                <Link to="/admin-student-list"><div className='dropdown-choice'>Student List</div></Link>
+                                                <Link to="/admin-bis-list"><div className='dropdown-choice'>Basic Info Sheet</div></Link>
+                                                <Link to="/admin-scif-list"><div className='dropdown-choice'>Student Cumulative Info</div></Link>
+                                                <Link to="/admin-referral-list"><div className='dropdown-choice'>Referral Form</div></Link>
+                                                <Link to="/admin-reports"><div className='dropdown-choice'>Report Analytics</div></Link>
+                                                <Link to="/admin-system-settings"><div className='dropdown-choice'>System Settings</div></Link>
+                                            </>
+                                        )}
+                                        <div className='dropdown-choice' onClick={handleLogout}>Logout</div>
+                                    </div>
+                                )}
+                            </li>
                         </ul>
                     </div>
                 )}

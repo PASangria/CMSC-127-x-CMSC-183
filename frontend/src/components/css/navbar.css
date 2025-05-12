@@ -67,42 +67,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 1.25rem;
     flex-wrap: nowrap;
-}
-
-.navigation a,
-.navigation button {
-    text-decoration: none;
-    color: #FFF;
-    font-size: 0.875rem;
-    font-weight: 500;
-    font-family: Arial, Helvetica, sans-serif;
-    position: relative;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-}
-
-.navigation a:hover,
-.navigation button:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: scale(1.08);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.navigation button {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.navigation button.active {
-    background-color: #a00000;
-    color: #FFF;
-    font-weight: 600;
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* ========== Dropdown Trigger ========== */
@@ -113,9 +78,8 @@
 .link-button {
     display: flex;
     align-items: center;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem; /* Same padding as dropdown-choice */
     border-radius: 0.5rem;
     color: #fff;
     background-color: transparent;
@@ -124,25 +88,15 @@
     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.link-button:hover,
-.link-button.active {
-    background-color: rgba(255, 255, 255, 0.15);
+.link-button:hover {
+    background-color: rgba(255, 255, 255, 0.15); /* Same hover effect */
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .link-button.active {
-    background-color: #a00000;
+    background-color: #a00000; /* Active state, matches hover of dropdown-choice */
     font-weight: 600;
-}
-
-.dropdown-icon {
-    margin-left: 8px;
-    transition: transform 0.3s ease;
-}
-
-.dropdown-icon.rotate {
-    transform: rotate(180deg);
 }
 
 /* ========== Dropdown Menu ========== */
@@ -180,27 +134,35 @@
 
 /* ========== Dropdown Choices ========== */
 .dropdown-choice {
-    background-color: #58514fc5;
+    background-color: #58514fc5; /* Default red background for all buttons */
     color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 0.5rem;
     font-family: Arial, Helvetica, sans-serif;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem; /* Consistent padding */
     text-align: center;
     margin-top: 0.5rem;
     transition: all 0.3s ease-in-out;
     width: 100%;
+    font-size: 1rem; /* Standard font size */
 }
 
 .dropdown-choice:hover {
-    background-color: #7B1113;
+    background-color: #7B1113 !important;
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-choice:active {
-    transform: scale(0.95);
+    transform: scale(0.95); /* Shrinks when clicked */
+}
+
+/* Specific hover color change for the logout button */
+.dropdown-choice:last-child:hover {
+    background-color: #7B1113; /* Darker color for logout hover */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* ========== Avatar / User Info ========== */
@@ -245,48 +207,34 @@
         justify-content: space-between;
     }
 
-    .dropdown-wrapper .link-button {
-        margin: 0 auto;
-    }
-
-    .nav-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
-    .headerLogo {
-        padding-left: 0;
-    }
-
     .hamburger {
-        display: none;
+        display: none; /* Optionally make this visible for mobile toggle */
     }
 
+    /* Navigation for small screens */
     .navigation {
         display: flex;
         flex-direction: row;
-        background-color: transparent;
         align-items: center;
-        padding: 0;
-    }
-
-    .navigation.open {
-        display: flex;
     }
 
     .navigation ul {
-        flex-direction: row;
-        align-items: center;
-        gap: 1rem;
-        padding: 0;
-        margin: 0;
-    }
-
-    .navigation li,
-    .dropdown-wrapper {
         display: flex;
         align-items: center;
+        justify-content: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Ensure all links (HOME, FAQ, FORMS, LOG IN, SIGN UP) have hover effect when logged out */
+    .navigation li a:hover,
+    .navigation button:hover {
+        background-color: rgba(255, 255, 255, 0.15); /* Same hover effect for buttons and links */
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 }
+
+/* ========== Remove redundant button styles ========== */
+/* Removed extra button styles to ensure consistency across elements */
