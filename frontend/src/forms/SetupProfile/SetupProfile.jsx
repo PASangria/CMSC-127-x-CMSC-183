@@ -98,7 +98,7 @@ const MultiStepForm = () => {
       student_number: formData.student_number,
       college: formData.college,
       current_year_level: formData.current_year_level,
-      degree_program: formData.degreeProgram,
+      degree_program: formData.degree_program,
       last_name: formData.family_name,
       first_name: formData.first_name,
       middle_name: formData.middle_name,

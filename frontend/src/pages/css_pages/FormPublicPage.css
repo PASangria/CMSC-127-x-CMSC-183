@@ -60,7 +60,7 @@ html, body {
     transform: translateY(0);
 }
   
-.card-title {
+.form-card-title {
     margin: 0;
     font-size: 1.15rem;
     font-weight: 600;
@@ -68,8 +68,9 @@ html, body {
     transition: transform 0.3s ease;
 }
   
-.form-card:hover .card-title {
+.form-card:hover .form-card-title {
     transform: translateY(-8px);
+    color: white;
 }
   
 .card-desc {

@@ -1,47 +1,53 @@
 import React from "react";
 import "../components/css/DashboardTable.css";
+import { formatDate } from "../utils/helperFunctions";
 
-const TableSection = ({ title, headers, rows }) => (
-  <div className="table-section">
-    <h2>{title}</h2>
-    {rows.length === 0 ? (
-      <p>No {title.toLowerCase()} yet.</p>
-    ) : (
-      <table className="dashboard-table">
-        <thead>
-          <tr>
-            {headers.map((header, index) => (
-              <th key={index}>{header}</th>
+const TableSection = ({ title, headers, rows, onView }) => {
+  // Check if rows is an array and default to an empty array if not
+  const validRows = Array.isArray(rows) ? rows : [];
+
+  return (
+    <div className="table-section">
+      <h2>{title}</h2>
+      {validRows.length === 0 ? (
+        <p>No {title.toLowerCase()} yet.</p>
+      ) : (
+        <table className="dashboard-table">
+          <thead>
+            <tr>
+              {headers.map((header, index) => (
+                <th key={index}>{header}</th>
+              ))}
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {validRows.map((row, idx) => (
+              <tr key={row.id}> {/* Use a unique ID from the form */}
+                {/* Access individual properties of the row */}
+                <td>{row.form_type}</td> {/* Example: formType could be a property */}
+                <td><span>{formatDate(row.date_submitted || row.saved_on)}</span></td> 
+                <td>
+                  <span className={`status-badge ${row.status.toLowerCase()}`}>{row.status}</span>
+                </td>
+                <td>
+                  <button className="view-button" onClick={() => onView(row)}>VIEW</button>
+                </td>
+              </tr>
             ))}
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-        {rows.map((row, idx) => (
-          <tr key={idx}>
-            {row.map((cell, i) => (
-              <td key={i}>
-                {i === 2? (
-                  <span className={`status-badge ${cell.toLowerCase()}`}>{cell}</span>
-                ) : (
-                  cell
-                )}
-              </td>
-            ))}
-            <td>
-              <button className="view-button" onClick={() => handleView(row)}>VIEW</button>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-    )}
-  </div>
-);
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
 
 const DashboardTable = ({ submittedForms, pendingActions, onView }) => {
   const submittedHeaders = ["Form Type", "Date Submitted", "Status"];
   const pendingHeaders = ["Form Type", "Last Date Updated", "Status"];
+
+  console.log("Submitted Forms:", submittedForms);
+  console.log("Pending Actions:", pendingActions);
 
   return (
     <div className="dashboard-container">
@@ -62,13 +68,5 @@ const DashboardTable = ({ submittedForms, pendingActions, onView }) => {
   );
 };
 
+
 export default DashboardTable;
-
-// To improve:  
-// key usage for rows.map:
-// {rows.map((row, idx) => (             --> line 21
-//  <tr key={idx}></tr>
-// Using index as a key works, but ideally use a unique ID from the form object if available (like form.id).
-
-// define handleView(row) (or pass it as a prop). --> line 32 in the button
-// make the "VIEW" button open a modal or route to a detailed page.

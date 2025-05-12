@@ -76,7 +76,7 @@ export const FormPublicPage = () => {
                   <div className="card-text">
                     <p className="card-desc">{form.desc}</p>
                   </div>
-                  <h3 className="card-title">{form.title}</h3>
+                  <h3 className="form-card-title">{form.title}</h3>
                   <button className={form.comingSoon ? 'disabled' : 'active'}>
                     {form.comingSoon ? 'Coming Soon' : 'Fill Out'}
                   </button>

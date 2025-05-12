@@ -1,34 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SideNav_student from './SideNav_student'; // Ensure this path and component are correct
-import DataTable from './DataTable';
+import DashboardTable from './DashboardTable'; // Import the DashboardTable component
+import Loader from '../components/Loader'; // Assuming you have a Loader component for loading states
+import { AuthContext } from '../context/AuthContext'; // Assuming AuthContext provides user data
+import { apiRequest } from '../utils/apiUtils'; // Importing apiRequest for API calls
 import './css/Dashboard_student.css';
 
 const Dashboard = () => {
-  const user = {
-    name: 'Quennie Nebria',
-    email: 'qneb@up.edu.ph',
+  const [submittedForms, setSubmittedForms] = useState([]);
+  const [pendingActions, setPendingActions] = useState([]);
+  const { user, loading } = useContext(AuthContext); // Access the user from AuthContext
+  const navigate = useNavigate(); // For navigation purposes
+
+
+  useEffect(() => {
+    if (!user) {
+      return; // If the user is not authenticated, do nothing
+    }
+
+    const fetchForms = async () => {
+      try {
+        // API request to get all submissions for the logged-in user
+        const response = await apiRequest('http://localhost:8000/api/submissions/');
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // Filter forms based on their status
+          const submitted = data.filter((form) => form.status === 'submitted');
+          const pending = data.filter((form) => form.status === 'draft');
+
+          setSubmittedForms(submitted); // Set the submitted forms
+          setPendingActions(pending); // Set the pending actions
+        } else {
+          console.error('Failed to fetch submissions');
+        }
+      } catch (error) {
+        console.error('Error fetching submissions:', error);
+      }
+    };
+
+    fetchForms();
+  }, [user]);
+
+  const handleView = (form) => {
+    navigate(`/forms/${form.id}`);
   };
 
-  const submittedForms = [
-    { formType: 'Form A', dateSubmitted: '2025-04-01', status: 'Approved' },
-    { formType: 'Form B', dateSubmitted: '2025-04-02', status: 'Pending' },
-    { formType: 'Form C', dateSubmitted: '2025-04-03', status: 'Rejected' },
-  ];
-
-  const pendingActions = [
-    { formType: 'Form D', dateSubmitted: '2025-04-04', status: 'Pending' },
-    { formType: 'Form E', dateSubmitted: '2025-04-05', status: 'Pending' },
-  ];
+  if (loading) {
+    return <Loader />; 
+  }
 
   return (
     <div className="dashboard-container">
       <SideNav_student user={user} /> {/* Pass the user object to SideNav_student */}
       <div className="dashboard-content">
         <h1>Welcome, {user.name}</h1>
-        <h2>Your Submitted Forms</h2>
-        <DataTable data={submittedForms} /> {/* Pass the submitted forms data to DataTable */}
-        <h2>Pending Actions</h2>
-        <DataTable data={pendingActions} /> {/* Pass the pending actions data to DataTable */}
+        
+        {/* Pass the submitted and pending actions data to DashboardTable */}
+        <DashboardTable 
+          submittedForms={submittedForms} 
+          pendingActions={pendingActions} 
+          onView={handleView}
+        />
       </div>
     </div>
   );

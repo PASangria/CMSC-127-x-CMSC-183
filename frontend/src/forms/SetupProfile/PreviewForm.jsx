@@ -1,61 +1,91 @@
 import React from 'react';
-import "./css/multistep.css"
+import DisplayField from "../../components/DisplayField"
+import './css/multistep.css';
 import { X } from 'react-feather';
 
-
 const PreviewModal = ({ data, onClose }) => {
+  if (!data) return null;
+
+  const birthdate = `${data.birthYear}-${String(data.birthMonth).padStart(2, '0')}-${String(data.birthDay).padStart(2, '0')}`;
+  
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-          <button className="modal-close-btn" onClick={onClose}>
-            <X size={24} />
+        <button className="modal-close-btn" onClick={onClose}>
+          <X size={24} />
         </button>
         <h2>Profile Preview</h2>
 
-        <section>
-          <h3>Personal Information</h3>
-          <p><strong>Family Name:</strong> {data.family_name}</p>
-          <p><strong>First Name:</strong> {data.first_name}</p>
-          <p><strong>Middle Name:</strong> {data.middle_name}</p>
-          <p><strong>Nickname:</strong> {data.nickname}</p>
-          <p><strong>Sex:</strong> {data.sex}</p>
-          <p><strong>Religion:</strong> {data.religion}</p>
-          <p><strong>Birth Rank:</strong> {data.birth_rank}</p>
-          <p><strong>Birthdate:</strong> {data.birthdate}</p>
-          <p><strong>Birth Place:</strong> {data.birth_place}</p>
-          <p><strong>Landline:</strong> {data.landline_number}</p>
-          <p><strong>Mobile:</strong> {data.mobile_number}</p>
-        </section>
+        <div className='student_preview_wrapper'>
+          {/* PERSONAL INFORMATION */}
+          <div className='info-group'>
+            <p><strong>PERSONAL INFORMATION</strong></p>
+            <div className='form-row three-columns'>
+              <DisplayField label="Family Name" value={data.family_name} />
+              <DisplayField label="First Name" value={data.first_name} />
+              <DisplayField label="Middle Name" value={data.middle_name} />
+            </div>
+            <div className='form-row three-columns'>
+              <DisplayField label="Nickname" value={data.nickname} />
+              <DisplayField label="Sex" value={data.sex} />
+              <DisplayField label="Religion" value={data.religion} />
+            </div>
+            <div className='form-row three-columns'>
+              <DisplayField label="Birthdate" value={birthdate} />
+              <DisplayField label="Birth Place" value={data.birth_place} />
+              <DisplayField label="Birth Rank" value={data.birth_rank} />
+            </div>
+            <div className='form-row'>
+              <DisplayField label="Landline" value={data.landline_number || "None"} />
+              <DisplayField label="Mobile" value={data.mobile_number} />
+            </div>
+          </div>
 
-        <section>
-          <h3>Education Information</h3>
-          <p><strong>Student Number:</strong> {data.student_number}</p>
-          <p><strong>College:</strong> {data.college}</p>
-          <p><strong>Degree Program:</strong> {data.degree_program}</p>
-          <p><strong>Year Level:</strong> {data.current_year_level}</p>
-        </section>
+          {/* EDUCATION INFORMATION */}
+          <div className='info-group'>
+            <p><strong>EDUCATION INFORMATION</strong></p>
+            <DisplayField label="Student Number" value={data.student_number} />
+            <DisplayField label="College" value={data.college} />
+            <DisplayField label="Degree Program" value={data.degreeProgram} />
+            <DisplayField label="Year Level" value={data.current_year_level} />
+          </div>
 
-        <section>
-          <h3>Permanent Address</h3>
-          <p><strong>Region:</strong> {data.permanent_region}</p>
-          <p><strong>Province:</strong> {data.permanent_province}</p>
-          <p><strong>City/Municipality:</strong> {data.permanent_city_municipality}</p>
-          <p><strong>Barangay:</strong> {data.permanent_barangay}</p>
-          <p><strong>Address 1:</strong> {data.permanent_address_line_1}</p>
-          <p><strong>Address 2:</strong> {data.permanent_address_line_2}</p>
-          <p><strong>ZIP Code:</strong> {data.permanent_zip_code}</p>
-        </section>
+          {/* PERMANENT ADDRESS */}
+          <div className='info-group'>
+            <p><strong>PERMANENT ADDRESS</strong></p>
+            <DisplayField label="Address Line 1" value={data.permanent_address_line_1} />
+            {data.permanent_address_line_2 && (
+              <DisplayField label="Address Line 2" value={data.permanent_address_line_2} />
+            )}
+            <div className='form-row'>
+              <DisplayField label="Barangay" value={data.permanent_barangay} />
+              <DisplayField label="City/Municipality" value={data.permanent_city_municipality} />
+            </div>
+            <div className='form-row three-columns'>
+              <DisplayField label="Province" value={data.permanent_province} />
+              <DisplayField label="Region" value={data.permanent_region} />
+              <DisplayField label="ZIP Code" value={data.permanent_zip_code} />
+            </div>
+          </div>
 
-        <section>
-          <h3>Address While in UP</h3>
-          <p><strong>Region:</strong> {data.up_region}</p>
-          <p><strong>Province:</strong> {data.up_province}</p>
-          <p><strong>City/Municipality:</strong> {data.up_city_municipality}</p>
-          <p><strong>Barangay:</strong> {data.up_barangay}</p>
-          <p><strong>Address 1:</strong> {data.up_address_line_1}</p>
-          <p><strong>Address 2:</strong> {data.up_address_line_2}</p>
-          <p><strong>ZIP Code:</strong> {data.up_zip_code}</p>
-        </section>
+          {/* ADDRESS WHILE IN UP */}
+          <div className='info-group'>
+            <p><strong>ADDRESS WHILE IN UP</strong></p>
+            <DisplayField label="Address Line 1" value={data.up_address_line_1} />
+            {data.up_address_line_2 && (
+              <DisplayField label="Address Line 2" value={data.up_address_line_2} />
+            )}
+            <div className='form-row'>
+              <DisplayField label="Barangay" value={data.up_barangay} />
+              <DisplayField label="City/Municipality" value={data.up_city_municipality} />
+            </div>
+            <div className='form-row three-columns'>
+              <DisplayField label="Province" value={data.up_province} />
+              <DisplayField label="Region" value={data.up_region} />
+              <DisplayField label="ZIP Code" value={data.up_zip_code} />
+            </div>
+          </div>
+        </div>
 
         <button onClick={onClose} className="btn-secondary">Close</button>
       </div>

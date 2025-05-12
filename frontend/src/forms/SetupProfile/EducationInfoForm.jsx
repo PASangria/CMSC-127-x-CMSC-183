@@ -31,8 +31,8 @@ const EducationInfoForm = ({ formData, setFormData }) => {
     }
 
     // Validate degreeProgram
-    if (!formData.degreeProgram) {
-      validationErrors.degreeProgram = 'Please select your degree program.';
+    if (!formData.degree_program) {
+      validationErrors.degree_program = 'Please select your degree program.';
     }
 
     setErrors(validationErrors);

@@ -55,9 +55,9 @@
         };
 
         const confirmLogout = () => {
-            logout(navigate);  // Call the logout function from context with navigation
+            logout(navigate);  
             toast.success("You have been logged out!");
-            setLogoutDialogOpen(false);  // Close the confirmation dialog
+            setLogoutDialogOpen(false);  
         };
 
         const isDashboard = location.pathname.startsWith('/student') || location.pathname.startsWith('/admin');
