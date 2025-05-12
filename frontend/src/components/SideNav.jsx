@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 
 const SideNav = ({ variant, onLogoutClick }) => {
-    const { user, profileData, loading } = useContext(AuthContext);
+    const { user, profileData, loading, logout } = useContext(AuthContext);
 
     useEffect(() => {
         if (!loading && !user) {
@@ -38,9 +38,8 @@ const SideNav = ({ variant, onLogoutClick }) => {
     const lastName = profileData?.last_name || user?.last_name || 'Last';
     const email = user?.email || 'user@example.com';
 
-    // Handle logout
     const handleLogout = () => {
-        logout(); // Call the logout function from AuthContext
+        logout(); 
     };
 
     return (
@@ -86,7 +85,7 @@ const SideNav = ({ variant, onLogoutClick }) => {
 
                     <div className="nav-buttons-bottom">
                         <Link to="/help"><button><HelpOutline /> Help</button></Link>
-                        <Link to="/logout"><button  onClick={onLogoutClick}><LogoutOutlined /> Log out</button></Link>
+                         <button onClick={handleLogout}><LogoutOutlined /> Log out</button>
                     </div>
                 </div>
         </div>

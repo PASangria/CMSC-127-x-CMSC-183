@@ -36,10 +36,6 @@ class HealthDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = HealthData
         fields = '__all__'
-        extra_kwargs = {
-            field.name: {'required': False}
-            for field in model._meta.fields if field.name != 'id'
-        }
 
 class SchoolAddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,32 +43,34 @@ class SchoolAddressSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SchoolSerializer(serializers.ModelSerializer):
-    address = SchoolAddressSerializer()
-
+    school_address = SchoolAddressSerializer()
     class Meta:
-        model = School
-        fields = '__all__'
-
-    def create(self, validated_data):
-        address_data = validated_data.pop('address')
-        address = SchoolAddress.objects.create(**address_data)
-        return School.objects.create(address=address, **validated_data)
-
-    def update(self, instance, validated_data):
-        address_data = validated_data.pop('address', None)
-        if address_data:
-            for attr, value in address_data.items():
-                setattr(instance.address, attr, value)
-            instance.address.save()
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        return instance
+        model = School 
+        fields = ['id', 'name', 'school_address']
 
 class PreviousSchoolRecordSerializer(serializers.ModelSerializer):
+    school = SchoolSerializer()
+
     class Meta:
         model = PreviousSchoolRecord
-        fields = '__all__'
+        fields = ['school', 'education_level', 'start_year', 'end_year', 'honors_received', 'senior_high_gpa']
+
+    def create(self, validated_data):
+        # Extract the nested 'school' data from validated_data
+        school_data = validated_data.pop('school')
+        school_address_data = school_data.pop('school_address')
+
+        # Create the school_address first
+        school_address = SchoolAddress.objects.create(**school_address_data)
+
+        # Create the School instance, associating it with the newly created school_address
+        school = School.objects.create(school_address=school_address, **school_data)
+
+        # Finally, create the PreviousSchoolRecord and associate it with the created school
+        previous_school_record = PreviousSchoolRecord.objects.create(school=school, **validated_data)
+
+        return previous_school_record
+
 
 class ScholarshipSerializer(serializers.ModelSerializer):
     class Meta:
