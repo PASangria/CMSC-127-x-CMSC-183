@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/NavBar';
-import Footer from '../components/Footer';
+import React, { useState } from 'react';
 import DashboardTable from '../components/DashboardTable';
+<<<<<<< Updated upstream
 import Loader from '../components/Loader';
 import { useAuth } from '../context/AuthContext';  // Import the useAuth hook
 import { useApiRequest } from '../context/ApiRequestContext';  // Import the useApiRequest hook
@@ -72,5 +70,20 @@ export const UserDashboard = () => {
       </div>
       <Footer />
     </div>
+=======
+import DefaultLayout from '../components/DefaultLayout';
+
+export const UserDashboard = () => {
+  const [submittedForms, setSubmittedForms] = useState([]);
+  const [pendingActions, setPendingActions] = useState([]);
+
+  return (
+    <DefaultLayout variant="student">
+      <DashboardTable
+        submittedForms={submittedForms}
+        pendingActions={pendingActions}
+      />
+    </DefaultLayout>
+>>>>>>> Stashed changes
   );
 };
