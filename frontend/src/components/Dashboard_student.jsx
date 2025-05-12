@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {  } from 'react-router-dom';
 import SideNav_student from './SideNav_student'; // Ensure this path and component are correct
 import DashboardTable from './DashboardTable'; // Import the DashboardTable component
 import Loader from '../components/Loader'; // Assuming you have a Loader component for loading states
