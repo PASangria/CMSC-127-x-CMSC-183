@@ -26,7 +26,7 @@ class School(models.Model):
         return self.name
 
 class PreviousSchoolRecord(models.Model):
-    student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, to_field='student_number', on_delete=models.CASCADE)
     school = models.ForeignKey('School', on_delete=models.CASCADE, blank=True, null=True)
     education_level = models.CharField(
         max_length=50,

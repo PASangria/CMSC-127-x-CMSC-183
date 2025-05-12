@@ -204,9 +204,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 
 ###
-POST http://localhost:8000/api/forms/finalize/9/ HTTP/1.1
+POST http://localhost:8000/api/forms/finalize/11/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDI4MDUxLCJpYXQiOjE3NDcwMjQ0NTEsImp0aSI6IjkxM2Q5MjhkZDlhZDQyYWNhZjE2ODBhMTI4ZGZkZmIxIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.zULnggCI48kL119_9p7BfjML-x0KWcp9xmupTXSaOSI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
+
 
 {
 
@@ -217,12 +218,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 GET http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTkyMDE4LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6IjFkYTBmYjZlNjFiNTQ1NjA4YmRhZWRkNGEwNDVmNDEyIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.TJnEkwG1XWprm2v_8FqrynTgpQ4EFlXEqD9KHP4U3C8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
 
 ###
 POST http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDIwMDA4LCJpYXQiOjE3NDcwMTY0MDgsImp0aSI6ImM0MmM2ZjQzMWUzNTRlMTY5MmRlMTViZWFkZWVkOGJhIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.I2gAhkIDNAbl4kClrIsXLOImXulwdxC5-OvhYhhJL9o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDM3NTg3LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImI1NWZhY2VjZjI1NjQxOWI5MTUyNWY2YWZhZmE1ZGU5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.qzv4kCYVpKK2M8KBUNRC3VP0I43AYfkjenhwQ3QMzvs
 
 {
 }
@@ -230,10 +231,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDI4MDUxLCJpYXQiOjE3NDcwMjQ0NTEsImp0aSI6IjkxM2Q5MjhkZDlhZDQyYWNhZjE2ODBhMTI4ZGZkZmIxIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.zULnggCI48kL119_9p7BfjML-x0KWcp9xmupTXSaOSI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
 
 {
-  "familyData": {
+  "family_data": {
     "mother": {
       "first_name": "Jane",
       "last_name": "Doe",
@@ -242,7 +243,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
       "company_agency": "TechCorp",
       "company_address": "123 Tech Rd, Tech City",
       "highest_educational_attainment": "Masters",
-      "contact_number": "123-456-7890"
+      "contact_number": "+09273819364"
     },
     "father": {
       "first_name": "John",
@@ -252,12 +253,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
       "company_agency": "City High School",
       "company_address": "456 School St, Schooltown",
       "highest_educational_attainment": "Bachelor's",
-      "contact_number": "098-765-4321"
+      "contact_number": "+09273819364"
     },
     "guardian": {
       "first_name": "Mary",
       "last_name": "Smith",
-      "contact_no": "321-654-9870",
+      "contact_number": "+09273819364",
       "address": "789 Guardian Ln, Caretown",
       "relationship_to_guardian": "Aunt",
       "language_dialect": ["English", "Tagalog"]
@@ -273,27 +274,33 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "educational_attainment": "Undergraduate",
     "students": ["2023-12345"]
   },
-   "previous_school_record": {
+  "previous_school_record": {
     "school": {
-      "name": "University of XYZ",
+      "name": "UP Mindanao Integrated School",
       "school_address": {
-        "address_line_1": "123 Main St",
-        "barangay": "Central",
-        "city_municipality": "University City",
-        "province": "Province A",
-        "region": "Region I - Ilocos",
-        "zip_code": "12345"
+        "address_line_1": "Quarry Road",
+        "barangay": "Bago Oshiro",
+        "city_municipality": "Davao City",
+        "province": "Davao del Sur",
+        "region": "Region XI - Davao Region",
+        "zip_code": "8000"
       }
     },
     "education_level": "Senior High",
-    "start_year": "2020",
-    "end_year": "2022",
-    "honors_received": "Cum Laude",
-    "senior_high_gpa": "3.85"
+    "start_year": 2021,
+    "end_year": 2023,
+    "honors_received": "With High Honors",
+    "senior_high_gpa": 93.25
   },
+  "health_data": {
+    "health_condition": "excellent",
+    "height": "153",
+    "weight": "50",
+    "eye_sight": "good",
+    "hearing": "good"
+  }, 
   "scholarship": {
-    "scholarship_type": "Full Scholarship",
-    "details": "Merit-based Assistance"
+    "scholarships_and_assistance": ["DOST", "CHED"]
   },
   "personality_traits": {
     "enrollment_reason": "To pursue a career in technology and innovation.",
@@ -306,8 +313,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "dislikes_in_people": "Dishonesty, Laziness"
   },
   "family_relationship": {
-    "closest_to": "mother",
-    "specify_other": ""
+    "closest_to": "mother"
   },
   "counseling_info": {
     "personal_characteristics": "Hardworking, Compassionate, Optimistic",
@@ -336,8 +342,10 @@ Content-Type:  application/json
 ###
 GET http://localhost:8000/api/forms/display/submissions/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDIwNzk5LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6IjhmZGNmMmI0YTQyZDQyNTlhZDEyZDI2Y2MwY2U2MDJlIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.BccvumSFxDOX2HqGMNPKdI7UpqeH-gIyadGrqmb4Cys
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDM3NTg3LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImI1NWZhY2VjZjI1NjQxOWI5MTUyNWY2YWZhZmE1ZGU5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.qzv4kCYVpKK2M8KBUNRC3VP0I43AYfkjenhwQ3QMzvs
 
 {
 
 }
+
+

@@ -4,6 +4,13 @@ from .student import Student
 from .submission import Submission
 from forms.utils.helperFunctions import check_required_fields
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+
+def get_phone_validator():
+    return RegexValidator(
+        regex=r'^\+?\d{9,15}$',
+        message="Enter a valid phone number (9 to 15 digits, optional leading '+')."
+    )
 
 class Parent(models.Model):
     first_name = models.CharField(max_length=50, null=True, blank=True)
@@ -13,8 +20,7 @@ class Parent(models.Model):
     company_agency = models.CharField(max_length=50, null=True, blank=True)
     company_address = models.TextField(null=True, blank=True)
     highest_educational_attainment = models.CharField(max_length=50, null=True, blank=True)
-    contact_number = PhoneNumberField(null=True, blank=True)
-    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    contact_number = models.CharField(max_length=15, validators=[get_phone_validator()], null=True, blank=True)
 
     def clean(self):
         if self.submission.status == 'draft':
@@ -60,14 +66,12 @@ class Sibling(models.Model):
         return f'{self.first_name} {self.last_name}'
 
 class Guardian(models.Model):
-    student = models.OneToOneField('Student', to_field='student_number', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    contact_no = PhoneNumberField(null=True, blank=True)
+    contact_number = models.CharField(max_length=15, validators=[get_phone_validator()], null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
     relationship_to_guardian = models.CharField(max_length=50, null=True, blank=True)
     language_dialect = models.JSONField(null=True, blank=True)
-    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
 
     def clean(self):
         if self.submission.status == 'draft':
@@ -77,7 +81,7 @@ class Guardian(models.Model):
             required_fields = {
                 'first_name': 'required',
                 'last_name': 'required',
-                'contact_no': 'required',
+                'contact_number': 'required',
                 'address': 'required',
                 'relationship_to_guardian': 'required'
             }

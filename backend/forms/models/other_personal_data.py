@@ -55,7 +55,7 @@ class FamilyRelationship(models.Model):
         ('other', 'Others (specify)')
     ]
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, to_field='student_number', related_name='family_relationships')
+    student = models.ForeignKey('Student', on_delete=models.CASCADE, to_field='student_number', related_name='family_relationships')
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     closest_to = models.CharField(max_length=20, choices=CLOSEST_CHOICES, null=True, blank=True, verbose_name="With whom are you closest to?")
     specify_other = models.CharField(max_length=100, null=True, blank=True, verbose_name="Others (specify)")
@@ -69,7 +69,7 @@ class FamilyRelationship(models.Model):
         Custom validation to enforce the required fields based on submission status.
         """
         if self.submission.status == 'draft':
-            return  # If draft, no validation is required for required fields
+            return  
         
         elif self.submission.status == 'submitted':
             required_fields = {
@@ -87,7 +87,7 @@ class FamilyRelationship(models.Model):
         return f"{self.student.first_name}'s closest relationship: {self.get_closest_to_display()}"
 
 class CounselingInformation(models.Model):
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, to_field='student_number', related_name='counseling_info')
+    student = models.OneToOneField('Student', on_delete=models.CASCADE, to_field='student_number', related_name='counseling_info')
     personal_characteristics = models.TextField(verbose_name="Personal characteristics as a person", null=True, blank=True)
     problem_confidant = models.CharField(max_length=100, verbose_name="To whom do you open-up your problems?", null=True, blank=True)
     confidant_reason = models.TextField(verbose_name="Why?", null=True, blank=True)
@@ -95,6 +95,8 @@ class CounselingInformation(models.Model):
     previous_counseling = models.BooleanField(default=False, verbose_name="Any previous counseling?")
     counseling_location = models.CharField(max_length=100, null=True, blank=True, verbose_name="If yes, where?")
     counseling_reason = models.TextField(null=True, blank=True, verbose_name="Why?")
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+
 
     def clean(self):
         """
