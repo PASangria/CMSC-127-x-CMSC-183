@@ -24,13 +24,9 @@ FORM_SECTIONS_MAP = {
         'privacy_consent': (PrivacyConsent, PrivacyConsentSerializer)
     },
     'student-cumulative-information-sheet': {
-        'parents': (Parent, ParentSerializer),
         'siblings': (Sibling, SiblingSerializer),
-        'guardians': (Guardian, GuardianSerializer),
         'family_data': (FamilyData, FamilyDataSerializer),
         'health_data': (HealthData, HealthDataSerializer),
-        'school_address': (SchoolAddress, SchoolAddressSerializer),
-        'school': (School, SchoolSerializer),
         'previous_school_record': (PreviousSchoolRecord, PreviousSchoolRecordSerializer),
         'scholarship': (Scholarship, ScholarshipSerializer),
         'personality_traits': (PersonalityTraits, PersonalityTraitsSerializer),

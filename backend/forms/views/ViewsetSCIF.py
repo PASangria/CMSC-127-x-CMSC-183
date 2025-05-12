@@ -16,6 +16,18 @@ from forms.serializers import (
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+class SiblingViewSet(viewsets.ModelViewSet):
+    queryset = Sibling.objects.all()
+    serializer_class = SiblingSerializer
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=True, methods=['get'])
+    def get_family_data(self, request, pk=None):
+        sibling = self.get_object()
+        family_data = sibling.family_data.all()
+        serializer = FamilyDataSerializer(family_data, many=True)
+        return Response(serializer.data)
+
 class ParentViewSet(viewsets.ModelViewSet):
     queryset = Parent.objects.all()
     serializer_class = ParentSerializer
@@ -28,17 +40,6 @@ class ParentViewSet(viewsets.ModelViewSet):
         serializer = FamilyDataSerializer(family_data, many=True)
         return Response(serializer.data)
 
-class SiblingViewSet(viewsets.ModelViewSet):
-    queryset = Sibling.objects.all()
-    serializer_class = SiblingSerializer
-    permission_classes = [IsAuthenticated]
-
-    @action(detail=True, methods=['get'])
-    def get_family_data(self, request, pk=None):
-        sibling = self.get_object()
-        family_data = sibling.family_data.all()
-        serializer = FamilyDataSerializer(family_data, many=True)
-        return Response(serializer.data)
 
 class GuardianViewSet(viewsets.ModelViewSet):
     queryset = Guardian.objects.all()
@@ -57,16 +58,6 @@ class FamilyDataViewSet(viewsets.ModelViewSet):
     serializer_class = FamilyDataSerializer
     permission_classes = [IsAuthenticated]
     
-    @action(detail=True, methods=['get'])
-    def get_parents_and_guardian(self, request, pk=None):
-        family_data = self.get_object()
-        data = {
-            "mother": ParentSerializer(family_data.mother).data if family_data.mother else None,
-            "father": ParentSerializer(family_data.father).data if family_data.father else None,
-            "guardian": GuardianSerializer(family_data.guardian).data if family_data.guardian else None
-        }
-        return Response(data)
-
 class HealthDataViewSet(viewsets.ModelViewSet):
     queryset = HealthData.objects.all()
     serializer_class = HealthDataSerializer

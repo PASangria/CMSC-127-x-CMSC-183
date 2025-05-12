@@ -6,11 +6,6 @@ from forms.models import (
     PersonalityTraits, FamilyRelationship, CounselingInformation
 )
 
-class ParentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Parent
-        fields = '__all__'
-        extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
 
 class SiblingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,19 +13,80 @@ class SiblingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
 
-class GuardianSerializer(serializers.ModelSerializer):
-    contact_no = PhoneNumberField()
+class ParentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parent
+        fields = '__all__'
+        extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
 
+class GuardianSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guardian
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
 
 class FamilyDataSerializer(serializers.ModelSerializer):
+    mother = ParentSerializer(required=False)
+    father = ParentSerializer(required=False)
+    guardian = GuardianSerializer(required=False)
+
     class Meta:
         model = FamilyData
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
+
+    def create(self, validated_data):
+        mother_data = validated_data.pop('mother', None)
+        father_data = validated_data.pop('father', None)
+        guardian_data = validated_data.pop('guardian', None)
+
+        if mother_data:
+            mother = Parent.objects.create(**mother_data)
+            validated_data['mother'] = mother
+        if father_data:
+            father = Parent.objects.create(**father_data)
+            validated_data['father'] = father
+        if guardian_data:
+            guardian = Guardian.objects.create(**guardian_data)
+            validated_data['guardian'] = guardian
+
+        return FamilyData.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        mother_data = validated_data.pop('mother', None)
+        father_data = validated_data.pop('father', None)
+        guardian_data = validated_data.pop('guardian', None)
+
+        if mother_data:
+            if instance.mother:
+                for attr, value in mother_data.items():
+                    setattr(instance.mother, attr, value)
+                instance.mother.save()
+            else:
+                instance.mother = Parent.objects.create(**mother_data)
+
+        if father_data:
+            if instance.father:
+                for attr, value in father_data.items():
+                    setattr(instance.father, attr, value)
+                instance.father.save()
+            else:
+                instance.father = Parent.objects.create(**father_data)
+
+        if guardian_data:
+            if instance.guardian:
+                for attr, value in guardian_data.items():
+                    setattr(instance.guardian, attr, value)
+                instance.guardian.save()
+            else:
+                instance.guardian = Guardian.objects.create(**guardian_data)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
 
 class HealthDataSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,20 +112,40 @@ class PreviousSchoolRecordSerializer(serializers.ModelSerializer):
         fields = ['school', 'education_level', 'start_year', 'end_year', 'honors_received', 'senior_high_gpa']
 
     def create(self, validated_data):
-        # Extract the nested 'school' data from validated_data
         school_data = validated_data.pop('school')
         school_address_data = school_data.pop('school_address')
 
-        # Create the school_address first
         school_address = SchoolAddress.objects.create(**school_address_data)
-
-        # Create the School instance, associating it with the newly created school_address
         school = School.objects.create(school_address=school_address, **school_data)
 
-        # Finally, create the PreviousSchoolRecord and associate it with the created school
-        previous_school_record = PreviousSchoolRecord.objects.create(school=school, **validated_data)
+        return PreviousSchoolRecord.objects.create(school=school, **validated_data)
 
-        return previous_school_record
+    def update(self, instance, validated_data):
+        school_data = validated_data.pop('school', None)
+        if school_data:
+            address_data = school_data.pop('school_address', None)
+            
+            school = instance.school
+            if school:
+                if address_data:
+                    address = school.school_address
+                    for attr, value in address_data.items():
+                        setattr(address, attr, value)
+                    address.save()
+                
+                for attr, value in school_data.items():
+                    setattr(school, attr, value)
+                school.save()
+            else:
+                address = SchoolAddress.objects.create(**address_data)
+                school = School.objects.create(school_address=address, **school_data)
+                instance.school = school
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
 
 class ScholarshipSerializer(serializers.ModelSerializer):
@@ -86,6 +162,7 @@ class FamilyRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilyRelationship
         fields = '__all__'
+        read_only_fields = ['student', 'submission']
 
 class CounselingInformationSerializer(serializers.ModelSerializer):
     class Meta:
