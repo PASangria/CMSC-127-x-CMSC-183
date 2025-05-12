@@ -4,6 +4,7 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import ToastMessage from '../components/ToastMessage';
 import ModalMessage from '../components/ModalMessage';
+import DefaultLayout from '../components/DefaultLayout'; // 👈 Import this
 import './css_pages/FormPublicPage.css';
 import { AuthContext } from '../context/AuthContext';
 
@@ -15,14 +16,13 @@ export const FormPublicPage = () => {
 
   const handleCardClick = (form) => {
     if (form === 'referral') {
-      // still use toast for "coming soon" if desired, or replace with modal too
       setToastMessage('Counseling Referral Slip is coming soon!');
     } else if (!user) {
-      setShowModal(true); // show modal
+      setShowModal(true);
     } else {
       navigate(`/forms/${form}`);
     }
-  };  
+  };
 
   const formCards = [
     {
@@ -46,20 +46,16 @@ export const FormPublicPage = () => {
     },
   ];
 
-  return (
-    <div className="form-page">
-      <Navbar />
-
-      <div className="form-page form-fade">
+  const formContent = (
+    <div className="form-page form-fade">
       <div className="form-body">
         <div className="form-body-content">
           <div className="form-header">
             <div className="form-header-line"></div>
             <div className="form-header-top">
               <h1>Forms</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sige nga i should write more here to see if maghaba ba sya or mag next line na as it should...</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
             </div>
-            
           </div>
 
           <div className="form-cards-container">
@@ -71,7 +67,6 @@ export const FormPublicPage = () => {
                 style={{ animationDelay: `${0.2 + index * 0.2}s` }}
               >
                 <div className="circle" />
-
                 <div className="card-content">
                   <div className="card-text">
                     <p className="card-desc">{form.desc}</p>
@@ -85,7 +80,6 @@ export const FormPublicPage = () => {
             ))}
           </div>
         </div>
-      </div>
       </div>
 
       {toastMessage && (
@@ -124,8 +118,17 @@ export const FormPublicPage = () => {
           }
         />
       )}
-
-      <Footer />
     </div>
+  );
+
+  // ⬇️ Conditionally render with layout based on auth state
+  return user ? (
+    <DefaultLayout>{formContent}</DefaultLayout>
+  ) : (
+    <>
+      <Navbar />
+      {formContent}
+      <Footer />
+    </>
   );
 };

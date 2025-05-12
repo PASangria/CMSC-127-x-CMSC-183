@@ -60,6 +60,7 @@ const SideNav = ({ variant, onLogoutClick }) => {
                             <>
                                 <Link to="/myprofile"><button><PersonOutline /> My Profile</button></Link>
                                 <Link to="/student"><button><DashboardOutlined /> Dashboard</button></Link>
+                                <Link to="/public-forms"><button><DescriptionOutlined /> Forms</button></Link>
                                 <Link to="/submitted-forms"><button><AssignmentTurnedInOutlined /> Submitted Forms</button></Link>
                                 <Link to="/privacy-setting"><button><SettingsOutlined /> Privacy Settings</button></Link>
                             </>
