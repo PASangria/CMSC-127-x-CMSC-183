@@ -42,24 +42,36 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
   const fetchUserData = async (token) => {
-    try {
-      const userRes = await apiRequest('http://localhost:8000/auth/users/me/', { headers: { Authorization: `Bearer ${token}` } });
-      if (!userRes.ok) throw new Error('User fetch failed');
-      const userData = await userRes.json();
-      setUser(userData);
-  
-      const profileRes = await apiRequest('http://localhost:8000/api/forms/student/profile/', { headers: { Authorization: `Bearer ${token}` } });
+  try {
+    const decoded = jwtDecode(token);
+    const currentRole = decoded.role;
+
+    const userRes = await apiRequest('http://localhost:8000/auth/users/me/', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!userRes.ok) throw new Error('User fetch failed');
+    const userData = await userRes.json();
+    setUser(userData);
+
+    if (currentRole === 'student') {
+      const profileRes = await apiRequest('http://localhost:8000/api/forms/student/profile/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
       if (profileRes.ok) {
         const profileJson = await profileRes.json();
         setProfileData(profileJson);
       }
-  
-      setLoading(false);
-    } catch (err) {
-      console.error("User/profile fetch failed", err);
-      clearAuthData();
     }
-  };
+
+    setLoading(false);
+  } catch (err) {
+    console.error("User/profile fetch failed", err);
+    clearAuthData();
+  }
+};
+
   
 
   const clearAuthData = () => {
@@ -107,16 +119,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = (navigate) => {
-    // Clear localStorage and context states
-    removeToken();  // Clear token from local storage or cookies
+    removeRefreshToken();
+    removeToken();  
     setUser(null);
     setRole(null);
     setProfileData(null);
     setLoading(false);
   
-    // Redirect to home
     if (navigate) {
       navigate('/');
+      window.location.reload();
     }
   };
 

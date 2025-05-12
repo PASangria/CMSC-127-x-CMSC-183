@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from forms.models import Preferences, StudentSupport, SocioEconomicStatus, PresentScholasticStatus
+from forms.models import Preferences, StudentSupport, SocioEconomicStatus, PresentScholasticStatus, Submission
 from forms.models import StudentSupport, Support
 
 class PreferencesSerializer(serializers.ModelSerializer):
@@ -49,10 +49,3 @@ class PresentScholasticStatusSerializer(serializers.ModelSerializer):
         model = PresentScholasticStatus
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
-
-class SubmissionBundleSerializer(serializers.Serializer):
-    submission = serializers.DictField()
-    preferences = PreferencesSerializer(required=False)
-    support = StudentSupportSerializer(required=False)
-    socio_economic_status = SocioEconomicStatusSerializer(required=False)
-    scholastic_status = PresentScholasticStatusSerializer(required=False)

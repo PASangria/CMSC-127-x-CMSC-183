@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from .student import Student
 from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, SupportChoices
 from .submission import Submission
-from forms.helperFunctions import check_required_fields
+from forms.utils.helperFunctions import check_required_fields
 
 class Preferences(models.Model):
     student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)

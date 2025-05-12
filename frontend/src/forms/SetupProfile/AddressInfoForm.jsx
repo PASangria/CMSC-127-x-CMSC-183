@@ -128,9 +128,6 @@ const AddressInfoForm = ({
             disabled={disabled}
           />
         </div>
-      </div>
-
-      <div className="form-row three-columns">
         <div className="form-group">
           <FormField
             label="Zip code *"

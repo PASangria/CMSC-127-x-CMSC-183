@@ -8,7 +8,8 @@ from .graduation import Graduation, GraduateStudent
 from .guidance_notes import GuidanceSpecialistNotes
 from .healthData import HealthData
 from .organization import Organization, Membership
-from .other_personal_data import PersonalityTraits, FamilyRelationship, CounselingInformation, PrivacyConsent
+from .other_personal_data import PersonalityTraits, FamilyRelationship, CounselingInformation
+from .privacy_statement import PrivacyConsent
 from .psychometric import PsychometricData
 from .scholarship import Scholarship
 from .schoolRecord import SchoolAddress, School, PreviousSchoolRecord
