@@ -1,0 +1,46 @@
+.default-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content below navbar */
+.main-section {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Side navigation */
+.side-nav {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: white;
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Footer */
+.Footer, .NavBar {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .side-nav {
+    display: none;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .main-section {
+    flex-direction: column;
+  }
+}

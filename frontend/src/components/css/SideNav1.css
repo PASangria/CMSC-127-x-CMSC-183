@@ -1,0 +1,179 @@
+/* General container */
+.side-navigator {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    height: 90vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* Avatar section */
+.avatar-section {
+  text-align: left;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  background-color: #7c0a02;
+  color: white;
+  font-size: 1.5rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.user-info h4 {
+  margin: 0.5rem 0 0.2rem;
+  font-size: 1rem;
+}
+
+.user-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+
+
+/* Navigation buttons */
+.nav-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.nav-buttons-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.nav-buttons-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* Menu button styling */
+.nav-buttons-top button,
+.nav-buttons-bottom button {
+    background: none;
+    border: none;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+} 
+
+
+.nav-buttons-top button:hover,
+.nav-buttons-bottom button:hover {
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+}
+
+.nav-buttons .active,
+.nav-buttons-bottom .active {
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+}
+
+/* Dropdown section */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.dropdown-button:hover {
+  background-color: #e0e7ff;  /* Hover background */
+  color: #1d4ed8;  /* Hover text color */
+}
+
+/* Add active state to dropdown items for consistency */
+.dropdown-content .active {
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+}
+
+/* Apply similar button style to all buttons inside the dropdown */
+.dropdown-content button {
+  background: none;
+  border: none;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.dropdown-content button:hover {
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+}
+
+/* Help, logout, toggle section */
+.toggle-section {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.dark-mode-toggle {
+  background-color: #7c0a02;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.7rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
