@@ -72,22 +72,9 @@ class HealthDataViewSet(viewsets.ModelViewSet):
     serializer_class = HealthDataSerializer
     permission_classes = [IsAuthenticated]
     
-    
-class SchoolAddressViewSet(viewsets.ModelViewSet):
-    queryset = SchoolAddress.objects.all()
-    serializer_class = SchoolAddressSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class SchoolViewSet(viewsets.ModelViewSet):
-    queryset = School.objects.select_related('address').all()
-    serializer_class = SchoolSerializer
-    permission_classes = [IsAuthenticated]
-
-
 class PreviousSchoolRecordViewSet(viewsets.ModelViewSet):
-    queryset = PreviousSchoolRecord.objects.select_related('school', 'student_number').all()
-    serializer_class = PreviousSchoolRecordSerializer
+    queryset = PreviousSchoolRecord.objects.all()
+    serializer_class = PreviousSchoolRecordSerializer    
     permission_classes = [IsAuthenticated]
     
 class ScholarshipViewSet(viewsets.ModelViewSet):

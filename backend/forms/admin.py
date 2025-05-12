@@ -55,3 +55,15 @@ class SubmissionAdmin(admin.ModelAdmin):
     list_filter = ('form_type', 'status', 'created_at')
     search_fields = ('student__id', 'student__first_name', 'student__last_name')
     ordering = ('-created_at',)
+    
+@admin.register(FamilyRelationship)
+class FamilyRelationshipAdmin(admin.ModelAdmin):
+    list_display = ('student', 'closest_to', 'specify_other', 'submission')
+    search_fields = ('student__first_name', 'student__last_name', 'student__student_number')
+    list_filter = ('submission__status', 'closest_to')
+
+@admin.register(CounselingInformation)
+class CounselingInformationAdmin(admin.ModelAdmin):
+    list_display = ('student', 'personal_characteristics', 'problem_confidant', 'previous_counseling')
+    search_fields = ('student__first_name', 'student__last_name', 'student__student_number')
+    list_filter = ('previous_counseling',)

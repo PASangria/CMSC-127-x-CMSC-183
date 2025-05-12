@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import Button from '../components/UIButton';
 import "./css/studentList.css"
 import { useNavigate } from 'react-router-dom';
+import DefaultLayout from '../components/DefaultLayout';
 
 export const AdminStudentList = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export const AdminStudentList = () => {
   };
     return (
   <div>
-    <Navbar />
+    <DefaultLayout variant='admin'>
     <div className='admin-student-list'>
     <h1>Student List</h1>
     <table>
@@ -67,7 +68,7 @@ export const AdminStudentList = () => {
       </tbody>
     </table>
     </div>
-    <Footer />
+    </DefaultLayout>
   </div>
 );
 };

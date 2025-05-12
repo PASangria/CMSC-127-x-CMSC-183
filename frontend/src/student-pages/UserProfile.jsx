@@ -8,6 +8,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useApiRequest } from '../context/ApiRequestContext';
 import StudentSideInfo from './IndividualStudent';
 import './css/userDashboard.css';
+import DefaultLayout from '../components/DefaultLayout';
 
 export const UserProfile = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -76,6 +77,7 @@ export const UserProfile = () => {
     return (
       <div>
       <Navbar />
+      <DefaultLayout variant='student' />
       <div className="protected_pages">
       <div className="error-message">
         <p>No profile data available.</p>
@@ -91,14 +93,14 @@ export const UserProfile = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="protected_pages">
-        <div className="profile-content">
-          <h1>My Profile</h1>
-          <StudentSideInfo profileData={profile} />
-        </div>
+        <DefaultLayout variant='student'>
+          <div className="profile-content">
+            <h1>My Profile</h1>
+            <StudentSideInfo profileData={profile} />
+          </div>
+        </DefaultLayout>
       </div>
-      <Footer />
     </div>
   );
 };

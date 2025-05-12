@@ -20,7 +20,7 @@ class SchoolAddress(models.Model):
 # Model for School
 class School(models.Model):
     name = models.CharField(max_length=255)
-    address = models.ForeignKey(SchoolAddress, on_delete=models.CASCADE, blank=True, null=True)
+    school_address = models.ForeignKey(SchoolAddress, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -44,9 +44,6 @@ class PreviousSchoolRecord(models.Model):
         verbose_name = "Previous School Record"
         verbose_name_plural = "Previous School Records"
         ordering = ['-end_year', '-start_year']
-
-    def __str__(self):
-        return f"{self.school.name} - {self.education_level} ({self.start_year}-{self.end_year})"
     
     def clean(self):
         """
@@ -81,4 +78,7 @@ class PreviousSchoolRecord(models.Model):
             
             if self.start_year > current_year or self.end_year > current_year:
                 raise ValidationError('Start and end years cannot be in the future.')
-            
+    def __str__(self):
+        school_name = self.school.name if self.school else "Unknown School"
+        return f"{school_name} - {self.education_level or 'Unknown Level'} ({self.start_year or '?'}-{self.end_year or '?'})"
+
