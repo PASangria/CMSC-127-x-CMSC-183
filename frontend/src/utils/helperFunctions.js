@@ -10,7 +10,6 @@
 export const formatDate = (isoDate, locale = 'en-US', options = {}) => {
   const date = new Date(isoDate);
 
-  // Default options for full date format
   const defaultOptions = {
     weekday: 'long',
     year: 'numeric',
@@ -19,10 +18,9 @@ export const formatDate = (isoDate, locale = 'en-US', options = {}) => {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: true, // Use 12-hour clock (AM/PM)
+    hour12: true, 
   };
 
-  // Merge default options with custom options if provided
   const formatOptions = { ...defaultOptions, ...options };
 
   return date.toLocaleString(locale, formatOptions);

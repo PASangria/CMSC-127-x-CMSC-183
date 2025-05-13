@@ -3,7 +3,7 @@ from forms.models import (
     Parent, Sibling, Guardian, 
     FamilyData, HealthData, 
     SchoolAddress, School, PreviousSchoolRecord, 
-    Scholarship, PersonalityTraits, FamilyRelationship, CounselingInformation
+    Scholarship, PersonalityTraits, FamilyRelationship, CounselingInformation, Support
 )
 from forms.serializers import (
     PreferencesSerializer, StudentSupportSerializer, SocioEconomicStatusSerializer, PresentScholasticStatusSerializer, PrivacyConsentSerializer,

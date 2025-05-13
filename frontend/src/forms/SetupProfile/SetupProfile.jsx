@@ -12,7 +12,7 @@ import PreviewModal from './PreviewForm';
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [step, setStep] = useState(1); 
+    const [step, setStep] = useState(4); 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
 
@@ -57,7 +57,7 @@ const MultiStepForm = () => {
     const isValid = validateStep(step, formData);
 
     if (isValid) {
-      setStep(prevStep => prevStep + 1); // Move to the next step
+      setStep(prevStep => prevStep + 1);
     } else {
       alert("Please fill in all required fields correctly.");
     }

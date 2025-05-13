@@ -15,8 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import MultiStepForm from "./forms/SetupProfile/SetupProfile";
 import BISForm from "./forms/BIS/BIS";
 import SCIF from "./forms/SCIF/SCIF";
-import Testing from "./forms/SetupProfile/TestingPage";
 import { AdminStudentView } from "./admin-pages/AdminStudentView";
+import BISProfilePage from "./student-pages/BISProfilePage";
 
 function App() {
   return (
@@ -90,7 +90,15 @@ function App() {
           }
         />
         <Route
-          path="/forms/cumulative"
+          path="/forms/basic-information-sheet-display"
+          element={
+            <ProtectedRoute requireAdmin={false} requireUser={true}>
+              <BISProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/forms/student-cumulative-information-file"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <SCIF/>
@@ -185,7 +193,6 @@ function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/public-forms" element={<FormPublicPage />} />
         <Route path="/faq" element={<FAQPublicPage />} />
-        <Route path="/test" element={<Testing />} />
         <Route path="/password/reset/confirm/:uid/:token" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>

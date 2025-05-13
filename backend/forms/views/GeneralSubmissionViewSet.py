@@ -97,7 +97,6 @@ class FormBundleView(APIView):
     def patch(self, request, form_type):
         # Map slug to display name
         form_type_display = FORM_TYPE_SLUG_MAP.get(form_type)
-
         student = request.user.student
         sections = FORM_SECTIONS_MAP.get(form_type)
 

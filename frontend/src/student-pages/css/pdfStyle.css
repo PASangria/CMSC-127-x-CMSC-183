@@ -1,0 +1,32 @@
+.pdf input[readonly], textarea[readonly] {
+  border: none;
+  border-bottom: 1px solid black;
+  background: transparent;
+  width: 100%;
+}
+
+.pdf input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 8px;
+}
+
+.pdf textarea[readonly] {
+  width: 100%;
+  resize: none;
+}
+
+.pdf label {
+  display: block;
+  margin: 8px 0;
+}
+
+@media print {
+  .pdf body {
+    margin: 20mm;
+  }
+
+  .pdf input, .pdf textarea {
+    font-size: 12pt;
+    font-family: Arial, sans-serif;
+  }
+}

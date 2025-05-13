@@ -1,7 +1,5 @@
 import { getToken, setToken } from './cookieUtils';
 import { refreshToken } from './refreshUtils'; 
-import { AuthContext } from '../context/AuthContext';
-
 
 export const isTokenExpired = (token) => {
   try {

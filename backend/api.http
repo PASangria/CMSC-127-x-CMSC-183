@@ -6,8 +6,8 @@ POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
 Content-Type:  application/json
 
 {
-    "email": "celeszhaianna@gmail.com",
-    "password": "lunalovegood"
+    "email": "presapplesang@gmail.com",
+    "password": "presapp11"
 }
 
 ###
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 GET http://localhost:8000/api/forms/student/profile HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODQyMjkzLCJpYXQiOjE3NDY4NDE5OTMsImp0aSI6IjkwMjJjZmRmNDJjMzQ2MzBhYmNlY2UzYzdiODc3YmUxIiwidXNlcl9pZCI6MSwicm9sZSI6ImFkbWluIn0.CDVO3nhFEUp_l_CN80y4l55QjV_JRfFdckEloKk3fxM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQ1NDc0LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6IjJmNDc4YzI2M2I0YjRlOTU5NGU0MDg2N2JkYTBmMWMzIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.oGFJF2WozWNWJt7sF-QmziP7gU5BrIi0O32tJA8YP3g
 
 ###
 POST http://localhost:8000/api/forms/student/profile/create/ HTTP/1.1
@@ -80,12 +80,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 GET http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2OTkyMDE4LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6IjFkYTBmYjZlNjFiNTQ1NjA4YmRhZWRkNGEwNDVmNDEyIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.TJnEkwG1XWprm2v_8FqrynTgpQ4EFlXEqD9KHP4U3C8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDY4ODAzLCJpYXQiOjE3NDcwNTQxOTQsImp0aSI6IjQ4MTgzOTNlYmM5MzRmM2I5NWMwNjQ3ZDhiN2IyMmIwIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.laWGJ-HZX0tEPxzwpydfGcKJfrfxg51GtEx6RQJhVrA
 
 ### 📝 Step 1: Save Preferences in Draft Mode
 POST http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDIwMDA4LCJpYXQiOjE3NDcwMTY0MDgsImp0aSI6ImM0MmM2ZjQzMWUzNTRlMTY5MmRlMTViZWFkZWVkOGJhIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.I2gAhkIDNAbl4kClrIsXLOImXulwdxC5-OvhYhhJL9o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 {
 
@@ -94,119 +94,53 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/basic-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDI4MDUxLCJpYXQiOjE3NDcwMjQ0NTEsImp0aSI6IjkxM2Q5MjhkZDlhZDQyYWNhZjE2ODBhMTI4ZGZkZmIxIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.zULnggCI48kL119_9p7BfjML-x0KWcp9xmupTXSaOSI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 {
-  "familyData": {
-    "mother": {
-      "first_name": "Jane",
-      "last_name": "Doe",
-      "age": "45",
-      "job_occupation": "Engineer",
-      "company_agency": "TechCorp",
-      "company_address": "123 Tech Rd, Tech City",
-      "highest_educational_attainment": "Masters",
-      "contact_number": "123-456-7890"
-    },
-    "father": {
-      "first_name": "John",
-      "last_name": "Doe",
-      "age": "50",
-      "job_occupation": "Teacher",
-      "company_agency": "City High School",
-      "company_address": "456 School St, Schooltown",
-      "highest_educational_attainment": "Bachelor's",
-      "contact_number": "098-765-4321"
-    },
-    "guardian": {
-      "first_name": "Mary",
-      "last_name": "Smith",
-      "contact_no": "321-654-9870",
-      "address": "789 Guardian Ln, Caretown",
-      "relationship_to_guardian": "Aunt",
-      "language_dialect": ["English", "Tagalog"]
-    }
+  "preferences": {
+    "student_number": "2023-03844",
+    "influence": "Parents and career opportunities",
+    "reason_for_enrolling": "I've always wanted to study in this field.",
+    "transfer_plans": true,
+    "transfer_reason": "Better program offered elsewhere.",
+    "shift_plans": true,
+    "planned_shift_degree": "BS Computer Science",
+    "reason_for_shifting": "More aligned with my interests."
   },
-  "siblings": [
-    {
-      "first_name": "Jack",
-      "last_name": "Doe",
-      "sex": "Male",
-      "age": "20",
-      "job_occupation": "Student",
-      "company_school": "University of XYZ",
-      "educational_attainment": "Undergraduate",
-      "students": ["Jane", "Jim"]
-    }
-  ],
-  "health_data": {
-    "health_condition": "No known conditions",
-    "height": "5'9\"",
-    "weight": "150 lbs",
-    "eye_sight": "Normal",
-    "hearing": "Normal",
-    "physical_disabilities": ["None"],
-    "common_ailments": ["Cold", "Headache"],
-    "last_hospitalization": "2023-05-01",
-    "reason_of_hospitalization": "Appendectomy"
+  "student_support": {
+    "student_number": "2023-03844",
+    "support": ["scholarship", "others"],
+    "other_notes": "NGO-provided support",
+    "other_scholarship": "Local government scholarship",
+    "combination_notes": ""
   },
-  "previous_school_record": [
-    {
-      "school": {
-        "name": "University of XYZ",
-        "school_address": {
-          "address_line_1": "123 Main St",
-          "barangay": "Central",
-          "city_municipality": "University City",
-          "province": "Province A",
-          "region": "Region 1",
-          "zip_code": "12345"
-        }
-      },
-      "education_level": "Senior High",
-      "start_year": "2020",
-      "end_year": "2022",
-      "honors_received": "Cum Laude",
-      "senior_high_gpa": "3.85"
-    }
-  ],
-  "scholarship": [
-    "Full Scholarship",
-    "Merit-based Assistance"
-  ],
-  "personality_traits": {
-    "enrollment_reason": "To pursue a career in technology and innovation.",
-    "degree_program_aspiration": true,
-    "aspiration_explanation": "I want to develop new software solutions to help solve global challenges.",
-    "special_talents": "Programming, Problem-solving",
-    "musical_instruments": "Piano",
-    "hobbies": "Reading, Coding, Traveling",
-    "likes_in_people": "Honesty, Creativity",
-    "dislikes_in_people": "Dishonesty, Laziness"
+  "socio_economic_status": {
+    "student_number": "2023-03844",
+    "has_scholarship": true,
+    "scholarships": "Academic Excellence Grant",
+    "scholarship_privileges": "Full tuition coverage, monthly stipend",
+    "monthly_allowance": 3500.00,
+    "spending_habit": "Mostly food, transportation, and some educational materials"
   },
-  "family_relationship": {
-    "closest_to": "mother",
-    "specify_other": ""
-  },
-  "counseling_info": {
-    "personal_characteristics": "Hardworking, Compassionate, Optimistic",
-    "problem_confidant": "Best friend",
-    "confidant_reason": "They understand me the most.",
-    "anticipated_problems": "Adjusting to a new environment, managing time",
-    "previous_counseling": true,
-    "counseling_location": "Counseling Center",
-    "counseling_reason": "Stress management"
+  "scholastic_status": {
+    "student_number": "2023-03844",
+    "intended_course": "BS Computer Science",
+    "first_choice_course": "BS Computer Science",
+    "admitted_course": "BS Information Technology",
+    "next_plan": "Shift to my first choice next semester"
   },
   "privacy_consent": {
+    "student_number": "2023-03844",
     "has_consented": true
   }
 }
 
 
+
 ###
-POST http://localhost:8000/api/forms/finalize/11/ HTTP/1.1
+POST http://localhost:8000/api/forms/finalize/14/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 
 {
@@ -218,12 +152,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 GET http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 ###
 POST http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDM3NTg3LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImI1NWZhY2VjZjI1NjQxOWI5MTUyNWY2YWZhZmE1ZGU5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.qzv4kCYVpKK2M8KBUNRC3VP0I43AYfkjenhwQ3QMzvs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 {
 }
@@ -231,10 +165,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQxMjQwLCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImVkOTczNTE1ZjNjYTQ3ZDM4OWYyOWNmM2ExMjY3MWE1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.2fJJ1less3HwGCRKRq2JPfGWmlNetGeQ1-y2q43mUes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDUxNjMwLCJpYXQiOjE3NDcwNDgwMzAsImp0aSI6IjhhNzBlMGUwZjQzMjRhZDA5MjAxMDhmOThlYzQxYjAyIiwidXNlcl9pZCI6Miwicm9sZSI6InN0dWRlbnQifQ.AxQYMqCUM4ogpzQjaSuAxmAAQFCTp6A4gqXOHysKSag
 
 {
   "family_data": {
+    "student_number": "2023-03844",
     "mother": {
       "first_name": "Jane",
       "last_name": "Doe",
@@ -272,9 +207,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "job_occupation": "Student",
     "company_school": "University of XYZ",
     "educational_attainment": "Undergraduate",
-    "students": ["2023-12345"]
+    "students": ["2023-03844"]
   },
   "previous_school_record": {
+    "student_number": "2023-03844",
     "school": {
       "name": "UP Mindanao Integrated School",
       "school_address": {
@@ -293,6 +229,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "senior_high_gpa": 93.25
   },
   "health_data": {
+    "student_number": "2023-03844",
     "health_condition": "excellent",
     "height": "153",
     "weight": "50",
@@ -300,9 +237,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "hearing": "good"
   }, 
   "scholarship": {
+    "student_number": "2023-03844",
     "scholarships_and_assistance": ["DOST", "CHED"]
   },
   "personality_traits": {
+    "student_number": "2023-03844",
     "enrollment_reason": "To pursue a career in technology and innovation.",
     "degree_program_aspiration": true,
     "aspiration_explanation": "I want to develop new software solutions to help solve global challenges.",
@@ -313,9 +252,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "dislikes_in_people": "Dishonesty, Laziness"
   },
   "family_relationship": {
+    "student_number": "2023-03844",
     "closest_to": "mother"
   },
   "counseling_info": {
+    "student_number": "2023-03844",
     "personal_characteristics": "Hardworking, Compassionate, Optimistic",
     "problem_confidant": "Best friend",
     "confidant_reason": "They understand me the most.",
@@ -325,6 +266,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "counseling_reason": "Stress management"
   },
   "privacy_consent": {
+    "student_number": "2023-03844",
     "has_consented": true
   }
 }
@@ -343,6 +285,15 @@ Content-Type:  application/json
 GET http://localhost:8000/api/forms/display/submissions/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDM3NTg3LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6ImI1NWZhY2VjZjI1NjQxOWI5MTUyNWY2YWZhZmE1ZGU5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.qzv4kCYVpKK2M8KBUNRC3VP0I43AYfkjenhwQ3QMzvs
+
+{
+
+}
+
+###
+GET http://localhost:8000/api/forms/get/enums/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDkyODc1LCJpYXQiOjE3NDcwODg5OTgsImp0aSI6ImVlYTUyZTZjYzc3MzQ5ZDY4ZDE0ZjAwYjM2NDA5ZDg1IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.VGgcA9WO4xtMcMCNn5MBh03KDn7kkMGpyJvN4cYPaoM
 
 {
 

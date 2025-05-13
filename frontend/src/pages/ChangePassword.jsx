@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import './css_pages/resetpassword.css';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
+import FormField from '../components/FormField';
 
 export const ChangePassword = () => {
     const { request } = useApiRequest();
@@ -71,29 +72,31 @@ export const ChangePassword = () => {
                         <div className="signup__right fade-in-up">
                             <h2 className="signup__header">Update Your Password</h2>
                             <form onSubmit={handleSubmit} className="signup__form">
-                                <input
-                                    type="password"
-                                    placeholder="Current Password"
-                                    value={currentPassword}
-                                    onChange={(e) => setCurrentPassword(e.target.value)}
-                                    required
-                                    className="form-input"
+                                <FormField
+                                label="Current Password"
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                required={true}
+                                name="currentPassword"
                                 />
-                                <input
-                                    type="password"
-                                    placeholder="New Password"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                    required
-                                    className="form-input"
+
+                                <FormField
+                                label="New Password"
+                                type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                                required={true}
+                                name="newPassword"
                                 />
-                                <input
-                                    type="password"
-                                    placeholder="Confirm New Password"
-                                    value={reNewPassword}
-                                    onChange={(e) => setReNewPassword(e.target.value)}
-                                    required
-                                    className="form-input"
+
+                                <FormField
+                                label="Confirm New Password"
+                                type="password"
+                                value={reNewPassword}
+                                onChange={(e) => setReNewPassword(e.target.value)}
+                                required={true}
+                                name="reNewPassword"
                                 />
                                 <button type="submit" className="submit-button">
                                     Change Password

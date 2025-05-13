@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormField from '../../components/FormField'; // Adjust path as needed
 import './css/multistep.css';
+import { useEnumChoices } from '../../utils/enumChoices'  
 
 const EducationInfoForm = ({ formData, setFormData }) => {
+  const { enums, loading, error } = useEnumChoices(); 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -40,6 +42,14 @@ const EducationInfoForm = ({ formData, setFormData }) => {
     return Object.keys(validationErrors).length === 0;
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching data: {error}</div>;
+  }
+
   return (
     <div className='form-container'>
       <h2 className='step-title'>Education Information</h2>
@@ -47,66 +57,58 @@ const EducationInfoForm = ({ formData, setFormData }) => {
       <div className="form-row">
         <div className="form-group">
           <FormField
-            label="Student Number *"
+            label="Student Number "
             name="student_number"
             value={formData.student_number}
             onChange={handleChange}
             required
-            error={errors.student_number}  // Show error if present
+            error={errors.student_number}  
           />
         </div>
         <div className="form-group">
-          <select
-            name="current_year_level"
-            value={formData.current_year_level}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Year</option>
-            <option value="1">1st Year</option>
-            <option value="2">2nd Year</option>
-            <option value="3">3rd Year</option>
-            <option value="4">4th Year</option>
-          </select>
-          {errors.current_year_level && <span className="error-message">{errors.current_year_level}</span>}
+        <FormField
+          label="Current Year Level"
+          name="current_year_level"
+          type="select"
+          value={formData.current_year_level}
+          onChange={handleChange}
+          required
+          error={errors.current_year_level}
+          options={
+            enums?.year_level?.map((opt) => ({ value: opt.value, label: opt.label })) || []
+          }
+        />
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
-          <select
-            name="college"
-            value={formData.college}
-            onChange={handleChange}
-            required
-          >
-            <option value="">College/Department</option>
-            <option value="CSM">CSM</option>
-            <option value="CHSS">CHSS</option>
-            <option value="SOM">SOM</option>
-          </select>
-          {errors.college && <span className="error-message">{errors.college}</span>}
+        <FormField
+          label="College / Department"
+          name="college"
+          type="select"
+          value={formData.college}
+          onChange={handleChange}
+          required
+          error={errors.college}
+          options={
+            enums?.college?.map((opt) => ({ value: opt.value, label: opt.label })) || []
+          }
+        />
         </div>
         <div className="form-group">
-          <select
-            name="degreeProgram"
-            value={formData.degreeProgram}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Degree Program</option>
-            <option value="BA Communication and Media Arts">BA Communication and Media Arts</option>
-            <option value="BA English">BA English</option>
-            <option value="BS Anthropology">BS Anthropology</option>
-            <option value="BS Applied Mathematics">BS Applied Mathematics</option>
-            <option value="BS Architecture">BS Architecture</option>
-            <option value="BS Biology">BS Biology</option>
-            <option value="BS Computer Science">BS Computer Science</option>
-            <option value="BS Data Science">BS Data Science</option>
-            <option value="BS Food Technology">BS Food Technology</option>
-            <option value="BS Sports Science">BS Sports Science</option>
-          </select>
-          {errors.degreeProgram && <span className="error-message">{errors.degreeProgram}</span>}
+                  <FormField
+          label="Degree Program"
+          name="degree_program"
+          type="select"
+          value={formData.degree_program}
+          onChange={handleChange}
+          required
+          error={errors.degree_program}
+          options={
+            enums?.degree_program?.map((opt) => ({ value: opt.value, label: opt.label })) || []
+          }
+        />
         </div>
       </div>
     </div>
