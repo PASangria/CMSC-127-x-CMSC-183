@@ -1,9 +1,12 @@
 import React from 'react';
 import '../SetupProfile/css/multistep.css';
 
-const BISCertify = ({ data, updateData }) => {
+const BISCertify = ({ data, updateData, showError }) => {
+  const hasConsented = data?.privacy_consent?.has_consented || false;
+
   const handleChange = (e) => {
-    updateData({ ...data, certify: e.target.checked });
+    const isChecked = e.target.checked;
+    updateData(isChecked);
   };
 
   return (
@@ -26,19 +29,25 @@ const BISCertify = ({ data, updateData }) => {
         <label className="form-label">
           <input
             type="checkbox"
-            name="certify"
-            checked={data.certify || false}
+            name="has_consented"
+            checked={hasConsented}
             onChange={handleChange}
             className="certify-checkbox"
           />
           <span className="certify-text">
-            I have read the University of the Philippines’ Privacy Notice for Students.
+              I have read the University of the Philippines’ Privacy Notice for Students.
             I understand that for the UP System to carry out its mandate under the 1987 Constitution, the UP Charter, and other laws,
             the University must necessarily process my personal and sensitive personal information.
             Therefore, I recognize the authority of the University of the Philippines to process my personal and sensitive personal
             information, pursuant to the UP Privacy Notice and applicable laws.
           </span>
         </label>
+
+        {showError && !hasConsented && (
+          <div className="error-message">
+            <span>Please agree to the privacy notice to proceed.</span>
+          </div>
+        )}
       </div>
     </div>
   );
