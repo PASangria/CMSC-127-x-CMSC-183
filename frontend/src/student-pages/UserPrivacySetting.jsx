@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import Navbar from '../components/NavBar';
-import Footer from '../components/Footer';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import {
   TextField,
   Button,
@@ -8,10 +7,10 @@ import {
   Box,
   Container,
   Paper,
-  Alert
+  Alert,
 } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import DefaultLayout from '../components/DefaultLayout';
 
 export const UserPrivacySetting = () => {
   const [email, setEmail] = useState('');
@@ -21,11 +20,12 @@ export const UserPrivacySetting = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { user } = useContext(AuthContext);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Validate form
     if (!email || !currentPassword || !newPassword || !confirmPassword) {
       setError('Please fill out all fields.');
       return;
@@ -70,9 +70,8 @@ export const UserPrivacySetting = () => {
     }
   };
 
-  return (
+  const content = (
     <>
-      <Navbar />
       <Box sx={{ backgroundColor: '#7B1113', py: 2 }}>
         <Typography variant="h5" align="center" color="white" fontWeight="bold">
           PRIVACY SETTING
@@ -137,8 +136,10 @@ export const UserPrivacySetting = () => {
           </Box>
         </Paper>
       </Container>
+
       <ToastContainer />
-      <Footer />
     </>
   );
+
+  return <DefaultLayout variant="student">{content}</DefaultLayout>;
 };
