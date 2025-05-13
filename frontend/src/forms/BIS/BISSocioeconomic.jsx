@@ -14,35 +14,42 @@ const SupportChoices = {
 
 const BISSocioeconomic = ({ data, updateData }) => {
   const handleChange = (e, section) => {
-    const { name, type, checked, value } = e.target;
+  const { name, type, value, checked } = e.target;
 
-    if (type === 'checkbox') {
-      // Determine which section's support array to update
-      const updatedSupport = new Set(data[section].support || []);
+  // Convert "true"/"false" string to boolean
+  const parsedValue =
+    type === 'radio' && (value === 'true' || value === 'false')
+      ? value === 'true'
+      : value;
 
-      if (checked) {
-        updatedSupport.add(name);
-      } else {
-        updatedSupport.delete(name);
-      }
+  if (type === 'checkbox' && section === 'student_support') {
+    const updatedSupport = new Set(data[section].support || []);
 
-      updateData({
-        ...data,
-        [section]: {
-          ...data[section],
-          support: Array.from(updatedSupport), 
-        },
-      });
+    if (checked) {
+      updatedSupport.add(name);
     } else {
-      updateData({
-        ...data,
-        [section]: {
-          ...data[section],
-          [name]: value, // Update the other fields in the section
-        },
-      });
+      updatedSupport.delete(name);
     }
-  };
+
+    updateData({
+      ...data,
+      [section]: {
+        ...data[section],
+        support: Array.from(updatedSupport),
+      },
+    });
+  } else {
+    updateData({
+      ...data,
+      [section]: {
+        ...data[section],
+        [name]: parsedValue,
+      },
+    });
+  }
+};
+
+
 
   return (
     <div className="form-section">
@@ -131,15 +138,42 @@ const BISSocioeconomic = ({ data, updateData }) => {
           )}
         </label>
       </div>
+        
+       <div className="radio-question-group">
+        <label className="form-label">
+          Do you have other scholarships aside from UP Socialized Tuition System? 
+        </label>
+        <div className="radio-options">
+        <label>
+          <input
+            type="radio"
+            name="has_scholarship"
+            value="true"
+            checked={data.socio_economic_status.has_scholarship === true}
+            onChange={(e) => handleChange(e, 'socio_economic_status')}
+          />
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="has_scholarship"
+            value="false"
+            checked={data.socio_economic_status.has_scholarship === false}
+            onChange={(e) => handleChange(e, 'socio_economic_status')}
+          />
+          No
+        </label>
+        </div>
+      </div> 
 
-      {/* Additional Text Inputs */}
       <div className="form-row full-width">
         <label className="form-label">
           What other scholarships do you have aside from UP Socialized Tuition System?
         </label>
         <textarea
           className="form-input"
-          name="other_scholarship"
+          name="scholarships"
           value={data.socio_economic_status.scholarships || ''}
           onChange={(e) => handleChange(e, 'socio_economic_status')}
         />

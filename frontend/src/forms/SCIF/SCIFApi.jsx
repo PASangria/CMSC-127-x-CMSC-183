@@ -1,6 +1,6 @@
 import { useApiRequest } from '../../context/ApiRequestContext';
 
-const BASE_URL = 'http://localhost:8000/api/forms/basic-information-sheet';
+const BASE_URL = 'http://localhost:8000/api/forms/student-cumulative-information-file';
 
 const sectionKeys = [
   'preferences',
@@ -54,8 +54,7 @@ export const useFormApi = () => {
     return response;
   };
 
-const finalizeSubmission = async (submissionId) => {
-  try {
+  const finalizeSubmission = async (submissionId) => {
     const response = await request(
       `http://localhost:8000/api/forms/finalize/${submissionId.submission}/`,
       {
@@ -64,32 +63,8 @@ const finalizeSubmission = async (submissionId) => {
       }
     );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return {
-        success: false,
-        status: response.status,
-        data,
-      };
-    }
-
-    return {
-      success: true,
-      status: response.status,
-      data,
-    };
-  } catch (error) {
-    console.error('Network or unexpected error:', error);
-    return {
-      success: false,
-      status: 0,
-      data: { error: 'Network error or unexpected issue occurred.' },
-    };
-  }
-};
-
-
+    return response;
+  };
 
   return {
     createDraftSubmission,
