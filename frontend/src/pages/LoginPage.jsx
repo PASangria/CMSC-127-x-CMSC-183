@@ -80,7 +80,12 @@ const LoginPage = () => {
                   <div className="login__links">
                     <Link to="/forgot-password">Forgot password?</Link>
                     <br />
-                    Don’t have an account? <Link to="/signup">Sign Up</Link>
+                    {/* Conditionally render Sign Up link based on role */}
+                    {role !== 'admin' && (
+                      <span>
+                        Don’t have an account? <Link to="/signup">Sign Up</Link>
+                      </span>
+                    )}
                   </div>
                 </form>
               </section>
@@ -89,9 +94,8 @@ const LoginPage = () => {
         </div>
         <Footer />
       </main>
-      
     </>
   );
 };
 
-export default LoginPage; 
+export default LoginPage;
