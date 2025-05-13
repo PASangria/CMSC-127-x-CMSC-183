@@ -1,74 +1,30 @@
-import React from 'react';
-import '../SetupProfile/css/multistep.css';
+import React, { useContext } from 'react';
+import '../SetupProfile/css/multistep.css'
+import DisplayField from '../../components/DisplayField';
 
-const BISPersonalData = ({ data, updateData }) => {
-  return (
-    <div className="form-section">
-      <h2 className="step-title">PERSONAL DATA</h2>
-      <div className="form-row">
-        <div className="form-group">
-          <label className="form-label">Surname:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.surname}
-            onChange={(e) => updateData({ surname: e.target.value })}
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">First Name:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.firstName}
-            onChange={(e) => updateData({ firstName: e.target.value })}
-          />
-        </div>
-      </div>
+const BISPersonalData = ({ profileData }) => {
 
-      <div className="form-row">
-        <div className="form-group">
-          <label className="form-label">Middle Name:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.middleName}
-            onChange={(e) => updateData({ middleName: e.target.value })}
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Nickname:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.nickname}
-            onChange={(e) => updateData({ nickname: e.target.value })}
-          />
-        </div>
-      </div>
+    if (!profileData) return <div>Loading...</div>;
 
-      <div className="form-row">
-        <div className="form-group">
-          <label className="form-label">Year:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.year}
-            onChange={(e) => updateData({ year: e.target.value })}
-          />
+    return (
+        <div className='form-container'>
+            <h2 className='step-title'>Personal Data</h2>
+            <p>If you wish to update information in this section, please go to your profile and update it. </p>
+            <div className='form-row'>
+                <div className='form-group'><DisplayField label="First Name" value={profileData.first_name} /></div>
+                <div className='form-group'><DisplayField label="Last Name" value={profileData.last_name} /></div>
+            </div>
+            <div className='form-row'>
+                <div className='form-group'><DisplayField label="Middle Name" value={profileData.middle_name} /></div>
+                <div className='form-group'><DisplayField label="Nickname" value={profileData.nickname} /></div>
+            </div>
+            <div className='form-row'>
+                <div className='form-group'><DisplayField label="Year" value={profileData.current_year_level} /></div>
+                <div className='form-group'><DisplayField label="Degree Program" value={profileData.degree_program} /></div>
+            </div>
         </div>
-        <div className="form-group">
-          <label className="form-label">Program/Course:</label>
-          <input
-            type="text"
-            className="form-input"
-            value={data.programCourse}
-            onChange={(e) => updateData({ programCourse: e.target.value })}
-          />
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
+
 
 export default BISPersonalData;

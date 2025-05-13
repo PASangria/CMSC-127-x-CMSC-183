@@ -1,15 +1,14 @@
-/* Background Rectangle */
+/* ===== BACKGROUND & WRAPPERS ===== */
 .background-rectangle {
   position: absolute;
   width: 100%;
-  height: 19.3125em; /* 309px / 16px */
+  height: 19.3125em;
   left: 0;
   top: 0;
   background: #7B1113;
-  z-index: 0; /* Stay behind all */
+  z-index: 0;
 }
 
-/* Wrapper that holds Navbar, Form, and Footer */
 .content-wrapper {
   position: relative;
   z-index: 1;
@@ -18,24 +17,22 @@
   min-height: 100vh;
 }
 
-/* Ensure Navbar and Footer are on top */
 .navbar,
 .footer {
   position: relative;
   z-index: 10;
 }
 
-/* Main Step Form */
+/* ===== FORM LAYOUT ===== */
 .mainStepForm {
   margin: 1.875em auto 0 auto;
   width: 62.25em;
-  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 2;
 }
 
-/* Title and Subtitle */
 .main-form-info {
   padding-bottom: 1.25em;
 }
@@ -50,27 +47,145 @@
 
 .step-title {
   color: #7B1113;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
   padding-bottom: 1.25em;
 }
 
-/* Card */
+/* ===== FORM CARD ===== */
 .main-form-card {
   background: #FFFFFF;
   border-radius: 0.9375em;
   padding: 2em;
-  box-sizing: border-box;
   width: 62.25em;
-  z-index: 2;
+  box-sizing: border-box;
   box-shadow: 0px 0px 0.625em rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  z-index: 2;
 }
 
-/* Progress Bar */
+/* ===== FORM INPUTS & LABELS ===== */
+.form-section {
+  padding: 2rem;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Radio Group */
+.radio-question-group {
+  margin-bottom: 1.5rem;
+}
+
+.radio-question-group .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.radio-options {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-left: 2em;
+}
+
+.radio-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Optional: Improve radio input size and spacing */
+.radio-options input[type="radio"] {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* Certify */
+.certify-agreement {
+  margin-top: 1.5em;
+  padding: 1em;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.certify-agreement .form-label {
+    display: flex
+;
+    margin-bottom: 0.5rem;
+    align-items: baseline;
+    font-weight: 600;
+    color: #444;
+}
+
+.certify-checkbox {
+  margin-right: 0.75em;
+  transform: scale(1.2);
+  vertical-align: middle;
+}
+
+.certify-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+
+/* Grid layout for dual inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Full-width override */
+.full-width {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+/* ===== PROGRESS BAR ===== */
 .progress-bar {
   padding: 0.625em 0 1.25em;
 }
 
-/* Buttons */
+/* ===== BUTTONS ===== */
 .main-form-buttons {
   display: flex;
   justify-content: center;
@@ -101,7 +216,7 @@
   background: #7E7E7E;
 }
 
-/* Modal */
+/* ===== MODAL ===== */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -135,8 +250,38 @@
   z-index: 1;
 }
 
-/* Responsive Design */
+/* ===== CHECKBOX GRID ===== */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 2rem;
+  margin: 2rem;
+  padding-left: 5em;
+}
 
+.inline-checkbox {
+  font-size: 1rem;
+  line-height: 1.4;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.inline-checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.2);
+}
+
+.inline-checkbox input[type="text"] {
+  margin-left: 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 48em) {
   .mainStepForm {
     width: 90%;
@@ -160,6 +305,15 @@
   .main-form-buttons {
     gap: 0.625em;
     flex-direction: column;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+    padding-left: 0;
   }
 }
 
@@ -190,51 +344,4 @@
     gap: 0.5em;
     flex-direction: column;
   }
-
-  .checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-  gap: 1rem 2rem;
-  margin: 0.5rem 0 1.5rem;
-}
-
-.inline-checkbox {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.4rem;
-  font-size: 0.95rem;
-}
-
-.inline-checkbox input[type="checkbox"] {
-  margin-right: 0.5rem;
-  transform: scale(1.2);
-}
-
-.inline-checkbox input[type="text"] {
-  margin-left: 0;
-  padding: 0.4rem 0.6rem;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.full-width {
-  width: 100%;
-  margin-top: 1.5rem;
-}
-
-.form-group textarea,
-.form-group input[type="text"],
-.form-input {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
 }

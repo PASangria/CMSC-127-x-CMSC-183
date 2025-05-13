@@ -1,128 +1,186 @@
 import React from 'react';
 import '../SetupProfile/css/multistep.css';
 
+const SupportChoices = {
+  SELF: 'self',
+  BOTH_PARENTS: 'both_parents',
+  FATHER_ONLY: 'father_only',
+  MOTHER_ONLY: 'mother_only',
+  SCHOLARSHIP: 'scholarship',
+  COMBINATION: 'combination',
+  OTHERS: 'others',
+  GOV_FUNDED: 'gov_funded',
+};
+
 const BISSocioeconomic = ({ data, updateData }) => {
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    updateData({
-      ...data,
-      [name]: type === 'checkbox' ? checked : value,
-    });
+  const handleChange = (e, section) => {
+    const { name, type, checked, value } = e.target;
+
+    if (type === 'checkbox') {
+      // Determine which section's support array to update
+      const updatedSupport = new Set(data[section].support || []);
+
+      if (checked) {
+        updatedSupport.add(name);
+      } else {
+        updatedSupport.delete(name);
+      }
+
+      updateData({
+        ...data,
+        [section]: {
+          ...data[section],
+          support: Array.from(updatedSupport), 
+        },
+      });
+    } else {
+      updateData({
+        ...data,
+        [section]: {
+          ...data[section],
+          [name]: value, // Update the other fields in the section
+        },
+      });
+    }
   };
 
   return (
     <div className="form-section">
-      <h2 className="step-title">SOCIO-ECONOMIC STATUS</h2>
+      <h2 className="step-title">Socio-Economic Status</h2>
 
       <label className="form-label">What is your means of support for your college education?</label>
       <div className="checkbox-grid">
-        <label className="inline-checkbox">
-          <input type="checkbox" name="self_supporting" checked={data.self_supporting || false} onChange={handleChange} />
-          Self-supporting
-        </label>
+        {[
+          { name: SupportChoices.SELF, label: 'Self-supporting' },
+          { name: SupportChoices.BOTH_PARENTS, label: 'Both parents' },
+          { name: SupportChoices.FATHER_ONLY, label: 'Father only' },
+          { name: SupportChoices.MOTHER_ONLY, label: 'Mother only' },
+          { name: SupportChoices.GOV_FUNDED, label: 'Government Funded' },
+        ].map(({ name, label }) => (
+          <label key={name} className="inline-checkbox">
+            <input
+              type="checkbox"
+              name={name}
+              checked={(data.student_support.support || []).includes(name)}
+              onChange={(e) => handleChange(e, 'student_support')}
+            />
+            {label}
+          </label>
+        ))}
 
+        {/* Scholarship + text input */}
         <label className="inline-checkbox">
-          <input type="checkbox" name="both_parents" checked={data.both_parents || false} onChange={handleChange} />
-          Both parents
-        </label>
-
-        <label className="inline-checkbox">
-          <input type="checkbox" name="father_only" checked={data.father_only || false} onChange={handleChange} />
-          Father only
-        </label>
-
-        <label className="inline-checkbox">
-          <input type="checkbox" name="mother_only" checked={data.mother_only || false} onChange={handleChange} />
-          Mother only
-        </label>
-
-        <label className="inline-checkbox">
-          <input type="checkbox" name="government_funded" checked={data.government_funded || false} onChange={handleChange} />
-          Government Funded
-        </label>
-
-        <label className="inline-checkbox">
-          <input type="checkbox" name="scholarship" checked={data.scholarship || false} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name={SupportChoices.SCHOLARSHIP}
+            checked={(data.student_support.support || []).includes(SupportChoices.SCHOLARSHIP)}
+            onChange={(e) => handleChange(e, 'student_support')}
+          />
           Scholarship
-          {data.scholarship && (
+          {(data.student_support.support || []).includes(SupportChoices.SCHOLARSHIP) && (
             <input
               type="text"
-              name="scholarships"
+              name="other_scholarship"
               placeholder="What Scholarship?"
-              value={data.scholarships || ''}
-              onChange={handleChange}
+              value={data.student_support.other_scholarship || ''}
+              onChange={(e) => handleChange(e, 'student_support')}
+              className="form-input"
             />
           )}
         </label>
 
+        {/* Combination + input */}
         <label className="inline-checkbox">
-          <input type="checkbox" name="combination" checked={data.combination || false} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name={SupportChoices.COMBINATION}
+            checked={(data.student_support.support || []).includes(SupportChoices.COMBINATION)}
+            onChange={(e) => handleChange(e, 'student_support')}
+          />
           Combination of
-          {data.combination && (
+          {(data.student_support.support || []).includes(SupportChoices.COMBINATION) && (
             <input
               type="text"
-              name="combination_details"
+              name="combination_notes"
               placeholder="Combination of..."
-              value={data.combination_details || ''}
-              onChange={handleChange}
+              value={data.student_support.combination_notes || ''}
+              onChange={(e) => handleChange(e, 'student_support')}
+              className="form-input"
             />
           )}
         </label>
 
+        {/* Others + input */}
         <label className="inline-checkbox">
-          <input type="checkbox" name="others" checked={data.others || false} onChange={handleChange} />
+          <input
+            type="checkbox"
+            name={SupportChoices.OTHERS}
+            checked={(data.student_support.support || []).includes(SupportChoices.OTHERS)}
+            onChange={(e) => handleChange(e, 'student_support')}
+          />
           Others <span style={{ fontSize: '0.85em' }}>(aunts, uncles, etc. – pls. specify)</span>
-          {data.others && (
+          {(data.student_support.support || []).includes(SupportChoices.OTHERS) && (
             <input
               type="text"
-              name="others_details"
+              name="other_notes"
               placeholder="Specify..."
-              value={data.others_details || ''}
-              onChange={handleChange}
+              value={data.student_support.other_notes || ''}
+              onChange={(e) => handleChange(e, 'student_support')}
+              className="form-input"
             />
           )}
         </label>
       </div>
 
+      {/* Additional Text Inputs */}
       <div className="form-row full-width">
-        <label className="form-label">What other scholarships do you have aside from UP Socialized Tuition System?</label>
+        <label className="form-label">
+          What other scholarships do you have aside from UP Socialized Tuition System?
+        </label>
         <textarea
           className="form-input"
-          name="other_scholarships"
-          value={data.other_scholarships || ''}
-          onChange={handleChange}
+          name="other_scholarship"
+          value={data.socio_economic_status.scholarships || ''}
+          onChange={(e) => handleChange(e, 'socio_economic_status')}
         />
       </div>
 
       <div className="form-row full-width">
-        <label className="form-label">What are your privileges that you specified in no. (5)?</label>
+        <label className="form-label">
+          What are your privileges that you specified in the question above?
+        </label>
         <textarea
           className="form-input"
           name="scholarship_privileges"
-          value={data.scholarship_privileges || ''}
-          onChange={handleChange}
+          value={data.socio_economic_status.scholarship_privileges || ''}
+          onChange={(e) => handleChange(e, 'socio_economic_status')}
+
         />
       </div>
 
       <div className="form-row full-width">
-        <label className="form-label">How much is your monthly allowance to be provided by your family when you reach college?</label>
+        <label className="form-label">
+          How much is your monthly allowance (in pesos) to be provided by your family when you reach college?
+        </label>
         <input
-          type="text"
+          type="number"
           className="form-input"
           name="monthly_allowance"
-          value={data.monthly_allowance || ''}
-          onChange={handleChange}
+          value={data.socio_economic_status.monthly_allowance || ''}
+          onChange={(e) => handleChange(e, 'socio_economic_status')}
+          step="0.01"
+          min="0"
         />
       </div>
 
       <div className="form-row full-width">
-        <label className="form-label">What do you spend much?</label> 
+        <label className="form-label">What do you spend much?</label>
         <input
           type="text"
           className="form-input"
           name="spending_habit"
-          value={data.spending_habit || ''}
-          onChange={handleChange}
+          value={data.socio_economic_status.spending_habit || ''}
+          onChange={(e) => handleChange(e, 'socio_economic_status')}
         />
       </div>
     </div>

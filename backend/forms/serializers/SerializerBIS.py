@@ -24,9 +24,10 @@ class StudentSupportSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        supports = validated_data.pop('support')
+        supports = validated_data.pop('support', None)
         student_support = StudentSupport.objects.create(**validated_data)
-        student_support.support.set(supports)
+        if supports is not None:
+            student_support.support.set(supports)
         return student_support
 
     def update(self, instance, validated_data):
@@ -43,9 +44,11 @@ class SocioEconomicStatusSerializer(serializers.ModelSerializer):
         model = SocioEconomicStatus
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
+        read_only_fields = ['student', 'submission']
 
 class PresentScholasticStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentScholasticStatus
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
+        read_only_fields = ['student', 'submission']

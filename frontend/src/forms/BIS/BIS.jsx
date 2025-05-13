@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useApiRequest } from '../../context/ApiRequestContext';
 import { AuthContext } from '../../context/AuthContext';
 import BISPersonalData from './BISPersonalData';
@@ -10,20 +10,19 @@ import ProgressBar from '../../components/ProgressBar';
 import Navbar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import '../SetupProfile/css/multistep.css';
+import {  useFormApi } from './BISApi';
 
 const BISForm = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
+  const {
+    createDraftSubmission,
+    getFormBundle,
+    saveDraft,
+    finalizeSubmission,
+  } = useFormApi();
 
   const [formData, setFormData] = useState({
-    personalData: {
-      surname: '',
-      firstName: '',
-      middleName: '',
-      nickname: '',
-      year: '',
-      programCourse: '',
-    },
     socio_economic_status: {
       has_scholarship: false,
       scholarships: '',
@@ -56,13 +55,98 @@ const BISForm = () => {
   });
 
   const [step, setStep] = useState(0);
+  const [submissionId, setSubmissionId] = useState(null);
+  const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
 
+  // Loading and error states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetching form data
+useEffect(() => {
+  const fetchFormData = async () => {
+    setLoading(true);
+    try {
+      let response = await getFormBundle(studentNumber);
+
+      // If no submission yet, create one
+      if (!response) {
+        alert('No submission found. Creating a new one...');
+        response = await createDraftSubmission(studentNumber);
+      }
+
+      if (response) {
+        setFormData({
+          socio_economic_status: response.socio_economic_status || {},
+          scholastic_status: response.scholastic_status || {},
+          preferences: response.preferences || {},
+          student_support: response.student_support || {},
+          certify: response.certify || false,
+        });
+        setSubmissionId(response.submission.id);
+      } else {
+        setError('Failed to create or fetch the form.');
+      }
+    } catch (err) {
+      setError('Error fetching or creating form.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (studentNumber) fetchFormData();
+}, [studentNumber]);
+
+const handleSaveDraft = async () => {
+  if (!submissionId) {
+    alert('Submission ID is missing. Try reloading the page.');
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const response = await saveDraft(submissionId, studentNumber, formData);
+    if (response?.ok) {
+      alert('Draft saved successfully!');
+    } else {
+      alert('Error saving draft.');
+    }
+  } catch (err) {
+    alert('Failed to save draft.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // Handle navigation between steps
   const handleNextStep = () => setStep((prev) => prev + 1);
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
+  // Submit form
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const data = {
+        ...formData,
+        submission: submissionId,
+        student_number: studentNumber,
+      };
+      const response = await finalizeSubmission(data);
+      if (response) {
+        alert('Form submitted successfully!');
+      } else {
+        alert('Error submitting form.');
+      }
+    } catch (err) {
+      alert('Failed to submit form.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      {/* Background rectangle behind everything */}
+      {/* Background rectangle */}
       <div className="background-rectangle"></div>
 
       <div className="content-wrapper">
@@ -73,34 +157,29 @@ const BISForm = () => {
             <div className="main-form-info">
               <h1 className="main-form-title">Basic Information Sheet</h1>
               <p className="main-form-subtitle">
-                Please fill out the form below to complete your profile.
+                Please PROVIDE the information asked for. The data contained in this form will be kept confidential and will serve as your record. Please fill in the blanks carefully and sincerely.
               </p>
             </div>
 
             <div className="main-form-card">
               <ProgressBar currentStep={step} totalSteps={5} />
 
-              {step === 0 && (
-                <BISPersonalData
-                  data={formData.personalData}
-                  updateData={(newData) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      personalData: { ...prev.personalData, ...newData },
-                    }))
-                  }
-                />
-              )}
+              {step === 0 && <BISPersonalData profileData={profileData} />}
               {step === 1 && (
                 <BISSocioeconomic
-                  data={formData.socio_economic_status}
+                  data={{
+                    socio_economic_status: formData.socio_economic_status,
+                    student_support: formData.student_support
+                  }}
                   updateData={(newData) =>
                     setFormData((prev) => ({
                       ...prev,
-                      socio_economic_status: { ...prev.socio_economic_status, ...newData },
+                      socio_economic_status: { ...prev.socio_economic_status, ...newData.socio_economic_status },
+                      student_support: { ...prev.student_support, ...newData.student_support }
                     }))
                   }
                 />
+
               )}
               {step === 2 && (
                 <BISPreferences
@@ -137,21 +216,26 @@ const BISForm = () => {
               )}
 
               <div className="main-form-buttons">
-                {step > 0 && (
+                {step > 0 && !loading && (
                   <button className="btn-secondary" onClick={handlePreviousStep}>
                     Back
                   </button>
                 )}
-                {step < 4 && (
+                <button className="btn-primary" onClick={handleSaveDraft} disabled={loading}>
+                  {loading ? 'Saving Draft...' : 'Save Draft'}
+                </button>
+                {step < 4 && !loading && (
                   <button className="btn-primary" onClick={handleNextStep}>
                     Next
                   </button>
                 )}
-                {step === 4 && (
-                  <button className="btn-submit" onClick={() => alert('Form submitted!')}>
+                {step === 4 && !loading && (
+                  <button className="btn-submit" onClick={handleSubmit}>
                     Submit
                   </button>
                 )}
+                {loading && <div>Loading...</div>}
+                {error && <div className="error-message">{error}</div>}
               </div>
             </div>
           </div>

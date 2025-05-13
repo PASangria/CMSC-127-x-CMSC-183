@@ -1,86 +1,108 @@
-/* Form Group */
+/* --- Form Group Wrapper --- */
 .form-group {
-   position: relative;
-   margin-bottom: 20px;
- }
- 
- /* Input Field */
- .form-input {
-   box-sizing: border-box;
-   width: 100%;
-   height: 50px;
-   padding: 18px 12px 6px 12px;
-   border: 1px solid gray;
-   border-radius: 4px;
-   font-family: Arial, Helvetica, sans-serif;
-   font-size: 16px;
-   background: transparent;
-   transition: border-color 0.3s ease, padding-top 0.3s ease;
-   line-height: 1.2;
- }
- 
- /* Label Styling */
- .form-group label {
-   font-size: 14px;
-   color: rgba(0, 0, 0, 0.6);
-   position: absolute;
-   left: 12px;
-   top: 50%;
-   transform: translateY(-50%);
-   pointer-events: none;
-   transition: all 0.2s ease;
-   padding: 0 4px;
-   background-color: white;
- }
- 
- /* Active or filled input */
- .form-input:focus,
- .form-input.filled {
-   padding-top: 24px;
-   padding-bottom: 24px;
- }
- 
- .form-input:focus + label,
- .form-input.filled + label {
-   top: -7px;
-   font-size: 11px;
-   color: #1976D2;
-   transform: none;
-   padding: 1px;
- }
- 
- /* Focus border */
- .form-input:focus {
-   border-color: #1976D2;
-   outline: none;
-   padding-top: 24px;
-   padding-bottom: 20px;
- }
- 
- /* Error border */
- .form-group.error .form-input {
-   border-color: #D32F2F;
- }
- 
- /* ✅ Always show red label on error */
- .form-group.error label {
-   color: #D32F2F;
- }
- 
- .form-group.error .form-input:focus + label,
- .form-group.error .form-input.filled + label {
-   color: #D32F2F;
-   top: -5px;
-   font-size: 11px;
-   transform: none;
-   padding: 0;
-   background-color: #fff;
- }
- 
- /* Error message */
- .form-group .error-message {
-   font-size: 12px;
-   color: #D32F2F;
-   margin-top: 4px;
- }
- 
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* --- Label Styling (Floating Effect) --- */
+.form-group label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  background: white;
+  padding: 0 4px;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+/* --- Input and Select Base Styles --- */
+.form-input,
+.form-group select {
+  width: 100%;
+  height: 50px;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: transparent;
+  line-height: 1.2;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, padding-top 0.3s ease;
+  appearance: none;
+}
+
+/* --- Floating Label Behavior for Focus or Filled --- */
+.form-input:focus,
+.form-input.filled {
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+
+.form-group select:focus,
+.form-group select.filled {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.form-input:focus + label,
+.form-input.filled + label,
+.form-group select:focus + label,
+.form-group select.filled + label {
+  top: -7px;
+  font-size: 11px;
+  color: #1976D2;
+  transform: none;
+  padding: 1px;
+}
+
+/* --- Focus State --- */
+.form-input:focus,
+.form-group select:focus {
+  border-color: #1976D2;
+  outline: none;
+}
+
+/* --- Select Arrow Icon Styling --- */
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+}
+
+/* --- Error Styles --- */
+.form-group.error .form-input,
+.form-group.error select {
+  border-color: #D32F2F;
+}
+
+.form-group.error label,
+.form-group.error .form-input:focus + label,
+.form-group.error .form-input.filled + label,
+.form-group.error select:focus + label,
+.form-group.error select.filled + label {
+  color: #D32F2F;
+}
+
+/* --- Error Message --- */
+.form-group .error-message {
+  font-size: 12px;
+  color: #D32F2F;
+  margin-top: 4px;
+}
+
+/* --- Form Rows (Grid Layout) --- */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.form-row.three-columns {
+  grid-template-columns: repeat(3, 1fr);
+}

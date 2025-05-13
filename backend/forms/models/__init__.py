@@ -1,6 +1,6 @@
 from .student import Student
 from .address import Address
-from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, PhilippineRegionEnum, SemesterEnum
+from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, PhilippineRegionEnum, SemesterEnum, SupportChoices
 from .BIS import Preferences, Support, StudentSupport, SocioEconomicStatus, PresentScholasticStatus
 from .award import Award, CollegeAward
 from .familydata import Parent, Sibling, Guardian, FamilyData

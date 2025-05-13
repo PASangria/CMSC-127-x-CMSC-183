@@ -1,125 +1,133 @@
 import React from 'react';
-import '../SetupProfile/css/multistep.css';
+import './../SetupProfile/css/multistep.css';
+import FormField from '../../components/FormField';
 
 const BISPreferences = ({ data, updateData }) => {
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    updateData({
-      ...data,
-      [name]: type === 'checkbox' ? checked : value,
-    });
-  };
+    const handleChange = (e) => {
+      const { name, value, type } = e.target;
+
+      const updatedValue = type === 'radio' ? value === 'true' : value;
+
+      if (name === 'shift_plans' && updatedValue === false)  {
+        updateData({
+          ...data, 
+          shift_plans: false,
+          planned_shift_degree: '', 
+          reason_for_shifting: '', 
+        });
+      } else {
+        updateData({
+          ...data,
+          [name]: updatedValue,
+        });
+      }
+    };
 
   return (
     <div className="form-section">
       <h2 className="step-title">SCHOOL PREFERENCES</h2>
 
-      <div className="form-group">
-        <input
-          type="text"
-          name="influence"
-          value={data.influence || ''}
-          onChange={handleChange}
-          placeholder=" "
-        />
-        <label>Who influenced you to study in UP Mindanao?</label>
-      </div>
+      <FormField
+        label="Who influenced you to study in UP Mindanao?"
+        name="influence"
+        value={data.influence || ''}
+        onChange={handleChange}
+      />
 
-      <div className="form-group">
-        <input
-          type="text"
-          name="reason_for_enrolling"
-          value={data.reason_for_enrolling || ''}
-          onChange={handleChange}
-          placeholder=" "
-        />
-        <label>Indicate the reason/s of enrolling in this campus (UP Mindanao): </label>
-      </div>
+      <FormField
+        label="Indicate the reason/s of enrolling in this campus (UP Mindanao):"
+        name="reason_for_enrolling"
+        value={data.reason_for_enrolling || ''}
+        onChange={handleChange}
+      />
 
-      <div className="form-group checkbox-group">
-        <label>
-          <input
-            type="checkbox"
-            name="transfer_plans"
-            checked={data.transfer_plans || false}
-            onChange={handleChange}
-          />
+      {/* Transfer Plans Question */}
+      <div className="radio-question-group">
+        <label className="form-label">
           Do you have plans of transferring to another UP Campus by 2nd year?
         </label>
+        <div className="radio-options">
+          <label>
+            <input
+              type="radio"
+              name="transfer_plans"
+              value={true} // boolean true
+              checked={data.transfer_plans === true}
+              onChange={handleChange}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="transfer_plans"
+              value={false} // boolean false
+              checked={data.transfer_plans === false}
+              onChange={handleChange}
+            />
+            No
+          </label>
+        </div>
       </div>
 
-      <div className="form-group">
-        <input
-          type="text"
-          name="transfer_reason"
-          value={data.transfer_reason || ''}
-          onChange={handleChange}
-          placeholder=" "
-        />
-        <label>If yes, why?</label>
-      </div>
 
-      <div className="form-group checkbox-group">
-        <label>
-          <input
-            type="checkbox"
-            name="shift_plans"
-            checked={data.shift_plans || false}
-            onChange={handleChange}
-          />
+      <FormField
+        label="Why and why not?"
+        name="transfer_reason"
+        value={data.transfer_reason || ''}
+        onChange={handleChange}
+      />
+
+      {/* Shifting Plans Question */}
+      <div className="radio-question-group">
+        <label className="form-label">
           Do you have plans of shifting to another degree program by 2nd year?
         </label>
+        <div className="radio-options">
+          <label>
+            <input
+              type="radio"
+              name="shift_plans"
+              value={true} 
+              checked={data.shift_plans === true}
+              onChange={handleChange}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="shift_plans"
+              value={false} 
+              checked={data.shift_plans === false}
+              onChange={handleChange}
+            />
+            No
+          </label>
+        </div>
       </div>
 
-      <div className="form-grid">
-        <div className="form-group">
-          <input
-            type="text"
+
+      {/* Conditionally render shifting-related fields */}
+      {data.shift_plans === true && (
+        <div className="form-grid">
+          <FormField
+            label="If yes, what degree program?"
             name="planned_shift_degree"
             value={data.planned_shift_degree || ''}
             onChange={handleChange}
-            placeholder=" "
           />
-          <label>If yes, what degree program?</label>
-        </div>
 
-        <div className="form-group">
-          <input
-            type="text"
+          <FormField
+            label="Why?"
             name="reason_for_shifting"
             value={data.reason_for_shifting || ''}
             onChange={handleChange}
-            placeholder=" "
           />
-          <label>Why?</label>
         </div>
-      </div>
-      
-      {/* Missing Fields */}
-      <div className="form-group">
-        <input
-          type="text"
-          name="degree_program"
-          value={data.degree_program || ''}
-          onChange={handleChange}
-          placeholder=" "
-        />
-        <label>If yes, what degree program?</label>
-      </div>
-
-      <div className="form-group">
-        <input
-          type="text"
-          name="reason_for_degree"
-          value={data.reason_for_degree || ''}
-          onChange={handleChange}
-          placeholder=" "
-        />
-        <label>Why?</label>
-      </div>
+      )}
     </div>
   );
 };
 
 export default BISPreferences;
-  
