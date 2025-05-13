@@ -98,7 +98,6 @@ export default function Navbar() {
     return (
         <>
             <nav className="nav">
-                <div className='nav-top'>
                     <Link to="/" className="headerLogo">
                         <div className="headerPhoto">
                             <img src={logo} alt="UP Min Logo" />
@@ -110,12 +109,13 @@ export default function Navbar() {
                     </Link>
 
                     {/* Mobile Hamburger (visible only when user is logged out and on mobile) */}
-                    {!isAuthenticated && isMobile && (
-                        <button className="hamburger" onClick={() => setIsMenuOpen(prev => !prev)}>
-                            ☰
-                        </button>
-                    )}
-                </div>
+                    <div className="hamburger-container">
+                        {!isAuthenticated && isMobile && (
+                            <button className="hamburger" onClick={() => setIsMenuOpen(prev => !prev)}>
+                                ☰
+                            </button>
+                        )}
+                    </div>
 
                 {/* Navigation Menu for Logged Out Users */}
                 {!isAuthenticated && !isMobile && (
@@ -142,27 +142,23 @@ export default function Navbar() {
 
                 {/* Mobile Navigation for Logged-Out Users */}
                 {!isAuthenticated && isMobile && isMenuOpen && (
-                    <div className="navigation">
+                    <div className="mobile-dropdown">
                         <ul>
-                            <li><Link to="/" className="link-button">HOME</Link></li>
-                            <li><Link to="/faq" className="link-button">FAQ</Link></li>
-                            <li><Link to="/public-forms" className="link-button">FORMS</Link></li>
-                            <li>
+                            <button onClick={handleHomeClick} className="link-button">HOME</button>
+                            <button onClick={handleFaqClick} className="link-button">FAQ</button>
+                            <button onClick={handleFormsClick} className="link-button">FORMS</button>
+                            <div className={`dropdown-wrapper ${showDropdown ? 'active' : ''}`} ref={dropdownRef}>
                                 <button onClick={() => setShowDropdown(prev => !prev)} className="link-button">
                                     LOGIN
                                 </button>
                                 {showDropdown && (
                                     <div className="dropdown-menu">
-                                        <Link to="/login?role=student">
-                                            <div className='dropdown-choice'>As Student</div>
-                                        </Link>
-                                        <Link to="/login?role=admin">
-                                            <div className='dropdown-choice'>As Admin</div>
-                                        </Link>
+                                        <div className='dropdown-choice' onClick={() => handleRoleClick('student')}>As Student</div>
+                                        <div className='dropdown-choice' onClick={() => handleRoleClick('admin')}>As Admin</div>
                                     </div>
                                 )}
-                            </li>
-                            <li><Link to="/signup" className="link-button">SIGN UP</Link></li>
+                            </div>
+                            <button onClick={handleSignupClick} className="link-button">SIGN UP</button>
                         </ul>
                     </div>
                 )}

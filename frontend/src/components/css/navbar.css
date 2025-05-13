@@ -200,6 +200,13 @@
 
 /* ========== Responsive ========== */
 @media (max-width: 48rem) {
+    .headerLogoName {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* ✅ vertically centers the text */
+        line-height: 1.2;
+    }
+    
     .nav {
         padding: 1rem;
         height: fit-content;
@@ -208,14 +215,41 @@
     }
 
     .hamburger {
-        display: none; /* Optionally make this visible for mobile toggle */
+        display: block;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem;
     }
+
+    .hamburger:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 0.5rem;
+        transform: scale(1.05);
+        transition: all 0.2s ease;
+    }
+
+    .hamburger.active {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+        transform: rotate(90deg); /* Optional: rotate or scale */
+    }
+
+    .hamburger-container {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+
 
     /* Navigation for small screens */
     .navigation {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
     }
 
     .navigation ul {
@@ -233,6 +267,52 @@
         background-color: rgba(255, 255, 255, 0.15); /* Same hover effect for buttons and links */
         transform: scale(1.05);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        width: 40%;
+        background-color: #7B1113;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        border-radius: 0 0 0.5rem 0.5rem;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-dropdown ul {
+        display: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+        margin: 0;
+        list-style: none;
+
+    }
+
+    .mobile-dropdown .link-button {
+        display: block;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        width: 100%;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .mobile-dropdown .link-button:hover {
+        background-color: rgba(255, 255, 255, 0.15); /* Same hover effect */
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-dropdown .dropdown-menu {
+        background-color: #fffdfd;
+        padding: 0.5rem 1rem;
     }
 }
 
