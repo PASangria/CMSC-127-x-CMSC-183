@@ -12,7 +12,7 @@ import PreviewModal from './PreviewForm';
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [step, setStep] = useState(4); 
+    const [step, setStep] = useState(1); 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
 
@@ -34,6 +34,8 @@ const MultiStepForm = () => {
       college: '',
       degree_program: '',
       current_year_level: '',
+      date_initial_entry: '',
+      date_initial_entry_sem: '',
       // Permanent Address
       permanent_region: '',
       permanent_province: '',
@@ -99,6 +101,8 @@ const MultiStepForm = () => {
       college: formData.college,
       current_year_level: formData.current_year_level,
       degree_program: formData.degree_program,
+      date_initial_entry: formData.date_initial_entry,
+      date_initial_entry_sem: formData.date_initial_entry_sem,
       last_name: formData.family_name,
       first_name: formData.first_name,
       middle_name: formData.middle_name,

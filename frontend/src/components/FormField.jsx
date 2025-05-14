@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/formfield.css';
+import './css/formfield.css'; // Assuming CSS is imported from this path
 
 const FormField = ({
   label,
@@ -9,11 +9,19 @@ const FormField = ({
   name,
   required,
   error,
-  options, // for select fields
+  options, 
   disabled,
+  helperText, // Add helperText prop
   ...rest
 }) => {
   const isFilled = value && value.toString().trim().length > 0;
+
+  // Handle focus for textarea to ensure the cursor starts at the beginning
+  const handleFocus = (e) => {
+    if (e.target.setSelectionRange) {
+      e.target.setSelectionRange(0, 0); // Set cursor at the beginning of the textarea
+    }
+  };
 
   return (
     <div className={`form-group ${error ? 'error' : ''}`}>
@@ -34,6 +42,16 @@ const FormField = ({
             </option>
           ))}
         </select>
+      ) : type === 'textarea' ? (
+        <textarea
+          value={value}
+          onChange={onChange}
+          name={name}
+          required={required}
+          className={`form-input ${isFilled ? 'filled' : ''}`}
+          onFocus={handleFocus} // Ensure focus is at the start of the textarea
+          {...rest}
+        />
       ) : (
         <input
           type={type}
@@ -47,6 +65,9 @@ const FormField = ({
       )}
       <label className={isFilled ? 'active' : ''}>{label} {required && '*'}</label>
       {error && <div className="error-message">This field is required</div>}
+
+      {/* Add the helperText here */}
+      {helperText && <small className="helper-text">{helperText}</small>}
     </div>
   );
 };

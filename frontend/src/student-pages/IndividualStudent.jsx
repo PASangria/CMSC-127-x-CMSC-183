@@ -7,7 +7,7 @@ const StudentSideInfo = ({ profileData }) => {
     return <div>Loading...</div>; 
   }
 
-  const { first_name, last_name, student_number, current_year_level, degree_program, college, email } = profileData;
+  const { first_name, last_name, student_number, current_year_level, degree_program, college, email, date_initial_entry, date_initial_entry_sem } = profileData;
   
   const firstName = first_name || "N/A";
   const lastName = last_name || "N/A";
@@ -52,6 +52,11 @@ const StudentSideInfo = ({ profileData }) => {
         <p>{email}</p>
         <p>------------------------------</p>
         <strong>UP Mail:</strong>
+      </div>
+      <div className="student_side_educ_info">
+        <p>{date_initial_entry_sem}- AY {date_initial_entry}</p>
+        <p>------------------------------</p>
+        <strong>Date of Initial Entry:</strong>
       </div>
       </div>
       <div className='right-student-profile'>

@@ -63,7 +63,7 @@ export const UserProfile = () => {
 
   if (error) {
     return (
-      <div className="error-message">
+      <div className="no-profile">
         <p>{error}</p>
         <button onClick={handleCompleteProfile} className="btn-complete-profile">
           Complete Your Profile
@@ -72,21 +72,19 @@ export const UserProfile = () => {
     );
   }
 
-  // If profile is empty (i.e., user hasn't set it up yet)
   if (profile && Object.keys(profile).length === 0) {
     return (
       <div>
-      <Navbar />
-      <DefaultLayout variant='student' />
+      <DefaultLayout variant='student' >
       <div className="protected_pages">
-      <div className="error-message">
+      <div className="no-profile">
         <p>No profile data available.</p>
         <button onClick={handleCompleteProfile} className="btn-complete-profile">
           Complete Your Profile
         </button>
       </div>
       </div>
-      <Footer />
+      </DefaultLayout>
     </div>
     );
   }

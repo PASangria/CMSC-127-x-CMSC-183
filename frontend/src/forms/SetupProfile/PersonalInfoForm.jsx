@@ -132,6 +132,23 @@ const PersonalInfoForm = ({ formData, setFormData }) => {
           required
         />
       </div>
+      <div className="form-row">
+      <FormField
+        label="Mobile Number"
+        name="mobile_number"
+        value={formData.mobile_number}
+        onChange={handleChange}
+        required
+        placeholder="+639XXXXXXXXX"
+      />
+      <FormField
+        label="Landline Number"
+        name="landline_number"
+        value={formData.landline_number}
+        onChange={handleChange}
+        placeholder="Optional"
+      />
+    </div>
     </div>
   );
 };

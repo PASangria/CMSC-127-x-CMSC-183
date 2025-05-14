@@ -54,10 +54,23 @@ export const useFormApi = () => {
     return response;
   };
 
-const finalizeSubmission = async (submissionId) => {
+const finalizeSubmission = async (submissionId, studentNumber, formData) => {
   try {
+    const draftResponse = await saveDraft(submissionId, studentNumber, formData);
+
+    if (!draftResponse.ok) {
+      const draftError = await draftResponse.json();
+      return {
+        success: false,
+        status: draftResponse.status,
+        data: draftError,
+        message: 'Failed to save draft before finalizing.',
+      };
+    }
+
+    // Step 2: Finalize submission
     const response = await request(
-      `http://localhost:8000/api/forms/finalize/${submissionId.submission}/`,
+      `http://localhost:8000/api/forms/finalize/${submissionId}/`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
