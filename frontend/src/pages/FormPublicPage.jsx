@@ -4,7 +4,7 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import ToastMessage from '../components/ToastMessage';
 import ModalMessage from '../components/ModalMessage';
-import DefaultLayout from '../components/DefaultLayout';
+import DefaultLayout from '../components/DefaultLayout'; // 👈 Import this
 import './css_pages/FormPublicPage.css';
 import { AuthContext } from '../context/AuthContext';
 
@@ -34,7 +34,7 @@ export const FormPublicPage = () => {
     {
       title: 'Student Cumulative Information Sheet',
       desc: 'Collects cumulative academic and personal data.',
-      id: 'student-cumulative-information-file',
+      id: 'cumulative',
       bg: 'white',
     },
     {

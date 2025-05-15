@@ -1,4 +1,4 @@
-export * from "./AdminDashboard"
+export * from "./adminDashboard"
 export * from "./AdminBIS"
 export * from "./AdminReferral"
 export * from "./AdminReports"
