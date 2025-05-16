@@ -69,7 +69,8 @@ const SCIF = () => {
         students: [], 
       },
     ],
-    previous_school_record: {
+    previous_school_record: [
+    {
       student_number: '',
       school: {
         name: '',
@@ -88,6 +89,7 @@ const SCIF = () => {
       honors_received: '',
       senior_high_gpa: '',
     },
+    ],
     health_data: {
       student_number: '',
       health_condition: '',

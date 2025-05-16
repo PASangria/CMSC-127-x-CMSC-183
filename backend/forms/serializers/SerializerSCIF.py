@@ -3,15 +3,58 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from forms.models import (
     Parent, Sibling, Guardian, FamilyData, HealthData, 
     SchoolAddress, School, PreviousSchoolRecord, Scholarship,
-    PersonalityTraits, FamilyRelationship, CounselingInformation
+    PersonalityTraits, FamilyRelationship, CounselingInformation, PrivacyConsent, Student, Submission
 )
+
+class CustomListSerializer(serializers.ListSerializer):
+   def update(self, instance, validated_data):
+    instance_mapping = {item.id: item for item in instance}
+    data_mapping = {item.get('id'): item for item in validated_data if item.get('id') is not None}
+
+    ret = []
+
+    # Update existing instances
+    for item_id, data in data_mapping.items():
+        if item_id in instance_mapping:
+            ret.append(self.child.update(instance_mapping[item_id], data))
+
+    # Create new instances
+    create_data = [item for item in validated_data 
+                   if item.get('id') is None or item.get('id') not in instance_mapping]
+    
+    for data in create_data:
+        ret.append(self.child.create(data))
+
+    # Optionally delete items not in payload
+    payload_ids = set(data_mapping.keys())
+    existing_ids = set(instance_mapping.keys())
+    for item_id in existing_ids - payload_ids:
+        instance_mapping[item_id].delete()
+
+    return ret
 
 
 class SiblingSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)  
+    submission = serializers.PrimaryKeyRelatedField(queryset=Submission.objects.all())
+    students = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Student.objects.all(),
+        required=False
+    )
+
     class Meta:
         model = Sibling
         fields = '__all__'
-        extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
+        list_serializer_class = CustomListSerializer
+
+    def to_internal_value(self, data):
+        if 'id' in data and isinstance(data['id'], str):
+            try:
+                data['id'] = int(data['id'])
+            except (ValueError, TypeError):
+                pass
+        return super().to_internal_value(data)
 
 class ParentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -106,25 +149,51 @@ class SchoolSerializer(serializers.ModelSerializer):
 
 class PreviousSchoolRecordSerializer(serializers.ModelSerializer):
     school = SchoolSerializer()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = PreviousSchoolRecord
-        fields = ['school', 'education_level', 'start_year', 'end_year', 'honors_received', 'senior_high_gpa']
+        fields = [
+            'id',
+            'school',
+            'education_level',
+            'start_year',
+            'end_year',
+            'honors_received',
+            'senior_high_gpa',
+            'submission',
+        ]
+        list_serializer_class = CustomListSerializer
 
     def create(self, validated_data):
         school_data = validated_data.pop('school')
         school_address_data = school_data.pop('school_address')
 
-        school_address = SchoolAddress.objects.create(**school_address_data)
-        school = School.objects.create(school_address=school_address, **school_data)
+        school_address, _ = SchoolAddress.objects.update_or_create(
+            id=school_address_data.get('id'),
+            defaults=school_address_data
+        )
+
+        school_data['school_address'] = school_address
+        school, _ = School.objects.update_or_create(
+            id=school_data.get('id'),
+            defaults=school_data
+        )
+
+        if 'student' not in validated_data and 'student' in self.context:
+            validated_data['student'] = self.context['student']
+
+        if 'submission' not in validated_data and 'submission' in self.context:
+            validated_data['submission'] = self.context['submission']
 
         return PreviousSchoolRecord.objects.create(school=school, **validated_data)
 
     def update(self, instance, validated_data):
         school_data = validated_data.pop('school', None)
+
         if school_data:
             address_data = school_data.pop('school_address', None)
-            
+
             school = instance.school
             if school:
                 if address_data:
@@ -132,7 +201,7 @@ class PreviousSchoolRecordSerializer(serializers.ModelSerializer):
                     for attr, value in address_data.items():
                         setattr(address, attr, value)
                     address.save()
-                
+
                 for attr, value in school_data.items():
                     setattr(school, attr, value)
                 school.save()
@@ -142,7 +211,8 @@ class PreviousSchoolRecordSerializer(serializers.ModelSerializer):
                 instance.school = school
 
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            if attr != 'id':
+                setattr(instance, attr, value)
 
         instance.save()
         return instance
@@ -168,3 +238,4 @@ class CounselingInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CounselingInformation
         fields = '__all__'
+  

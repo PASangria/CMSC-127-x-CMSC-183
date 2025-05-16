@@ -50,7 +50,6 @@ class FormBundleView(APIView):
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Use the actual display name (not the slug) to fetch the submission
             submission = Submission.objects.select_related('student').get(student=student, form_type=form_type_display)
         except Submission.DoesNotExist:
             return Response({'error': 'No submission found for this form type.'}, status=status.HTTP_404_NOT_FOUND)
@@ -60,15 +59,21 @@ class FormBundleView(APIView):
         }
 
         for key, (model, serializer) in sections.items():
-            instance = None
+            # Check if the section expects multiple items
+            many = model._meta.model_name in ['sibling', 'previousschoolrecord']  # Add others as needed
 
-            # Check if model has a submission field
             if any(field.name == 'submission' for field in model._meta.fields):
-                instance = model.objects.filter(submission=submission).first()
+                queryset = model.objects.filter(submission=submission)
             elif any(field.name == 'student' for field in model._meta.fields):
-                instance = model.objects.filter(student=student).first()
+                queryset = model.objects.filter(student=student)
+            else:
+                queryset = model.objects.none()
 
-            data[key] = serializer(instance).data if instance else None
+            if many:
+                data[key] = serializer(queryset, many=True).data
+            else:
+                instance = queryset.first()
+                data[key] = serializer(instance).data if instance else None
 
         return Response(data)
 
@@ -95,7 +100,6 @@ class FormBundleView(APIView):
         return Response({'message': 'Draft submission created successfully.', 'submission_id': submission.id}, status=status.HTTP_201_CREATED)
 
     def patch(self, request, form_type):
-        # Map slug to display name
         form_type_display = FORM_TYPE_SLUG_MAP.get(form_type)
         student = request.user.student
         sections = FORM_SECTIONS_MAP.get(form_type)
@@ -104,7 +108,7 @@ class FormBundleView(APIView):
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            submission = Submission.objects.get(student=student, form_type=form_type_display)  # Use display name
+            submission = Submission.objects.get(student=student, form_type=form_type_display)
         except Submission.DoesNotExist:
             return Response({'error': 'No submission found for this form type.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -117,35 +121,50 @@ class FormBundleView(APIView):
         for key, (model, serializer_class) in sections.items():
             section_data = request.data.get(key)
             if section_data is not None:
-                instance = None
-                filter_kwargs = {}
+                many = isinstance(section_data, list)
 
-                # Dynamically build filter
-                if any(field.name == 'submission' for field in model._meta.fields):
-                    filter_kwargs['submission'] = submission
-                if any(field.name == 'student' for field in model._meta.fields):
-                    filter_kwargs['student'] = student
+                if many:
+                    existing_instances = model.objects.filter(submission=submission)
 
-                if filter_kwargs:
-                    instance = model.objects.filter(**filter_kwargs).first()
+                    for item in section_data:
+                        if 'submission' not in item and 'submission' in [f.name for f in model._meta.fields]:
+                            item['submission'] = submission.id
+                        if 'student' not in item and 'student' in [f.name for f in model._meta.fields]:
+                            item['student'] = student.student_number
 
-                serializer = serializer_class(instance, data=section_data, partial=True)
+                    serializer = serializer_class(
+                        instance=existing_instances,
+                        data=section_data,
+                        partial=True,
+                        many=True,
+                        context={'submission': submission, 'student': student}
+                    )
+                else:
+                    instance = model.objects.filter(submission=submission).first() if 'submission' in [f.name for f in model._meta.fields] else model.objects.filter(student=student).first()
+
+                    if 'submission' not in section_data and 'submission' in [f.name for f in model._meta.fields]:
+                        section_data['submission'] = submission.id
+                    if 'student' not in section_data and 'student' in [f.name for f in model._meta.fields]:
+                        section_data['student'] = student.student_number
+
+                    serializer = serializer_class(
+                        instance=instance,
+                        data=section_data,
+                        partial=True,
+                        many=False,
+                        context={'submission': submission, 'student': student}
+                    )
 
                 if serializer.is_valid():
-                    serializer.save(**filter_kwargs)
+                    saved_data = serializer.save()
                     updated_data[key] = serializer.data
                 else:
                     errors[key] = serializer.errors
 
-        submission.saved_on = timezone.now()  
-        submission.save()
-        
-        if errors:
-            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
-
+                
         return Response({'message': 'Form data updated successfully.', 'data': updated_data}, status=status.HTTP_200_OK)
 
- 
+    
 class FinalizeSubmissionView(APIView):
     permission_classes = [IsAuthenticated]
 
