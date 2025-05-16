@@ -1,5 +1,5 @@
 import React from 'react';
-import FormField from '../../components/FormField'; // Assuming you placed FormField component in the correct directory
+import FormField from '../../components/FormField'; 
 import '../SetupProfile/css/multistep.css';
 
 const SCIFHealthData = ({ data, updateData }) => {
@@ -8,7 +8,7 @@ const SCIFHealthData = ({ data, updateData }) => {
   const handleHealthConditionChange = (condition) => {
     updateData({
       ...data,
-      healthCondition: condition, // Set the selected condition as the value
+      health_condition: condition, 
     });
   };
 
@@ -24,9 +24,9 @@ const SCIFHealthData = ({ data, updateData }) => {
             <label key={condition} className="radio-label">
               <input
                 type="radio"
-                name="healthCondition"
+                name="health_condition"
                 value={condition}
-                checked={data.healthCondition === condition} // Check if this condition is selected
+                checked={data.health_condition === condition} // Check if this condition is selected
                 onChange={() => handleHealthConditionChange(condition)} // Update state on change
               />
               {condition}
@@ -58,8 +58,8 @@ const SCIFHealthData = ({ data, updateData }) => {
         <FormField
           label="Eye Sight"
           type="select"
-          value={data.eyeSight || ''}
-          onChange={(e) => updateData({ ...data, eyeSight: e.target.value })}
+          value={data.eye_sight || ''}
+          onChange={(e) => updateData({ ...data, eye_sight: e.target.value })}
           options={[
             { value: '', label: 'Select' },
             { value: 'Good', label: 'Good' },
@@ -84,42 +84,43 @@ const SCIFHealthData = ({ data, updateData }) => {
       </div>
 
       <div className='form-row'>
-      {/* Disability */}
-      <FormField
-        label="Any Physical Disability"
-        type="text"
-        value={data.disability || ''}
-        onChange={(e) => updateData({ ...data, disability: e.target.value })}
-      />
+        {/* Disability */}
+        <FormField
+          label="Any Physical Disability"
+          type="text"
+          value={data.physical_disabilities || ''}
+          onChange={(e) => updateData({ ...data, physical_disabilities: e.target.value })}
+        />
 
-      {/* Ailment */}
-      <FormField
-        label="Common/ Frequent Ailment"
-        type="text"
-        value={data.ailment || ''}
-        onChange={(e) => updateData({ ...data, ailment: e.target.value })}
-      />
+        {/* Ailment */}
+        <FormField
+          label="Common/ Frequent Ailment"
+          type="text"
+          value={data.common_ailments || ''}
+          onChange={(e) => updateData({ ...data, common_ailments: e.target.value })}
+        />
       </div>
+
       <div className='custom-form-row'>
-          {/* Last Hospitalization */}
-          <FormField
-            label="Last Hospitalization (MM/DD/YYYY)"
-            type="date"
-            value={data.lastHospitalization || ''}
-            onChange={(e) => updateData({ ...data, lastHospitalization: e.target.value })}
-            className="custom-form-input form-input"
-          />
+        {/* Last Hospitalization */}
+        <FormField
+          label="Last Hospitalization (MM/DD/YYYY)"
+          type="date"
+          value={data.last_hospitalization || ''}
+          onChange={(e) => updateData({ ...data, last_hospitalization: e.target.value })}
+          className="custom-form-input form-input"
+        />
 
-          {/* Reason for Hospitalization (Textarea Field using FormField) */}
-          <FormField
-            label="Reason for Hospitalization"
-            type="textarea"
-            value={data.hospitalizationReason || ''}
-            onChange={(e) => updateData({ ...data, hospitalizationReason: e.target.value })}
-            className="custom-form-input form-input"
-          />
-        </div>
+        {/* Reason for Hospitalization (Textarea Field using FormField) */}
+        <FormField
+          label="Reason for Hospitalization"
+          type="textarea"
+          value={data.reason_of_hospitalization || ''}
+          onChange={(e) => updateData({ ...data, reason_of_hospitalization: e.target.value })}
+          className="custom-form-input form-input"
+        />
       </div>
+    </div>
   );
 };
 

@@ -16,6 +16,7 @@ const sectionKeys = [
 
 export const useFormApi = () => {
   const { request } = useApiRequest();
+  const arraySections = ['siblings', 'previous_school_record'];
 
     const createDraftSubmission = async (studentNumber) => {
       const response = await request(`${BASE_URL}/`, {
@@ -40,17 +41,24 @@ export const useFormApi = () => {
   const saveDraft = async (submissionId, studentNumber, formData) => {
     const payload = {};
     sectionKeys.forEach((key) => {
-      if (formData[key]) {
+    if (formData[key]) {
+      if (arraySections.includes(key) && Array.isArray(formData[key])) {
+        payload[key] = formData[key].map((item) => ({
+          ...item,
+          submission: submissionId,
+          students: item.students?.length ? item.students : [studentNumber], // Fallback if empty
+        }));
+      } else {
         payload[key] = {
           ...formData[key],
           submission: submissionId,
           student_number: studentNumber,
         };
       }
-    });
+    }
+  });
 
     console.log(formData);
-    console.log("52 API");
     const response = await request(`${BASE_URL}/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -62,7 +70,6 @@ export const useFormApi = () => {
 
 const finalizeSubmission = async (submissionId, studentNumber, formData) => {
   try {
-    // Step 1: Save draft first
     const draftResponse = await saveDraft(submissionId, studentNumber, formData);
 
     if (!draftResponse.ok) {

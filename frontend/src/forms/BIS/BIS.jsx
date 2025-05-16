@@ -32,6 +32,7 @@ const BISForm = () => {
 
   const [formData, setFormData] = useState({
     socio_economic_status: {
+      student_number: '',
       has_scholarship: false,
       scholarships: '',
       scholarship_privileges: '',
@@ -39,12 +40,14 @@ const BISForm = () => {
       spending_habit: '',
     },
     scholastic_status: {
+      student_number: '',
       intended_course: '',
       first_choice_course: '',
       admitted_course: '',
       next_plan: '',
     },
     preferences: {
+      student_number: '',
       influence: '',
       reason_for_enrolling: '',
       transfer_plans: false,
@@ -54,12 +57,14 @@ const BISForm = () => {
       reason_for_shifting: '',
     },
     student_support: {
+      student_number: '',
       support: [],
       other_notes: '',
       other_scholarship: '',
       combination_notes: '',
     },
     privacy_consent: {
+      student_number: '',
       has_consented: false
     }
   });

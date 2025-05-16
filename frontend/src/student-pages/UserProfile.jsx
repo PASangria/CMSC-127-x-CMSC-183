@@ -18,34 +18,44 @@ export const UserProfile = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      if (!isAuthenticated) return;
+  const [submittedForms, setSubmittedForms] = useState([]);
 
-      try {
-        const res = await request('http://localhost:8000/api/forms/student/profile/', { method: 'GET' });
+useEffect(() => {
+  const fetchProfileData = async () => {
+    if (!isAuthenticated) return;
 
-        if (!res.ok) {
-          if (res.status === 404) {
-            setProfile({});
-            setLoading(false);
-            return;
-          }
-          throw new Error('Failed to fetch profile data');
+    try {
+      const res = await request('http://localhost:8000/api/forms/student/profile/');
+      if (!res.ok) {
+        if (res.status === 404) {
+          setProfile({});
+          setLoading(false);
+          return;
         }
-
-        const data = await res.json();
-        setProfile(data);
-      } catch (err) {
-        console.error('Error fetching profile data:', err);
-        setError('Error fetching profile. Please try again.');
-      } finally {
-        setLoading(false);
+        throw new Error('Failed to fetch profile data');
       }
-    };
 
-    fetchProfileData();
-  }, [isAuthenticated, request]);
+      const data = await res.json();
+      setProfile(data);
+
+      // Fetch submitted forms after profile is fetched
+      const formRes = await request('http://localhost:8000/api/forms/display/submissions/');
+      if (formRes.ok) {
+        const allForms = await formRes.json();
+        const submitted = allForms.filter(f => f.status === 'submitted');
+        setSubmittedForms(submitted);
+      }
+    } catch (err) {
+      console.error('Error fetching profile or forms:', err);
+      setError('Error fetching profile. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProfileData();
+}, [isAuthenticated, request]);
+
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -95,7 +105,7 @@ export const UserProfile = () => {
         <DefaultLayout variant='student'>
           <div className="profile-content">
             <h1>My Profile</h1>
-            <StudentSideInfo profileData={profile} />
+            <StudentSideInfo profileData={profile} submittedForms={submittedForms} />
           </div>
         </DefaultLayout>
       </div>

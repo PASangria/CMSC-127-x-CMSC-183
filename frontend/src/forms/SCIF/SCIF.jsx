@@ -9,6 +9,7 @@ import SCIFHealthData from './SCIFHealthData';
 import SCIFPreviousSchoolRecord from './SCIFPreviousSchoolRecord';
 import SCIFScholarships from './SCIFScholarships';
 import SCIFOtherPersonalData from './SCIFOtherPersonalData';
+import SCIFCertify from './SCIFCertify';
 import '../SetupProfile/css/multistep.css';
 import { useApiRequest } from '../../context/ApiRequestContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -97,6 +98,10 @@ const SCIF = () => {
       weight: '',
       eye_sight: '',
       hearing: '',
+      physical_disabilities: '',
+      common_ailments: '',
+      last_hospitalization: '',
+      reason_of_hospitalization: '',
     },
     scholarship: {
       student_number: '',
@@ -105,7 +110,7 @@ const SCIF = () => {
     personality_traits: {
       student_number: '',
       enrollment_reason: '',
-      degree_program_aspiration: false,
+      degree_program_aspiration: '',
       aspiration_explanation: '',
       special_talents: '',
       musical_instruments: '',
@@ -116,6 +121,7 @@ const SCIF = () => {
     family_relationship: {
       student_number: '',
       closest_to: '',
+      specify_other: '',
     },
     counseling_info: {
       student_number: '',
@@ -123,7 +129,7 @@ const SCIF = () => {
       problem_confidant: '',
       confidant_reason: '',
       anticipated_problems: '',
-      previous_counseling: false,
+      previous_counseling: '',
       counseling_location: '',
       counseling_reason: '',
     },
@@ -157,16 +163,64 @@ const SCIF = () => {
         if (response) {
 
           setFormData((prev) => ({
-            family_data: { ...prev.family_data, ...response.family_data },
-            siblings: { ...prev.siblings, ...response.siblings },
-            previous_school_record: { ...prev.previous_school_record, ...response.previous_school_record },
-            health_data: { ...prev.health_data, ...response.health_data },
-            scholarship: { ...prev.scholarship, ...response.scholarship },
-            personality_traits: { ...prev.personality_traits, ...response.personality_traits },
-            family_relationship: { ...prev.family_relationship, ...response.family_relationship },
-            counseling_info: { ...prev.counseling_info, ...response.counseling_info },
-            privacy_consent: { ...prev.privacy_consent, ...response.privacy_consent },
+            family_data: {
+              ...prev.family_data,
+              ...response.family_data,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            siblings: Array.isArray(response.siblings)
+              ? response.siblings.map((sibling) => ({
+                  ...sibling,
+                  submission: response.submission.id,
+                  students: sibling.students?.length ? sibling.students : [studentNumber],
+                }))
+              : [],
+            previous_school_record: Array.isArray(response.previous_school_record)
+              ? response.previous_school_record.map((record) => ({
+                  ...record,
+                  submission: response.submission.id,
+                  student_number: studentNumber,
+                }))
+              : [],
+            health_data: {
+              ...prev.health_data,
+              ...response.health_data,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            scholarship: {
+              ...prev.scholarship,
+              ...response.scholarship,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            personality_traits: {
+              ...prev.personality_traits,
+              ...response.personality_traits,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            family_relationship: {
+              ...prev.family_relationship,
+              ...response.family_relationship,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            counseling_info: {
+              ...prev.counseling_info,
+              ...response.counseling_info,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
+            privacy_consent: {
+              ...prev.privacy_consent,
+              ...response.privacy_consent,
+              submission: response.submission.id,
+              student_number: studentNumber,
+            },
           }));
+
 
           setSubmissionId(response.submission.id);
         } else {
@@ -261,12 +315,16 @@ const SCIF = () => {
               <SCIFHealthData
                 data={{
                   ...formData.health_data,
-                  healthCondition: formData.health_data.healthCondition || [], // Ensure healthCondition is an array
                 }}
                 updateData={(newData) =>
                   setFormData((prev) => ({
                     ...prev,
-                    health_data: { ...prev.health_data, ...newData },
+                    health_data: {
+                      ...prev.health_data,
+                      ...newData,
+                      student_number: studentNumber,
+                      submission: submissionId,
+                    },
                   }))
                 }
               />
@@ -308,6 +366,20 @@ const SCIF = () => {
                 }
               />
             )}
+            {step === 7 && (
+                <SCIFCertify
+                  data={formData}
+                  updateData={(isChecked) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      privacy_consent: {
+                        ...prev.privacy_consent,
+                        has_consented: isChecked, 
+                      },
+                    }))
+                  }
+                />
+              )}
             <div className="main-form-buttons">
               {/* Back Button */}
               {step > 0 && !loading && (
@@ -322,14 +394,14 @@ const SCIF = () => {
               </button>
 
               {/* Next Button (Visible until step 6) */}
-              {step < 6 && !loading && (
+              {step < 7 && !loading && (
                 <button className="btn-primary" onClick={handleNextStep}>
                   Next
                 </button>
               )}
 
               {/* Preview and Submit Button (Visible at step 7) */}
-              {step === 6 && !loading && (
+              {step === 7 && !loading && (
                 <>
                   <button className="btn-primary" onClick={handlePreview}>
                     Preview

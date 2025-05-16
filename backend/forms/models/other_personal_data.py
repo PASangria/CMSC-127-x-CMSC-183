@@ -48,11 +48,11 @@ class PersonalityTraits(models.Model):
     
 class FamilyRelationship(models.Model):
     CLOSEST_CHOICES = [
-        ('father', 'Father'),
-        ('mother', 'Mother'),
-        ('brother', 'Brother(s)'),
-        ('sister', 'Sister(s)'),
-        ('other', 'Others (specify)')
+        ('Father', 'Father'),
+        ('Mother', 'Mother'),
+        ('Brother', 'Brother(s)'),
+        ('Sister', 'Sister(s)'),
+        ('Other', 'Others (specify)')
     ]
 
     student = models.ForeignKey('Student', on_delete=models.CASCADE, to_field='student_number', related_name='family_relationships')

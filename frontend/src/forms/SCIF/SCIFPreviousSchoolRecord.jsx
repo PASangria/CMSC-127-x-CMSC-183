@@ -4,35 +4,34 @@ import '../SetupProfile/css/multistep.css'; // Ensure your styles are applied
 
 const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
   // State to hold multiple previous school records
-  const [schoolRecords, setSchoolRecords] = useState(data.previous_school_record || []);
+  const [schoolRecords, setSchoolRecords] = useState(data || []);
 
   // Function to handle adding a new school record
   const addSchoolRecord = () => {
-    setSchoolRecords([
-      ...schoolRecords,
-      {
-        student_number: '',
-        school: {
-          name: '',
-          school_address: {
-            address_line_1: '',
-            barangay: '',
-            city_municipality: '',
-            province: '',
-            region: '',
-            zip_code: ''
-          }
-        },
-        education_level: '',
-        start_year: '',
-        end_year: '',
-        honors_received: '',
-        senior_high_gpa: ''
-      }
-    ]);
+    const newRecord = {
+      student_number: '',
+      school: {
+        name: '',
+        school_address: {
+          address_line_1: '',
+          barangay: '',
+          city_municipality: '',
+          province: '',
+          region: '',
+          zip_code: ''
+        }
+      },
+      education_level: '',
+      start_year: '',
+      end_year: '',
+      honors_received: '',
+      senior_high_gpa: ''
+    };
+    const updatedRecords = [...schoolRecords, newRecord];
+    setSchoolRecords(updatedRecords);
+    updateData(updatedRecords);  // Updating the parent component's state
   };
 
-  // Function to handle changes within each school record
   const handleFieldChange = (index, field, value) => {
     const updatedRecords = [...schoolRecords];
     if (field.includes('school_address')) {
@@ -42,14 +41,14 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
       updatedRecords[index][field] = value;
     }
     setSchoolRecords(updatedRecords);
-    updateData({ ...data, previous_school_record: updatedRecords });
+    updateData(updatedRecords);  // Updating the parent component's state
   };
 
   // Function to handle removing a school record
   const removeSchoolRecord = (index) => {
     const updatedRecords = schoolRecords.filter((_, i) => i !== index);
     setSchoolRecords(updatedRecords);
-    updateData({ ...data, previous_school_record: updatedRecords });
+    updateData(updatedRecords);  // Updating the parent component's state
   };
 
   return (
@@ -84,7 +83,7 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
               value={record.school.school_address.barangay}
               onChange={(e) => handleFieldChange(index, 'school.school_address.barangay', e.target.value)}
             />
-             <FormField
+            <FormField
               label="City/Municipality"
               type="text"
               value={record.school.school_address.city_municipality}
@@ -115,20 +114,20 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
           {/* Education Level */}
           <div className="form-row three-columns">
             <FormField
-            label="Education Level"
-            type="select"
-            value={record.education_level}
-            onChange={(e) => handleFieldChange(index, 'education_level', e.target.value)}
-            options={[
-              { value: '', label: 'Select Education Level' },
-              { value: 'Primary', label: 'Primary' },
-              { value: 'Junior High', label: 'Junior High' },
-              { value: 'Senior High', label: 'Senior High' },
-              { value: 'College', label: 'College' }
-            ]}
-          />
+              label="Education Level"
+              type="select"
+              value={record.education_level}
+              onChange={(e) => handleFieldChange(index, 'education_level', e.target.value)}
+              options={[
+                { value: '', label: 'Select Education Level' },
+                { value: 'Primary', label: 'Primary' },
+                { value: 'Junior High', label: 'Junior High' },
+                { value: 'Senior High', label: 'Senior High' },
+                { value: 'College', label: 'College' }
+              ]}
+            />
 
-          {/* Start Year and End Year */}
+            {/* Start Year and End Year */}
             <FormField
               label="Start Year"
               type="number"
