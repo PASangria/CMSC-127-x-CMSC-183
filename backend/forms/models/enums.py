@@ -56,3 +56,13 @@ class PhilippineRegionEnum(models.TextChoices):
     CAR = 'CAR - Cordillera Administrative Region', 'CAR - Cordillera Administrative Region'
     BARMM = 'BARMM - Bangsamoro Autonomous Region', 'BARMM - Bangsamoro Autonomous Region'
     NIR = 'NIR - Negros Island Region', 'NIR - Negros Island Region'
+    
+class SupportChoices(models.TextChoices):
+    SELF = 'self', 'Self-supporting'
+    BOTH_PARENTS = 'both_parents', 'Both parents'
+    FATHER_ONLY = 'father_only', 'Father only'
+    MOTHER_ONLY = 'mother_only', 'Mother only'
+    SCHOLARSHIP = 'scholarship', 'Scholarship'
+    COMBINATION = 'combination', 'Combination'
+    OTHERS = 'others', 'Others'
+    GOV_FUNDED = 'gov_funded', 'Government Funded'

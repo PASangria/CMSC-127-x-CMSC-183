@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import NavBar from '../components/NavBar';
+import NavBar from "../components/NavBar";
 import FormField from "../components/FormField";
-import "./css_pages/SignUp.css"
 import Footer from "../components/Footer";
+import "./css_pages/SignUp.css";
+import { Link } from 'react-router-dom';
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -16,14 +17,11 @@ export const SignUp = () => {
     rePassword: false,
   });
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     setMessage("");
     setIsError(false);
 
-    // Validate fields
     const errors = {};
     let hasError = false;
 
@@ -40,7 +38,6 @@ export const SignUp = () => {
       hasError = true;
     }
 
-    // If there are errors, update the state and stop submission
     if (hasError) {
       setFormErrors({
         email: !email,
@@ -62,8 +59,6 @@ export const SignUp = () => {
       re_password: rePassword,
     };
 
-    console.log(userData);
-
     try {
       const response = await fetch("http://127.0.0.1:8000/auth/users/", {
         method: "POST",
@@ -72,11 +67,11 @@ export const SignUp = () => {
         },
         body: JSON.stringify(userData),
       });
-    
+
       const data = await response.json();
-    
+
       if (response.ok) {
-        setMessage(data.message || "Registration successful! Please check your email to verify your account.");
+        setMessage("Registration successful! Please check your email.");
         setIsError(false);
       } else {
         const errorMessages = Object.entries(data)
@@ -84,7 +79,7 @@ export const SignUp = () => {
             `${field}: ${Array.isArray(messages) ? messages.join(", ") : messages}`
           )
           .join(" ");
-        setMessage(errorMessages || "Something went wrong. Please try again.");
+        setMessage(errorMessages || "Something went wrong.");
         setIsError(true);
       }
     } catch (error) {
@@ -92,59 +87,70 @@ export const SignUp = () => {
       setMessage("An error occurred. Please try again later.");
       setIsError(true);
     }
-  }
-    
-      
+  };
 
   return (
-    <div>
+    <>
       <NavBar />
-      <div className="signUp-container">
-      {/* <div className="signUpLeft"></div> */}
-      <div className="signUpRight">
-        <div className="form-container">
-            <h2>Create Account</h2>
-            <form onSubmit={handleSubmit}>
-            <FormField
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                name="email"
-                required={true}
-                error={formErrors.email}
-            />
-            <FormField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-                required={true}
-                error={formErrors.password}
-            />
-            <FormField
-              label="Confirm Password"
-              type="password"
-              value={rePassword}
-              onChange={(e) => setRePassword(e.target.value)}
-              name="rePassword"
-              required={true}
-              error={formErrors.rePassword}
-            />
+      <main className="signup-page-wrapper">
+        <div className="signup">
+          <div className="signup__overlay" />
+          <div className="signup__container">
+            <div className="signup__content">
+              <section className="signup__left fade-in-up">
+                <h1 className="hero-title">
+                  Join the<br />
+                  <span className="highlighted-text">Student Affairs</span><br />
+                  Digital Platform
+                </h1>
+              </section>
 
-            <button type="submit">Sign Up</button>
-            </form>
-
-            {message && (
-            <div className={`message ${isError ? "error" : "success"}`}>
-                {message}
+              <section className="signup__right fade-in-up">
+                <h2 className="signup__header">Create Account</h2>
+                <form className="signup__form" onSubmit={handleSubmit}>
+                  <FormField
+                    label="Email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    required
+                    error={formErrors.email}
+                  />
+                  <FormField
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    required
+                    error={formErrors.password}
+                  />
+                  <FormField
+                    label="Confirm Password"
+                    type="password"
+                    value={rePassword}
+                    onChange={(e) => setRePassword(e.target.value)}
+                    name="rePassword"
+                    required
+                    error={formErrors.rePassword}
+                  />
+                  <button type="submit" className="submit-button">Sign Up</button>
+                  <div className="signup__links">
+                    Already have an account? <Link to="/login">Log in</Link>
+                  </div>
+                  {message && (
+                    <div className={`message ${isError ? "error" : "success"}`}>
+                      {message}
+                    </div>
+                  )}
+                </form>
+              </section>
             </div>
-            )}
+          </div>
         </div>
-      </div>
-      </div>
-      <Footer />
-    </div>
+        <Footer />
+      </main>
+    </>
   );
 };

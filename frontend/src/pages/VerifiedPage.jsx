@@ -4,11 +4,13 @@ import { CheckCircle, AlertCircle } from 'react-feather'; // Add AlertCircle for
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import './css_pages/VerifiedPage.css';
+import Loader from '../components/Loader';
 
 export const VerifiedPage = () => {
   const { uid, token } = useParams();
   const [message, setMessage] = useState('Verifying your email...');
-  const [icon, setIcon] = useState(<CheckCircle className="check-icon" size={80} />); // Default icon is CheckCircle
+  const [icon, setIcon] = useState(<CheckCircle className="check-icon" size={80} />); 
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate(); 
 
@@ -33,6 +35,8 @@ export const VerifiedPage = () => {
       } catch (error) {
         setMessage('An error occurred during verification.');
         setIcon(<AlertCircle className="alert-icon" size={80} />);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -48,6 +52,10 @@ export const VerifiedPage = () => {
       <Navbar />
       <div className="verified-page">
         <div className="content-container">
+        {loading ? (
+            <Loader />
+          ) : (
+            <>
           {icon} 
           <h2>{message}</h2>
           {message.includes("verified") && (
@@ -57,6 +65,8 @@ export const VerifiedPage = () => {
           >
             Continue to Login
           </button>
+          )}
+          </>
           )}
         </div>
       </div>

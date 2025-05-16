@@ -1,67 +1,65 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/NavBar';
 import SideNav_student from '../components/SideNav_student';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
-import '../pages/css_pages/userDashboard.css';
+import { useApiRequest } from '../context/ApiRequestContext';
+import StudentSideInfo from './IndividualStudent';
+import './css/userDashboard.css';
+import DefaultLayout from '../components/DefaultLayout';
 
 export const UserProfile = () => {
   const { isAuthenticated } = useContext(AuthContext);
-  const [profileData, setProfileData] = useState(null);
+  const { request } = useApiRequest();
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
+    const fetchProfileData = async () => {
+      if (!isAuthenticated) return;
 
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      setError('You are not authenticated. Redirecting...');
-      return;
-    }
+      try {
+        const res = await request('http://localhost:8000/api/forms/student/profile/', { method: 'GET' });
 
-    fetch('http://localhost:8000/api/forms/student/profile/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
         if (!res.ok) {
           if (res.status === 404) {
-            setError('Student profile not found.');
+            setProfile({});
             setLoading(false);
-            return null;
+            return;
           }
-          throw new Error('Profile fetch failed.');
+          throw new Error('Failed to fetch profile data');
         }
-        return res.json();
-      })
-      .then((data) => {
-        if (data) {
-          setProfileData(data);
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
+
+        const data = await res.json();
+        setProfile(data);
+      } catch (err) {
+        console.error('Error fetching profile data:', err);
         setError('Error fetching profile. Please try again.');
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProfileData();
+  }, [isAuthenticated, request]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login?role=student');
+    }
   }, [isAuthenticated, navigate]);
 
   const handleCompleteProfile = () => {
     navigate('/setup-profile');
   };
 
-  if (loading) return <Loader />;
+  if (!isAuthenticated || loading) {
+    return <Loader />;
+  }
 
   if (error) {
     return (
@@ -74,33 +72,35 @@ export const UserProfile = () => {
     );
   }
 
-  return (
-    <div>
+  // If profile is empty (i.e., user hasn't set it up yet)
+  if (profile && Object.keys(profile).length === 0) {
+    return (
+      <div>
       <Navbar />
-      <SideNav_student />
-      <div className="profile-content">
-        <h1>My Profile</h1>
-        {profileData ? (
-          <div className="profile-info">
-            <h2>Profile Information</h2>
-            <p><strong>Student Number:</strong> {profileData.student_number}</p>
-            <p><strong>Name:</strong> {profileData.first_name} {profileData.middle_name} {profileData.last_name}</p>
-            <p><strong>Nickname:</strong> {profileData.nickname}</p>
-            <p><strong>Sex:</strong> {profileData.sex}</p>
-            <p><strong>Religion:</strong> {profileData.religion}</p>
-            <p><strong>Birthdate:</strong> {profileData.birthdate}</p>
-            <p><strong>Birthplace:</strong> {profileData.birthplace}</p>
-            <p><strong>Contact Number:</strong> {profileData.contact_number}</p>
-            <p><strong>College:</strong> {profileData.college}</p>
-            <p><strong>Program:</strong> {profileData.degree_program}</p>
-            <p><strong>Year Level:</strong> {profileData.current_year_level}</p>
-            <p><strong>Profile Complete:</strong> {profileData.is_complete ? 'Yes' : 'No'}</p>
-          </div>
-        ) : (
-          <p>No profile data available.</p>
-        )}
+      <DefaultLayout variant='student' />
+      <div className="protected_pages">
+      <div className="error-message">
+        <p>No profile data available.</p>
+        <button onClick={handleCompleteProfile} className="btn-complete-profile">
+          Complete Your Profile
+        </button>
+      </div>
       </div>
       <Footer />
+    </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="protected_pages">
+        <DefaultLayout variant='student'>
+          <div className="profile-content">
+            <h1>My Profile</h1>
+            <StudentSideInfo profileData={profile} />
+          </div>
+        </DefaultLayout>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navbar from '../components/NavBar';
+import Footer from '../components/Footer';
+import './css_pages/forgotpassword.css';
+import { useNavigate } from 'react-router-dom';
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -20,21 +24,47 @@ export const ForgotPassword = () => {
         }
     };
 
+    const navigate = useNavigate();
+
+    const handleCancel = () => {
+        navigate('/login');
+    };
+
     return (
-        <div>
-            <h2>Forgot Password</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                />
-                <button type="submit">Reset Password</button>
-            </form>
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-        </div>
+        <>
+            <Navbar />
+            <div className="signup">
+                <div className="signup__container">
+                    <div className="signup__content fade-in-up">
+                        <div className="signup__left fade-in-up">
+                            <h1 className="hero-title">
+                                Forgot your <span className="highlighted-text">Password?</span>
+                            </h1>
+                        </div>
+                        <div className="signup__right fade-in-up">
+                            <h2 className="signup__header">Reset Your Password</h2>
+                            <form onSubmit={handleSubmit} className="signup__form">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    className={`form-input ${error ? 'error' : ''}`}
+                                />
+                                {message && <p className="success-message">{message}</p>}
+                                {error && <p className="error-message">{error}</p>}
+                                <div className="button-group">
+                                    <button type="submit" className="submit-button">Send Reset Link</button>
+                                    <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Footer />
+        </>
+
     );
 };

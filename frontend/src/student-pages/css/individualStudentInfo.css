@@ -1,0 +1,97 @@
+/* Make the whole wrapper fill the viewport */
+.student_profile_wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  overflow: auto; /* Allow scrolling if content overflows */
+}
+
+/* Left: Avatar and academic info */
+.student_side_info {
+  width: 30%;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  overflow-y: auto;
+}
+
+/* Avatar */
+.bigger_avatar {
+  background-color: #7B1113;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Academic info section */
+.student_side_educ_info {
+  margin-top: 1.5rem;
+}
+
+.student_side_educ_info p {
+  margin: 0.25rem 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.student_side_educ_info strong {
+  color: #7B1113;
+  font-size: 0.9rem;
+}
+
+/* Right: Personal details */
+.right-student-profile {
+  width: 70%;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+/* Personal info section */
+.student-personal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-group p {
+  font-size: 1.2rem;
+  color: #7B1113;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  color: #333;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Responsive: Stack on small screens */
+@media (max-width: 768px) {
+  .student_profile_wrapper {
+    flex-direction: column;
+    height: auto; /* Let height expand naturally */
+    padding: 1rem;
+  }
+
+  .student_side_info,
+  .right-student-profile {
+    width: 100%;
+  }
+}

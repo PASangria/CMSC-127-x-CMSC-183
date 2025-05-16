@@ -1,33 +1,57 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/NavBar';
-import SideNav_student from '../components/SideNav_student';
-import Footer from '../components/Footer';
 import DashboardTable from '../components/DashboardTable';
 import Loader from '../components/Loader';
-import { AuthContext } from '../context/AuthContext';
-import '../pages/css_pages/userDashboard.css'
+import { useAuth } from '../context/AuthContext';
+import { useApiRequest } from '../context/ApiRequestContext';
+import DefaultLayout from '../components/DefaultLayout';
+import './css/userDashboard.css';
 
 export const UserDashboard = () => {
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  const { request } = useApiRequest();
+  const [submittedForms, setSubmittedForms] = useState([]);
+  const [pendingActions, setPendingActions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-    const [submittedForms, setSubmittedForms] = useState([]);
-    const [pendingActions, setPendingActions] = useState([]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    const fetchSubmittedForms = async () => {
+      try {
+        const response = await request('http://localhost:8000/api/forms/display/submissions/');
+        if (response) {
+          const data = await response.json();
+          const submitted = data.filter(form => form.status === 'submitted');
+          const pending = data.filter(form => form.status === 'draft');
+
+          setSubmittedForms(submitted);
+          setPendingActions(pending);
+        }
+      } catch (err) {
+        console.error('Error fetching submissions:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubmittedForms();
+  }, [isAuthenticated, request, navigate]);
+
+  if (authLoading || loading) {
+    return <Loader />;
+  }
 
   return (
-    <div className="profile-dashboard">
-      <Navbar />
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        <div className='profile-container'>
-          <SideNav_student />
-          <div style={{ flex: 1, padding: '20px', minWidth: 0 }}>
-            <DashboardTable
-              submittedForms={submittedForms}
-              pendingActions={pendingActions}
-            />
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </div>
+    <DefaultLayout variant="student">
+      <DashboardTable
+        submittedForms={submittedForms}
+        pendingActions={pendingActions}
+      />
+    </DefaultLayout>
   );
 };

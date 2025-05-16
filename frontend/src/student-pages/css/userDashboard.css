@@ -1,0 +1,52 @@
+/* Full-height layout: navbar + content + footer */
+.profile-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* This wraps SideNav and dashboard content */
+.main-section {
+  display: flex;
+  flex: 1;
+  overflow: hidden; /* Prevents overflow */
+}
+
+/* Sidebar styling */
+.side-navigator {
+  width: 240px;
+  background-color: #fff;
+  padding: 1rem;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
+}
+
+/* Dashboard content area */
+.dashboard-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9fafb;
+  overflow-y: auto;
+}
+
+/* Keep table layout responsive */
+.profile-container {
+  display: flex;
+  width: 100%;
+}
+
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

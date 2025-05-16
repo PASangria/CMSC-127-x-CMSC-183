@@ -29,7 +29,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     nickname = models.CharField(max_length=50, null=True, blank=True)
-    sex = models.CharField(max_length=6, choices=[('male', 'Male'), ('female', 'Female')])
+    sex = models.CharField(max_length=6, choices=[('Male', 'Male'), ('Female', 'Female')])
     religion = models.CharField(max_length=50, null=True, blank=True)
     birth_rank = models.PositiveIntegerField()  
     birthdate = models.DateField()

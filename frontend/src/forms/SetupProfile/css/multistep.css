@@ -1,0 +1,347 @@
+/* ===== BACKGROUND & WRAPPERS ===== */
+.background-rectangle {
+  position: absolute;
+  width: 100%;
+  height: 19.3125em;
+  left: 0;
+  top: 0;
+  background: #7B1113;
+  z-index: 0;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar,
+.footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* ===== FORM LAYOUT ===== */
+.mainStepForm {
+  margin: 1.875em auto 0 auto;
+  width: 62.25em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.main-form-info {
+  padding-bottom: 1.25em;
+}
+
+.main-form-title,
+.main-form-subtitle {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.step-title {
+  color: #7B1113;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25em;
+}
+
+/* ===== FORM CARD ===== */
+.main-form-card {
+  background: #FFFFFF;
+  border-radius: 0.9375em;
+  padding: 2em;
+  width: 62.25em;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 0.625em rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  z-index: 2;
+}
+
+/* ===== FORM INPUTS & LABELS ===== */
+.form-section {
+  padding: 2rem;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Radio Group */
+.radio-question-group {
+  margin-bottom: 1.5rem;
+}
+
+.radio-question-group .form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.radio-options {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-left: 2em;
+}
+
+.radio-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Optional: Improve radio input size and spacing */
+.radio-options input[type="radio"] {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+/* Certify */
+.certify-agreement {
+  margin-top: 1.5em;
+  padding: 1em;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.certify-agreement .form-label {
+    display: flex
+;
+    margin-bottom: 0.5rem;
+    align-items: baseline;
+    font-weight: 600;
+    color: #444;
+}
+
+.certify-checkbox {
+  margin-right: 0.75em;
+  transform: scale(1.2);
+  vertical-align: middle;
+}
+
+.certify-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+
+/* Grid layout for dual inputs */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Full-width override */
+.full-width {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar {
+  padding: 0.625em 0 1.25em;
+}
+
+/* ===== BUTTONS ===== */
+.main-form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1.25em;
+}
+
+.btn-primary,
+.btn-secondary {
+  width: 5.25em;
+  height: 2.625em;
+  font-family: 'Roboto';
+  font-size: 0.9375em;
+  line-height: 1.625em;
+  text-transform: uppercase;
+  border-radius: 0.9375em;
+  color: #fff;
+  box-shadow: 0px 0.0625em 0.3125em rgba(0, 0, 0, 0.12),
+              0px 0.125em 0.125em rgba(0, 0, 0, 0.14),
+              0px 0.1875em 0.0625em -0.125em rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: #1976D2;
+}
+
+.btn-secondary {
+  background: #7E7E7E;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-height: 70vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  z-index: 1;
+}
+
+/* ===== CHECKBOX GRID ===== */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 2rem;
+  margin: 2rem;
+  padding-left: 5em;
+}
+
+.inline-checkbox {
+  font-size: 1rem;
+  line-height: 1.4;
+  align-items: flex-start;
+  gap: 0.4rem;
+}
+
+.inline-checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.2);
+}
+
+.inline-checkbox input[type="text"] {
+  margin-left: 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 48em) {
+  .mainStepForm {
+    width: 90%;
+    margin-top: 1.25em;
+  }
+
+  .main-form-card {
+    width: 100%;
+    padding: 1.25em;
+  }
+
+  .main-form-title { font-size: 1.75em; }
+  .main-form-subtitle { font-size: 1em; }
+
+  .btn-primary, .btn-secondary {
+    width: 4.375em;
+    height: 2.1875em;
+    font-size: 0.875em;
+  }
+
+  .main-form-buttons {
+    gap: 0.625em;
+    flex-direction: column;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 30em) {
+  .background-rectangle {
+    height: 15.625em;
+  }
+
+  .mainStepForm {
+    width: 100%;
+    margin-top: 0.625em;
+  }
+
+  .main-form-title { font-size: 1.5em; }
+  .main-form-subtitle { font-size: 0.875em; }
+
+  .main-form-card {
+    padding: 1em;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 3.75em;
+    height: 1.875em;
+    font-size: 0.75em;
+  }
+
+  .main-form-buttons {
+    gap: 0.5em;
+    flex-direction: column;
+  }
+}

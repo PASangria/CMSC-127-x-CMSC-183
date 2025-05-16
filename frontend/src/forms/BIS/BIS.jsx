@@ -1,0 +1,330 @@
+import React, { useContext, useState, useEffect } from 'react';
+import { useApiRequest } from '../../context/ApiRequestContext';
+import { AuthContext } from '../../context/AuthContext';
+import BISPersonalData from './BISPersonalData';
+import BISSocioeconomic from './BISSocioeconomic';
+import BISPreferences from './BISPreferences';
+import BISPresentScholastic from './BISPresentScholastic';
+import BISCertify from './BISCertify';
+import BISPreview from './BISPreview';
+import ProgressBar from '../../components/ProgressBar';
+import Navbar from '../../components/NavBar';
+import Footer from '../../components/Footer';
+import '../SetupProfile/css/multistep.css';
+import {  useFormApi } from './BISApi';
+import {
+  validatePreferences,
+  validateScholasticStatus, 
+  validateSocioEconomicStatus,
+  validateSupport
+} from '../../utils/BISValidation'
+
+const BISForm = () => {
+  const { request } = useApiRequest();
+  const { profileData } = useContext(AuthContext);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
+  const {
+    createDraftSubmission,
+    getFormBundle,
+    saveDraft,
+    finalizeSubmission,
+  } = useFormApi();
+
+  const [formData, setFormData] = useState({
+    socio_economic_status: {
+      has_scholarship: false,
+      scholarships: '',
+      scholarship_privileges: '',
+      monthly_allowance: '',
+      spending_habit: '',
+    },
+    scholastic_status: {
+      intended_course: '',
+      first_choice_course: '',
+      admitted_course: '',
+      next_plan: '',
+    },
+    preferences: {
+      influence: '',
+      reason_for_enrolling: '',
+      transfer_plans: false,
+      transfer_reason: '',
+      shift_plans: false,
+      planned_shift_degree: '',
+      reason_for_shifting: '',
+    },
+    student_support: {
+      support: [],
+      other_notes: '',
+      other_scholarship: '',
+      combination_notes: '',
+    },
+    privacy_consent: {
+      has_consented: false
+    }
+  });
+
+  const [step, setStep] = useState(0);
+  const [submissionId, setSubmissionId] = useState(null);
+  const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
+
+  // Loading and error states
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const validateStep = (step, formData) => {
+  switch (step) {
+    case 1: 
+      const errors = [
+      ...validateSocioEconomicStatus(formData),
+      ...validateSupport(formData)
+    ];
+
+    return errors;
+    case 2: return validatePreferences(formData);
+    case 3: return validateScholasticStatus(formData);
+     case 4:
+      if (!formData.privacy_consent.has_consented) {
+        alert('You must agree to the Privacy Notice to proceed.');
+        return false; 
+      }
+      return true; 
+    default:
+      return true;
+  }
+};
+
+  // Fetching form data
+useEffect(() => {
+  const fetchFormData = async () => {
+    setLoading(true);
+    try {
+      let response = await getFormBundle(studentNumber);
+
+      // If no submission yet, create one
+      if (!response) {
+        alert('No submission found. Creating a new one...');
+        response = await createDraftSubmission(studentNumber);
+      }
+
+      if (response) {
+        setFormData({
+          socio_economic_status: response.socio_economic_status || {},
+          scholastic_status: response.scholastic_status || {},
+          preferences: response.preferences || {},
+          student_support: response.student_support || {},
+          privacy_consent: response.privacy_consent || false,
+        });
+        setSubmissionId(response.submission.id);
+      } else {
+        setError('Failed to create or fetch the form.');
+      }
+    } catch (err) {
+      setError('Error fetching or creating form.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (studentNumber) fetchFormData();
+}, [studentNumber]);
+
+const handleSaveDraft = async () => {
+  if (!submissionId) {
+    alert('Submission ID is missing. Try reloading the page.');
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const response = await saveDraft(submissionId, studentNumber, formData);
+    console.log(formData)
+    if (response?.ok) {
+      alert('Draft saved successfully!');
+    } else {
+      console.log(response)
+      alert('Error saving draft.');
+    }
+  } catch (err) {
+    alert('Failed to save draft.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // Handle navigation between steps
+  const handleNextStep = () => {
+    const errors = validateStep(step, formData);
+
+    if (errors.length > 0) {
+      alert("Please fix the following errors:\n\n" + errors.join("\n"));
+      return;
+    }
+
+    setStep(prev => prev + 1);
+  };
+  const handlePreviousStep = () => setStep((prev) => prev - 1);
+
+  const handlePreview = () => {
+    setIsPreviewOpen(true);
+  };
+
+
+  // Submit form
+const handleSubmit = async () => {
+  if (!formData?.privacy_consent?.has_consented) {
+    alert('You must agree to the Privacy Statement to submit the form.');
+    return; 
+  }
+
+  setLoading(true);
+  try {
+    const data = {
+      ...formData,
+      submission: submissionId,
+      student_number: studentNumber,
+    };
+    const result = await finalizeSubmission(data);
+
+    if (result.success) {
+      alert(result.data.message || 'Form submitted successfully!');
+    } else {
+      // Handle specific error messages based on response
+      if (result.status === 400 && result.data.errors) {
+        alert('Validation errors:\n' + JSON.stringify(result.data.errors, null, 2));
+      } else if (result.data.error) {
+        alert(`Error: ${result.data.error}`);
+      } else if (result.data.message) {
+        alert(`Error: ${result.data.message}`);
+      } else {
+        alert('Unknown error occurred.');
+      }
+    }
+  } catch (err) {
+    alert('Failed to submit form.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+  return (
+    <>
+      {/* Background rectangle */}
+      <div className="background-rectangle"></div>
+
+      <div className="content-wrapper">
+        <Navbar />
+
+        <div className="content" style={{ paddingTop: '60px', paddingBottom: '60px' }}>
+          <div className="mainStepForm">
+            <div className="main-form-info">
+              <h1 className="main-form-title">Basic Information Sheet</h1>
+              <p className="main-form-subtitle">
+                Please PROVIDE the information asked for. The data contained in this form will be kept confidential and will serve as your record. Please fill in the blanks carefully and sincerely.
+              </p>
+            </div>
+
+            <div className="main-form-card">
+              <ProgressBar currentStep={step} totalSteps={5} />
+
+              {step === 0 && <BISPersonalData profileData={profileData} />}
+              {step === 1 && (
+                <BISSocioeconomic
+                  data={{
+                    socio_economic_status: formData.socio_economic_status,
+                    student_support: formData.student_support
+                  }}
+                  updateData={(newData) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      socio_economic_status: { ...prev.socio_economic_status, ...newData.socio_economic_status },
+                      student_support: { ...prev.student_support, ...newData.student_support }
+                    }))
+                  }
+                />
+
+              )}
+              {step === 2 && (
+                <BISPreferences
+                  data={formData.preferences}
+                  updateData={(newData) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      preferences: { ...prev.preferences, ...newData },
+                    }))
+                  }
+                />
+              )}
+              {step === 3 && (
+                <BISPresentScholastic
+                  data={formData.scholastic_status}
+                  updateData={(newData) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      scholastic_status: { ...prev.scholastic_status, ...newData },
+                    }))
+                  }
+                />
+              )}
+              {step === 4 && (
+                <BISCertify
+                  data={formData}
+                  updateData={(isChecked) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      privacy_consent: {
+                        ...prev.privacy_consent,
+                        has_consented: isChecked, 
+                      },
+                    }))
+                  }
+                />
+              )}
+
+              <div className="main-form-buttons">
+                {step > 0 && !loading && (
+                  <button className="btn-secondary" onClick={handlePreviousStep}>
+                    Back
+                  </button>
+                )}
+                <button className="btn-primary" onClick={handleSaveDraft} disabled={loading}>
+                  {loading ? 'Saving Draft...' : 'Save Draft'}
+                </button>
+                {step < 4 && !loading && (
+                  <button className="btn-primary" onClick={handleNextStep}>
+                    Next
+                  </button>
+                )}
+                {step === 4 && !loading && (
+                  <>
+                    <button className="btn-primary" onClick={handlePreview}>
+                      Preview
+                    </button>
+                    {isPreviewOpen && (
+                      <BISPreview
+                        profileData={profileData}  
+                        formData={formData}
+                        onClose={() => setIsPreviewOpen(false)}
+                      />
+                    )}
+                    <button className="btn-submit" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                  </>
+                )}
+                {loading && <div>Loading...</div>}
+                {error && <div className="error-message">{error}</div>}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Footer />
+      </div>
+    </>
+  );
+};
+
+export default BISForm;

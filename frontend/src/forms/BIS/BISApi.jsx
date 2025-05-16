@@ -1,0 +1,100 @@
+import { useApiRequest } from '../../context/ApiRequestContext';
+
+const BASE_URL = 'http://localhost:8000/api/forms/basic-information-sheet';
+
+const sectionKeys = [
+  'preferences',
+  'socio_economic_status',
+  'scholastic_status',
+  'student_support',
+  'privacy_consent',
+];
+
+export const useFormApi = () => {
+  const { request } = useApiRequest();
+
+  const createDraftSubmission = async (studentNumber) => {
+    const response = await request(`${BASE_URL}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_number: studentNumber }),
+    });
+
+    return response?.ok ? await response.json() : null;
+  };
+
+  const getFormBundle = async (studentNumber) => {
+    const response = await request(`${BASE_URL}/?student_number=${studentNumber}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (response?.status === 404) return null;
+    return response?.ok ? await response.json() : null;
+  };
+
+  const saveDraft = async (submissionId, studentNumber, formData) => {
+    const payload = {};
+    sectionKeys.forEach((key) => {
+      if (formData[key]) {
+        payload[key] = {
+          ...formData[key],
+          submission: submissionId,
+          student_number: studentNumber,
+        };
+      }
+    });
+
+    const response = await request(`${BASE_URL}/`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    return response;
+  };
+
+const finalizeSubmission = async (submissionId) => {
+  try {
+    const response = await request(
+      `http://localhost:8000/api/forms/finalize/${submissionId.submission}/`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        status: response.status,
+        data,
+      };
+    }
+
+    return {
+      success: true,
+      status: response.status,
+      data,
+    };
+  } catch (error) {
+    console.error('Network or unexpected error:', error);
+    return {
+      success: false,
+      status: 0,
+      data: { error: 'Network error or unexpected issue occurred.' },
+    };
+  }
+};
+
+
+
+  return {
+    createDraftSubmission,
+    getFormBundle,
+    saveDraft,
+    finalizeSubmission,
+  };
+};

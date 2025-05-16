@@ -12,6 +12,7 @@ export const SetUpProfile = () => {
   const token = localStorage.getItem('access_token');
   
   const [formData, setFormData] = useState({
+    // Personal Information
     family_name: '',
     first_name: '',
     middle_name: '',
@@ -23,10 +24,12 @@ export const SetUpProfile = () => {
     birth_place: '',
     landline_number: '',
     mobile_number: '',
+    // Education
     student_number: '',
     college: '',
     degree_program: '',
     current_year_level: '',
+    // Permanent Address
     permanent_region: '',
     permanent_province: '',
     permanent_city_municipality: '',
@@ -34,6 +37,7 @@ export const SetUpProfile = () => {
     permanent_address_line_1: '',
     permanent_address_line_2: '',
     permanent_zip_code: '',
+    // Address While In UP
     up_region: '',
     up_province: '',
     up_city_municipality: '',
@@ -148,11 +152,11 @@ export const SetUpProfile = () => {
   
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:8000/api/forms/student/profile/create/", {
+  
+      const response = await apiRequest("http://localhost:8000/api/forms/student/profile/create/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
         },
         credentials: 'include',
         body: JSON.stringify(payload),
