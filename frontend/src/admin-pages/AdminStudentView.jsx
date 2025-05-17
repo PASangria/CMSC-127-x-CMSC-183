@@ -4,6 +4,7 @@ import { useApiRequest } from '../context/ApiRequestContext';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import StudentSideInfo from '../student-pages/IndividualStudent';
+import DefaultLayout from '../components/DefaultLayout';
 
 export const AdminStudentView = () => {
   const { studentId } = useParams();
@@ -28,9 +29,9 @@ export const AdminStudentView = () => {
 
   return (
     <div>
-        <Navbar />
-        <StudentSideInfo profileData={student} />
-        <Footer />
+        <DefaultLayout variant='admin'>
+          <StudentSideInfo profileData={student} />
+        </DefaultLayout>
     </div>
   );
 };

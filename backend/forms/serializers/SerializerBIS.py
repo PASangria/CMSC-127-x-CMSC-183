@@ -44,11 +44,9 @@ class SocioEconomicStatusSerializer(serializers.ModelSerializer):
         model = SocioEconomicStatus
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
-        read_only_fields = ['student', 'submission']
 
 class PresentScholasticStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PresentScholasticStatus
         fields = '__all__'
         extra_kwargs = {field.name: {'required': False} for field in model._meta.fields if field.name != 'id'}
-        read_only_fields = ['student', 'submission']

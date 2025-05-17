@@ -32,6 +32,7 @@ const BISForm = () => {
 
   const [formData, setFormData] = useState({
     socio_economic_status: {
+      student_number: '',
       has_scholarship: false,
       scholarships: '',
       scholarship_privileges: '',
@@ -39,12 +40,14 @@ const BISForm = () => {
       spending_habit: '',
     },
     scholastic_status: {
+      student_number: '',
       intended_course: '',
       first_choice_course: '',
       admitted_course: '',
       next_plan: '',
     },
     preferences: {
+      student_number: '',
       influence: '',
       reason_for_enrolling: '',
       transfer_plans: false,
@@ -54,12 +57,14 @@ const BISForm = () => {
       reason_for_shifting: '',
     },
     student_support: {
+      student_number: '',
       support: [],
       other_notes: '',
       other_scholarship: '',
       combination_notes: '',
     },
     privacy_consent: {
+      student_number: '',
       has_consented: false
     }
   });
@@ -68,7 +73,6 @@ const BISForm = () => {
   const [submissionId, setSubmissionId] = useState(null);
   const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
 
-  // Loading and error states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -94,16 +98,14 @@ const BISForm = () => {
   }
 };
 
-  // Fetching form data
+
 useEffect(() => {
   const fetchFormData = async () => {
     setLoading(true);
     try {
       let response = await getFormBundle(studentNumber);
 
-      // If no submission yet, create one
       if (!response) {
-        alert('No submission found. Creating a new one...');
         response = await createDraftSubmission(studentNumber);
       }
 
@@ -179,12 +181,7 @@ const handleSubmit = async () => {
 
   setLoading(true);
   try {
-    const data = {
-      ...formData,
-      submission: submissionId,
-      student_number: studentNumber,
-    };
-    const result = await finalizeSubmission(data);
+    const result = await finalizeSubmission(submissionId, studentNumber, formData);
 
     if (result.success) {
       alert(result.data.message || 'Form submitted successfully!');

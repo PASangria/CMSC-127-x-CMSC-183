@@ -64,7 +64,7 @@ function validatePersonalInfo(data) {
 
 function validateEducation(data) {
   const validStudentNumber = studentNumberPattern.test(data.student_number);
-  const requiredFields = ['college', 'degreeProgram', 'current_year_level'];
+  const requiredFields = ['college', 'degree_program', 'current_year_level', 'date_initial_entry'];
 
   const allRequiredFilled = requiredFields.every(field => !!data[field]);
 

@@ -6,6 +6,7 @@ import { useEnumChoices } from '../../utils/enumChoices'
 const EducationInfoForm = ({ formData, setFormData }) => {
   const { enums, loading, error } = useEnumChoices(); 
   const [errors, setErrors] = useState({});
+  const academicYearPattern = /^20\d{2}-20\d{2}$/;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +36,15 @@ const EducationInfoForm = ({ formData, setFormData }) => {
     // Validate degreeProgram
     if (!formData.degree_program) {
       validationErrors.degree_program = 'Please select your degree program.';
+    }
+
+    if (!formData.date_initial_entry || !academicYearPattern.test(formData.date_initial_entry)) {
+      validationErrors.date_initial_entry = 'Format must be YYYY-YYYY using years from 2000 onward (e.g., 2023-2024).';
+    } else {
+      const [startYear, endYear] = formData.date_initial_entry.split('-').map(Number);
+      if (endYear !== startYear + 1) {
+        validationErrors.date_initial_entry = 'The second year must be the first year plus one (e.g., 2023-2024).';
+      } 
     }
 
     setErrors(validationErrors);
@@ -109,6 +119,33 @@ const EducationInfoForm = ({ formData, setFormData }) => {
             enums?.degree_program?.map((opt) => ({ value: opt.value, label: opt.label })) || []
           }
         />
+        </div>
+      </div>
+       <div className="form-row">
+        <div className="form-group">
+          <FormField
+            label="Academic Year of Initial Entry (e.g., 2023-2024)"
+            name="date_initial_entry"
+            value={formData.date_initial_entry}
+            onChange={handleChange}
+            required
+            error={errors.date_initial_entry}
+            placeholder="2023-2024"
+          />
+        </div>
+        <div className="form-group">
+          <FormField
+            label="Semester"
+            name="date_initial_entry_sem"
+            type="select"
+            value={formData.date_initial_entry_sem}
+            onChange={handleChange}
+            required
+            error={errors.semester}
+            options={
+              enums?.semester?.map((opt) => ({ value: opt.value, label: opt.label })) || []
+            }
+          />
         </div>
       </div>
     </div>

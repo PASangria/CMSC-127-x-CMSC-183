@@ -56,7 +56,7 @@ class PreviousSchoolRecord(models.Model):
         
         elif self.submission.status == 'submitted':
             required_fields = {
-                'student_number': 'required',
+                'student': 'required',
                 'school': 'required',
                 'education_level': 'required',
                 'start_year': 'required',
