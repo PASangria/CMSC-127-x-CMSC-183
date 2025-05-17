@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/NavBar';
-import SideNav_student from '../components/SideNav_student';
-import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import { AuthContext } from '../context/AuthContext';
 import { useApiRequest } from '../context/ApiRequestContext';

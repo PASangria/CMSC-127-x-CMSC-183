@@ -165,6 +165,7 @@ const handleSaveDraft = async () => {
 
     setStep(prev => prev + 1);
   };
+  
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
   const handlePreview = () => {
@@ -172,7 +173,6 @@ const handleSaveDraft = async () => {
   };
 
 
-  // Submit form
 const handleSubmit = async () => {
   if (!formData?.privacy_consent?.has_consented) {
     alert('You must agree to the Privacy Statement to submit the form.');
