@@ -76,7 +76,6 @@ class FormBundleView(APIView):
                 data[key] = serializer(instance).data if instance else None
 
         return Response(data)
-
     def post(self, request, form_type):
         # Map slug to display name
         form_type_display = FORM_TYPE_SLUG_MAP.get(form_type)
@@ -85,6 +84,11 @@ class FormBundleView(APIView):
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
 
         student = request.user.student
+
+        # Ensure that the student can only submit their own data
+        if student.student_number != request.user.student.student_number:
+            return Response({'error': 'You can only submit your own data.'}, status=status.HTTP_403_FORBIDDEN)
+
         submission, created = Submission.objects.get_or_create(
             student=student,
             form_type=form_type_display,  # Save the actual display name, not the slug
@@ -111,6 +115,10 @@ class FormBundleView(APIView):
             submission = Submission.objects.get(student=student, form_type=form_type_display)
         except Submission.DoesNotExist:
             return Response({'error': 'No submission found for this form type.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Ensure that the student can only modify their own data
+        if submission.student != student:
+            return Response({'error': 'You can only update your own submission.'}, status=status.HTTP_403_FORBIDDEN)
 
         if submission.status == 'submitted':
             return Response({'error': 'You cannot modify a submitted form.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -161,7 +169,6 @@ class FormBundleView(APIView):
                 else:
                     errors[key] = serializer.errors
 
-                
         return Response({'message': 'Form data updated successfully.', 'data': updated_data}, status=status.HTTP_200_OK)
 
     

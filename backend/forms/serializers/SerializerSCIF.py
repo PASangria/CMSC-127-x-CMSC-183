@@ -232,7 +232,6 @@ class FamilyRelationshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilyRelationship
         fields = '__all__'
-        read_only_fields = ['student', 'submission']
 
 class CounselingInformationSerializer(serializers.ModelSerializer):
     class Meta:

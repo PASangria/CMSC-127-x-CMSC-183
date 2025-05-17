@@ -1,17 +1,29 @@
 # forms/views.py
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from forms.models import Submission
 from forms.serializers import SubmissionSerializer
 
 class SubmissionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Submission.objects.all()  
+    """
+    A viewset for viewing submissions. Admins can view all submissions,
+    while regular users can only see their own.
+    """
+    queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """
-        Restricts the returned submissions to the current logged-in user.
+        Returns all submissions if the user is an admin/staff,
+        otherwise only the submissions of the logged-in student.
         """
-        student = self.request.user.student  
-        return Submission.objects.filter(student=student) 
+        user = self.request.user
+
+        if user.is_staff or user.is_superuser:
+            return Submission.objects.all()
+
+        # Assuming every non-admin user has a related student profile
+        return Submission.objects.filter(student=user.student)
+

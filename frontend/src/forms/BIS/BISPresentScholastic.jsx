@@ -11,8 +11,6 @@ const BISPresentScholastic = ({ data, updateData, errors }) => {
       [name]: value,
     };
 
-    // If first_choice_course or admitted_course is updated,
-    // and they are now the same, clear next_plan
     if (
       (name === 'first_choice_course' || name === 'admitted_course') &&
       updatedData.first_choice_course === updatedData.admitted_course

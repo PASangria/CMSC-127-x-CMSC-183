@@ -29,3 +29,7 @@ from .SerializerSCIF import (
     CounselingInformationSerializer,
     FamilyRelationshipSerializer
 )
+
+from .AdminSerializers import (
+    AdminSubmissionDetailSerializer,
+)

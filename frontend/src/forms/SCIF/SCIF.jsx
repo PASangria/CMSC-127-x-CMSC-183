@@ -14,6 +14,17 @@ import '../SetupProfile/css/multistep.css';
 import { useApiRequest } from '../../context/ApiRequestContext';
 import { AuthContext } from '../../context/AuthContext';
 import { useFormApi } from '../SCIF/SCIFApi';
+import {
+  validateParent,
+  validateGuardian,
+  validateSibling,
+  validateHealthData,
+  validatePrivacyConsent,
+  validatePreviousSchool,
+  validatePersonalityTraits,
+  validateFamilyRelationship,
+  validateCounselingInfo
+} from '../../utils/SCIFValidation';
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -25,7 +36,17 @@ const SCIF = () => {
       saveDraft,
       finalizeSubmission,
     } = useFormApi();
+      const [step, setStep] = useState(0);
+      const [submissionId, setSubmissionId] = useState(null);
+      const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
 
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState(null);
+      const [submissionStatus, setSubmissionStatus] = useState(null);
+  
+
+
+  
   const [formData, setFormData] = useState({
     family_data: {
       student_number: '',
@@ -38,6 +59,7 @@ const SCIF = () => {
         company_address: '',
         highest_educational_attainment: '',
         contact_number: '',
+        submission: '',
       },
       father: {
         first_name: '',
@@ -48,6 +70,7 @@ const SCIF = () => {
         company_address: '',
         highest_educational_attainment: '',
         contact_number: '',
+        submission: '',
       },
       guardian: {
         first_name: '',
@@ -56,6 +79,7 @@ const SCIF = () => {
         address: '',
         relationship_to_guardian: '',
         language_dialect: [],
+        submission: '',
       },
     },
     siblings: [
@@ -68,6 +92,7 @@ const SCIF = () => {
         company_school: '',
         educational_attainment: '',
         students: [], 
+        submission: '',
       },
     ],
     previous_school_record: [
@@ -89,6 +114,8 @@ const SCIF = () => {
       end_year: '',
       honors_received: '',
       senior_high_gpa: '',
+      submission: '',
+
     },
     ],
     health_data: {
@@ -102,10 +129,12 @@ const SCIF = () => {
       common_ailments: '',
       last_hospitalization: '',
       reason_of_hospitalization: '',
+      submission: '',
     },
     scholarship: {
       student_number: '',
       scholarships_and_assistance: [],
+      submission: '',
     },
     personality_traits: {
       student_number: '',
@@ -117,11 +146,13 @@ const SCIF = () => {
       hobbies: '',
       likes_in_people: '',
       dislikes_in_people: '',
+      submission: '',
     },
     family_relationship: {
       student_number: '',
       closest_to: '',
       specify_other: '',
+      submission: '',
     },
     counseling_info: {
       student_number: '',
@@ -132,24 +163,55 @@ const SCIF = () => {
       previous_counseling: '',
       counseling_location: '',
       counseling_reason: '',
+      submission: '',
     },
     privacy_consent: {
       student_number: '',
       has_consented: false,
+      submission: '',
     },
   });
 
+  const validateStep = (step, formData, submissionStatus) => {
+    switch (step) {
+      case 2:
+        const errors = [
+              ...validateParent(formData),
+              ...validateGuardian(formData),
+              ...validateSibling(formData)
+            ];
+        
+        return errors;
+      case 3:
+          return validateHealthData(formData);
+      case 4:
+          return validatePreviousSchool(formData);
+      case 5:
+        return true;
+      case 6:
+        const personalDataErrors = [
+          ...validatePersonalityTraits(formData),
+          ...validateFamilyRelationship(formData),
+          ...validateCounselingInfo(formData),
+        ];
 
-  const [step, setStep] = useState(0);
-  const [submissionId, setSubmissionId] = useState(null);
-  const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
-  console.log(studentNumber);
-  console.log(formData);
-  console.log("137");
+        if (personalDataErrors.length > 0) {
+          return personalDataErrors;
+        }
+        return true;
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-   
+      case 7:
+        const consentErrors = validatePrivacyConsent(formData);
+        if (consentErrors.length > 0) {
+          return consentErrors;
+        }
+        return true;
+
+      default:
+        return true;
+    }
+  };
+ 
   useEffect(() => {
     const fetchFormData = async () => {
       
@@ -223,6 +285,7 @@ const SCIF = () => {
 
 
           setSubmissionId(response.submission.id);
+          setSubmissionStatus(response.submission.status);
         } else {
           setError('Failed to create or fetch the form.');
       }
@@ -245,7 +308,6 @@ const SCIF = () => {
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
-    console.log(formData + "IN LINE 188")
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
@@ -257,22 +319,57 @@ const SCIF = () => {
     setLoading(false);
   }
 };
-  console.log(formData);
-  console.log("200");
 
-
-  // Handle navigation between steps
   const handleNextStep = () => {
+    const errors = validateStep(step, formData);
+
+    if (Array.isArray(errors) && errors.length > 0) {
+      alert("Please fix the following errors:\n\n" + errors.join("\n"));
+      return;
+    }
     setStep(prev => prev + 1);
+
   };
+
+  
+
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
   const handlePreview = () => {
     setIsPreviewOpen(true);
   };
 
-  const handleSubmit = async () => {};
-  
+  const handleSubmit = async () => {
+  if (!formData?.privacy_consent?.has_consented) {
+    alert('You must agree to the Privacy Statement to submit the form.');
+    return; 
+  }
+
+  setLoading(true);
+  try {
+    const result = await finalizeSubmission(submissionId, studentNumber, formData);
+
+    if (result.success) {
+      alert(result.data.message || 'Form submitted successfully!');
+    } else {
+      // Handle specific error messages based on response
+      if (result.status === 400 && result.data.errors) {
+        alert('Validation errors:\n' + JSON.stringify(result.data.errors, null, 2));
+      } else if (result.data.error) {
+        alert(`Error: ${result.data.error}`);
+      } else if (result.data.message) {
+        alert(`Error: ${result.data.message}`);
+      } else {
+        alert('Unknown error occurred.');
+      }
+    }
+  } catch (err) {
+    alert('Failed to submit form.');
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <>
       <Navbar />

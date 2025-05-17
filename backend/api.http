@@ -6,8 +6,8 @@ POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
 Content-Type:  application/json
 
 {
-    "email": "presapplesang@gmail.com",
-    "password": "presapp11"
+    "email": "katherine58@example.com",
+    "password": "testpass123"
 }
 
 ###
@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 GET http://localhost:8000/api/forms/student/profile HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MDQ1NDc0LCJpYXQiOjE3NDY5ODIzNjYsImp0aSI6IjJmNDc4YzI2M2I0YjRlOTU5NGU0MDg2N2JkYTBmMWMzIiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.oGFJF2WozWNWJt7sF-QmziP7gU5BrIi0O32tJA8YP3g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDY2MDkzLCJpYXQiOjE3NDc0NjI0OTMsImp0aSI6IjNhNGVmNDI2NDlhMDRjZDViYmNiZmQxMzI5YTNjYjFlIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.ib3dKwFfSA6STgvRqsvmy59Jbu0LWk5zdIxrE-naNe4
 
 ###
 POST http://localhost:8000/api/forms/student/profile/create/ HTTP/1.1
@@ -152,7 +152,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 GET http://localhost:8000/api/forms/student-cumulative-information-file/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3Mzk4MzQ4LCJpYXQiOjE3NDczNTgzODMsImp0aSI6IjljNDg0YmNkY2E5ZjQyZjZhY2U0MDQzNGEzOTYyZTc0IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.XmmLrfj9AnlMST813gbl9Fn0J2EFKcScEQgRIAhuTkY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDY2MDYyLCJpYXQiOjE3NDc0NjI0NjIsImp0aSI6ImQzODZjOWYxYzZkODQ2YjBhMTgxYTdlNDRkYTdkOWMyIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.niltV61BMWgdewU-qwZAwegIWQodW9awvnVMhntCjlE
 
 ###
 POST http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
@@ -165,7 +165,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/student-cumulative-information-file/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MzczMTgxLCJpYXQiOjE3NDczNTgzODMsImp0aSI6ImUzZDliZjg5NjgwNzRmYzU5NjUwMWQ1NzdmZGJjNDA5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.fxrU38T7CQR-xq2InJZPf6NY4OMLgpw_ws1NZsHuCpw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDY2MDkzLCJpYXQiOjE3NDc0NjI0OTMsImp0aSI6IjNhNGVmNDI2NDlhMDRjZDViYmNiZmQxMzI5YTNjYjFlIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.ib3dKwFfSA6STgvRqsvmy59Jbu0LWk5zdIxrE-naNe4
 
 {
   "submission": {
@@ -456,12 +456,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/student-cumulative-information-file/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MzczMTgxLCJpYXQiOjE3NDczNTgzODMsImp0aSI6ImUzZDliZjg5NjgwNzRmYzU5NjUwMWQ1NzdmZGJjNDA5IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.fxrU38T7CQR-xq2InJZPf6NY4OMLgpw_ws1NZsHuCpw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDYzNDk0LCJpYXQiOjE3NDc0NTk4OTQsImp0aSI6IjdhY2YxNjJlZTk2MjRkYjFhNTQyOTJmZTVmOWU4MmRjIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.GYh4lbJyNGyug6K9raAxdZMBhmtoI9WFJNDpgjcIDyQ
 
 {
     "previous_school_record": [
     {
-    "id": 128,
+    "id": 131,
     "student_number": "2023-03844",
     "school": {
       "id": 128,
@@ -485,4 +485,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     }
   ]
 }
+
+###
+GET http://localhost:8000/api/forms/admin/basic-information-sheet-submissions?student=2018-66684
+ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDY4MDI4LCJpYXQiOjE3NDc0NjQ0MjgsImp0aSI6ImUzNzA1MDFkM2FhODRlYjdiZDBmM2U3NTIzZjA1MWM3IiwidXNlcl9pZCI6MSwicm9sZSI6ImFkbWluIn0.-jt54_VrNVqNkTiw4tJa4QVcKYPBDnb_0lXPQzOdutE
+
 
