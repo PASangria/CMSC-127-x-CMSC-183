@@ -25,6 +25,7 @@ import {
   validateFamilyRelationship,
   validateCounselingInfo
 } from '../../utils/SCIFValidation';
+import Loader from '../../components/Loader';
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -213,91 +214,96 @@ const SCIF = () => {
   };
  
   useEffect(() => {
-    const fetchFormData = async () => {
-      
-      setLoading(true);
-      try {
-        let response = await getFormBundle(studentNumber);
+  const fetchFormData = async () => {
+    setLoading(true);
+    try {
+      let response = await getFormBundle(studentNumber);
 
-        if (!response) {
-          response = await createDraftSubmission(studentNumber);
+      if (!response) {
+        // Create draft submission if no form data exists
+        const submissionId = await createDraftSubmission(studentNumber);
+
+        if (submissionId) {
+          // Set the submissionId state after creation
+          response = await getFormBundle(studentNumber);
         }
-        if (response) {
-
-          setFormData((prev) => ({
-            family_data: {
-              ...prev.family_data,
-              ...response.family_data,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            siblings: Array.isArray(response.siblings)
-              ? response.siblings.map((sibling) => ({
-                  ...sibling,
-                  submission: response.submission.id,
-                  students: sibling.students?.length ? sibling.students : [studentNumber],
-                }))
-              : [],
-            previous_school_record: Array.isArray(response.previous_school_record)
-              ? response.previous_school_record.map((record) => ({
-                  ...record,
-                  submission: response.submission.id,
-                  student_number: studentNumber,
-                }))
-              : [],
-            health_data: {
-              ...prev.health_data,
-              ...response.health_data,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            scholarship: {
-              ...prev.scholarship,
-              ...response.scholarship,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            personality_traits: {
-              ...prev.personality_traits,
-              ...response.personality_traits,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            family_relationship: {
-              ...prev.family_relationship,
-              ...response.family_relationship,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            counseling_info: {
-              ...prev.counseling_info,
-              ...response.counseling_info,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-            privacy_consent: {
-              ...prev.privacy_consent,
-              ...response.privacy_consent,
-              submission: response.submission.id,
-              student_number: studentNumber,
-            },
-          }));
-
-
-          setSubmissionId(response.submission.id);
-          setSubmissionStatus(response.submission.status);
-        } else {
-          setError('Failed to create or fetch the form.');
+      } else {
+        if (response.submission) {
+          const submissionId = response.submission?.id;
+          setSubmissionId(submissionId);
+          setSubmissionStatus(response.submission.status);  // Set the status of the submission
+        }
       }
-      } catch (err) {
-        setError('Error fetching or creating form.');
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    if (studentNumber) fetchFormData();
-  }, [studentNumber]);
+      // Fill the form data with the fetched response
+      setFormData((prev) => ({
+        family_data: {
+          ...prev.family_data,
+          ...response.family_data,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        siblings: Array.isArray(response.siblings)
+          ? response.siblings.map((sibling) => ({
+              ...sibling,
+              submission: submissionId,
+              students: sibling.students?.length ? sibling.students : [studentNumber],
+            }))
+          : [],
+        previous_school_record: Array.isArray(response.previous_school_record)
+          ? response.previous_school_record.map((record) => ({
+              ...record,
+              submission: submissionId,
+              student_number: studentNumber,
+            }))
+          : [],
+        health_data: {
+          ...prev.health_data,
+          ...response.health_data,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        scholarship: {
+          ...prev.scholarship,
+          ...response.scholarship,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        personality_traits: {
+          ...prev.personality_traits,
+          ...response.personality_traits,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        family_relationship: {
+          ...prev.family_relationship,
+          ...response.family_relationship,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        counseling_info: {
+          ...prev.counseling_info,
+          ...response.counseling_info,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+        privacy_consent: {
+          ...prev.privacy_consent,
+          ...response.privacy_consent,
+          submission: submissionId,
+          student_number: studentNumber,
+        },
+      }));
+    } catch (err) {
+      setError('Error fetching or creating form.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (studentNumber) fetchFormData();
+}, [studentNumber]);
+
 
   const handleSaveDraft = async () => {
   if (!submissionId) {
@@ -369,6 +375,10 @@ const SCIF = () => {
     setLoading(false);
   }
 };
+
+if (loading || !submissionId) {
+  return <Loader />
+}
 
   return (
     <>

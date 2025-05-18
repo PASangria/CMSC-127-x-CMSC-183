@@ -192,9 +192,9 @@ textarea:focus {
   gap: 1em;
   margin-top: 1.25em;
 }
-
-.btn-primary,
-.btn-secondary {
+/* 
+.btn-primary, */
+/* .btn-secondary {
   width: 5.25em;
   height: 2.625em;
   font-family: 'Roboto';
@@ -210,11 +210,11 @@ textarea:focus {
 
 .btn-primary {
   background: #1976D2;
-}
-
+} */
+/* 
 .btn-secondary {
   background: #7E7E7E;
-}
+} */
 
 /* ===== MODAL ===== */
 .modal-overlay {
@@ -296,11 +296,11 @@ textarea:focus {
   .main-form-title { font-size: 1.75em; }
   .main-form-subtitle { font-size: 1em; }
 
-  .btn-primary, .btn-secondary {
+  /* .btn-primary, .btn-secondary {
     width: 4.375em;
     height: 2.1875em;
     font-size: 0.875em;
-  }
+  } */
 
   .main-form-buttons {
     gap: 0.625em;
@@ -334,11 +334,11 @@ textarea:focus {
     padding: 1em;
   }
 
-  .btn-primary, .btn-secondary {
+  /* .btn-primary, .btn-secondary {
     width: 3.75em;
     height: 1.875em;
     font-size: 0.75em;
-  }
+  } */
 
   .main-form-buttons {
     gap: 0.5em;

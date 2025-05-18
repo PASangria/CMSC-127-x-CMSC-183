@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import BISProfileView from './BISViewPage';
 import { useFormApi } from '../forms/BIS/BISApi';
 import { AuthContext } from '../context/AuthContext';
+import DefaultLayout from '../components/DefaultLayout';
 
 const BISProfilePage = () => {
   const { getFormBundle } = useFormApi();
@@ -36,6 +37,7 @@ const BISProfilePage = () => {
         privacy_consent: data.privacy_consent,
       };
 
+      console.log(transformedData);
       setFormData(transformedData);
       setLoading(false);
     };
@@ -46,7 +48,13 @@ const BISProfilePage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
-  return <BISProfileView profileData={profileData} formData={formData} />;
+  return (
+  <div>
+    <DefaultLayout variant='student'>
+      <BISProfileView profileData={profileData} formData={formData} />;
+    </DefaultLayout>
+  </div>
+  );
 };
 
 export default BISProfilePage;

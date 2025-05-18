@@ -11,7 +11,6 @@ export const formatDate = (isoDate, locale = 'en-US', options = {}) => {
   const date = new Date(isoDate);
 
   const defaultOptions = {
-    weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',

@@ -28,7 +28,7 @@ export const AdminStudentView = () => {
           const formRes = await request(`http://localhost:8000/api/forms/admin/student-forms/${studentId}/`);
           if (formRes.ok) {
             const forms = await formRes.json();
-            setSubmittedForms(forms); // Set the entire response as the forms data
+            setSubmittedForms(forms); 
             console.log(forms); 
           } else {
             console.error("Failed to fetch form submissions");

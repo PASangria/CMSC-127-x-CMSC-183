@@ -2,6 +2,7 @@ import React from 'react';
 import DisplayField from "../../components/DisplayField"
 import './css/multistep.css';
 import { X } from 'react-feather';
+import Button from '../../components/UIButton';
 
 const PreviewModal = ({ data, onClose }) => {
   if (!data) return null;
@@ -87,7 +88,7 @@ const PreviewModal = ({ data, onClose }) => {
           </div>
         </div>
 
-        <button onClick={onClose} className="btn-secondary">Close</button>
+        <Button variant="secondary" onClick={onClose}> Close </Button>
       </div>
     </div>
   );

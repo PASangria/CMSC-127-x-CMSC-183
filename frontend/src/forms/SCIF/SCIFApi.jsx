@@ -25,8 +25,20 @@ export const useFormApi = () => {
         body: JSON.stringify({ student_number: studentNumber }),
       });
 
-      return response?.ok ? await response.json() : null;
+      if (response?.ok) {
+        const responseData = await response.json();
+        
+        // Assuming the response contains the submission object with an id
+        const submissionId = responseData?.submission?.id;
+        
+        if (submissionId) {
+          return submissionId;  // Return the submissionId to use later
+        }
+      }
+      
+      return null;  // Return null if something goes wrong
     };
+
 
   const getFormBundle = async (studentNumber) => {
     const response = await request(`${BASE_URL}/?student_number=${studentNumber}`, {
