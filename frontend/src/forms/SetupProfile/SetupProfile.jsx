@@ -8,6 +8,7 @@ import Navbar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import ProgressBar from '../../components/ProgressBar';
 import PreviewModal from './PreviewForm';
+import Button from '../../components/UIButton';
 
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
@@ -195,45 +196,44 @@ const MultiStepForm = () => {
                         handleSameAsPermanentToggle={handleSameAsPermanentToggle}
                         disabled={sameAsPermanent}
                         prefix="up"/>}
-                        <div className="main-form-buttons">
+                      <div className="main-form-buttons">
                         {/* Step 1: Only 'Next' button */}
                         {step === 1 && (
-                            <button className="btn-primary" onClick={handleNextStep}>
+                          <Button variant="primary" onClick={handleNextStep}>
                             Next
-                            </button>
+                          </Button>
                         )}
 
                         {/* Steps 2-4: 'Back' and 'Next' buttons */}
                         {step >= 2 && step <= 4 && (
-                            <>
-                            <button className="btn-secondary" onClick={handlePreviousStep}>
-                                Back
-                            </button>
-                            <button className="btn-primary" onClick={handleNextStep}>
-                                Next
-                            </button>
-                            </>
+                          <>
+                            <Button variant="secondary" onClick={handlePreviousStep}>
+                              Back
+                            </Button>
+                            <Button variant="primary" onClick={handleNextStep} style={{ marginLeft: '0.5rem' }}>
+                              Next
+                            </Button>
+                          </>
                         )}
 
                         {/* Step 5: 'Back', 'Preview', and 'Submit' buttons */}
                         {step === 5 && (
-                            <>
-                            <button className="btn-secondary" onClick={handlePreviousStep}>
-                                Back
-                            </button>
-                            <button className="btn-primary" onClick={handlePreview}>
-                                Preview
-                            </button>
+                          <>
+                            <Button variant="secondary" onClick={handlePreviousStep}>
+                              Back
+                            </Button>
+                            <Button variant="primary" onClick={handlePreview} style={{ marginLeft: '0.5rem' }}>
+                              Preview
+                            </Button>
                             {isPreviewOpen && (
                               <PreviewModal data={formData} onClose={() => setIsPreviewOpen(false)} />
                             )}
-                            <button className="btn-submit" onClick={handleSubmit}>
-                                Submit
-                            </button>
-                            </>
+                            <Button variant="primary" onClick={handleSubmit} style={{ marginLeft: '0.5rem' }}>
+                              Submit
+                            </Button>
+                          </>
                         )}
-                        </div>
-
+                      </div>
                     </div>
                 </div>
             </div>

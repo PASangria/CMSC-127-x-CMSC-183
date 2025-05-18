@@ -82,14 +82,17 @@ const BISProfileView = ({ profileData, formData }) => {
       <div>
         <p>4. What is your means of support for your college education?</p>
         <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-          {supportOptions.map(({ key, label }) => (
-            <li key={key}>
-              <label>
-                <input type="checkbox" checked={student_support?.support?.includes(key)} readOnly />
-                {' '} {label}
-              </label>
-            </li>
-          ))}
+          {supportOptions.map(({ key, label }) => {
+            const isChecked = Array.isArray(student_support?.support) && student_support.support.includes(key);
+            return (
+              <li key={key}>
+                <label>
+                  <input type="checkbox" checked={isChecked} readOnly />
+                  {' '}{label}
+                </label>
+              </li>
+            );
+          })}
         </ul>
       </div>
       <label>5. Other scholarships (aside from UP STS): <input type="text" value={socio_economic_status.scholarships} readOnly /></label>

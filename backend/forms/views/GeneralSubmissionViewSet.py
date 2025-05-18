@@ -166,10 +166,36 @@ class FormBundleView(APIView):
                 if serializer.is_valid():
                     saved_data = serializer.save()
                     updated_data[key] = serializer.data
+                    submission.saved_on = timezone.now()
+                    submission.save()
                 else:
                     errors[key] = serializer.errors
 
         return Response({'message': 'Form data updated successfully.', 'data': updated_data}, status=status.HTTP_200_OK)
+    
+    def delete(self, request, form_type):
+        form_type_display = FORM_TYPE_SLUG_MAP.get(form_type)
+
+        if not form_type_display:
+            return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        student = request.user.student
+
+        try:
+            submission = Submission.objects.get(student=student, form_type=form_type_display)
+        except Submission.DoesNotExist:
+            return Response({'error': 'No submission found for this form type.'}, status=status.HTTP_404_NOT_FOUND)
+
+        if submission.student != student:
+            return Response({'error': 'You can only delete your own submission.'}, status=status.HTTP_403_FORBIDDEN)
+
+        if submission.status != 'draft':
+            return Response({'error': 'Only draft submissions can be deleted.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        submission.delete()
+
+        return Response({'message': 'Submission deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+
 
     
 class FinalizeSubmissionView(APIView):

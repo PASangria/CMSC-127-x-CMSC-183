@@ -1,83 +1,52 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import {
-  Box,
-  Stack,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Button,
-  Divider
-} from '@mui/material';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend
-} from 'recharts';
-
+import { AuthContext } from '../context/AuthContext';
+import { apiRequest } from '../utils/apiUtils';
 import DefaultLayout from '../components/DefaultLayout';
 import StatCard from '../components/StatCard';
-
-// Dummy data for bar chart
-const barData = [
-  { name: 'BSCS', Female: 90, Male: 80 },
-  { name: 'BSES', Female: 85, Male: 70 },
-  { name: 'BSAM', Female: 70, Male: 50 },
-  { name: 'BA', Female: 60, Male: 40 },
-  { name: 'DSES', Female: 20, Male: 15 },
-];
-
-const now = new Date();
-const todayFormatted = now.toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-});
-
-// Updated Stat Cards Summary Data
-const summaryData = [
-  {
-    title: 'Total Number of Students',
-    value: '1,245',
-    trend: 'up',
-    interval: `Registered users as of ${todayFormatted}`,
-    data: [0, 5, 8, 12, 15, 22, 30, 35, 38, 40, 45], // Add more if needed; StatCard handles padding
-  },
-  {
-    title: 'SCIF Submissions',
-    value: '320',
-    trend: 'neutral',
-    interval: `SCIF Submissions This Month (recent - ${todayFormatted})`,
-    data: [5, 10, 20, 30, 50, 70, 110],
-  },
-  {
-    title: 'BIS Submissions',
-    value: '210',
-    trend: 'down',
-    interval: `BIS Submissions This Month (recent - ${todayFormatted})`,
-    data: [15, 18, 20, 25, 20, 15, 10],
-  },
-];
+import {
+  Box, Stack, Typography, Grid, Card, CardContent,
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, Divider,
+  List, ListItem, ListItemIcon, ListItemText
+} from '@mui/material';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 export const AdminDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user, role, loading } = useContext(AuthContext);
+
+  const [barData, setBarData] = useState([]);
+  const [summaryData, setSummaryData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (role !== 'admin') return;
+
+    const fetchDashboardData = async () => {
+      try {
+        const barRes = await apiRequest('http://localhost:8000/api/dashboard/bar-data');
+        const summaryRes = await apiRequest('http://localhost:8000/api/dashboard/summary/');
+
+        const barJson = await barRes.json();
+        const summaryJson = await summaryRes.json();
+
+        console.log('Bar data:', barJson);
+        console.log('Summary data:', summaryJson);
+
+        if (Array.isArray(barJson)) setBarData(barJson);
+        if (summaryJson?.summary) setSummaryData(summaryJson.summary);
+      } catch (err) {
+        setError('Failed to fetch dashboard data.');
+        console.error('Dashboard fetch error:', err);
+      }
+    };
+
+    fetchDashboardData();
+  }, [role]);
+
+  if (loading) return <Typography variant="h6">Loading...</Typography>;
+  if (role !== 'admin') return <Navigate to="/" replace />;
   if (!user) return <Navigate to="/" replace />;
 
   return (
@@ -88,6 +57,12 @@ export const AdminDashboard = () => {
             Welcome, {user.email}
           </Typography>
 
+          {error && (
+            <Typography color="error" variant="body1">
+              {error}
+            </Typography>
+          )}
+
           {/* Summary Cards */}
           <Grid container spacing={2}>
             {summaryData.map((item, index) => (
@@ -97,7 +72,7 @@ export const AdminDashboard = () => {
             ))}
           </Grid>
 
-          {/* Chart and Table Section */}
+          {/* Bar Chart + Table */}
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
               <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
@@ -156,7 +131,7 @@ export const AdminDashboard = () => {
             </Grid>
           </Grid>
 
-          {/* Recently Drafted Section */}
+          {/* Recently Drafted */}
           <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
             <CardContent>
               <Typography variant="h6" fontWeight={600} gutterBottom>

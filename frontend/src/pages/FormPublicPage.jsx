@@ -34,7 +34,7 @@ export const FormPublicPage = () => {
     {
       title: 'Student Cumulative Information Sheet',
       desc: 'Collects cumulative academic and personal data.',
-      id: 'cumulative',
+      id: 'student-cumulative-information-file',
       bg: 'white',
     },
     {

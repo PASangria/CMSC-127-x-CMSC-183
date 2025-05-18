@@ -92,7 +92,7 @@ function App() {
           }
         />
         <Route
-          path="/forms/basic-information-sheet-display"
+          path="/submitted-forms/basic-information-sheet"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <BISProfilePage />

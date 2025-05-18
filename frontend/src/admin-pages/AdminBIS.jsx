@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/UIButton';
 import DefaultLayout from '../components/DefaultLayout';
 import "./css/studentList.css";
+import { formatDate } from '../utils/helperFunctions';
 
 export const AdminBISList = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const AdminBISList = () => {
         
         if (res.ok) {
           const data = await res.json();
-          setSubmissions(data); // Save submissions, not just students
+          setSubmissions(data);
         } else {
           throw new Error('Failed to fetch BIS students');
         }
@@ -55,8 +56,8 @@ export const AdminBISList = () => {
             <thead>
               <tr>
                 <th>Student Name</th>
-                <th>Year-Degree Program</th>
-                <th>UP Mail</th>
+                <th>Date Submitted</th>
+                <th>Year - Degree Program</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -67,7 +68,7 @@ export const AdminBISList = () => {
                   return (
                     <tr key={student.student_number}>
                       <td data-label="Student Name">{student.first_name} {student.last_name}</td>
-                      <td data-label="Date Submitted">{submission.submitted_on}</td>
+                      <td data-label="Date Submitted">{formatDate(submission.submitted_on)}</td>
                       <td data-label="Year-Degree Program">{student.current_year_level} - {student.degree_program}</td>
                       <td data-label="Actions">
                         <Button variant="secondary" onClick={() => handleViewStudent(student)}>

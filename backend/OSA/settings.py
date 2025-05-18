@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'djoser',
     'users',
     'forms',
+    'analytics',
 ]
 
 MIDDLEWARE = [

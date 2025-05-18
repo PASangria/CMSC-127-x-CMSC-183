@@ -34,6 +34,8 @@
   box-sizing: border-box;
   transition: border-color 0.3s ease, padding-top 0.3s ease;
   appearance: none;
+  /* Space at the top */
+  padding-top: 10px;
 }
 
 /* --- Floating Label Behavior for Focus or Filled --- */
@@ -65,14 +67,6 @@
 .form-group select:focus {
   border-color: #1976D2;
   outline: none;
-}
-
-/* --- Select Arrow Icon Styling --- */
-.form-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2rem;
 }
 
 /* --- Error Styles --- */
@@ -113,51 +107,30 @@
   grid-column: span 2;
 }
 
-/* Container for the radio form */
-.radio-form {
-  margin: 20px 0;
-}
-
-.radio-form .form-label {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-  color: #333;
-}
-
-/* Group for the radio buttons */
-.radio-group {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-/* Styling for each radio button label */
-.radio-label {
+/* Textarea field styling: ensures overflow goes downwards and cursor starts at top left */
+.custom-form-row .custom-form-group textarea.custom-form-input {
+  width: 100%;
+  padding: 10px;
   font-size: 1rem;
-  font-weight: normal;
-  color: #555;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical; /* Allow resizing vertically */
+  min-height: 100px; /* Minimum height for the textarea */
+  height: auto; /* Allow textarea to grow in height */
+  overflow-y: auto; /* Show a scrollbar only when content exceeds the visible area */
+  text-align: left; /* Align text to the left */
+  vertical-align: top; /* Align text vertically to the top */
+  padding-top: 10px; /* Ensure enough space at the top for the cursor */
+  box-sizing: border-box;
 }
 
-/* Styling for the radio input */
-.radio-label input[type='radio'] {
-  margin-right: 8px; 
-  cursor: pointer;
-}
-
-
-/* Custom form row to ensure layout spacing */
+/* --- Form Rows (Grid Layout) --- */
 .custom-form-row {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Custom form group to separate the fields */
 .custom-form-row .custom-form-group {
   display: flex;
   flex-direction: column;
@@ -176,27 +149,4 @@
   margin-top: 5px;
   text-align: left; /* Align text to the left */
   vertical-align: top; /* Align text vertically to the top */
-}
-
-/* Textarea field styling: ensures overflow goes downwards and cursor starts at top left */
-.custom-form-row .custom-form-group textarea.custom-form-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  resize: vertical; /* Allow resizing vertically */
-  min-height: 100px; /* Minimum height for the textarea */
-  height: auto; /* Allow textarea to grow in height */
-  overflow-y: auto; /* Show a scrollbar only when content exceeds the visible area */
-  text-align: left; /* Align text to the left */
-  vertical-align: top; /* Align text vertically to the top */
-  padding-top: 10px; /* Ensure enough space at the top for the cursor */
-  box-sizing: border-box;
-}
-
-/* Ensure focus remains at the top-left of the textarea when user starts typing */
-.custom-form-row .custom-form-group textarea.custom-form-input:focus {
-  outline: none; /* Remove default outline */
-  border-color: #4CAF50; /* Change border color when focused */
 }
