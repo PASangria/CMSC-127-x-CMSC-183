@@ -92,11 +92,21 @@
 
 /* Secondary: #9C27B0 */
 .btn-secondary {
+  background-color: #505050;
+  color: #FFFFFF;
+  border: 1px solid #ccc;
+}
+.btn-secondary:hover {
+  background-color: #6b6b6b;
+}
+
+/* Tertiary: #9C27B0 */
+.btn-tertiary {
   background-color: #E0E0E0;
   color: #303030;
   border: 1px solid #ccc;
 }
-.btn-secondary:hover {
+.btn-tertiary:hover {
   background-color: #a8a8a8;
 }
 

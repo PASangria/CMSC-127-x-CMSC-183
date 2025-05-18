@@ -6,11 +6,11 @@ import DefaultLayout from '../components/DefaultLayout';
 
 const BISProfilePage = () => {
   const { getFormBundle } = useFormApi();
-  const { profileData } = useContext(AuthContext); // Get profile data from AuthContext
+  const { profileData } = useContext(AuthContext); 
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const form_type = "basic-information-sheet"; // Assuming this is static for now
+  const form_type = "basic-information-sheet"; 
 
   useEffect(() => {
     const loadData = async () => {

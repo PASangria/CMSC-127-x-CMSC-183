@@ -1,17 +1,20 @@
 import React from 'react';
 import '../SetupProfile/css/multistep.css';
 
-const BISCertify = ({ data, updateData, showError }) => {
+const BISCertify = ({ data, updateData, showError, readOnly = false }) => {
   const hasConsented = data?.privacy_consent?.has_consented || false;
 
   const handleChange = (e) => {
+    if (readOnly) return;
+
     const isChecked = e.target.checked;
     updateData(isChecked);
   };
 
   return (
     <div className="form-section">
-      <h2 className="form-title">Privacy Statement</h2>
+      <fieldset className="form-section" disabled={readOnly}>
+      <h2 className="step-title">Privacy Statement</h2>
 
       <p className="privacy-description">
         The University of the Philippines takes your privacy seriously and we are committed to protecting your personal information.
@@ -49,6 +52,7 @@ const BISCertify = ({ data, updateData, showError }) => {
           </div>
         )}
       </div>
+      </fieldset>
     </div>
   );
 };

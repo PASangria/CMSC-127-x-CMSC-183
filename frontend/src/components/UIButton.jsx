@@ -5,6 +5,7 @@ const Button = ({ children, onClick, type = 'button', variant = 'primary', ...pr
   const variantClass = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
+    tertiary: 'btn-tertiary',
     danger: 'btn-danger',
   }[variant] || 'btn-primary';
 
