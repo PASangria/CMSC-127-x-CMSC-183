@@ -13,41 +13,85 @@ import {
 import DraftsIcon from '@mui/icons-material/Drafts';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
+import DefaultLayout from '../components/DefaultLayout';
+import StatCard from '../components/StatCard';
+import GroupedBarChart from '../components/GroupedBarChart';
+import GridTable from '../components/GridTable';
+
+
+// Dummy data for bar chart
+const barData = [
+  { name: 'BSCS', Female: 90, Male: 80 },
+  { name: 'BACMA', Female: 85, Male: 70 },
+  { name: 'BSAM', Female: 70, Male: 50 },
+  { name: 'BAE', Female: 60, Male: 40 },
+  { name: 'DSES', Female: 20, Male: 15 },
+  { name: 'BSDS', Female: 20, Male: 15 },
+  { name: 'AASS', Female: 20, Male: 15 },
+  { name: 'BSB', Female: 20, Male: 15 },
+  { name: 'DSES', Female: 20, Male: 15 },
+];
+
+const now = new Date();
+const todayFormatted = now.toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+});
+
+// Updated Stat Cards Summary Data
+const summaryData = [
+  {
+    title: 'Total Number of Students',
+    value: '1,245',
+    trend: 'up',
+    interval: `Registered users as of ${todayFormatted}`,
+    data: [0, 5, 8, 12, 15, 22, 30, 35, 38, 40, 45], // Add more if needed; StatCard handles padding
+  },
+  {
+    title: 'SCIF Submissions',
+    value: '320',
+    trend: 'neutral',
+    interval: `SCIF Submissions This Month (recent - ${todayFormatted})`,
+    data: [5, 10, 20, 30, 50, 70, 110],
+  },
+  {
+    title: 'BIS Submissions',
+    value: '210',
+    trend: 'down',
+    interval: `BIS Submissions This Month (recent - ${todayFormatted})`,
+    data: [15, 18, 20, 25, 20, 15, 10],
+  },
+];
+
+const recentDraftColumns = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'formType', headerName: 'Form Type', flex: 1 },
+  { field: 'student', headerName: 'Student Name', flex: 1 },
+];
+
+const recentDraftRows = [...Array(4)].map((_, i) => ({
+  id: i + 1,
+  formType: `Form Type ${i + 1}`,
+  student: `Student Name`,
+}));
+
+const recentSubmissionColumns = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'submittedBy', headerName: 'Submitted By', flex: 1 },
+  { field: 'date', headerName: 'Date', flex: 1 },
+  { field: 'formType', headerName: 'Form Type', flex: 1 },
+];
+
+const recentSubmissionRows = [
+  { id: 1, submittedBy: 'Juan Dela Cruz', date: '2025-05-01', formType: 'SCIF' },
+  { id: 2, submittedBy: 'Maria Clara', date: '2025-05-02', formType: 'BIS' },
+  { id: 3, submittedBy: 'Pedro Penduko', date: '2025-05-03', formType: 'SCIF' },
+  { id: 4, submittedBy: 'Luna Lovegood', date: '2025-05-04', formType: 'BIS' },
+];
+
 export const AdminDashboard = () => {
-  const { user, role, loading } = useContext(AuthContext);
-
-  const [barData, setBarData] = useState([]);
-  const [summaryData, setSummaryData] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (role !== 'admin') return;
-
-    const fetchDashboardData = async () => {
-      try {
-        const barRes = await apiRequest('http://localhost:8000/api/dashboard/bar-data');
-        const summaryRes = await apiRequest('http://localhost:8000/api/dashboard/summary/');
-
-        const barJson = await barRes.json();
-        const summaryJson = await summaryRes.json();
-
-        console.log('Bar data:', barJson);
-        console.log('Summary data:', summaryJson);
-
-        if (Array.isArray(barJson)) setBarData(barJson);
-        if (summaryJson?.summary) setSummaryData(summaryJson.summary);
-      } catch (err) {
-        setError('Failed to fetch dashboard data.');
-        console.error('Dashboard fetch error:', err);
-      }
-    };
-
-    fetchDashboardData();
-  }, [role]);
-
-  if (loading) return <Typography variant="h6">Loading...</Typography>;
-  if (role !== 'admin') return <Navigate to="/" replace />;
-  if (!user) return <Navigate to="/" replace />;
+  const { user } = useContext(AuthContext);
+turn <Navigate to="/" replace />;
 
   return (
     <DefaultLayout variant="admin">
@@ -64,92 +108,53 @@ export const AdminDashboard = () => {
           )}
 
           {/* Summary Cards */}
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             {summaryData.map((item, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item xs={12} sm={12} md={6} key={index}>
                 <StatCard {...item} />
               </Grid>
             ))}
           </Grid>
 
-          {/* Bar Chart + Table */}
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
-                <CardContent>
-                  <Typography variant="h6" fontWeight={600} gutterBottom>
-                    Students per Degree Program
-                  </Typography>
-                  <Box sx={{ height: 300 }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={barData}>
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="Female" fill="#FF7F00" radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="Male" fill="#11073D" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </Box>
-                </CardContent>
-              </Card>
+          {/* Chart and Recent Submissions */}
+            <Grid item xs={24} md={8}>
+              <GroupedBarChart
+                data={barData}
+                keys={['Female', 'Male']}
+                xKey="name"
+                title="Students per Degree Program"
+                totalValue="1,245"
+                trendLabel="+3.2%"
+                trendColor="success"
+                subtitle="Enrollment per program as of May 2025"
+              />
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={600} gutterBottom>
                     Recent Submissions
                   </Typography>
-                  <TableContainer component={Paper} elevation={0}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Submitted by</TableCell>
-                          <TableCell>Date</TableCell>
-                          <TableCell>Form</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {[...Array(4)].map((_, i) => (
-                          <TableRow key={i}>
-                            <TableCell>Student {i + 1}</TableCell>
-                            <TableCell>2024-0{i + 1}-15</TableCell>
-                            <TableCell>
-                              <Button size="small" variant="outlined">
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                  <Divider sx={{ mb: 2 }} />
+                  <GridTable
+                    rows={recentSubmissionRows}
+                    columns={recentSubmissionColumns}
+                  />
                 </CardContent>
-              </Card>
             </Grid>
-          </Grid>
 
           {/* Recently Drafted */}
-          <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+
             <CardContent>
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Recently Drafted
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              <List dense>
-                {[...Array(4)].map((_, i) => (
-                  <ListItem key={i}>
-                    <ListItemIcon>
-                      <DraftsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={`Form Type ${i + 1} : Student Name`} />
-                  </ListItem>
-                ))}
-              </List>
+              <GridTable
+                rows={recentDraftRows}
+                columns={recentDraftColumns}
+              />
             </CardContent>
-          </Card>
         </Stack>
       </Box>
     </DefaultLayout>
