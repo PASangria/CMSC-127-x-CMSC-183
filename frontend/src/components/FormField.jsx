@@ -9,11 +9,18 @@ const FormField = ({
   name,
   required,
   error,
-  options, // for select fields
+  options,
   disabled,
+  helperText,
   ...rest
 }) => {
   const isFilled = value && value.toString().trim().length > 0;
+
+  const handleFocus = (e) => {
+    if (e.target.setSelectionRange) {
+      e.target.setSelectionRange(0, 0); // Set cursor at the beginning of the textarea
+    }
+  };
 
   return (
     <div className={`form-group ${error ? 'error' : ''}`}>
@@ -34,6 +41,16 @@ const FormField = ({
             </option>
           ))}
         </select>
+      ) : type === 'textarea' ? (
+        <textarea
+          value={value}
+          onChange={onChange}
+          name={name}
+          required={required}
+          className={`form-input ${isFilled ? 'filled' : ''}`}
+          onFocus={handleFocus} // Ensure focus is at the start of the textarea
+          {...rest}
+        />
       ) : (
         <input
           type={type}
@@ -47,6 +64,7 @@ const FormField = ({
       )}
       <label className={isFilled ? 'active' : ''}>{label} {required && '*'}</label>
       {error && <div className="error-message">This field is required</div>}
+      {helperText && <small className="helper-text">{helperText}</small>}
     </div>
   );
 };

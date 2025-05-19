@@ -34,6 +34,8 @@
   box-sizing: border-box;
   transition: border-color 0.3s ease, padding-top 0.3s ease;
   appearance: none;
+  /* Space at the top */
+  padding-top: 10px;
 }
 
 /* --- Floating Label Behavior for Focus or Filled --- */
@@ -67,14 +69,6 @@
   outline: none;
 }
 
-/* --- Select Arrow Icon Styling --- */
-.form-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2rem;
-}
-
 /* --- Error Styles --- */
 .form-group.error .form-input,
 .form-group.error select {
@@ -104,5 +98,55 @@
 }
 
 .form-row.three-columns {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.span-two-columns {
+  grid-column: span 2;
+}
+
+/* Textarea field styling: ensures overflow goes downwards and cursor starts at top left */
+.custom-form-row .custom-form-group textarea.custom-form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical; /* Allow resizing vertically */
+  min-height: 100px; /* Minimum height for the textarea */
+  height: auto; /* Allow textarea to grow in height */
+  overflow-y: auto; /* Show a scrollbar only when content exceeds the visible area */
+  text-align: left; /* Align text to the left */
+  vertical-align: top; /* Align text vertically to the top */
+  padding-top: 10px; /* Ensure enough space at the top for the cursor */
+  box-sizing: border-box;
+}
+
+/* --- Form Rows (Grid Layout) --- */
+.custom-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.custom-form-row .custom-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Style for input fields */
+.custom-form-row .custom-form-group input.custom-form-input,
+.custom-form-row .custom-form-group select.custom-form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  text-align: left; /* Align text to the left */
+  vertical-align: top; /* Align text vertically to the top */
 }

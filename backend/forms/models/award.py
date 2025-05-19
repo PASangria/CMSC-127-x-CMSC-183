@@ -18,7 +18,7 @@ class CollegeAward(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     award = models.ForeignKey('Award', on_delete=models.CASCADE)
     semester = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=SemesterEnum.choices
     )
     academic_year = models.CharField(

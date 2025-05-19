@@ -6,15 +6,23 @@ import BISSocioeconomic from './BISSocioeconomic';
 import BISPreferences from './BISPreferences';
 import BISPresentScholastic from './BISPresentScholastic';
 import BISCertify from './BISCertify';
+import BISPreview from './BISPreview';
 import ProgressBar from '../../components/ProgressBar';
 import Navbar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import '../SetupProfile/css/multistep.css';
 import {  useFormApi } from './BISApi';
+import {
+  validatePreferences,
+  validateScholasticStatus, 
+  validateSocioEconomicStatus,
+  validateSupport
+} from '../../utils/BISValidation'
 
 const BISForm = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
   const {
     createDraftSubmission,
     getFormBundle,
@@ -24,6 +32,7 @@ const BISForm = () => {
 
   const [formData, setFormData] = useState({
     socio_economic_status: {
+      student_number: '',
       has_scholarship: false,
       scholarships: '',
       scholarship_privileges: '',
@@ -31,12 +40,14 @@ const BISForm = () => {
       spending_habit: '',
     },
     scholastic_status: {
+      student_number: '',
       intended_course: '',
       first_choice_course: '',
       admitted_course: '',
       next_plan: '',
     },
     preferences: {
+      student_number: '',
       influence: '',
       reason_for_enrolling: '',
       transfer_plans: false,
@@ -46,32 +57,55 @@ const BISForm = () => {
       reason_for_shifting: '',
     },
     student_support: {
+      student_number: '',
       support: [],
       other_notes: '',
       other_scholarship: '',
       combination_notes: '',
     },
-    certify: false,
+    privacy_consent: {
+      student_number: '',
+      has_consented: false
+    }
   });
 
   const [step, setStep] = useState(0);
   const [submissionId, setSubmissionId] = useState(null);
   const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
 
-  // Loading and error states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetching form data
+  const validateStep = (step, formData) => {
+  switch (step) {
+    case 1: 
+      const errors = [
+      ...validateSocioEconomicStatus(formData),
+      ...validateSupport(formData)
+    ];
+
+    return errors;
+    case 2: return validatePreferences(formData);
+    case 3: return validateScholasticStatus(formData);
+     case 4:
+      if (!formData.privacy_consent.has_consented) {
+        alert('You must agree to the Privacy Notice to proceed.');
+        return false; 
+      }
+      return true; 
+    default:
+      return true;
+  }
+};
+
+
 useEffect(() => {
   const fetchFormData = async () => {
     setLoading(true);
     try {
       let response = await getFormBundle(studentNumber);
 
-      // If no submission yet, create one
       if (!response) {
-        alert('No submission found. Creating a new one...');
         response = await createDraftSubmission(studentNumber);
       }
 
@@ -81,7 +115,7 @@ useEffect(() => {
           scholastic_status: response.scholastic_status || {},
           preferences: response.preferences || {},
           student_support: response.student_support || {},
-          certify: response.certify || false,
+          privacy_consent: response.privacy_consent || false,
         });
         setSubmissionId(response.submission.id);
       } else {
@@ -106,9 +140,11 @@ const handleSaveDraft = async () => {
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
+    console.log(formData)
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
+      console.log(response)
       alert('Error saving draft.');
     }
   } catch (err) {
@@ -119,30 +155,56 @@ const handleSaveDraft = async () => {
 };
 
   // Handle navigation between steps
-  const handleNextStep = () => setStep((prev) => prev + 1);
+  const handleNextStep = () => {
+    const errors = validateStep(step, formData);
+
+    if (errors.length > 0) {
+      alert("Please fix the following errors:\n\n" + errors.join("\n"));
+      return;
+    }
+
+    setStep(prev => prev + 1);
+  };
+  
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
-  // Submit form
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const data = {
-        ...formData,
-        submission: submissionId,
-        student_number: studentNumber,
-      };
-      const response = await finalizeSubmission(data);
-      if (response) {
-        alert('Form submitted successfully!');
-      } else {
-        alert('Error submitting form.');
-      }
-    } catch (err) {
-      alert('Failed to submit form.');
-    } finally {
-      setLoading(false);
-    }
+  const handlePreview = () => {
+    setIsPreviewOpen(true);
   };
+
+
+const handleSubmit = async () => {
+  if (!formData?.privacy_consent?.has_consented) {
+    alert('You must agree to the Privacy Statement to submit the form.');
+    return; 
+  }
+
+  setLoading(true);
+  try {
+    const result = await finalizeSubmission(submissionId, studentNumber, formData);
+
+    if (result.success) {
+      alert(result.data.message || 'Form submitted successfully!');
+    } else {
+      // Handle specific error messages based on response
+      if (result.status === 400 && result.data.errors) {
+        alert('Validation errors:\n' + JSON.stringify(result.data.errors, null, 2));
+      } else if (result.data.error) {
+        alert(`Error: ${result.data.error}`);
+      } else if (result.data.message) {
+        alert(`Error: ${result.data.message}`);
+      } else {
+        alert('Unknown error occurred.');
+      }
+    }
+  } catch (err) {
+    alert('Failed to submit form.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <>
@@ -205,11 +267,14 @@ const handleSaveDraft = async () => {
               )}
               {step === 4 && (
                 <BISCertify
-                  data={formData.certify}
-                  updateData={(newData) =>
+                  data={formData}
+                  updateData={(isChecked) =>
                     setFormData((prev) => ({
                       ...prev,
-                      certify: newData,
+                      privacy_consent: {
+                        ...prev.privacy_consent,
+                        has_consented: isChecked, 
+                      },
                     }))
                   }
                 />
@@ -230,9 +295,21 @@ const handleSaveDraft = async () => {
                   </button>
                 )}
                 {step === 4 && !loading && (
-                  <button className="btn-submit" onClick={handleSubmit}>
-                    Submit
-                  </button>
+                  <>
+                    <button className="btn-primary" onClick={handlePreview}>
+                      Preview
+                    </button>
+                    {isPreviewOpen && (
+                      <BISPreview
+                        profileData={profileData}  
+                        formData={formData}
+                        onClose={() => setIsPreviewOpen(false)}
+                      />
+                    )}
+                    <button className="btn-submit" onClick={handleSubmit}>
+                      Submit
+                    </button>
+                  </>
                 )}
                 {loading && <div>Loading...</div>}
                 {error && <div className="error-message">{error}</div>}

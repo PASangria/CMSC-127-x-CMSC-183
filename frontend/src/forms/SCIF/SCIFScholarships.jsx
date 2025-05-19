@@ -1,20 +1,24 @@
 import React from 'react';
-import '../SetupProfile/css/multistep.css';
+import FormField from '../../components/FormField'; // Assuming FormField is in the same directory
 
 const SCIFScholarships = ({ data, updateData }) => {
+  const handleChange = (newValue) => {
+    // Update the formData with the new value from the textarea
+    updateData({ scholarships_and_assistance: newValue });
+  };
+
   return (
     <div className="form-section">
       <h2 className="step-title">List of Scholarships & Financial Assistance While in College</h2>
 
-      <div className="form-group full-width">
-        <label>List your Scholarship/s and Financial Assistance here:</label>
-        <textarea
-          className="large-textarea"
-          value={data || ''}
-          onChange={(e) => updateData(e.target.value)}
-          placeholder="Scholarship..."
-        ></textarea>
-      </div>
+      <FormField
+        label="List your Scholarship/s and Financial Assistance here:"
+        type="textarea"
+        value={data.scholarships_and_assistance || ''}
+        onChange={(e) => handleChange(e.target.value)}
+        required={false}
+        helperText="Please include any scholarships, financial aid, or other assistance you are receiving. Please skip if none."
+      />
     </div>
   );
 };

@@ -1,37 +1,17 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { apiRequest } from '../utils/apiUtils';
+import DefaultLayout from '../components/DefaultLayout';
+import StatCard from '../components/StatCard';
 import {
-  Box,
-  Stack,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Button,
-  Divider
+  Box, Stack, Typography, Grid, Card, CardContent,
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Button, Divider,
+  List, ListItem, ListItemIcon, ListItemText
 } from '@mui/material';
 import DraftsIcon from '@mui/icons-material/Drafts';
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend
-} from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 import DefaultLayout from '../components/DefaultLayout';
 import StatCard from '../components/StatCard';
@@ -111,7 +91,7 @@ const recentSubmissionRows = [
 
 export const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
-  if (!user) return <Navigate to="/" replace />;
+turn <Navigate to="/" replace />;
 
   return (
     <DefaultLayout variant="admin">
@@ -120,6 +100,12 @@ export const AdminDashboard = () => {
           <Typography variant="h5" fontWeight="bold">
             Welcome, {user.email}
           </Typography>
+
+          {error && (
+            <Typography color="error" variant="body1">
+              {error}
+            </Typography>
+          )}
 
           {/* Summary Cards */}
           <Grid container spacing={4}>
@@ -158,6 +144,7 @@ export const AdminDashboard = () => {
             </Grid>
 
           {/* Recently Drafted */}
+
             <CardContent>
               <Typography variant="h6" fontWeight={600} gutterBottom>
                 Recently Drafted

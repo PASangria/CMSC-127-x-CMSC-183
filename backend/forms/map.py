@@ -23,7 +23,7 @@ FORM_SECTIONS_MAP = {
         'scholastic_status': (PresentScholasticStatus, PresentScholasticStatusSerializer),
         'privacy_consent': (PrivacyConsent, PrivacyConsentSerializer)
     },
-    'student-cumulative-information-sheet': {
+    'student-cumulative-information-file': {
         'siblings': (Sibling, SiblingSerializer),
         'family_data': (FamilyData, FamilyDataSerializer),
         'health_data': (HealthData, HealthDataSerializer),
@@ -38,10 +38,10 @@ FORM_SECTIONS_MAP = {
 
 FORM_TYPE_SLUG_MAP = {
     'basic-information-sheet': 'Basic Information Sheet',
-    'student-cumulative-information-sheet': 'Student Cumulative Information Sheet'
+    'student-cumulative-information-file': 'Student Cumulative Information File'
 }
 
 FORM_TYPE_UNSLUG_MAP = {
     'Basic Information Sheet': 'basic-information-sheet',
-    'Student Cumulative Information Sheet': 'student-cumulative-information-sheet'
+    'Student Cumulative Information File': 'student-cumulative-information-file'
 }
