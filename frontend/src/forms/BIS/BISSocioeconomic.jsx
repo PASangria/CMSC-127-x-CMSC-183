@@ -12,47 +12,49 @@ const SupportChoices = {
   GOV_FUNDED: 'gov_funded',
 };
 
-const BISSocioeconomic = ({ data, updateData }) => {
+const BISSocioeconomic = ({ data, updateData,  readOnly = false }) => {
   const handleChange = (e, section) => {
-  const { name, type, value, checked } = e.target;
+    if (readOnly) return;
 
-  // Convert "true"/"false" string to boolean
-  const parsedValue =
-    type === 'radio' && (value === 'true' || value === 'false')
-      ? value === 'true'
-      : value;
+    const { name, type, value, checked } = e.target;
 
-  if (type === 'checkbox' && section === 'student_support') {
-    const updatedSupport = new Set(data[section].support || []);
+    const parsedValue =
+      type === 'radio' && (value === 'true' || value === 'false')
+        ? value === 'true'
+        : value;
 
-    if (checked) {
-      updatedSupport.add(name);
+    if (type === 'checkbox' && section === 'student_support') {
+      const updatedSupport = new Set(data[section].support || []);
+
+      if (checked) {
+        updatedSupport.add(name);
+      } else {
+        updatedSupport.delete(name);
+      }
+
+      updateData({
+        ...data,
+        [section]: {
+          ...data[section],
+          support: Array.from(updatedSupport),
+        },
+      });
     } else {
-      updatedSupport.delete(name);
+      updateData({
+        ...data,
+        [section]: {
+          ...data[section],
+          [name]: parsedValue,
+        },
+      });
     }
-
-    updateData({
-      ...data,
-      [section]: {
-        ...data[section],
-        support: Array.from(updatedSupport),
-      },
-    });
-  } else {
-    updateData({
-      ...data,
-      [section]: {
-        ...data[section],
-        [name]: parsedValue,
-      },
-    });
-  }
-};
+  };
 
 
 
   return (
     <div className="form-section">
+    <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Socio-Economic Status</h2>
 
       <label className="form-label">What is your means of support for your college education?</label>
@@ -75,7 +77,6 @@ const BISSocioeconomic = ({ data, updateData }) => {
           </label>
         ))}
 
-        {/* Scholarship + text input */}
         <label className="inline-checkbox">
           <input
             type="checkbox"
@@ -217,6 +218,7 @@ const BISSocioeconomic = ({ data, updateData }) => {
           onChange={(e) => handleChange(e, 'socio_economic_status')}
         />
       </div>
+      </fieldset>
     </div>
   );
 };

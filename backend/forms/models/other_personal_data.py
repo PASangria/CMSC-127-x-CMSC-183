@@ -92,7 +92,7 @@ class CounselingInformation(models.Model):
     problem_confidant = models.CharField(max_length=100, verbose_name="To whom do you open-up your problems?", null=True, blank=True)
     confidant_reason = models.TextField(verbose_name="Why?", null=True, blank=True)
     anticipated_problems = models.TextField(verbose_name="Any problem that you might encounter later while in UP?", null=True, blank=True)
-    previous_counseling = models.BooleanField(default=False, verbose_name="Any previous counseling?")
+    previous_counseling = models.BooleanField(null=True, blank=True, default=False, verbose_name="Any previous counseling?")
     counseling_location = models.CharField(max_length=100, null=True, blank=True, verbose_name="If yes, where?")
     counseling_reason = models.TextField(null=True, blank=True, verbose_name="Why?")
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
@@ -111,7 +111,8 @@ class CounselingInformation(models.Model):
                 'personal_characteristics': 'required',
                 'problem_confidant': 'required',
                 'confidant_reason': 'required',
-                'anticipated_problems': 'required'
+                'anticipated_problems': 'required',
+                'previous_counseling': 'required'
             }
 
             check_required_fields(self, required_fields, self.submission.status)

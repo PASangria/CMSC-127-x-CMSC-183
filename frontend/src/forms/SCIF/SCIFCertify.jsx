@@ -1,16 +1,19 @@
 import React from 'react';
 import '../SetupProfile/css/multistep.css';
 
-const SCIFCertify = ({ data, updateData, showError }) => {
+const SCIFCertify = ({ data, updateData, showError, readOnly = false}) => {
   const hasConsented = data?.privacy_consent?.has_consented || false;
 
   const handleChange = (e) => {
+    if (readOnly) return;
+
     const isChecked = e.target.checked;
     updateData(isChecked);
   };
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="form-title">Privacy Statement</h2>
 
       <p className="privacy-description">
@@ -49,6 +52,7 @@ const SCIFCertify = ({ data, updateData, showError }) => {
           </div>
         )}
       </div>
+      </fieldset>
     </div>
   );
 };

@@ -20,7 +20,6 @@
 .navbar,
 .footer {
   position: relative;
-  z-index: 10;
 }
 
 /* ===== FORM LAYOUT ===== */
@@ -30,7 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
+  z-index: 1;
 }
 
 .main-form-info {
@@ -40,7 +39,6 @@
 .main-form-title,
 .main-form-subtitle {
   position: relative;
-  z-index: 1;
   text-align: center;
   color: #FFFFFF;
 }
@@ -48,9 +46,22 @@
 .step-title {
   color: #7B1113;
   font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.25em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25em;
 }
+
+.step-info {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+fieldset {
+  border: none; 
+  padding: 0; 
+  margin: 0; 
+  background: none;
+}
+
 
 /* ===== FORM CARD ===== */
 .main-form-card {
@@ -61,15 +72,15 @@
   box-sizing: border-box;
   box-shadow: 0px 0px 0.625em rgba(0, 0, 0, 0.1);
   margin: 0 auto;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* ===== FORM INPUTS & LABELS ===== */
 .form-section {
   padding: 2rem;
-  background-color: #fdfdfd;
+  /* background-color: #fdfdfd;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
 }
 
 .form-label {
@@ -164,6 +175,11 @@ textarea:focus {
   vertical-align: middle;
 }
 
+.step-button-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 
 
 /* Grid layout for dual inputs */
@@ -192,40 +208,18 @@ textarea:focus {
   gap: 1em;
   margin-top: 1.25em;
 }
-/* 
-.btn-primary, */
-/* .btn-secondary {
-  width: 5.25em;
-  height: 2.625em;
-  font-family: 'Roboto';
-  font-size: 0.9375em;
-  line-height: 1.625em;
-  text-transform: uppercase;
-  border-radius: 0.9375em;
-  color: #fff;
-  box-shadow: 0px 0.0625em 0.3125em rgba(0, 0, 0, 0.12),
-              0px 0.125em 0.125em rgba(0, 0, 0, 0.14),
-              0px 0.1875em 0.0625em -0.125em rgba(0, 0, 0, 0.2);
-}
-
-.btn-primary {
-  background: #1976D2;
-} */
-/* 
-.btn-secondary {
-  background: #7E7E7E;
-} */
 
 /* ===== MODAL ===== */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 101;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  overflow-y: hidden;
 }
 
 .modal-content {
@@ -233,21 +227,36 @@ textarea:focus {
   padding: 2rem;
   border-radius: 8px;
   max-height: 70vh;
+  z-index: 4;
   overflow-y: auto;
   width: 100%;
   max-width: 700px;
   position: relative;
 }
 
-.modal-close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #333;
-  z-index: 1;
+.modal-close {
+    position: fixed;
+    padding: 0.3rem;
+    border: none;
+    cursor: pointer;
+    color: #4e4e4e;
+    background: transparent;
+    z-index: 20;
+    right: 9em;
+    bottom: 10.4em;
+    font-size: 3em;
+    border-radius: 1em;
+    scrollbar-width: 0;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+}
+
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-content .step-title, .modal-content .step-info {
+  align-items: center;
 }
 
 /* ===== CHECKBOX GRID ===== */
@@ -256,7 +265,6 @@ textarea:focus {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem 2rem;
   margin: 2rem;
-  padding-left: 5em;
 }
 
 .inline-checkbox {
@@ -296,12 +304,6 @@ textarea:focus {
   .main-form-title { font-size: 1.75em; }
   .main-form-subtitle { font-size: 1em; }
 
-  /* .btn-primary, .btn-secondary {
-    width: 4.375em;
-    height: 2.1875em;
-    font-size: 0.875em;
-  } */
-
   .main-form-buttons {
     gap: 0.625em;
     flex-direction: column;
@@ -333,12 +335,6 @@ textarea:focus {
   .main-form-card {
     padding: 1em;
   }
-
-  /* .btn-primary, .btn-secondary {
-    width: 3.75em;
-    height: 1.875em;
-    font-size: 0.75em;
-  } */
 
   .main-form-buttons {
     gap: 0.5em;

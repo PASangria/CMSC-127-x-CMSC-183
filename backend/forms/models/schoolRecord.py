@@ -7,19 +7,18 @@ from forms.utils.helperFunctions import check_required_fields
 from datetime import datetime
 
 class SchoolAddress(models.Model):
-    address_line_1 = models.TextField()
-    barangay = models.CharField(max_length=100)
-    city_municipality = models.CharField(max_length=100)
-    province = models.CharField(max_length=100)
-    region = models.CharField(max_length=100, choices=PhilippineRegionEnum.choices)
-    zip_code = models.CharField(max_length=10)
+    address_line_1 = models.TextField(blank=True, null=True)
+    barangay = models.CharField(max_length=100, blank=True, null=True)
+    city_municipality = models.CharField(max_length=100, blank=True, null=True)
+    province = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, choices=PhilippineRegionEnum.choices, blank=True, null=True)
+    zip_code = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return f'{self.address_line_1}, {self.barangay}, {self.city_municipality}, {self.province}, {self.region}'
 
-# Model for School
 class School(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True, null=True)
     school_address = models.ForeignKey(SchoolAddress, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

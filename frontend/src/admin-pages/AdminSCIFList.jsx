@@ -8,7 +8,7 @@ import "./css/studentList.css";
 import { formatDate } from '../utils/helperFunctions';
 import { AlignCenter } from 'react-feather';
 
-export const AdminBISList = () => {
+export const AdminSCIFList = () => {
   const navigate = useNavigate();
   const { request } = useApiRequest();
   const { role, loading, isAuthenticated } = useAuth();
@@ -20,13 +20,13 @@ export const AdminBISList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await request('http://localhost:8000/api/forms/admin/basic-information-sheet-submissions');
+        const res = await request('http://localhost:8000/api/forms/admin/student-cumulative-information-file-submissions');
         
         if (res.ok) {
           const data = await res.json();
           setSubmissions(data);
         } else {
-          throw new Error('Failed to fetch BIS students');
+          throw new Error('Failed to fetch SCIF submissions.');
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -52,7 +52,7 @@ export const AdminBISList = () => {
     <div>
       <DefaultLayout variant="admin">
         <div className="admin-student-list">
-          <h1>Basic Information Sheet</h1>
+          <h1>Student Cumulative Information File</h1>
           <h2 style={{textAlign: "center"}}>Submissions</h2>
           <table>
             <thead>
@@ -82,7 +82,7 @@ export const AdminBISList = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="4">No Basic Information Sheet submissions found.</td>
+                  <td colSpan="4">No Student Cumulative Information File submissions found.</td>
                 </tr>
               )}
             </tbody>

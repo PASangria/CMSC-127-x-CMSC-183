@@ -61,14 +61,13 @@ const DashboardTable = ({ submittedForms, pendingActions, onView, onDelete }) =>
         headers={submittedHeaders}
         rows={submittedForms}
         onView={onView}
-        // No onDelete here
       />
       <TableSection
         title="Pending Actions"
         headers={pendingHeaders}
         rows={pendingActions}
         onView={onView}
-        onDelete={onDelete} // Only pass it to pending section
+        onDelete={onDelete}
       />
     </div>
   );

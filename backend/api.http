@@ -152,7 +152,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 GET http://localhost:8000/api/forms/student-cumulative-information-file/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDY2MDYyLCJpYXQiOjE3NDc0NjI0NjIsImp0aSI6ImQzODZjOWYxYzZkODQ2YjBhMTgxYTdlNDRkYTdkOWMyIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.niltV61BMWgdewU-qwZAwegIWQodW9awvnVMhntCjlE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NjMwNDg2LCJpYXQiOjE3NDc2MjY4ODYsImp0aSI6ImM0OGY1YTI4YjQxMjQ0MTI4NjNjYWI3Y2VhNDA5ZjY3IiwidXNlcl9pZCI6Mywicm9sZSI6InN0dWRlbnQifQ.0azlncjFTc_OHSyIioKQ-aQ1t4tIx-384Kj42jSiLPE
 
 ###
 POST http://localhost:8000/api/forms/student-cumulative-information-sheet/ HTTP/1.1
@@ -456,34 +456,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 ###
 PATCH http://localhost:8000/api/forms/student-cumulative-information-file/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NDYzNDk0LCJpYXQiOjE3NDc0NTk4OTQsImp0aSI6IjdhY2YxNjJlZTk2MjRkYjFhNTQyOTJmZTVmOWU4MmRjIiwidXNlcl9pZCI6MjMsInJvbGUiOiJzdHVkZW50In0.GYh4lbJyNGyug6K9raAxdZMBhmtoI9WFJNDpgjcIDyQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3NTk3Njg0LCJpYXQiOjE3NDc1ODMwNDEsImp0aSI6ImZkMDA3ZGEwYThjYzRmOTFiNDc1ODllYjcyMTk2ZmI4IiwidXNlcl9pZCI6ODUsInJvbGUiOiJzdHVkZW50In0.5ncHvj0yhIhL4EBu7evIVYm-8SbRoJneJnCwv506gfg
 
 {
-    "previous_school_record": [
-    {
-    "id": 131,
-    "student_number": "2023-03844",
-    "school": {
-      "id": 128,
-      "name": "UP Mindanao Integrated School",
-      "school_address": {
-        "id": 128,
-        "address_line_1": "Quarry Road",
-        "barangay": "Bago Oshiro",
-        "city_municipality": "Davao City",
-        "province": "Davao del Sur",
-        "region": "Region XI - Davao Region",
-        "zip_code": "8000"
-      }
-    },
-    "education_level": "Senior High",
-    "start_year": 2021,
-    "end_year": 2023,
-    "honors_received": "With High Honors",
-    "senior_high_gpa": 93.25,
-    "submission": 1
+    "health_data": {
+      "weight": "83",
+      "student_number": "2023-12312"
     }
-  ]
 }
 
 ###

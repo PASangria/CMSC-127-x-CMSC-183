@@ -9,7 +9,7 @@ const BISPersonalData = ({ profileData }) => {
     return (
         <div className='form-container'>
             <h2 className='step-title'>Personal Data</h2>
-            <p>If you wish to update information in this section, please go to your profile and update it. </p>
+            <p className='step-info'>If you wish to update information in this section, please go to your profile and update it. </p>
             <div className='form-row'>
                 <div className='form-group'><DisplayField label="First Name" value={profileData.first_name} /></div>
                 <div className='form-group'><DisplayField label="Last Name" value={profileData.last_name} /></div>

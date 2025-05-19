@@ -2,23 +2,26 @@ import React from 'react';
 import FormField from '../../components/FormField';
 import '../SetupProfile/css/multistep.css';
 
-const SCIFOtherPersonalData = ({ data, updateData }) => {
+const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
   const { personality_traits, family_relationship, counseling_info } = data;
 
   const handleFieldChange = (section, field, value) => {
+    if (readOnly) return;
     updateData(section, { [field]: value });
   };
 
   const closestOptions = [
-    { value: 'father', label: 'Father' },
-    { value: 'mother', label: 'Mother' },
-    { value: 'brother', label: 'Brother(s)' },
-    { value: 'sister', label: 'Sister(s)' },
-    { value: 'other', label: 'Others (specify)' }
+    { value: 'Father', label: 'Father' },
+    { value: 'Mother', label: 'Mother' },
+    { value: 'Brother', label: 'Brother(s)' },
+    { value: 'Sister', label: 'Sister(s)' },
+    { value: 'Other', label: 'Others (specify)' }
   ];
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
+
       <h2 className="step-title">Other Personal Data</h2>
 
       {/* Personality Traits Fields */}
@@ -225,6 +228,7 @@ const SCIFOtherPersonalData = ({ data, updateData }) => {
           />
         </>
       )}
+      </fieldset>
     </div>
   );
 };

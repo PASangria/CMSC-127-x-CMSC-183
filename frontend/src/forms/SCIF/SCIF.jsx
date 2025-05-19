@@ -10,6 +10,7 @@ import SCIFPreviousSchoolRecord from './SCIFPreviousSchoolRecord';
 import SCIFScholarships from './SCIFScholarships';
 import SCIFOtherPersonalData from './SCIFOtherPersonalData';
 import SCIFCertify from './SCIFCertify';
+import SCIFPreview from './SCIFPreview';
 import '../SetupProfile/css/multistep.css';
 import { useApiRequest } from '../../context/ApiRequestContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -19,13 +20,13 @@ import {
   validateGuardian,
   validateSibling,
   validateHealthData,
-  validatePrivacyConsent,
   validatePreviousSchool,
   validatePersonalityTraits,
   validateFamilyRelationship,
   validateCounselingInfo
 } from '../../utils/SCIFValidation';
 import Loader from '../../components/Loader';
+import Button from '../../components/UIButton';
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -40,7 +41,7 @@ const SCIF = () => {
       const [step, setStep] = useState(0);
       const [submissionId, setSubmissionId] = useState(null);
       const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
-
+      const [readOnly, setReadOnly] = useState(false);
       const [loading, setLoading] = useState(false);
       const [error, setError] = useState(null);
       const [submissionStatus, setSubmissionStatus] = useState(null);
@@ -126,8 +127,8 @@ const SCIF = () => {
       weight: '',
       eye_sight: '',
       hearing: '',
-      physical_disabilities: '',
-      common_ailments: '',
+      physical_disabilities: [],
+      common_ailments: [],
       last_hospitalization: '',
       reason_of_hospitalization: '',
       submission: '',
@@ -173,7 +174,7 @@ const SCIF = () => {
     },
   });
 
-  const validateStep = (step, formData, submissionStatus) => {
+  const validateStep = (step, formData) => {
     switch (step) {
       case 2:
         const errors = [
@@ -186,14 +187,14 @@ const SCIF = () => {
       case 3:
           return validateHealthData(formData);
       case 4:
-          return validatePreviousSchool(formData);
+           return validatePreviousSchool(formData.previous_school_record);
       case 5:
         return true;
       case 6:
         const personalDataErrors = [
-          ...validatePersonalityTraits(formData),
-          ...validateFamilyRelationship(formData),
-          ...validateCounselingInfo(formData),
+          ...validatePersonalityTraits(formData.personality_traits),
+          ...validateFamilyRelationship(formData.family_relationship),
+          ...validateCounselingInfo(formData.counseling_info),
         ];
 
         if (personalDataErrors.length > 0) {
@@ -214,106 +215,110 @@ const SCIF = () => {
   };
  
   useEffect(() => {
-  const fetchFormData = async () => {
-    setLoading(true);
-    try {
-      let response = await getFormBundle(studentNumber);
+    const fetchFormData = async () => {
+      setLoading(true);
+      try {
+        let response = await getFormBundle(studentNumber);
 
-      if (!response) {
-        // Create draft submission if no form data exists
-        const submissionId = await createDraftSubmission(studentNumber);
+        if (!response) {
+          const submissionId = await createDraftSubmission(studentNumber);
 
-        if (submissionId) {
-          // Set the submissionId state after creation
-          response = await getFormBundle(studentNumber);
+          if (submissionId) {
+            response = await getFormBundle(studentNumber);
+          }
+        } else {
+          if (response.submission) {
+            const submissionId = response.submission?.id;
+            setSubmissionId(submissionId);
+            setSubmissionStatus(response.submission.status); 
+          }
         }
-      } else {
-        if (response.submission) {
-          const submissionId = response.submission?.id;
-          setSubmissionId(submissionId);
-          setSubmissionStatus(response.submission.status);  // Set the status of the submission
-        }
+        setFormData((prev) => ({
+          family_data: {
+            ...prev.family_data,
+            ...response.family_data,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          siblings: Array.isArray(response.siblings)
+            ? response.siblings.map((sibling) => ({
+                ...sibling,
+                submission: submissionId,
+                students: sibling.students?.length ? sibling.students : [studentNumber],
+              }))
+            : [],
+            previous_school_record: Array.isArray(response.previous_school_record)
+              ? response.previous_school_record.map((record) => ({
+                  ...record,
+                  submission: submissionId,
+                  student_number: studentNumber,
+                }))
+              : [], 
+          health_data: {
+            ...prev.health_data,
+            ...response.health_data,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          scholarship: {
+            ...prev.scholarship,
+            ...response.scholarship,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          personality_traits: {
+            ...prev.personality_traits,
+            ...response.personality_traits,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          family_relationship: {
+            ...prev.family_relationship,
+            ...response.family_relationship,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          counseling_info: {
+            ...prev.counseling_info,
+            ...response.counseling_info,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+          privacy_consent: {
+            ...prev.privacy_consent,
+            ...response.privacy_consent,
+            submission: submissionId,
+            student_number: studentNumber,
+          },
+        }));
+      } catch (err) {
+        setError('Error fetching or creating form.');
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // Fill the form data with the fetched response
-      setFormData((prev) => ({
-        family_data: {
-          ...prev.family_data,
-          ...response.family_data,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        siblings: Array.isArray(response.siblings)
-          ? response.siblings.map((sibling) => ({
-              ...sibling,
-              submission: submissionId,
-              students: sibling.students?.length ? sibling.students : [studentNumber],
-            }))
-          : [],
-        previous_school_record: Array.isArray(response.previous_school_record)
-          ? response.previous_school_record.map((record) => ({
-              ...record,
-              submission: submissionId,
-              student_number: studentNumber,
-            }))
-          : [],
-        health_data: {
-          ...prev.health_data,
-          ...response.health_data,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        scholarship: {
-          ...prev.scholarship,
-          ...response.scholarship,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        personality_traits: {
-          ...prev.personality_traits,
-          ...response.personality_traits,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        family_relationship: {
-          ...prev.family_relationship,
-          ...response.family_relationship,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        counseling_info: {
-          ...prev.counseling_info,
-          ...response.counseling_info,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-        privacy_consent: {
-          ...prev.privacy_consent,
-          ...response.privacy_consent,
-          submission: submissionId,
-          student_number: studentNumber,
-        },
-      }));
-    } catch (err) {
-      setError('Error fetching or creating form.');
-    } finally {
-      setLoading(false);
+    if (studentNumber) fetchFormData();
+  }, [studentNumber]);
+
+  useEffect(() => {
+    if (submissionStatus === 'submitted') {
+      setReadOnly(true);
+    } else {
+      setReadOnly(false);
     }
-  };
-
-  if (studentNumber) fetchFormData();
-}, [studentNumber]);
-
+  }, [submissionStatus]);
 
   const handleSaveDraft = async () => {
   if (!submissionId) {
     alert('Submission ID is missing. Try reloading the page.');
     return;
   }
-
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
+    console.log("Form from main");
+    console.log(formData)
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
@@ -326,18 +331,27 @@ const SCIF = () => {
   }
 };
 
-  const handleNextStep = () => {
-    const errors = validateStep(step, formData);
+const handleNextStep = () => {
+  const errors = validateStep(step, formData);
 
-    if (Array.isArray(errors) && errors.length > 0) {
-      alert("Please fix the following errors:\n\n" + errors.join("\n"));
-      return;
-    }
-    setStep(prev => prev + 1);
+  if (Array.isArray(errors) && errors.length > 0) {
+    // Format errors for display
+    const formattedErrors = errors.map(error => {
+      if (typeof error === 'string') {
+        return error;
+      } else if (typeof error === 'object' && error.record && error.messages) {
+        return `Record ${error.record}:\n - ${error.messages.join("\n - ")}`;
+      } else {
+        return JSON.stringify(error);
+      }
+    });
 
-  };
+    alert("Please fix the following errors:\n\n" + formattedErrors.join("\n\n"));
+    return;
+  }
 
-  
+  setStep(prev => prev + 1);
+};
 
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
@@ -416,6 +430,7 @@ if (loading || !submissionId) {
                     [sectionKey]: newData,
                   }))
                 }
+                readOnly={readOnly}
               />
           )}
             {step === 3 && (
@@ -434,7 +449,9 @@ if (loading || !submissionId) {
                     },
                   }))
                 }
+                readOnly={readOnly}
               />
+             
             )}
             {step === 4 && (
               <SCIFPreviousSchoolRecord
@@ -442,9 +459,10 @@ if (loading || !submissionId) {
                 updateData={(newData) =>
                   setFormData((prev) => ({
                     ...prev,
-                    previous_school_record: { ...prev.previous_school_record, ...newData },
+                    previous_school_record: newData, // Update the array with the new data
                   }))
                 }
+                readOnly={readOnly}
               />
             )}
             {step === 5 && (
@@ -456,6 +474,7 @@ if (loading || !submissionId) {
                     scholarship: newData,
                   }))
                 }
+                readOnly={readOnly}
               />
             )}
             {step === 6 && (
@@ -471,6 +490,7 @@ if (loading || !submissionId) {
                     [sectionKey]: { ...prev[sectionKey], ...newData },
                   }))
                 }
+                readOnly={readOnly}
               />
             )}
             {step === 7 && (
@@ -485,53 +505,98 @@ if (loading || !submissionId) {
                       },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
-            <div className="main-form-buttons">
-              {/* Back Button */}
-              {step > 0 && !loading && (
-                <button className="btn-secondary" onClick={handlePreviousStep}>
+          <div className="main-form-buttons">
+            {/* Step 0: Only 'Next' button */}
+            {step === 0 && !loading && (
+              <Button variant="primary" onClick={handleNextStep}>
+                Next
+              </Button>
+            )}
+
+            {/* Steps 1-6: 'Back', 'Save Draft', and 'Next' buttons */}
+            {step >= 1 && step <= 6 && !loading && (
+              <>
+                <Button variant="secondary" onClick={handlePreviousStep}>
                   Back
-                </button>
-              )}
+                </Button>
 
-              {/* Save Draft Button */}
-              <button className="btn-primary" onClick={handleSaveDraft} disabled={loading}>
-                {loading ? 'Saving Draft...' : 'Save Draft'}
-              </button>
+                {!readOnly && (
+                  <Button
+                    variant="tertiary"
+                    onClick={handleSaveDraft}
+                    disabled={loading}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    {loading ? 'Saving Draft...' : 'Save Draft'}
+                  </Button>
+                )}
 
-              {/* Next Button (Visible until step 6) */}
-              {step < 7 && !loading && (
-                <button className="btn-primary" onClick={handleNextStep}>
+                <Button
+                  variant="primary"
+                  onClick={handleNextStep}
+                  style={{ marginLeft: '0.5rem' }}
+                >
                   Next
-                </button>
-              )}
+                </Button>
+              </>
+            )}
 
-              {/* Preview and Submit Button (Visible at step 7) */}
-              {step === 7 && !loading && (
-                <>
-                  <button className="btn-primary" onClick={handlePreview}>
-                    Preview
-                  </button>
-                  {isPreviewOpen && (
-                    <BISPreview
-                      profileData={profileData}  
-                      formData={formData}
-                      onClose={() => setIsPreviewOpen(false)}
-                    />
-                  )}
-                  <button className="btn-submit" onClick={handleSubmit}>
+            {/* Step 7: 'Back', 'Save Draft', 'Preview', and 'Submit' buttons */}
+            {step === 7 && !loading && (
+              <>
+                <Button variant="secondary" onClick={handlePreviousStep}>
+                  Back
+                </Button>
+
+                {!readOnly && (
+                  <Button
+                    variant="tertiary"
+                    onClick={handleSaveDraft}
+                    disabled={loading}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    {loading ? 'Saving Draft...' : 'Save Draft'}
+                  </Button>
+                )}
+
+                <Button
+                  variant="tertiary"
+                  onClick={handlePreview}
+                  style={{ marginLeft: '0.5rem' }}
+                >
+                  Preview
+                </Button>
+
+                {isPreviewOpen && (
+                  <SCIFPreview
+                    profileData={profileData}
+                    formData={formData}
+                    onClose={() => setIsPreviewOpen(false)}
+                  />
+                )}
+
+                {!readOnly && (
+                  <Button
+                    variant="primary"
+                    onClick={handleSubmit}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
                     Submit
-                  </button>
-                </>
-              )}
+                  </Button>
+                )}
+              </>
+            )}
 
-              {/* Loading Indicator */}
-              {loading && <div>Loading...</div>}
+            {/* Loading Indicator */}
+            {loading && <div>Loading...</div>}
 
-              {/* Error Message */}
-              {error && <div className="error-message">{error}</div>}
-            </div>
+            {/* Error Message */}
+            {error && <div className="error-message">{error}</div>}
+          </div>
+
 
           </div>
         </div>

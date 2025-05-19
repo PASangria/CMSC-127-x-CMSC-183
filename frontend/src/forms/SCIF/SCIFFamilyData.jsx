@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import FormField from '../../components/FormField'; // Import your FormField component
 import '../SetupProfile/css/multistep.css';
+import Button from '../../components/UIButton';
 
-const SCIFFamilyData = ({ data, updateData }) => {
-  const { family_data, siblings } = data; // Destructure family_data and siblings from props
+const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
+  const { family_data, siblings } = data;
 
-  const [languageInput, setLanguageInput] = useState(family_data.guardian?.language_dialect?.join(', ') || ''); // Initialize language input with existing data
+  const [languageInput, setLanguageInput] = useState(family_data.guardian?.language_dialect?.join(', ') || '');
+
+  const normalizeNumber = (value) => {
+    return value === '' ? null : Number(value);
+  };
 
   const handleFieldChange = (section, field, value) => {
+    if (readOnly) return;
     updateData('family_data', {
       ...family_data,
       [section]: {
@@ -18,7 +24,6 @@ const SCIFFamilyData = ({ data, updateData }) => {
   };
 
   const addSibling = () => {
-    // Make sure siblings is an array before adding a sibling
     if (Array.isArray(siblings)) {
       updateData('siblings', [
         ...siblings,
@@ -26,7 +31,7 @@ const SCIFFamilyData = ({ data, updateData }) => {
           first_name: '',
           last_name: '',
           sex: '',
-          age: '',
+          age: null,
           job_occupation: '',
           company_school: '',
           educational_attainment: '',
@@ -34,12 +39,11 @@ const SCIFFamilyData = ({ data, updateData }) => {
         },
       ]);
     } else {
-      // Fallback to an empty array if siblings is not an array
       updateData('siblings', [{
         first_name: '',
         last_name: '',
         sex: '',
-        age: '',
+        age: null,
         job_occupation: '',
         company_school: '',
         educational_attainment: '',
@@ -53,25 +57,29 @@ const SCIFFamilyData = ({ data, updateData }) => {
   };
 
   const handleSiblingChange = (index, field, value) => {
+    if (readOnly) return;
+
     updateData('siblings', siblings.map((sibling, i) =>
       i === index ? { ...sibling, [field]: value } : sibling
     ));
   };
 
   const handleLanguageChange = (e) => {
+    if (readOnly) return;
+
     const value = e.target.value;
     setLanguageInput(value);
-    // Update the language dialect field in the guardian section
     handleFieldChange('guardian', 'language_dialect', value.split(',').map(s => s.trim()).filter(Boolean));
   };
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Family Data</h2>
 
       {/* Father */}
-      <section className='family-data-father'>
-        <p><strong>FATHER</strong></p>
+      <section className='subsection-form  family-data-father'>
+        <p className='step-info'><strong>FATHER</strong></p>
         <div className="form-row three-columns">
           <FormField
             label="Father's Name"
@@ -92,9 +100,9 @@ const SCIFFamilyData = ({ data, updateData }) => {
           <FormField
             label="Age"
             type="number"
-            value={family_data.father?.age || ''}
+            value={family_data.father?.age ?? ''}
             onChange={(e) =>
-              handleFieldChange('father', 'age', e.target.value)
+              handleFieldChange('father', 'age', normalizeNumber(e.target.value))
             }
           />
         </div>
@@ -149,8 +157,8 @@ const SCIFFamilyData = ({ data, updateData }) => {
       </section>
 
       {/* Mother */}
-      <section className='family-data-mother'>
-        <p><strong>MOTHER</strong></p>
+      <section className='subsection-form  family-data-mother'>
+        <p className='step-info'><strong>MOTHER</strong></p>
         <div className="form-row three-columns">
           <FormField
             label="Mother's Name"
@@ -171,9 +179,9 @@ const SCIFFamilyData = ({ data, updateData }) => {
           <FormField
             label="Age"
             type="number"
-            value={family_data.mother?.age || ''}
+            value={family_data.mother?.age ?? ''}
             onChange={(e) =>
-              handleFieldChange('mother', 'age', e.target.value)
+              handleFieldChange('mother', 'age', normalizeNumber(e.target.value))
             }
           />
         </div>
@@ -228,8 +236,8 @@ const SCIFFamilyData = ({ data, updateData }) => {
       </section>
 
       {/* Siblings */}
-    <section className="family-data-sibling">
-        <p><strong>Siblings</strong></p>
+      <section className="subsection-form  family-data-sibling">
+        <p className='step-info'><strong>Siblings</strong></p>
         {Array.isArray(siblings) && siblings.map((sibling, index) => (
           <div key={index} className="sibling-section">
             <div className="form-row three-columns">
@@ -261,8 +269,8 @@ const SCIFFamilyData = ({ data, updateData }) => {
               <FormField
                 label="Age"
                 type="number"
-                value={sibling.age}
-                onChange={(e) => handleSiblingChange(index, 'age', e.target.value)}
+                value={sibling.age ?? ''}
+                onChange={(e) => handleSiblingChange(index, 'age', normalizeNumber(e.target.value))}
               />
               <FormField
                 label="Job/Occupation"
@@ -285,20 +293,29 @@ const SCIFFamilyData = ({ data, updateData }) => {
                 onChange={(e) => handleSiblingChange(index, 'educational_attainment', e.target.value)}
               />
             </div>
-            <button type="button" onClick={() => removeSibling(index)}>
-              Remove Sibling
-            </button>
+            <div className="step-button-form">
+              <Button
+                    variant="secondary"
+                    onClick={() => removeSibling(index)}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    Remove Sibling
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => addSibling}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    Add Sibling
+                  </Button>
+              </div>
           </div>
         ))}
-        {/* Add Sibling Button */}
-        <button type="button" onClick={addSibling} className="btn-primary">
-          + Add Sibling
-        </button>
       </section>
 
       {/* Guardian */}
-      <section className='family-data-guardian'>
-        <p><strong>GUARDIAN</strong></p>
+      <section className='subsection-form family-data-guardian'>
+        <p className='step-info'><strong>GUARDIAN</strong></p>
         <div className="form-row">
           <FormField
             label="Guardian's First Name"
@@ -349,7 +366,7 @@ const SCIFFamilyData = ({ data, updateData }) => {
           />
         </div>
       </section>
-
+      </fieldset>
     </div>
   );
 };

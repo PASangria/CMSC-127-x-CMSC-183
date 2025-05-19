@@ -2,8 +2,10 @@ import React from 'react';
 import './../SetupProfile/css/multistep.css';
 import FormField from '../../components/FormField';
 
-const BISPreferences = ({ data, updateData }) => {
+const BISPreferences = ({ data, updateData, readOnly = false }) => {
     const handleChange = (e) => {
+      if (readOnly) return;
+
       const { name, value, type } = e.target;
 
       const updatedValue = type === 'radio' ? value === 'true' : value;
@@ -25,7 +27,8 @@ const BISPreferences = ({ data, updateData }) => {
 
   return (
     <div className="form-section">
-      <h2 className="step-title">SCHOOL PREFERENCES</h2>
+      <fieldset className="form-section" disabled={readOnly}>
+      <h2 className="step-title">School Preferences</h2>
 
       <FormField
         label="Who influenced you to study in UP Mindanao?"
@@ -124,8 +127,10 @@ const BISPreferences = ({ data, updateData }) => {
             value={data.reason_for_shifting || ''}
             onChange={handleChange}
           />
+          
         </div>
       )}
+      </fieldset>
     </div>
   );
 };

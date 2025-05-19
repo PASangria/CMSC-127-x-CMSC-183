@@ -18,6 +18,7 @@ import {
   validateSocioEconomicStatus,
   validateSupport
 } from '../../utils/BISValidation'
+import Button from '../../components/UIButton'
 
 const BISForm = () => {
   const { request } = useApiRequest();
@@ -75,6 +76,7 @@ const BISForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [readOnly, setReadOnly] = useState(false);
 
   const validateStep = (step, formData) => {
   switch (step) {
@@ -83,11 +85,12 @@ const BISForm = () => {
       ...validateSocioEconomicStatus(formData),
       ...validateSupport(formData)
     ];
-
-    return errors;
-    case 2: return validatePreferences(formData);
-    case 3: return validateScholasticStatus(formData);
-     case 4:
+      return errors;
+    case 2: 
+      return validatePreferences(formData);
+    case 3: 
+      return validateScholasticStatus(formData);
+    case 4:
       if (!formData.privacy_consent.has_consented) {
         alert('You must agree to the Privacy Notice to proceed.');
         return false; 
@@ -118,6 +121,11 @@ useEffect(() => {
           privacy_consent: response.privacy_consent || false,
         });
         setSubmissionId(response.submission.id);
+
+         if (response.submission.status === 'submitted') {
+            setReadOnly(true);
+          }
+
       } else {
         setError('Failed to create or fetch the form.');
       }
@@ -140,11 +148,10 @@ const handleSaveDraft = async () => {
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
-    console.log(formData)
+
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
-      console.log(response)
       alert('Error saving draft.');
     }
   } catch (err) {
@@ -154,7 +161,6 @@ const handleSaveDraft = async () => {
   }
 };
 
-  // Handle navigation between steps
   const handleNextStep = () => {
     const errors = validateStep(step, formData);
 
@@ -240,6 +246,7 @@ const handleSubmit = async () => {
                       student_support: { ...prev.student_support, ...newData.student_support }
                     }))
                   }
+                  readOnly={readOnly}
                 />
 
               )}
@@ -252,6 +259,7 @@ const handleSubmit = async () => {
                       preferences: { ...prev.preferences, ...newData },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
               {step === 3 && (
@@ -263,6 +271,7 @@ const handleSubmit = async () => {
                       scholastic_status: { ...prev.scholastic_status, ...newData },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
               {step === 4 && (
@@ -277,50 +286,102 @@ const handleSubmit = async () => {
                       },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
 
               <div className="main-form-buttons">
-                {step > 0 && !loading && (
-                  <button className="btn-secondary" onClick={handlePreviousStep}>
-                    Back
-                  </button>
-                )}
-                <button className="btn-primary" onClick={handleSaveDraft} disabled={loading}>
-                  {loading ? 'Saving Draft...' : 'Save Draft'}
-                </button>
-                {step < 4 && !loading && (
-                  <button className="btn-primary" onClick={handleNextStep}>
+                {/* Step 1: Only 'Next' button */}
+                {step === 0 && !loading && (
+                  <Button variant="primary" onClick={handleNextStep}>
                     Next
-                  </button>
+                  </Button>
                 )}
-                {step === 4 && !loading && (
+
+                {/* Steps 2-4: 'Back', 'Save Draft', and 'Next' buttons */}
+                {step >= 1 && step <= 3 && !loading && (
                   <>
-                    <button className="btn-primary" onClick={handlePreview}>
-                      Preview
-                    </button>
-                    {isPreviewOpen && (
-                      <BISPreview
-                        profileData={profileData}  
-                        formData={formData}
-                        onClose={() => setIsPreviewOpen(false)}
-                      />
-                    )}
-                    <button className="btn-submit" onClick={handleSubmit}>
-                      Submit
-                    </button>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      {loading ? 'Saving Draft...' : 'Save Draft'}
+                    </Button>
+                  )}
+                    <Button
+                      variant="primary"
+                      onClick={handleNextStep}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      Next
+                    </Button>
                   </>
                 )}
+
+                {/* Step 5: 'Back', 'Save Draft', 'Preview', and 'Submit' buttons */}
+                {step === 4 && !loading && (
+                  <>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      {loading ? 'Saving Draft...' : 'Save Draft'}
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="tertiary"
+                    onClick={handlePreview}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    Preview
+                  </Button>
+
+                  {isPreviewOpen && (
+                    <BISPreview
+                      profileData={profileData}
+                      formData={formData}
+                      onClose={() => setIsPreviewOpen(false)}
+                    />
+                  )}
+
+                  {!readOnly && (
+                    <Button
+                      variant='primary'
+                      onClick={handleSubmit}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      Submit
+                    </Button>
+                  )}
+
+                  </>
+                )}
+
+                {/* Loading Indicator */}
                 {loading && <div>Loading...</div>}
+
+                {/* Error Message */}
                 {error && <div className="error-message">{error}</div>}
               </div>
             </div>
           </div>
         </div>
-
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
+  </>
   );
 };
 

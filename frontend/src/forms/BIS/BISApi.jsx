@@ -54,7 +54,6 @@ export const useFormApi = () => {
         }
       }
     });
-
     const response = await request(`${BASE_URL}/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
