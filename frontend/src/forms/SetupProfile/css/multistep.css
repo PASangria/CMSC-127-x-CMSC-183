@@ -175,6 +175,11 @@ textarea:focus {
   vertical-align: middle;
 }
 
+.step-button-form{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
 
 
 /* Grid layout for dual inputs */
@@ -237,8 +242,8 @@ textarea:focus {
     color: #4e4e4e;
     background: transparent;
     z-index: 20;
-    right: 7em;
-    bottom: 9.4em;
+    right: 9em;
+    bottom: 10.4em;
     font-size: 3em;
     border-radius: 1em;
     scrollbar-width: 0;

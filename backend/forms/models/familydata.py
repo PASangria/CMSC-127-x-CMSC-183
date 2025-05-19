@@ -30,7 +30,8 @@ class Parent(models.Model):
             required_fields = {
                 'first_name': 'required',
                 'last_name': 'required',
-                'contact_number': 'required'
+                'contact_number': 'required',
+                'age': 'required'
             }
             check_required_fields(self, required_fields, self.submission.status)
 

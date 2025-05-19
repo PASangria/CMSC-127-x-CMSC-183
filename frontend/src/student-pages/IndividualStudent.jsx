@@ -1,6 +1,7 @@
 import React from 'react';
 import DisplayField from '../components/DisplayField';
 import './css/individualStudentInfo.css'
+import { useNavigate } from 'react-router-dom';
 
 const StudentSideInfo = ({ profileData, submittedForms = [] }) => {
   if (!profileData) {
@@ -8,10 +9,24 @@ const StudentSideInfo = ({ profileData, submittedForms = [] }) => {
   }
 
   const { first_name, last_name, student_number, current_year_level, degree_program, college, email, date_initial_entry, date_initial_entry_sem } = profileData;
-  
   const firstName = first_name || "N/A";
   const lastName = last_name || "N/A";
+  const navigate = useNavigate(); 
 
+
+  const handleView = (form) => {
+    const slugify = (text) =>
+      text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+
+    const slug = slugify(form.form_type);
+
+    if (form.status === 'draft') {
+      navigate(`/forms/${slug}`);
+    } else if (form.status === 'submitted') {
+      navigate(`/submitted-forms/${slug}`);
+    }
+  };
+ 
   return (
     <div className='student_profile_wrapper'>
       <div className="info-sections-container">
@@ -138,27 +153,27 @@ const StudentSideInfo = ({ profileData, submittedForms = [] }) => {
                 <th>Form Type</th>
                 <th>Date Submitted</th>
                 <th>Status</th>
-                <th></th> {/* For View button */}
+                <th></th>
               </tr>
             </thead>
-            <tbody>
-              {submittedForms.map((form) => (
-                <tr key={form.id}>
-                  <td>{form.form_type}</td>
-                  <td>{new Date(form.submitted_on || form.saved_on).toLocaleDateString()}</td>
-                  <td>
-                    <span className={`status-badge ${form.status.toLowerCase()}`}>
-                      {form.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="view-button" onClick={() => console.log('View form:', form)}>
-                      VIEW
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+              <tbody>
+                {submittedForms.map((form) => (
+                  <tr key={form.id}>
+                    <td>{form.form_type}</td>
+                    <td>{new Date(form.submitted_on || form.saved_on).toLocaleDateString()}</td>
+                    <td>
+                      <span className={`status-badge ${form.status.toLowerCase()}`}>
+                        {form.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button className="view-button" onClick={() => handleView(form)}>
+                        VIEW
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
           </table>
 
         )}

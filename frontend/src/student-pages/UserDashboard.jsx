@@ -17,9 +17,8 @@ export const UserDashboard = () => {
   const [pendingActions, setPendingActions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
-  const [confirmDialog, setConfirmDialog] = useState({ visible: false, form: null })
+  const [confirmDialog, setConfirmDialog] = useState({ visible: false, form: null });
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -50,7 +49,6 @@ export const UserDashboard = () => {
       }
     };
 
-
     fetchSubmittedForms();
   }, [isAuthenticated, request, navigate]);
 
@@ -71,36 +69,41 @@ export const UserDashboard = () => {
     }
   };
 
-const promptDelete = (form) => {
-  setConfirmDialog({ visible: true, form });
-};
+  const promptDelete = (form) => {
+    setConfirmDialog({ visible: true, form });
+  };
 
-const confirmDelete = async () => {
-  const form = confirmDialog.form;
-  const slugify = (text) =>
-    text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+  const confirmDelete = async () => {
+    const form = confirmDialog.form;
+    const slugify = (text) =>
+      text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 
-  const slug = slugify(form.form_type);
+    const slug = slugify(form.form_type);  // This should match the backend form types
 
-  try {
-    const response = await request(
-      `http://localhost:8000/api/forms/${slug}/`,
-      'DELETE'
-    );
+    try {
+      const response = await request(
+        `http://localhost:8000/api/forms/${slug}/`,  // Make sure the slug is correctly formed
+        {
+          method: 'DELETE',
+        }
+      );
 
-    if (response.ok) {
-      setPendingActions(prev => prev.filter(item => item.id !== form.id));
-      setToastMessage(`"${form.form_type}" draft deleted successfully.`);
-    } else {
-      setToastMessage(`Failed to delete "${form.form_type}".`);
+       const responseData = await response.json();
+        console.log(responseData);
+
+      if (response.ok) {
+        setPendingActions(prev => prev.filter(item => item.id !== form.id));
+        setToastMessage(`"${form.form_type}" draft deleted successfully.`);
+      } else {
+        setToastMessage(`Failed to delete "${form.form_type}".`);
+      }
+    } catch (err) {
+      console.error('Error deleting submission:', err);
+      setToastMessage(`Error deleting "${form.form_type}".`);
+    } finally {
+      setConfirmDialog({ visible: false, form: null });
     }
-  } catch (err) {
-    console.error('Error deleting submission:', err);
-    setToastMessage(`Error deleting "${form.form_type}".`);
-  } finally {
-    setConfirmDialog({ visible: false, form: null });
-  }
-};
+  };
 
   return (
     <DefaultLayout variant="student">
@@ -110,17 +113,19 @@ const confirmDelete = async () => {
         onView={handleView}
         onDelete={promptDelete}
       />
-        {confirmDialog.visible && (
-      <ConfirmDialog
-        title="Delete Draft"
-        message={`Are you sure you want to delete the draft for "${confirmDialog.form.form_type}"?`}
-        onConfirm={confirmDelete}
-        onCancel={() => setConfirmDialog({ visible: false, form: null })}
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
-      />
-    )}
-    {toastMessage && (
+      
+      {confirmDialog.visible && (
+        <ConfirmDialog
+          title="Delete Draft"
+          message={`Are you sure you want to delete the draft for "${confirmDialog.form.form_type}"?`}
+          onConfirm={confirmDelete}
+          onCancel={() => setConfirmDialog({ visible: false, form: null })}
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+        />
+      )}
+
+      {toastMessage && (
         <ToastMessage
           message={toastMessage}
           onClose={() => setToastMessage('')}

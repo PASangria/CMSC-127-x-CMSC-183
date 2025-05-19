@@ -2,18 +2,39 @@ import React from 'react';
 import FormField from '../../components/FormField'; 
 import '../SetupProfile/css/multistep.css';
 
-const SCIFHealthData = ({ data, updateData }) => {
+const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
+  const normalizeNumber = (value) => {
+    if (readOnly) return;
+    if (value === '' || value === null || value === undefined) return null;
+    const number = Number(value);
+    return isNaN(number) ? null : number;
+  };
 
-  // Update Health Condition (single value)
+
+  const normalizeText = (value) => {
+    if (readOnly) return;
+    (value === '' ? null : value); 
+  };
+
+  const normalizeList = (value) => {
+    if (readOnly) return;
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+  };
+
   const handleHealthConditionChange = (condition) => {
+    if (readOnly) return;
     updateData({
       ...data,
-      health_condition: condition, 
+      health_condition: normalizeText(condition),
     });
   };
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Health Data</h2>
 
       {/* Health Condition (Radio Buttons) */}
@@ -26,8 +47,8 @@ const SCIFHealthData = ({ data, updateData }) => {
                 type="radio"
                 name="health_condition"
                 value={condition}
-                checked={data.health_condition === condition} // Check if this condition is selected
-                onChange={() => handleHealthConditionChange(condition)} // Update state on change
+                checked={data.health_condition === condition}
+                onChange={() => handleHealthConditionChange(condition)}
               />
               {condition}
             </label>
@@ -35,31 +56,36 @@ const SCIFHealthData = ({ data, updateData }) => {
         </div>
       </div>
 
-      {/* Height */}
+      {/* Height and Weight */}
       <div className='form-row'>
         <FormField
           label="Height (m)"
           type="number"
-          value={data.height || ''}
-          onChange={(e) => updateData({ ...data, height: e.target.value })}
+          value={data.height ?? ''}
+          onChange={(e) =>
+            updateData({ ...data, height: normalizeNumber(e.target.value) })
+          }
         />
 
-        {/* Weight */}
         <FormField
           label="Weight (kg)"
           type="number"
-          value={data.weight || ''}
-          onChange={(e) => updateData({ ...data, weight: e.target.value })}
+          value={data.weight ?? ''}
+          onChange={(e) =>
+            updateData({ ...data, weight: normalizeNumber(e.target.value) })
+          }
         />
       </div>
 
+      {/* Eye Sight and Hearing */}
       <div className='form-row'>
-        {/* Eye Sight */}
         <FormField
           label="Eye Sight"
           type="select"
           value={data.eye_sight || ''}
-          onChange={(e) => updateData({ ...data, eye_sight: e.target.value })}
+          onChange={(e) =>
+            updateData({ ...data, eye_sight: normalizeText(e.target.value) })
+          }
           options={[
             { value: '', label: 'Select' },
             { value: 'Good', label: 'Good' },
@@ -68,12 +94,13 @@ const SCIFHealthData = ({ data, updateData }) => {
           ]}
         />
 
-        {/* Hearing */}
         <FormField
           label="Hearing"
           type="select"
           value={data.hearing || ''}
-          onChange={(e) => updateData({ ...data, hearing: e.target.value })}
+          onChange={(e) =>
+            updateData({ ...data, hearing: normalizeText(e.target.value) })
+          }
           options={[
             { value: '', label: 'Select' },
             { value: 'Good', label: 'Good' },
@@ -83,43 +110,56 @@ const SCIFHealthData = ({ data, updateData }) => {
         />
       </div>
 
+      {/* Disabilities and Ailments */}
       <div className='form-row'>
-        {/* Disability */}
         <FormField
           label="Any Physical Disability"
           type="text"
-          value={data.physical_disabilities || ''}
-          onChange={(e) => updateData({ ...data, physical_disabilities: e.target.value })}
+          value={(data.physical_disabilities || []).join(', ')}
+          onChange={(e) =>
+            updateData({
+              ...data,
+              physical_disabilities: normalizeList(e.target.value),
+            })
+          }
         />
 
-        {/* Ailment */}
         <FormField
           label="Common/ Frequent Ailment"
           type="text"
-          value={data.common_ailments || ''}
-          onChange={(e) => updateData({ ...data, common_ailments: e.target.value })}
+          value={(data.common_ailments || []).join(', ')}
+          onChange={(e) =>
+            updateData({
+              ...data,
+              common_ailments: normalizeList(e.target.value),
+            })
+          }
         />
       </div>
 
+      {/* Hospitalization */}
       <div className='custom-form-row'>
-        {/* Last Hospitalization */}
         <FormField
           label="Last Hospitalization (MM/DD/YYYY)"
           type="date"
           value={data.last_hospitalization || ''}
-          onChange={(e) => updateData({ ...data, last_hospitalization: e.target.value })}
+          onChange={(e) =>
+            updateData({ ...data, last_hospitalization: e.target.value })
+          }
           className="custom-form-input form-input"
         />
 
-        {/* Reason for Hospitalization (Textarea Field using FormField) */}
         <FormField
           label="Reason for Hospitalization"
           type="textarea"
           value={data.reason_of_hospitalization || ''}
-          onChange={(e) => updateData({ ...data, reason_of_hospitalization: e.target.value })}
+          onChange={(e) =>
+            updateData({ ...data, reason_of_hospitalization: e.target.value })
+          }
           className="custom-form-input form-input"
         />
       </div>
+      </fieldset>
     </div>
   );
 };

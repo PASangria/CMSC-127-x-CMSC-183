@@ -11,7 +11,7 @@ const SCIFPersonalData = ({ data }) => {
   return (
     <div className='student_personal_info_wrapper'>
       <div className="student_personal_info">
-        <p><strong>PERSONAL INFORMATION</strong></p>
+        <p className='step-info'><strong>PERSONAL INFORMATION</strong></p>
         <div className='form-row three-columns'>
           <div className='form-group'>
             <DisplayField label="First Name" value={data.first_name} />
@@ -53,12 +53,10 @@ const SCIFPersonalData = ({ data }) => {
           </div>
         </div>
         
-        <p><strong>PERMANENT ADDRESS</strong></p>
+        <p className='step-info'><strong>PERMANENT ADDRESS</strong></p>
         <div className='form-row'>
           <DisplayField label="Address Line 1" value={data.permanent_address.address_line_1} />
-          {data.permanent_address.address_line_2 && (
-          <DisplayField label="Address Line 2" value={data.permanent_address.address_line_2 || "None"} />
-          )}
+          <DisplayField label="Address Line 2" value={data.permanent_address.address_line_2 || " "} />
           </div>
           <div className='form-row'>
             <DisplayField
@@ -73,7 +71,7 @@ const SCIFPersonalData = ({ data }) => {
             <DisplayField label="ZIP code" value={`${data.permanent_address.zip_code}`}></DisplayField>
           </div>
 
-        <p><strong>CONTACT INFORMATION</strong></p>
+        <p className='step-info'><strong>CONTACT INFORMATION</strong></p>
         <div className='form-row three-columns'>
           <div className='form-group'>
             <DisplayField label="Landline/Contact Number" value={data.landline || "None"} />

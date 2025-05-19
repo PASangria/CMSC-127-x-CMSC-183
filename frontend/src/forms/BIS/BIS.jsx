@@ -148,11 +148,10 @@ const handleSaveDraft = async () => {
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
-    console.log(formData)
+
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
-      console.log(response)
       alert('Error saving draft.');
     }
   } catch (err) {
@@ -305,14 +304,16 @@ const handleSubmit = async () => {
                     <Button variant="secondary" onClick={handlePreviousStep}>
                       Back
                     </Button>
+                    {!readOnly && (
                     <Button
-                      variant='tertiary'
+                      variant="tertiary"
                       onClick={handleSaveDraft}
                       disabled={loading}
                       style={{ marginLeft: '0.5rem' }}
                     >
                       {loading ? 'Saving Draft...' : 'Save Draft'}
                     </Button>
+                  )}
                     <Button
                       variant="primary"
                       onClick={handleNextStep}

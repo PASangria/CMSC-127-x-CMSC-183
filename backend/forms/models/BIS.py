@@ -99,7 +99,7 @@ class StudentSupport(models.Model):
 class SocioEconomicStatus(models.Model):
     student_number = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    has_scholarship = models.BooleanField(blank=True) 
+    has_scholarship = models.BooleanField(blank=True, null=True) 
     scholarships = models.TextField(blank=True, null=True) 
     scholarship_privileges = models.TextField(blank=True, null=True) 
     monthly_allowance = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)  

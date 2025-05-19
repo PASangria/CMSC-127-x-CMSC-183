@@ -1,5 +1,3 @@
-// src/pages/Student/BISPreview.js
-
 import React from 'react';
 import './../SetupProfile/css/multistep.css';
 import './../../components/css/modal.css'; // For modal styles

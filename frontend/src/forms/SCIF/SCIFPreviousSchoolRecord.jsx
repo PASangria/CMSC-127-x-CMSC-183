@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
 import FormField from '../../components/FormField'; // Import the FormField component
 import '../SetupProfile/css/multistep.css'; // Ensure your styles are applied
+import { useEnumChoices } from '../../utils/enumChoices';
 
-const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
-  // State to hold multiple previous school records
+const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
   const [schoolRecords, setSchoolRecords] = useState(data || []);
+  const getField = (name) => `${prefix}_${name}`;
+  const { enums, loading, error } = useEnumChoices();
 
-  // Function to handle adding a new school record
+  const handleFieldChange = (index, field, value) => {
+    if (readOnly) return;
+    const updatedRecords = [...schoolRecords];
+    const path = field.split('.');
+
+    let target = updatedRecords[index];
+    for (let i = 0; i < path.length - 1; i++) {
+        target = target[path[i]] ||= {}; 
+      }
+
+      target[path[path.length - 1]] = value;
+
+      setSchoolRecords(updatedRecords);
+      updateData(updatedRecords);
+  };
+
+
   const addSchoolRecord = () => {
     const newRecord = {
       student_number: '',
@@ -25,26 +43,14 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
       start_year: '',
       end_year: '',
       honors_received: '',
-      senior_high_gpa: ''
+      senior_high_gpa: '',
+      submission: '',
     };
     const updatedRecords = [...schoolRecords, newRecord];
     setSchoolRecords(updatedRecords);
-    updateData(updatedRecords);  // Updating the parent component's state
+    updateData(updatedRecords);  
   };
 
-  const handleFieldChange = (index, field, value) => {
-    const updatedRecords = [...schoolRecords];
-    if (field.includes('school_address')) {
-      const [addressField] = field.split('.').slice(-1); // Address fields like 'address_line_1'
-      updatedRecords[index].school.school_address[addressField] = value;
-    } else {
-      updatedRecords[index][field] = value;
-    }
-    setSchoolRecords(updatedRecords);
-    updateData(updatedRecords);  // Updating the parent component's state
-  };
-
-  // Function to handle removing a school record
   const removeSchoolRecord = (index) => {
     const updatedRecords = schoolRecords.filter((_, i) => i !== index);
     setSchoolRecords(updatedRecords);
@@ -53,10 +59,11 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Previous School Record</h2>
 
       {/* Render multiple previous school records */}
-      {schoolRecords.map((record, index) => (
+    {schoolRecords.map((record, index) => (
         <div key={index} className="school-record">
           <h3>School Record {index + 1}</h3>
 
@@ -64,10 +71,9 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
           <FormField
             label="School Name"
             type="text"
-            value={record.school.name}
+            value={record.school.name || ''}
             onChange={(e) => handleFieldChange(index, 'school.name', e.target.value)}
           />
-
           {/* School Address */}
           <h3>School {index + 1} Address</h3>
           <div className="form-row three-columns">
@@ -97,12 +103,22 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
               value={record.school.school_address.province}
               onChange={(e) => handleFieldChange(index, 'school.school_address.province', e.target.value)}
             />
-            <FormField
-              label="Region"
-              type="text"
-              value={record.school.school_address.region}
-              onChange={(e) => handleFieldChange(index, 'school.school_address.region', e.target.value)}
-            />
+            <div className="form-group">
+              <FormField
+                label="Region"
+                type="select"
+                value={record.school.school_address.region}  // This binds the value to the region field inside the record object
+                onChange={(e) => handleFieldChange(index, 'school.school_address.region', e.target.value)}  // Update the specific field when the value changes
+                required  // Optional: Make it required if needed
+                error={error}  // Optional: Handle any validation error
+                options={
+                  loading ? [{ value: "", label: "Loading regions..." }] :  // Placeholder text if loading
+                  error ? [{ value: "", label: "Error loading regions" }] :  // Placeholder text if there's an error
+                  enums?.region || []  
+                }
+              />
+            </div>
+
             <FormField
               label="ZIP Code"
               type="text"
@@ -132,13 +148,13 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
               label="Start Year"
               type="number"
               value={record.start_year}
-              onChange={(e) => handleFieldChange(index, 'start_year', e.target.value)}
+              onChange={(e) => handleFieldChange(index, 'start_year', +e.target.value)}  
             />
             <FormField
               label="End Year"
               type="number"
               value={record.end_year}
-              onChange={(e) => handleFieldChange(index, 'end_year', e.target.value)}
+              onChange={(e) => handleFieldChange(index, 'end_year', +e.target.value)} 
             />
           </div>
 
@@ -167,6 +183,7 @@ const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
 
       {/* Button to add a new school record */}
       <button type="button" onClick={addSchoolRecord}>Add Another School Record</button>
+      </fieldset>
     </div>
   );
 };
