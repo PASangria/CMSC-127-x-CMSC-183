@@ -27,10 +27,10 @@ function getCurrentMonthLabels() {
 function AreaGradient({ color, id }) {
     return (
         <defs>
-            <linearGradient id={id} x1="50%" y1="0%" x2="50%" y2="100%">
-                <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-                <stop offset="100%" stopColor={color} stopOpacity={0} />
-            </linearGradient>
+        <linearGradient id={id} x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+        </linearGradient>
         </defs>
     );
 }
@@ -70,24 +70,37 @@ function StatCard({ title, value, interval, trend, data }) {
     const gradientId = `area-gradient-${title.replace(/\s+/g, '-')}`;
 
     return (
-        <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>
-            <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <Typography component="h2" variant="subtitle2" gutterBottom>
+        <Card
+            variant="outlined"
+            sx={{
+                width: '424px',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                p: { xs: 2, sm: 4 },
+                justifyContent: 'space-between',
+            }}
+        >
+            <CardContent sx={{ flexGrow: 1, p: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <Typography component="h2" variant="subtitle1" fontWeight="bold" gutterBottom>
                     {title}
                 </Typography>
 
-                <Stack spacing={1} sx={{ flexGrow: 1 }}>
-                    <Stack>
+                <Stack spacing={2} flexGrow={1} justifyContent="space-between">
+                    <Box>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
-                            <Typography variant="h4">{value}</Typography>
+                            <Typography variant="h4" fontWeight="bold">{value}</Typography>
                             <Chip size="small" color={color} label={trendValues[trend]} />
                         </Stack>
-                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                            {interval}
+                        <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                        {interval}
                         </Typography>
-                    </Stack>
+                    </Box>
 
                     <Box sx={{ width: '100%', height: 50 }}>
+                        <svg style={{ height: 0 }}>
+                            <AreaGradient color={chartColor} id={gradientId} />
+                        </svg>
                         <SparkLineChart
                             height={50}
                             colors={[chartColor]}
@@ -101,7 +114,7 @@ function StatCard({ title, value, interval, trend, data }) {
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {
-                                    fill: `url(#${gradientId})`,
+                                fill: `url(#${gradientId})`,
                                 },
                             }}
                         >
