@@ -47,7 +47,7 @@ const PreviewModal = ({ data, onClose }) => {
             <p><strong>EDUCATION INFORMATION</strong></p>
             <DisplayField label="Student Number" value={data.student_number} />
             <DisplayField label="College" value={data.college} />
-            <DisplayField label="Degree Program" value={data.degreeProgram} />
+            <DisplayField label="Degree Program" value={data.degree_program} />
             <DisplayField label="Year Level" value={data.current_year_level} />
           </div>
 

@@ -13,7 +13,7 @@ const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
 
   const normalizeText = (value) => {
     if (readOnly) return;
-    (value === '' ? null : value); 
+    return value === '' ? null : value;
   };
 
   const normalizeList = (value) => {
@@ -25,6 +25,7 @@ const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
   };
 
   const handleHealthConditionChange = (condition) => {
+    
     if (readOnly) return;
     updateData({
       ...data,
@@ -38,9 +39,9 @@ const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
       <h2 className="step-title">Health Data</h2>
 
       {/* Health Condition (Radio Buttons) */}
-      <div className="radio-form">
-        <label className="form-label">Health Condition:</label>
-        <div className="radio-group">
+      <div className="radio-form ">
+         <label className="form-label ">Health Condition:</label>
+        <div className="radio-group form-row .span-two-columns">
           {['Excellent', 'Very Good', 'Good', 'Poor'].map((condition) => (
             <label key={condition} className="radio-label">
               <input
@@ -57,6 +58,7 @@ const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
       </div>
 
       {/* Height and Weight */}
+      <div className='subsection-form'></div>
       <div className='form-row'>
         <FormField
           label="Height (m)"

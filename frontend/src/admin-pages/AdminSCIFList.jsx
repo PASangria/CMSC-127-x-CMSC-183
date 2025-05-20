@@ -26,7 +26,7 @@ export const AdminSCIFList = () => {
           const data = await res.json();
           setSubmissions(data);
         } else {
-          throw new Error('Failed to fetch SCIF submissions.');
+          throw new Error('Failed to fetch BIS students');
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -52,7 +52,7 @@ export const AdminSCIFList = () => {
     <div>
       <DefaultLayout variant="admin">
         <div className="admin-student-list">
-          <h1>Student Cumulative Information File</h1>
+          <h1>Basic Information Sheet</h1>
           <h2 style={{textAlign: "center"}}>Submissions</h2>
           <table>
             <thead>
@@ -82,7 +82,7 @@ export const AdminSCIFList = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="4">No Student Cumulative Information File submissions found.</td>
+                  <td colSpan="4">No Basic Information Sheet submissions found.</td>
                 </tr>
               )}
             </tbody>

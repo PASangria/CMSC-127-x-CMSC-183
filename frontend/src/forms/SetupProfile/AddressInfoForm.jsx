@@ -28,7 +28,7 @@ const AddressInfoForm = ({
       <h2 className='step-title'>{addressLabel}</h2>
 
       {checkboxLabel && (
-        <label>
+        <label className='step-info'>
           <input
             type="checkbox"
             checked={sameAsPermanent}

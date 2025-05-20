@@ -10,6 +10,12 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
     updateData(section, { [field]: value });
   };
 
+  const previousCounselingOptions = [
+    { value: true, label: 'Yes' },
+    { value: false, label: 'No' }
+  ];
+
+
   const closestOptions = [
     { value: 'Father', label: 'Father' },
     { value: 'Mother', label: 'Mother' },
@@ -112,6 +118,9 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
 
       {/* Family Relationship Fields */}
       <label>With whom are you closest to?</label>
+      <small className="helper-text">
+        Select the person you are closest to in your family or personal circle.
+      </small>
       <div className="radio-group">
         {closestOptions.map((relation) => (
           <label key={relation.value} className="radio-label">
@@ -128,9 +137,7 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
           </label>
         ))}
       </div>
-      <small className="helper-text">
-        Select the person you are closest to in your family or personal circle.
-      </small>
+      
 
       {family_relationship.closest_to === 'other' && (
         <FormField
@@ -185,26 +192,17 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
         helperText="Are there any problems or challenges you foresee while studying at UP?"
       />
 
-      <label>Any previous counseling?</label>
-      <div className="radio-group">
-        {[true, false].map((option) => (
-          <label key={option.toString()} className="radio-label">
-            <input
-              type="radio"
-              name="previous_counseling"
-              value={option}
-              checked={counseling_info.previous_counseling === option}
-              onChange={() =>
-                handleFieldChange('counseling_info', 'previous_counseling', option)
-              }
-            />
-            {option ? 'Yes' : 'No'}
-          </label>
-        ))}
-      </div>
-      <small className="helper-text">
-        Indicate if you have had any previous counseling sessions.
-      </small>
+     <FormField
+          label="Any previous counseling?"
+          type="radio"
+          name="previous_counseling"
+          value={counseling_info.previous_counseling}
+          onChange={(e) =>
+            handleFieldChange('counseling_info', 'previous_counseling', e.target.value === 'true')
+          }
+          options={previousCounselingOptions}
+          helperText="Indicate if you have had any previous counseling sessions."
+        />
 
       {counseling_info.previous_counseling === true && (
         <>
