@@ -81,53 +81,57 @@ export const AdminDashboard = () => {
           {error && <Typography color="error">{error}</Typography>}
 
           {/* Summary Cards */}
-          <Grid container spacing={4}>
+          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
             {summaryData.map((item, index) => (
-              <Grid item xs={12} sm={12} md={6} key={index}>
+              <Box key={index} flex={1}>
                 <StatCard {...item} />
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
 
-          {/* Chart */}
-          <Grid item xs={24} md={8}>
-            <GroupedBarChart
-              data={barData}
-              keys={['Female', 'Male']}
-              xKey="name"
-              title="Students per Degree Program"
-              totalValue={summaryData[0]?.value || '0'}
-              trendLabel="+3.2%"
-              trendColor="success"
-              subtitle="Enrollment per program"
-            />
-          </Grid>
+          {/* Chart and Recent Submissions in Flex Layout */}
+          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
+            <Box flex={2}>
+              <GroupedBarChart
+                data={barData}
+                keys={['Female', 'Male']}
+                xKey="name"
+                title="Students per Degree Program"
+                totalValue="1,245"
+                trendLabel="+3.2%"
+                trendColor="success"
+                subtitle="Enrollment per program as of May 2025"
+              />
+            </Box>
+            <Box flex={1}>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="h6" fontWeight={600} gutterBottom>
+                    Recent Submissions
+                  </Typography>
+                  <Divider sx={{ mb: 2 }} />
+                  <GridTable
+                    rows={recentSubmissionRows}
+                    columns={recentSubmissionColumns}
+                  />
+                </CardContent>
+              </Card>
+            </Box>
+          </Box>
 
-          {/* Recent Submissions */}
-          <Grid item xs={12} md={4}>
+          {/* Recently Drafted in Card */}
+          <Card variant="outlined">
             <CardContent>
               <Typography variant="h6" fontWeight={600} gutterBottom>
-                Recent Submissions
+                Recently Drafted
               </Typography>
               <Divider sx={{ mb: 2 }} />
               <GridTable
-                rows={recentSubmissions}
-                columns={recentSubmissionColumns}
+                rows={recentDraftRows}
+                columns={recentDraftColumns}
               />
             </CardContent>
-          </Grid>
-
-          {/* Recently Drafted */}
-          <CardContent>
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Recently Drafted
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <GridTable
-              rows={recentDrafts}
-              columns={recentDraftColumns}
-            />
-          </CardContent>
+          </Card>
         </Stack>
       </Box>
     </DefaultLayout>
