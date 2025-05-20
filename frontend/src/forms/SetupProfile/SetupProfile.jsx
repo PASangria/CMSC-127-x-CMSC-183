@@ -9,6 +9,8 @@ import Footer from '../../components/Footer';
 import ProgressBar from '../../components/ProgressBar';
 import PreviewModal from './PreviewForm';
 import Button from '../../components/UIButton';
+import ToastMessage from '../../components/ToastMessage';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 const MultiStepForm = () => {
     const [loading, setLoading] = useState(false);
@@ -16,6 +18,8 @@ const MultiStepForm = () => {
     const [step, setStep] = useState(1); 
     const [sameAsPermanent, setSameAsPermanent] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
    const [formData, setFormData] = useState({
       // Personal Information
@@ -93,7 +97,6 @@ const MultiStepForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
   
     const birthdate = `${formData.birthYear}-${String(formData.birthMonth).padStart(2, '0')}-${String(formData.birthDay).padStart(2, '0')}`;
   
@@ -147,19 +150,32 @@ const MultiStepForm = () => {
         credentials: 'include',
         body: JSON.stringify(payload),
       });
-  
+      
       if (!response.ok) throw new Error("Failed to submit profile");
   
       const result = await response.json();
-      console.log("Profile submitted successfully:", result);
       setLoading(false);
+      setShowSuccessToast(true); 
+      window.location.href = '/myprofile';
     } catch (error) {
       setLoading(false);
       setError(error.message);
-      console.error("Submission error:", error);
+      
     }
   };
 
+    const handleConfirmSubmit = () => {
+    setShowConfirmDialog(true); 
+  };
+
+  const handleConfirmCancel = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const handleConfirmAction = () => {
+    setShowConfirmDialog(false); 
+    handleSubmit(); 
+  };
   
   return (
     <div>
@@ -205,7 +221,7 @@ const MultiStepForm = () => {
                         )}
 
                         {/* Steps 2-4: 'Back' and 'Next' buttons */}
-                        {step >= 2 && step <= 4 && (
+                        {step >= 2 && step <= 3 && (
                           <>
                             <Button variant="secondary" onClick={handlePreviousStep}>
                               Back
@@ -217,7 +233,7 @@ const MultiStepForm = () => {
                         )}
 
                         {/* Step 5: 'Back', 'Preview', and 'Submit' buttons */}
-                        {step === 5 && (
+                        {step === 4 && (
                           <>
                             <Button variant="secondary" onClick={handlePreviousStep}>
                               Back
@@ -228,9 +244,9 @@ const MultiStepForm = () => {
                             {isPreviewOpen && (
                               <PreviewModal data={formData} onClose={() => setIsPreviewOpen(false)} />
                             )}
-                            <Button variant="primary" onClick={handleSubmit} style={{ marginLeft: '0.5rem' }}>
-                              Submit
-                            </Button>
+                              <Button variant="primary" onClick={handleConfirmSubmit} style={{ marginLeft: '0.5rem' }}>
+                                Submit
+                              </Button>
                           </>
                         )}
                       </div>
@@ -240,6 +256,24 @@ const MultiStepForm = () => {
         </div>
 
         <Footer />
+          {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <ConfirmDialog
+          title="Are you sure?"
+          message="Please confirm that you want to submit your form."
+          onConfirm={handleConfirmAction}
+          onCancel={handleConfirmCancel}
+        />
+      )}
+
+      {/* Success Toast */}
+      {showSuccessToast && (
+        <ToastMessage
+          message="Your form has been successfully submitted!"
+          onClose={() => setShowSuccessToast(false)}
+          duration={5000}
+        />
+      )}
     </div>
 );
 };

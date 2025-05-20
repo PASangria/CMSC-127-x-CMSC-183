@@ -237,7 +237,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
 
       {/* Siblings */}
       <section className="subsection-form  family-data-sibling">
-        <p className='step-info'><strong>Siblings</strong></p>
+        <p className='step-info'><strong>SIBLINGS</strong></p>
         {Array.isArray(siblings) && siblings.map((sibling, index) => (
           <div key={index} className="sibling-section">
             <div className="form-row three-columns">
@@ -333,6 +333,8 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
               handleFieldChange('guardian', 'last_name', e.target.value)
             }
           />
+          </div>
+          <div className="form-row">
           <FormField
             label="Contact Number"
             type="text"
@@ -349,6 +351,8 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
               handleFieldChange('guardian', 'address', e.target.value)
             }
           />
+          </div>
+        <div className="form-row">
           <FormField
             label="Relationship to Guardian"
             type="text"
@@ -362,7 +366,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
             type="text"
             value={languageInput}
             onChange={handleLanguageChange}
-            placeholder="e.g., Tagalog, English"
+            helperText="e.g., Tagalog, English"
           />
         </div>
       </section>

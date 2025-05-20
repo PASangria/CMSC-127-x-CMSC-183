@@ -27,19 +27,35 @@ def get_student_profile_by_id(request, student_id):
     
 
 class AdminBISList(APIView):
-    permission_classes = [IsAdminUser] 
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
         if not request.user.is_staff:
             return Response({'error': 'Permission denied, admins only.'}, status=403)
 
         try:
-            submissions = Submission.objects.all()  # Get all submissions
+            submissions = Submission.objects.filter(form_type="Basic Information Sheet", status="submitted") 
             serializer = AdminSubmissionDetailSerializer(submissions, many=True)
             return Response(serializer.data, status=200)
+
         except Exception as e:
             return Response({'error': str(e)}, status=500)
-        
+
+class AdminSCIFList(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        if not request.user.is_staff:
+            return Response({'error': 'Permission denied, admins only.'}, status=403)
+
+        try:
+            submissions = Submission.objects.filter(form_type="Student Cumulative Information File", status="submitted") 
+            serializer = AdminSubmissionDetailSerializer(submissions, many=True)
+            return Response(serializer.data, status=200)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+    
 
 class AdminStudentFormsView(APIView):
     def get(self, request, student_id):

@@ -139,7 +139,6 @@ const PersonalInfoForm = ({ formData, setFormData }) => {
         value={formData.mobile_number}
         onChange={handleChange}
         required
-        placeholder="+639XXXXXXXXX"
       />
       <FormField
         label="Landline Number"

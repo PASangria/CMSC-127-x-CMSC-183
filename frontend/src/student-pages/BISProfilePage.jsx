@@ -5,12 +5,11 @@ import { AuthContext } from '../context/AuthContext';
 import DefaultLayout from '../components/DefaultLayout';
 
 const BISProfilePage = () => {
-  const { getFormBundle } = useFormApi();
+  const { getFormBundle } = useFormApi(); 
   const { profileData } = useContext(AuthContext); 
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const form_type = "basic-information-sheet"; 
 
   useEffect(() => {
     const loadData = async () => {
@@ -20,40 +19,44 @@ const BISProfilePage = () => {
         return;
       }
 
-      const data = await getFormBundle(profileData.student_number);
+      try {
+        const data = await getFormBundle(profileData.student_number);
+        console.log(data);
+        if (!data) {
+          setError('Failed to load form data.');
+          setLoading(false);
+          return;
+        }
 
-      if (!data) {
-        setError('Failed to load form data.');
+        const transformedData = {
+          student_support: data.student_support,
+          socio_economic_status: data.socio_economic_status,
+          preferences: data.preferences,
+          scholastic_status: data.scholastic_status,
+          privacy_consent: data.privacy_consent,
+          submission: data.submission,
+          consent: data.privacy_consent,
+        };
+
+        setFormData(transformedData);
+      } catch (err) {
+        setError('An error occurred while loading the form.');
+      } finally {
         setLoading(false);
-        return;
       }
-
-
-      const transformedData = {
-        student_support: data.student_support,
-        socio_economic_status: data.socio_economic_status,
-        preferences: data.preferences,
-        scholastic_status: data.scholastic_status,
-        privacy_consent: data.privacy_consent,
-      };
-
-      console.log(transformedData);
-      setFormData(transformedData);
-      setLoading(false);
     };
 
     loadData();
-  }, [profileData, form_type, getFormBundle]); 
+
+  }, [profileData?.student_number]); 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
-  <div>
-    <DefaultLayout variant='student'>
-      <BISProfileView profileData={profileData} formData={formData} />;
+    <DefaultLayout variant="student">
+      <BISProfileView profileData={profileData} formData={formData} />
     </DefaultLayout>
-  </div>
   );
 };
 

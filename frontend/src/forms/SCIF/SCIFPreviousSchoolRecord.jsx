@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import FormField from '../../components/FormField'; // Import the FormField component
 import '../SetupProfile/css/multistep.css'; // Ensure your styles are applied
 import { useEnumChoices } from '../../utils/enumChoices';
+import Button from '../../components/UIButton';
 
 const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
   const [schoolRecords, setSchoolRecords] = useState(data || []);
@@ -64,8 +65,8 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
 
       {/* Render multiple previous school records */}
     {schoolRecords.map((record, index) => (
-        <div key={index} className="school-record">
-          <h3>School Record {index + 1}</h3>
+        <div key={index} className="school-record subsection-form">
+          <h3 className='step-info'>School Record {index + 1}</h3>
 
           {/* School Name */}
           <FormField
@@ -75,7 +76,7 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
             onChange={(e) => handleFieldChange(index, 'school.name', e.target.value)}
           />
           {/* School Address */}
-          <h3>School {index + 1} Address</h3>
+          <h3 className='step-info'>School {index + 1} Address</h3>
           <div className="form-row three-columns">
             <FormField
               label="Address Line 1"
@@ -107,13 +108,13 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
               <FormField
                 label="Region"
                 type="select"
-                value={record.school.school_address.region}  // This binds the value to the region field inside the record object
-                onChange={(e) => handleFieldChange(index, 'school.school_address.region', e.target.value)}  // Update the specific field when the value changes
-                required  // Optional: Make it required if needed
-                error={error}  // Optional: Handle any validation error
+                value={record.school.school_address.region}  
+                onChange={(e) => handleFieldChange(index, 'school.school_address.region', e.target.value)}  
+                required 
+                error={error} 
                 options={
-                  loading ? [{ value: "", label: "Loading regions..." }] :  // Placeholder text if loading
-                  error ? [{ value: "", label: "Error loading regions" }] :  // Placeholder text if there's an error
+                  loading ? [{ value: "", label: "Loading regions..." }] : 
+                  error ? [{ value: "", label: "Error loading regions" }] :
                   enums?.region || []  
                 }
               />
@@ -128,6 +129,7 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
           </div>
 
           {/* Education Level */}
+           <h3 className='step-info'>School Record {index + 1} More Information</h3>
           <div className="form-row three-columns">
             <FormField
               label="Education Level"
@@ -175,14 +177,27 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
               onChange={(e) => handleFieldChange(index, 'senior_high_gpa', e.target.value)}
             />
           )}
-
-          {/* Button to remove the school record */}
-          <button type="button" onClick={() => removeSchoolRecord(index)}>Remove Record</button>
+        <div className='step-button-form'>
+          <Button
+            variant="secondary"
+            onClick={() => removeSchoolRecord(index)}
+            style={{ marginLeft: '0.5rem' }}
+          >
+            Remove Record
+          </Button>
+          </div>
         </div>
       ))}
 
-      {/* Button to add a new school record */}
-      <button type="button" onClick={addSchoolRecord}>Add Another School Record</button>
+      <div className='step-button-form'>
+      <Button
+          variant="primary"
+          onClick={addSchoolRecord}
+          style={{ marginLeft: '0.5rem' }}
+        >
+          Add Another School Record
+        </Button>
+        </div>
       </fieldset>
     </div>
   );
