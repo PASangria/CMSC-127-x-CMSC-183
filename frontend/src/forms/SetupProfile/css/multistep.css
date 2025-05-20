@@ -216,25 +216,27 @@ textarea:focus {
 /* ===== MODAL ===== */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(33, 33, 33, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  overflow-y: hidden;
+  z-index: 9999;
 }
 
 .modal-content {
-  background-color: #fff;
+  background: white;
+  border-radius: 1rem;
   padding: 2rem;
-  border-radius: 8px;
-  max-height: 70vh;
-  z-index: 4;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
   overflow-y: auto;
-  width: 100%;
-  max-width: 700px;
   position: relative;
 }
 
@@ -259,10 +261,23 @@ textarea:focus {
   display: none;
 }
 
-.modal-content .step-title, .modal-content .step-info {
-  align-items: center;
+.modal-content h2 {
+  text-align: center;
+  font-weight: 1000;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color:#7B1113;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
+.modal-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
 /* ===== CHECKBOX GRID ===== */
 .checkbox-grid {
   display: grid;
@@ -343,5 +358,121 @@ textarea:focus {
   .main-form-buttons {
     gap: 0.5em;
     flex-direction: column;
+  }
+}
+
+
+html {
+  font-size: 100%;
+}
+
+@media (max-width: 64em) {
+  /* Tablet */
+  .mainStepForm,
+  .main-form-card {
+    width: 95%;
+    max-width: 100%;
+  }
+
+  .form-grid,
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .radio-options {
+    gap: 1rem;
+    margin-left: 0;
+  }
+
+  .step-button-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 48em) {
+  /* Mobile Landscape */
+  .main-form-title {
+    font-size: 1.5rem;
+  }
+
+  .main-form-subtitle {
+    font-size: 1rem;
+  }
+
+  .background-rectangle {
+    height: 16em;
+  }
+
+  .form-label,
+  .radio-options label {
+    font-size: 0.95rem;
+  }
+
+  .main-form-card {
+    padding: 1em;
+    box-shadow: none;
+  }
+
+  .certify-agreement {
+    font-size: 0.9em;
+  }
+
+  .modal-content {
+    width: 95%;
+    max-height: 80vh;
+  }
+
+  .modal-close {
+    right: 2em;
+    bottom: 2em;
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 30em) {
+  /* Mobile Portrait */
+  .main-form-title {
+    font-size: 1.25rem;
+  }
+
+  .main-form-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .mainStepForm {
+    margin-top: 1em;
+    padding: 0 1em;
+  }
+
+  .background-rectangle {
+    height: 13em;
+  }
+
+  .form-section {
+    padding: 1rem 0.5rem;
+  }
+
+  .checkbox-grid,
+  .form-grid {
+    margin: 0;
+    gap: 1rem;
+  }
+
+  .inline-checkbox input[type="text"] {
+    font-size: 0.85rem;
+  }
+
+  .modal-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .certify-checkbox {
+    transform: scale(1.1);
+  }
+
+  .modal-close {
+    font-size: 2rem;
   }
 }

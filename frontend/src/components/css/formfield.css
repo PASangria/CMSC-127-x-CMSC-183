@@ -175,3 +175,93 @@
 .helper-text{
   padding-bottom: 2em;
 }
+
+@media (max-width: 64em) {
+  /* Tablet & smaller */
+  .form-row,
+  .form-row.three-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .span-two-columns {
+    grid-column: span 1;
+  }
+
+  .radio-group {
+    gap: 8px;
+  }
+
+  .radio-label {
+    width: 45%; /* Fit 2 per row */
+  }
+
+  .form-input,
+  .form-group select {
+    font-size: 0.95rem;
+    height: 44px;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+@media (max-width: 48em) {
+  /* Mobile landscape */
+  .form-input,
+  .form-group select {
+    font-size: 0.9rem;
+    height: 42px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group .error-message {
+    font-size: 11px;
+  }
+
+  .radio-label {
+    width: 100%; /* Stack vertically */
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 30em) {
+  /* Mobile portrait / extra small */
+  .form-group label {
+    top: 12px;
+    transform: none;
+  }
+
+  .form-input:focus,
+  .form-input.filled {
+    padding-top: 1.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .form-input,
+  .form-group select {
+    font-size: 0.875rem;
+    height: 40px;
+  }
+
+  .form-row,
+  .form-row.three-columns,
+  .custom-form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .custom-form-row .custom-form-group {
+    width: 100%;
+  }
+
+  .custom-form-row .custom-form-group input.custom-form-input,
+  .custom-form-row .custom-form-group select.custom-form-input,
+  .custom-form-row .custom-form-group textarea.custom-form-input {
+    font-size: 0.875rem;
+  }
+
+  .radio-label {
+    font-size: 0.85rem;
+  }
+}

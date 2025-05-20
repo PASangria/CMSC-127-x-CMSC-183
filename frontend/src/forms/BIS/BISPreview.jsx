@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './../SetupProfile/css/multistep.css';
 import './../../components/css/modal.css'; // For modal styles
 import DisplayField from '../../components/DisplayField';
@@ -6,17 +7,19 @@ import BISSocioeconomic from './BISSocioeconomic';
 import BISCertify from './BISCertify';
 import BISPresentScholastic from './BISPresentScholastic';
 import BISPreferences from './BISPreferences';
+import { X } from 'react-feather';
 
 const BISPreview = ({ profileData, formData, onClose }) => {
   const { scholastic_status, preferences, certify } = formData;
 
-  return (
+  const modalContent = (
     <div className="modal-overlay">
       <div className="modal-content large-modal">
-        <button className="modal-close" onClick={onClose}>×</button>
-
+        <button className="modal-close-btn" onClick={onClose}>
+                    <X size={24} />
+                  </button>
         <div className="form-container">
-          <h1 className="step-title">Basic Information Sheet</h1>
+          <h2 className="step-title" style={{marginBottom: '10px'}}>Basic Information Sheet</h2>
           <p className='step-info'>(Preview)</p>
 
           {/* PERSONAL DATA */}
@@ -53,6 +56,7 @@ const BISPreview = ({ profileData, formData, onClose }) => {
       </div>
     </div>
   );
+   return ReactDOM.createPortal(modalContent, document.body);
 };
 
 export default BISPreview;

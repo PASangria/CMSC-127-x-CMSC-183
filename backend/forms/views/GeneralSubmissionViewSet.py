@@ -59,7 +59,6 @@ class FormBundleView(APIView):
         }
 
         for key, (model, serializer) in sections.items():
-            # Check if the section expects multiple items
             many = model._meta.model_name in ['sibling', 'previousschoolrecord']  # Add others as needed
 
             if any(field.name == 'submission' for field in model._meta.fields):

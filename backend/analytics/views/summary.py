@@ -106,7 +106,7 @@ def recent_submissions_view(request):
             "date": Submission.submitted_on.strftime('%Y-%m-%d') if Submission.submitted_on else '',
             "formType": "Student Cumulative Information File" if "Cumulative" in Submission.form_type else "Basic Information SHeet"
         }
-        for s in recent
+        for Submission in recent
     ]
     return Response(data)
 

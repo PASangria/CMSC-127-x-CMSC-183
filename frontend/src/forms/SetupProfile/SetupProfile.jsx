@@ -156,11 +156,11 @@ const MultiStepForm = () => {
       const result = await response.json();
       setLoading(false);
       setShowSuccessToast(true); 
-      console.log("Profile submitted successfully:", result);
+      window.location.href = '/myprofile';
     } catch (error) {
       setLoading(false);
       setError(error.message);
-      console.error("Submission error:", error);
+      
     }
   };
 
@@ -221,7 +221,7 @@ const MultiStepForm = () => {
                         )}
 
                         {/* Steps 2-4: 'Back' and 'Next' buttons */}
-                        {step >= 2 && step <= 4 && (
+                        {step >= 2 && step <= 3 && (
                           <>
                             <Button variant="secondary" onClick={handlePreviousStep}>
                               Back
