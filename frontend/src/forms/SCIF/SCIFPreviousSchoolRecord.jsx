@@ -1,105 +1,204 @@
-import React from 'react';
-import '../SetupProfile/css/multistep.css';
+import React, { useState } from 'react';
+import FormField from '../../components/FormField'; // Import the FormField component
+import '../SetupProfile/css/multistep.css'; // Ensure your styles are applied
+import { useEnumChoices } from '../../utils/enumChoices';
+import Button from '../../components/UIButton';
 
-const SCIFPreviousSchoolRecord = ({ data, updateData }) => {
-  const handleSchoolChange = (level, index, field, value) => {
-    const updatedSchools = { ...data.previousSchools };
-    updatedSchools[level][index] = { ...updatedSchools[level][index], [field]: value };
-    updateData({ ...data, previousSchools: updatedSchools });
+const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly=false }) => {
+  const [schoolRecords, setSchoolRecords] = useState(data || []);
+  const getField = (name) => `${prefix}_${name}`;
+  const { enums, loading, error } = useEnumChoices();
+
+  const handleFieldChange = (index, field, value) => {
+    if (readOnly) return;
+    const updatedRecords = [...schoolRecords];
+    const path = field.split('.');
+
+    let target = updatedRecords[index];
+    for (let i = 0; i < path.length - 1; i++) {
+        target = target[path[i]] ||= {}; 
+      }
+
+      target[path[path.length - 1]] = value;
+
+      setSchoolRecords(updatedRecords);
+      updateData(updatedRecords);
   };
 
-  const addSchool = (level) => {
-    const updatedSchools = { ...data.previousSchools };
-    updatedSchools[level] = [
-      ...(updatedSchools[level] || []),
-      { schoolName: '', address: '', yearsOfAttendance: '', honors: '' },
-    ];
-    updateData({ ...data, previousSchools: updatedSchools });
+
+  const addSchoolRecord = () => {
+    const newRecord = {
+      student_number: '',
+      school: {
+        name: '',
+        school_address: {
+          address_line_1: '',
+          barangay: '',
+          city_municipality: '',
+          province: '',
+          region: '',
+          zip_code: ''
+        }
+      },
+      education_level: '',
+      start_year: '',
+      end_year: '',
+      honors_received: '',
+      senior_high_gpa: '',
+      submission: '',
+    };
+    const updatedRecords = [...schoolRecords, newRecord];
+    setSchoolRecords(updatedRecords);
+    updateData(updatedRecords);  
+  };
+
+  const removeSchoolRecord = (index) => {
+    const updatedRecords = schoolRecords.filter((_, i) => i !== index);
+    setSchoolRecords(updatedRecords);
+    updateData(updatedRecords);  // Updating the parent component's state
   };
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Previous School Record</h2>
 
-      {['Primary/Elementary', 'Secondary (Junior High)', 'Secondary (Senior High)', 'College/Tertiary'].map(
-        (level) => (
-          <div key={level} className="school-level-section">
-            <h3>{level}</h3>
-            {(data.previousSchools?.[level] || []).map((school, index) => (
-              <div key={index} className="school-entry">
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Name of School:</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={school.schoolName || ''}
-                      onChange={(e) =>
-                        handleSchoolChange(level, index, 'schoolName', e.target.value)
-                      }
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Address:</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={school.address || ''}
-                      onChange={(e) =>
-                        handleSchoolChange(level, index, 'address', e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Inclusive Years of Attendance:</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={school.yearsOfAttendance || ''}
-                      onChange={(e) =>
-                        handleSchoolChange(level, index, 'yearsOfAttendance', e.target.value)
-                      }
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Honors Received:</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={school.honors || ''}
-                      onChange={(e) =>
-                        handleSchoolChange(level, index, 'honors', e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => addSchool(level)}
-            >
-              + Add School
-            </button>
-          </div>
-        )
-      )}
+      {/* Render multiple previous school records */}
+    {schoolRecords.map((record, index) => (
+        <div key={index} className="school-record subsection-form">
+          <h3 className='step-info'>School Record {index + 1}</h3>
 
-      {/* Additional Field for College/Tertiary */}
-      <div className="form-row">
-        <div className="form-group">
-          <label>Senior High General Average:</label>
-          <input
-            type="number"
-            className="form-input"
-            value={data.generalAverage || ''}
-            onChange={(e) => updateData({ ...data, generalAverage: e.target.value })}
+          {/* School Name */}
+          <FormField
+            label="School Name"
+            type="text"
+            value={record.school.name || ''}
+            onChange={(e) => handleFieldChange(index, 'school.name', e.target.value)}
           />
+          {/* School Address */}
+          <h3 className='step-info'>School {index + 1} Address</h3>
+          <div className="form-row three-columns">
+            <FormField
+              label="Address Line 1"
+              type="text"
+              value={record.school.school_address.address_line_1}
+              onChange={(e) => handleFieldChange(index, 'school.school_address.address_line_1', e.target.value)}
+            />
+            <FormField
+              label="Barangay"
+              type="text"
+              value={record.school.school_address.barangay}
+              onChange={(e) => handleFieldChange(index, 'school.school_address.barangay', e.target.value)}
+            />
+            <FormField
+              label="City/Municipality"
+              type="text"
+              value={record.school.school_address.city_municipality}
+              onChange={(e) => handleFieldChange(index, 'school.school_address.city_municipality', e.target.value)}
+            />
+          </div>
+          <div className="form-row three-columns">
+            <FormField
+              label="Province"
+              type="text"
+              value={record.school.school_address.province}
+              onChange={(e) => handleFieldChange(index, 'school.school_address.province', e.target.value)}
+            />
+            <div className="form-group">
+              <FormField
+                label="Region"
+                type="select"
+                value={record.school.school_address.region}  
+                onChange={(e) => handleFieldChange(index, 'school.school_address.region', e.target.value)}  
+                required 
+                error={error} 
+                options={
+                  loading ? [{ value: "", label: "Loading regions..." }] : 
+                  error ? [{ value: "", label: "Error loading regions" }] :
+                  enums?.region || []  
+                }
+              />
+            </div>
+
+            <FormField
+              label="ZIP Code"
+              type="text"
+              value={record.school.school_address.zip_code}
+              onChange={(e) => handleFieldChange(index, 'school.school_address.zip_code', e.target.value)}
+            />
+          </div>
+
+          {/* Education Level */}
+           <h3 className='step-info'>School Record {index + 1} More Information</h3>
+          <div className="form-row three-columns">
+            <FormField
+              label="Education Level"
+              type="select"
+              value={record.education_level}
+              onChange={(e) => handleFieldChange(index, 'education_level', e.target.value)}
+              options={[
+                { value: '', label: 'Select Education Level' },
+                { value: 'Primary', label: 'Primary' },
+                { value: 'Junior High', label: 'Junior High' },
+                { value: 'Senior High', label: 'Senior High' },
+                { value: 'College', label: 'College' }
+              ]}
+            />
+
+            {/* Start Year and End Year */}
+            <FormField
+              label="Start Year"
+              type="number"
+              value={record.start_year}
+              onChange={(e) => handleFieldChange(index, 'start_year', +e.target.value)}  
+            />
+            <FormField
+              label="End Year"
+              type="number"
+              value={record.end_year}
+              onChange={(e) => handleFieldChange(index, 'end_year', +e.target.value)} 
+            />
+          </div>
+
+          {/* Honors Received */}
+          <FormField
+            label="Honors Received"
+            type="text"
+            value={record.honors_received}
+            onChange={(e) => handleFieldChange(index, 'honors_received', e.target.value)}
+          />
+
+          {/* Senior High GPA */}
+          {record.education_level === 'Senior High' && (
+            <FormField
+              label="Senior High GPA"
+              type="number"
+              value={record.senior_high_gpa}
+              onChange={(e) => handleFieldChange(index, 'senior_high_gpa', e.target.value)}
+            />
+          )}
+        <div className='step-button-form'>
+          <Button
+            variant="secondary"
+            onClick={() => removeSchoolRecord(index)}
+            style={{ marginLeft: '0.5rem' }}
+          >
+            Remove Record
+          </Button>
+          </div>
         </div>
-      </div>
+      ))}
+
+      <div className='step-button-form'>
+      <Button
+          variant="primary"
+          onClick={addSchoolRecord}
+          style={{ marginLeft: '0.5rem' }}
+        >
+          Add Another School Record
+        </Button>
+        </div>
+      </fieldset>
     </div>
   );
 };

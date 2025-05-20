@@ -3,7 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from users.models import CustomUser
 from .address import Address  
-from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum 
+from .enums import CollegeEnum, YearLevelEnum, DegreeProgramEnum, SemesterEnum 
 from django.core.validators import RegexValidator
 
 def validate_student_number(value):
@@ -22,6 +22,14 @@ class Student(models.Model):
     college = models.CharField(max_length=10, choices=CollegeEnum.choices)
     current_year_level = models.CharField(max_length=10, choices=YearLevelEnum.choices)
     degree_program = models.CharField(max_length=50, choices=DegreeProgramEnum.choices)
+    date_initial_entry = models.CharField(
+        max_length=9,
+        help_text="Format: YYYY-YYYY (e.g., 2023-2024)"
+    )
+    date_initial_entry_sem = models.CharField(
+        max_length=15,
+        choices=SemesterEnum.choices
+    )
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     
     # Personal Information
@@ -45,6 +53,18 @@ class Student(models.Model):
 
     is_complete = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
+    
+    def clean(self):
+        if not re.match(r"^20\d{2}-20\d{2}$", self.date_initial_entry):
+            raise ValidationError({
+                'date_initial_entry': "Format must be YYYY-YYYY using years from 2000 onward (e.g., 2023-2024)."
+            })
+
+        start_year, end_year = map(int, self.date_initial_entry.split('-'))
+        if end_year != start_year + 1:
+            raise ValidationError({
+                'date_initial_entry': "The second year must be the first year plus one (e.g., 2023-2024)."
+            })
     
     def __str__(self):
         return f'{self.first_name} {self.last_name} ({self.student_number})'

@@ -34,6 +34,8 @@
   box-sizing: border-box;
   transition: border-color 0.3s ease, padding-top 0.3s ease;
   appearance: none;
+  /* Space at the top */
+  padding-top: 10px;
 }
 
 /* --- Floating Label Behavior for Focus or Filled --- */
@@ -67,14 +69,6 @@
   outline: none;
 }
 
-/* --- Select Arrow Icon Styling --- */
-.form-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2rem;
-}
-
 /* --- Error Styles --- */
 .form-group.error .form-input,
 .form-group.error select {
@@ -104,5 +98,170 @@
 }
 
 .form-row.three-columns {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.span-two-columns {
+  grid-column: span 2;
+}
+
+/* Textarea field styling: ensures overflow goes downwards and cursor starts at top left */
+.custom-form-row .custom-form-group textarea.custom-form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical; /* Allow resizing vertically */
+  min-height: 100px; /* Minimum height for the textarea */
+  height: auto; /* Allow textarea to grow in height */
+  overflow-y: auto; /* Show a scrollbar only when content exceeds the visible area */
+  text-align: left; /* Align text to the left */
+  vertical-align: top; /* Align text vertically to the top */
+  padding-top: 10px; /* Ensure enough space at the top for the cursor */
+  box-sizing: border-box;
+}
+
+/* --- Form Rows (Grid Layout) --- */
+.custom-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.custom-form-row .custom-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Style for input fields */
+.custom-form-row .custom-form-group input.custom-form-input,
+.custom-form-row .custom-form-group select.custom-form-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 5px;
+  text-align: left; /* Align text to the left */
+  vertical-align: top; /* Align text vertically to the top */
+}
+
+/* --- Radio Button Group --- */
+.radio-group {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 5px;
+  width: calc(25% - 10px); 
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.helper-text{
+  padding-bottom: 2em;
+}
+
+@media (max-width: 64em) {
+  /* Tablet & smaller */
+  .form-row,
+  .form-row.three-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .span-two-columns {
+    grid-column: span 1;
+  }
+
+  .radio-group {
+    gap: 8px;
+  }
+
+  .radio-label {
+    width: 45%; /* Fit 2 per row */
+  }
+
+  .form-input,
+  .form-group select {
+    font-size: 0.95rem;
+    height: 44px;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+@media (max-width: 48em) {
+  /* Mobile landscape */
+  .form-input,
+  .form-group select {
+    font-size: 0.9rem;
+    height: 42px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group .error-message {
+    font-size: 11px;
+  }
+
+  .radio-label {
+    width: 100%; /* Stack vertically */
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 30em) {
+  /* Mobile portrait / extra small */
+  .form-group label {
+    top: 12px;
+    transform: none;
+  }
+
+  .form-input:focus,
+  .form-input.filled {
+    padding-top: 1.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .form-input,
+  .form-group select {
+    font-size: 0.875rem;
+    height: 40px;
+  }
+
+  .form-row,
+  .form-row.three-columns,
+  .custom-form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .custom-form-row .custom-form-group {
+    width: 100%;
+  }
+
+  .custom-form-row .custom-form-group input.custom-form-input,
+  .custom-form-row .custom-form-group select.custom-form-input,
+  .custom-form-row .custom-form-group textarea.custom-form-input {
+    font-size: 0.875rem;
+  }
+
+  .radio-label {
+    font-size: 0.85rem;
+  }
 }

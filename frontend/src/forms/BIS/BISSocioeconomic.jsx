@@ -12,12 +12,18 @@ const SupportChoices = {
   GOV_FUNDED: 'gov_funded',
 };
 
-const BISSocioeconomic = ({ data, updateData }) => {
+const BISSocioeconomic = ({ data, updateData,  readOnly = false }) => {
   const handleChange = (e, section) => {
-    const { name, type, checked, value } = e.target;
+    if (readOnly) return;
 
-    if (type === 'checkbox') {
-      // Determine which section's support array to update
+    const { name, type, value, checked } = e.target;
+
+    const parsedValue =
+      type === 'radio' && (value === 'true' || value === 'false')
+        ? value === 'true'
+        : value;
+
+    if (type === 'checkbox' && section === 'student_support') {
       const updatedSupport = new Set(data[section].support || []);
 
       if (checked) {
@@ -30,7 +36,7 @@ const BISSocioeconomic = ({ data, updateData }) => {
         ...data,
         [section]: {
           ...data[section],
-          support: Array.from(updatedSupport), 
+          support: Array.from(updatedSupport),
         },
       });
     } else {
@@ -38,14 +44,17 @@ const BISSocioeconomic = ({ data, updateData }) => {
         ...data,
         [section]: {
           ...data[section],
-          [name]: value, // Update the other fields in the section
+          [name]: parsedValue,
         },
       });
     }
   };
 
+
+
   return (
     <div className="form-section">
+    <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Socio-Economic Status</h2>
 
       <label className="form-label">What is your means of support for your college education?</label>
@@ -68,7 +77,6 @@ const BISSocioeconomic = ({ data, updateData }) => {
           </label>
         ))}
 
-        {/* Scholarship + text input */}
         <label className="inline-checkbox">
           <input
             type="checkbox"
@@ -131,15 +139,42 @@ const BISSocioeconomic = ({ data, updateData }) => {
           )}
         </label>
       </div>
+        
+       <div className="radio-question-group">
+        <label className="form-label">
+          Do you have other scholarships aside from UP Socialized Tuition System? 
+        </label>
+        <div className="radio-options">
+        <label>
+          <input
+            type="radio"
+            name="has_scholarship"
+            value="true"
+            checked={data.socio_economic_status.has_scholarship === true}
+            onChange={(e) => handleChange(e, 'socio_economic_status')}
+          />
+          Yes
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="has_scholarship"
+            value="false"
+            checked={data.socio_economic_status.has_scholarship === false}
+            onChange={(e) => handleChange(e, 'socio_economic_status')}
+          />
+          No
+        </label>
+        </div>
+      </div> 
 
-      {/* Additional Text Inputs */}
       <div className="form-row full-width">
         <label className="form-label">
           What other scholarships do you have aside from UP Socialized Tuition System?
         </label>
         <textarea
           className="form-input"
-          name="other_scholarship"
+          name="scholarships"
           value={data.socio_economic_status.scholarships || ''}
           onChange={(e) => handleChange(e, 'socio_economic_status')}
         />
@@ -183,6 +218,7 @@ const BISSocioeconomic = ({ data, updateData }) => {
           onChange={(e) => handleChange(e, 'socio_economic_status')}
         />
       </div>
+      </fieldset>
     </div>
   );
 };

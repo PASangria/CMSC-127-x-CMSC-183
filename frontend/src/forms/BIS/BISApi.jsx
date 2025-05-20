@@ -12,6 +12,7 @@ const sectionKeys = [
 
 export const useFormApi = () => {
   const { request } = useApiRequest();
+  const arraySections = []; 
 
   const createDraftSubmission = async (studentNumber) => {
     const response = await request(`${BASE_URL}/`, {
@@ -35,16 +36,24 @@ export const useFormApi = () => {
 
   const saveDraft = async (submissionId, studentNumber, formData) => {
     const payload = {};
+
     sectionKeys.forEach((key) => {
       if (formData[key]) {
-        payload[key] = {
-          ...formData[key],
-          submission: submissionId,
-          student_number: studentNumber,
-        };
+        if (arraySections.includes(key) && Array.isArray(formData[key])) {
+          payload[key] = formData[key].map((item) => ({
+            ...item,
+            submission: submissionId,
+            student_number: studentNumber,
+          }));
+        } else {
+          payload[key] = {
+            ...formData[key],
+            submission: submissionId,
+            student_number: studentNumber,
+          };
+        }
       }
     });
-
     const response = await request(`${BASE_URL}/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -54,16 +63,51 @@ export const useFormApi = () => {
     return response;
   };
 
-  const finalizeSubmission = async (submissionId) => {
-    const response = await request(
-      `http://localhost:8000/api/forms/finalize/${submissionId.submission}/`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+  const finalizeSubmission = async (submissionId, studentNumber, formData) => {
+    try {
+      const draftResponse = await saveDraft(submissionId, studentNumber, formData);
 
-    return response;
+      if (!draftResponse.ok) {
+        const draftError = await draftResponse.json();
+        return {
+          success: false,
+          status: draftResponse.status,
+          data: draftError,
+          message: 'Failed to save draft before finalizing.',
+        };
+      }
+
+      const response = await request(
+        `http://localhost:8000/api/forms/finalize/${submissionId}/`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          status: response.status,
+          data,
+        };
+      }
+
+      return {
+        success: true,
+        status: response.status,
+        data,
+      };
+    } catch (error) {
+      console.error('Network or unexpected error:', error);
+      return {
+        success: false,
+        status: 0,
+        data: { error: 'Network error or unexpected issue occurred.' },
+      };
+    }
   };
 
   return {

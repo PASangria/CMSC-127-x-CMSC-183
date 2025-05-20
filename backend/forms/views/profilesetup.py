@@ -18,22 +18,24 @@ def create_student_profile(request):
     
     student_data = request.data
     
-    # Extract and process address data
     permanent_address_data = student_data.get('permanent_address')
     address_while_in_up_data = student_data.get('address_while_in_up')
 
-    # Helper function to check if an address already exists or create a new one
     def get_or_create_address(address_data):
-        address, created = Address.objects.get_or_create(
-            address_line_1=address_data['address_line_1'],
-            address_line_2=address_data.get('address_line_2', ''),
-            barangay=address_data['barangay'],
-            city_municipality=address_data['city_municipality'],
-            province=address_data['province'],
-            region=address_data['region'],
-            zip_code=address_data['zip_code'],
-        )
+        try:
+            address = Address.objects.get(
+                address_line_1=address_data['address_line_1'],
+                barangay=address_data['barangay'],
+                city_municipality=address_data['city_municipality'],
+                province=address_data['province'],
+                region=address_data['region'],
+                zip_code=address_data['zip_code']
+            )
+        except Address.DoesNotExist:
+            address = Address.objects.create(**address_data)
+        
         return address
+
 
     # Get or create the permanent and UP addresses
     permanent_address = get_or_create_address(permanent_address_data)
@@ -60,6 +62,8 @@ def create_student_profile(request):
         permanent_address=permanent_address,
         address_while_in_up=address_while_in_up,
         is_complete=student_data.get('is_complete', False),
+        date_initial_entry = student_data.get('date_initial_entry'),
+        date_initial_entry_sem = student_data.get('date_initial_entry_sem')
     )
 
     # Serialize the student profile (to return in the response)

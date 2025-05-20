@@ -6,15 +6,24 @@ import BISSocioeconomic from './BISSocioeconomic';
 import BISPreferences from './BISPreferences';
 import BISPresentScholastic from './BISPresentScholastic';
 import BISCertify from './BISCertify';
+import BISPreview from './BISPreview';
 import ProgressBar from '../../components/ProgressBar';
 import Navbar from '../../components/NavBar';
 import Footer from '../../components/Footer';
 import '../SetupProfile/css/multistep.css';
 import {  useFormApi } from './BISApi';
+import {
+  validatePreferences,
+  validateScholasticStatus, 
+  validateSocioEconomicStatus,
+  validateSupport
+} from '../../utils/BISValidation'
+import Button from '../../components/UIButton'
 
 const BISForm = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
   const {
     createDraftSubmission,
     getFormBundle,
@@ -24,6 +33,7 @@ const BISForm = () => {
 
   const [formData, setFormData] = useState({
     socio_economic_status: {
+      student_number: '',
       has_scholarship: false,
       scholarships: '',
       scholarship_privileges: '',
@@ -31,12 +41,14 @@ const BISForm = () => {
       spending_habit: '',
     },
     scholastic_status: {
+      student_number: '',
       intended_course: '',
       first_choice_course: '',
       admitted_course: '',
       next_plan: '',
     },
     preferences: {
+      student_number: '',
       influence: '',
       reason_for_enrolling: '',
       transfer_plans: false,
@@ -46,32 +58,57 @@ const BISForm = () => {
       reason_for_shifting: '',
     },
     student_support: {
+      student_number: '',
       support: [],
       other_notes: '',
       other_scholarship: '',
       combination_notes: '',
     },
-    certify: false,
+    privacy_consent: {
+      student_number: '',
+      has_consented: false
+    }
   });
 
   const [step, setStep] = useState(0);
   const [submissionId, setSubmissionId] = useState(null);
   const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
 
-  // Loading and error states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [readOnly, setReadOnly] = useState(false);
 
-  // Fetching form data
+  const validateStep = (step, formData) => {
+  switch (step) {
+    case 1: 
+      const errors = [
+      ...validateSocioEconomicStatus(formData),
+      ...validateSupport(formData)
+    ];
+      return errors;
+    case 2: 
+      return validatePreferences(formData);
+    case 3: 
+      return validateScholasticStatus(formData);
+    case 4:
+      if (!formData.privacy_consent.has_consented) {
+        alert('You must agree to the Privacy Notice to proceed.');
+        return false; 
+      }
+      return true; 
+    default:
+      return true;
+  }
+};
+
+
 useEffect(() => {
   const fetchFormData = async () => {
     setLoading(true);
     try {
       let response = await getFormBundle(studentNumber);
 
-      // If no submission yet, create one
       if (!response) {
-        alert('No submission found. Creating a new one...');
         response = await createDraftSubmission(studentNumber);
       }
 
@@ -81,9 +118,14 @@ useEffect(() => {
           scholastic_status: response.scholastic_status || {},
           preferences: response.preferences || {},
           student_support: response.student_support || {},
-          certify: response.certify || false,
+          privacy_consent: response.privacy_consent || false,
         });
         setSubmissionId(response.submission.id);
+
+         if (response.submission.status === 'submitted') {
+            setReadOnly(true);
+          }
+
       } else {
         setError('Failed to create or fetch the form.');
       }
@@ -106,6 +148,7 @@ const handleSaveDraft = async () => {
   setLoading(true);
   try {
     const response = await saveDraft(submissionId, studentNumber, formData);
+
     if (response?.ok) {
       alert('Draft saved successfully!');
     } else {
@@ -118,31 +161,56 @@ const handleSaveDraft = async () => {
   }
 };
 
-  // Handle navigation between steps
-  const handleNextStep = () => setStep((prev) => prev + 1);
+  const handleNextStep = () => {
+    const errors = validateStep(step, formData);
+
+    if (errors.length > 0) {
+      alert("Please fix the following errors:\n\n" + errors.join("\n"));
+      return;
+    }
+
+    setStep(prev => prev + 1);
+  };
+  
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
-  // Submit form
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const data = {
-        ...formData,
-        submission: submissionId,
-        student_number: studentNumber,
-      };
-      const response = await finalizeSubmission(data);
-      if (response) {
-        alert('Form submitted successfully!');
-      } else {
-        alert('Error submitting form.');
-      }
-    } catch (err) {
-      alert('Failed to submit form.');
-    } finally {
-      setLoading(false);
-    }
+  const handlePreview = () => {
+    setIsPreviewOpen(true);
   };
+
+
+const handleSubmit = async () => {
+  if (!formData?.privacy_consent?.has_consented) {
+    alert('You must agree to the Privacy Statement to submit the form.');
+    return; 
+  }
+
+  setLoading(true);
+  try {
+    const result = await finalizeSubmission(submissionId, studentNumber, formData);
+
+    if (result.success) {
+      alert(result.data.message || 'Form submitted successfully!');
+    } else {
+      // Handle specific error messages based on response
+      if (result.status === 400 && result.data.errors) {
+        alert('Validation errors:\n' + JSON.stringify(result.data.errors, null, 2));
+      } else if (result.data.error) {
+        alert(`Error: ${result.data.error}`);
+      } else if (result.data.message) {
+        alert(`Error: ${result.data.message}`);
+      } else {
+        alert('Unknown error occurred.');
+      }
+    }
+  } catch (err) {
+    alert('Failed to submit form.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <>
@@ -178,6 +246,7 @@ const handleSaveDraft = async () => {
                       student_support: { ...prev.student_support, ...newData.student_support }
                     }))
                   }
+                  readOnly={readOnly}
                 />
 
               )}
@@ -190,6 +259,7 @@ const handleSaveDraft = async () => {
                       preferences: { ...prev.preferences, ...newData },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
               {step === 3 && (
@@ -201,49 +271,117 @@ const handleSaveDraft = async () => {
                       scholastic_status: { ...prev.scholastic_status, ...newData },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
               {step === 4 && (
                 <BISCertify
-                  data={formData.certify}
-                  updateData={(newData) =>
+                  data={formData}
+                  updateData={(isChecked) =>
                     setFormData((prev) => ({
                       ...prev,
-                      certify: newData,
+                      privacy_consent: {
+                        ...prev.privacy_consent,
+                        has_consented: isChecked, 
+                      },
                     }))
                   }
+                  readOnly={readOnly}
                 />
               )}
 
               <div className="main-form-buttons">
-                {step > 0 && !loading && (
-                  <button className="btn-secondary" onClick={handlePreviousStep}>
-                    Back
-                  </button>
-                )}
-                <button className="btn-primary" onClick={handleSaveDraft} disabled={loading}>
-                  {loading ? 'Saving Draft...' : 'Save Draft'}
-                </button>
-                {step < 4 && !loading && (
-                  <button className="btn-primary" onClick={handleNextStep}>
+                {/* Step 1: Only 'Next' button */}
+                {step === 0 && !loading && (
+                  <Button variant="primary" onClick={handleNextStep}>
                     Next
-                  </button>
+                  </Button>
                 )}
+
+                {/* Steps 2-4: 'Back', 'Save Draft', and 'Next' buttons */}
+                {step >= 1 && step <= 3 && !loading && (
+                  <>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      {loading ? 'Saving Draft...' : 'Save Draft'}
+                    </Button>
+                  )}
+                    <Button
+                      variant="primary"
+                      onClick={handleNextStep}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      Next
+                    </Button>
+                  </>
+                )}
+
+                {/* Step 5: 'Back', 'Save Draft', 'Preview', and 'Submit' buttons */}
                 {step === 4 && !loading && (
-                  <button className="btn-submit" onClick={handleSubmit}>
-                    Submit
-                  </button>
+                  <>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      {loading ? 'Saving Draft...' : 'Save Draft'}
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="tertiary"
+                    onClick={handlePreview}
+                    style={{ marginLeft: '0.5rem' }}
+                  >
+                    Preview
+                  </Button>
+
+                  {isPreviewOpen && (
+                    <BISPreview
+                      profileData={profileData}
+                      formData={formData}
+                      onClose={() => setIsPreviewOpen(false)}
+                    />
+                  )}
+
+                  {!readOnly && (
+                    <Button
+                      variant='primary'
+                      onClick={handleSubmit}
+                      style={{ marginLeft: '0.5rem' }}
+                    >
+                      Submit
+                    </Button>
+                  )}
+
+                  </>
                 )}
+
+                {/* Loading Indicator */}
                 {loading && <div>Loading...</div>}
+
+                {/* Error Message */}
                 {error && <div className="error-message">{error}</div>}
               </div>
             </div>
           </div>
         </div>
-
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
+  </>
   );
 };
 

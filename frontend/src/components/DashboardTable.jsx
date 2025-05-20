@@ -1,9 +1,9 @@
 import React from "react";
 import "../components/css/DashboardTable.css";
+import Button from "./UIButton";
 import { formatDate } from "../utils/helperFunctions";
 
-const TableSection = ({ title, headers, rows, onView }) => {
-  // Check if rows is an array and default to an empty array if not
+const TableSection = ({ title, headers, rows, onView, onDelete }) => {
   const validRows = Array.isArray(rows) ? rows : [];
 
   return (
@@ -18,20 +18,26 @@ const TableSection = ({ title, headers, rows, onView }) => {
               {headers.map((header, index) => (
                 <th key={index}>{header}</th>
               ))}
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {validRows.map((row, idx) => (
-              <tr key={row.id}> {/* Use a unique ID from the form */}
-                {/* Access individual properties of the row */}
-                <td>{row.form_type}</td> {/* Example: formType could be a property */}
-                <td><span>{formatDate(row.date_submitted || row.saved_on)}</span></td> 
+            {validRows.map((row) => (
+              <tr key={row.id}>
+                <td>{row.form_type}</td>
+                <td><span>{formatDate(row.date_submitted || row.saved_on)}</span></td>
                 <td>
                   <span className={`status-badge ${row.status.toLowerCase()}`}>{row.status}</span>
                 </td>
                 <td>
-                  <button className="view-button" onClick={() => onView(row)}>VIEW</button>
+                  {onView && (
+                    <Button variant="primary" onClick={() => onView(row)}>View</Button>
+                  )}
+                  {onDelete && (
+                    <Button variant="danger" onClick={() => onDelete(row)} style={{ marginLeft: '8px' }}>
+                      Delete
+                  </Button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -42,12 +48,10 @@ const TableSection = ({ title, headers, rows, onView }) => {
   );
 };
 
-const DashboardTable = ({ submittedForms, pendingActions, onView }) => {
+
+const DashboardTable = ({ submittedForms, pendingActions, onView, onDelete }) => {
   const submittedHeaders = ["Form Type", "Date Submitted", "Status"];
   const pendingHeaders = ["Form Type", "Last Date Updated", "Status"];
-
-  console.log("Submitted Forms:", submittedForms);
-  console.log("Pending Actions:", pendingActions);
 
   return (
     <div className="dashboard-container">
@@ -63,10 +67,12 @@ const DashboardTable = ({ submittedForms, pendingActions, onView }) => {
         headers={pendingHeaders}
         rows={pendingActions}
         onView={onView}
+        onDelete={onDelete}
       />
     </div>
   );
 };
+
 
 
 export default DashboardTable;

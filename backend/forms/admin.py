@@ -67,3 +67,58 @@ class CounselingInformationAdmin(admin.ModelAdmin):
     list_display = ('student', 'personal_characteristics', 'problem_confidant', 'previous_counseling')
     search_fields = ('student__first_name', 'student__last_name', 'student__student_number')
     list_filter = ('previous_counseling',)
+    
+class SchoolAddressAdmin(admin.ModelAdmin):
+    list_display = ('address_line_1', 'barangay', 'city_municipality', 'province', 'region', 'zip_code')
+    search_fields = ('barangay', 'city_municipality', 'province', 'region', 'zip_code')
+
+admin.site.register(SchoolAddress, SchoolAddressAdmin)
+
+
+# Register School with custom display
+class SchoolAdmin(admin.ModelAdmin):
+    list_display = ('name', 'school_address')
+    search_fields = ('name',)
+
+admin.site.register(School, SchoolAdmin)
+
+
+# Register PreviousSchoolRecord with custom display and validation error handling
+class PreviousSchoolRecordAdmin(admin.ModelAdmin):
+    list_display = ('student', 'school', 'education_level', 'start_year', 'end_year', 'senior_high_gpa', 'submission')
+    search_fields = ('student__first_name', 'student__last_name', 'school__name', 'education_level')
+    list_filter = ('education_level', 'submission__status')
+
+admin.site.register(PreviousSchoolRecord, PreviousSchoolRecordAdmin)
+
+
+# Register Parent with custom display
+class ParentAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'age', 'contact_number', 'job_occupation', 'company_agency', 'highest_educational_attainment')
+    search_fields = ('first_name', 'last_name', 'contact_number', 'job_occupation')
+
+admin.site.register(Parent, ParentAdmin)
+
+
+# Register Sibling with custom display
+class SiblingAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'sex', 'age', 'educational_attainment')
+    search_fields = ('first_name', 'last_name', 'educational_attainment')
+
+admin.site.register(Sibling, SiblingAdmin)
+
+
+# Register Guardian with custom display
+class GuardianAdmin(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'contact_number', 'relationship_to_guardian', 'address')
+    search_fields = ('first_name', 'last_name', 'contact_number', 'relationship_to_guardian')
+
+admin.site.register(Guardian, GuardianAdmin)
+
+
+# Register FamilyData with custom display
+class FamilyDataAdmin(admin.ModelAdmin):
+    list_display = ('student', 'mother', 'father', 'guardian')
+    search_fields = ('student__first_name', 'student__last_name', 'mother__first_name', 'father__first_name', 'guardian__first_name')
+
+admin.site.register(FamilyData, FamilyDataAdmin)

@@ -22,6 +22,7 @@ const FormField = ({
           name={name}
           value={value}
           onChange={onChange}
+          onInput={onChange}
           required={required}
           disabled={disabled}
           className={`form-input ${isFilled ? 'filled' : ''}`}

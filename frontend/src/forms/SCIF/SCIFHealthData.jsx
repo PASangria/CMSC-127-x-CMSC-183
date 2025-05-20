@@ -1,40 +1,55 @@
 import React from 'react';
+import FormField from '../../components/FormField'; 
 import '../SetupProfile/css/multistep.css';
 
-const SCIFHealthData = ({ data, updateData }) => {
-  const handleCheckboxChange = (condition) => {
-    const updatedConditions = data.healthCondition || [];
-    if (updatedConditions.includes(condition)) {
-      // Remove the condition if it's already selected
-      updateData({
-        ...data,
-        healthCondition: updatedConditions.filter((item) => item !== condition),
-      });
-    } else {
-      // Add the condition if it's not selected
-      updateData({
-        ...data,
-        healthCondition: [...updatedConditions, condition],
-      });
-    }
+const SCIFHealthData = ({ data, updateData, readOnly=false }) => {
+  const normalizeNumber = (value) => {
+    if (readOnly) return;
+    if (value === '' || value === null || value === undefined) return null;
+    const number = Number(value);
+    return isNaN(number) ? null : number;
+  };
+
+
+  const normalizeText = (value) => {
+    if (readOnly) return;
+    return value === '' ? null : value;
+  };
+
+  const normalizeList = (value) => {
+    if (readOnly) return;
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+  };
+
+  const handleHealthConditionChange = (condition) => {
+    
+    if (readOnly) return;
+    updateData({
+      ...data,
+      health_condition: normalizeText(condition),
+    });
   };
 
   return (
     <div className="form-section">
+      <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Health Data</h2>
 
-      {/* Health Condition */}
-      <div className="form-group">
-        <label className="form-label">Health Condition:</label>
-        <div className="checkbox-group">
+      {/* Health Condition (Radio Buttons) */}
+      <div className="radio-form ">
+         <label className="form-label ">Health Condition:</label>
+        <div className="radio-group form-row .span-two-columns">
           {['Excellent', 'Very Good', 'Good', 'Poor'].map((condition) => (
-            <label key={condition} className="checkbox-label">
+            <label key={condition} className="radio-label">
               <input
-                type="checkbox"
-                name="healthCondition"
+                type="radio"
+                name="health_condition"
                 value={condition}
-                checked={(data.healthCondition || []).includes(condition)}
-                onChange={() => handleCheckboxChange(condition)}
+                checked={data.health_condition === condition}
+                onChange={() => handleHealthConditionChange(condition)}
               />
               {condition}
             </label>
@@ -42,86 +57,111 @@ const SCIFHealthData = ({ data, updateData }) => {
         </div>
       </div>
 
-      <div className="form-row">
-        <div className="form-group">
-          <label>Height (m):</label>
-          <input
-            type="number"
-            step="0.01"
-            value={data.height || ''}
-            onChange={(e) => updateData({ ...data, height: e.target.value })}
-          />
-        </div>
-        <div className="form-group">
-          <label>Weight (kg):</label>
-          <input
-            type="number"
-            step="0.01"
-            value={data.weight || ''}
-            onChange={(e) => updateData({ ...data, weight: e.target.value })}
-          />
-        </div>
-        <div className="form-group">
-          <label>Eye Sight:</label>
-          <select
-            value={data.eyeSight || ''}
-            onChange={(e) => updateData({ ...data, eyeSight: e.target.value })}
-          >
-            <option value="">Select</option>
-            <option value="Good">Good</option>
-            <option value="Poor">Poor</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Hearing:</label>
-          <select
-            value={data.hearing || ''}
-            onChange={(e) => updateData({ ...data, hearing: e.target.value })}
-          >
-            <option value="">Select</option>
-            <option value="Good">Good</option>
-            <option value="Poor">Poor</option>
-          </select>
-        </div>
+      {/* Height and Weight */}
+      <div className='subsection-form'></div>
+      <div className='form-row'>
+        <FormField
+          label="Height (m)"
+          type="number"
+          value={data.height ?? ''}
+          onChange={(e) =>
+            updateData({ ...data, height: normalizeNumber(e.target.value) })
+          }
+        />
+
+        <FormField
+          label="Weight (kg)"
+          type="number"
+          value={data.weight ?? ''}
+          onChange={(e) =>
+            updateData({ ...data, weight: normalizeNumber(e.target.value) })
+          }
+        />
       </div>
 
-      <div className="form-row">
-        <div className="form-group">
-          <label>Any Physical Disability:</label>
-          <input
-            type="text"
-            value={data.disability || ''}
-            onChange={(e) => updateData({ ...data, disability: e.target.value })}
-          />
-        </div>
-        <div className="form-group">
-          <label>Common/ Frequent Ailment:</label>
-          <input
-            type="text"
-            value={data.ailment || ''}
-            onChange={(e) => updateData({ ...data, ailment: e.target.value })}
-          />
-        </div>
+      {/* Eye Sight and Hearing */}
+      <div className='form-row'>
+        <FormField
+          label="Eye Sight"
+          type="select"
+          value={data.eye_sight || ''}
+          onChange={(e) =>
+            updateData({ ...data, eye_sight: normalizeText(e.target.value) })
+          }
+          options={[
+            { value: '', label: 'Select' },
+            { value: 'Good', label: 'Good' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'Poor', label: 'Poor' },
+          ]}
+        />
+
+        <FormField
+          label="Hearing"
+          type="select"
+          value={data.hearing || ''}
+          onChange={(e) =>
+            updateData({ ...data, hearing: normalizeText(e.target.value) })
+          }
+          options={[
+            { value: '', label: 'Select' },
+            { value: 'Good', label: 'Good' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'Poor', label: 'Poor' },
+          ]}
+        />
       </div>
 
-      <div className="form-row">
-        <div className="form-group">
-          <label>Last Hospitalization (MM/DD/YYYY):</label>
-          <input
-            type="date"
-            value={data.lastHospitalization || ''}
-            onChange={(e) => updateData({ ...data, lastHospitalization: e.target.value })}
-          />
-        </div>
-        <div className="form-group full-width">
-          <label>Reason for Hospitalization:</label>
-          <textarea
-            className="large-textarea"
-            value={data.hospitalizationReason || ''}
-            onChange={(e) => updateData({ ...data, hospitalizationReason: e.target.value })}
-          ></textarea>
-        </div>
+      {/* Disabilities and Ailments */}
+      <div className='form-row'>
+        <FormField
+          label="Any Physical Disability"
+          type="text"
+          value={(data.physical_disabilities || []).join(', ')}
+          onChange={(e) =>
+            updateData({
+              ...data,
+              physical_disabilities: normalizeList(e.target.value),
+            })
+          }
+        />
+
+        <FormField
+          label="Common/ Frequent Ailment"
+          type="text"
+          value={(data.common_ailments || []).join(', ')}
+          onChange={(e) =>
+            updateData({
+              ...data,
+              common_ailments: normalizeList(e.target.value),
+            })
+          }
+        />
       </div>
+
+      {/* Hospitalization */}
+      <div className='custom-form-row'>
+        <FormField
+          label="Last Hospitalization (MM/DD/YYYY)"
+          type="date"
+          value={data.last_hospitalization || ''}
+          onChange={(e) =>
+            updateData({ ...data, last_hospitalization: e.target.value })
+          }
+          className="custom-form-input form-input"
+        />
+
+        <FormField
+          label="Reason for Hospitalization"
+          type="textarea"
+          value={data.reason_of_hospitalization || ''}
+          onChange={(e) =>
+            updateData({ ...data, reason_of_hospitalization: e.target.value })
+          }
+          className="custom-form-input form-input"
+        />
+      </div>
+      </fieldset>
     </div>
   );
 };

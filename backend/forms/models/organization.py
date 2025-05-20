@@ -17,7 +17,7 @@ class Membership(models.Model):
     student = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
-    semester = models.CharField(max_length=10, choices=SemesterEnum.choices, null=True, blank=True)
+    semester = models.CharField(max_length=15, choices=SemesterEnum.choices, null=True, blank=True)
     academic_year = models.CharField(max_length=9, help_text="Format: YYYY-YYYY", null=True, blank=True)
     position = models.CharField(max_length=255, null=True, blank=True)
 

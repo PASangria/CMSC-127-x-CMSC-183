@@ -11,7 +11,6 @@ export const formatDate = (isoDate, locale = 'en-US', options = {}) => {
   const date = new Date(isoDate);
 
   const defaultOptions = {
-    weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -25,3 +24,18 @@ export const formatDate = (isoDate, locale = 'en-US', options = {}) => {
 
   return date.toLocaleString(locale, formatOptions);
 };
+
+export function calculateAge(birthdate) {
+  const today = new Date();
+  const birthDate = new Date(birthdate);
+  
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
+}
+

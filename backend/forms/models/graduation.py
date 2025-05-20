@@ -12,7 +12,7 @@ class Graduation(models.Model):
         help_text="Format: YYYY-YYYY (e.g., 2023-2024)"
     )
     semester = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=SemesterEnum.choices
     )
     graduation_date = models.DateField()
@@ -31,8 +31,6 @@ class Graduation(models.Model):
 
     def __str__(self):
         return f"{self.academic_year} - {self.semester}"
-
-from django.db import models
 
 class GraduateStudent(models.Model):
     graduation = models.ForeignKey('Graduation', on_delete=models.CASCADE)
