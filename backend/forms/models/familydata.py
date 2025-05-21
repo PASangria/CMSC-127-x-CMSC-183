@@ -95,9 +95,9 @@ class Guardian(models.Model):
 class FamilyData(models.Model):
     student = models.OneToOneField(Student, to_field='student_number', on_delete=models.CASCADE, related_name='family_data')
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    mother = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.SET_NULL, related_name='children_mother')
-    father = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.SET_NULL, related_name='children_father')
-    guardian = models.ForeignKey(Guardian, null=True, blank=True, on_delete=models.SET_NULL)
+    mother = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.CASCADE, related_name='children_mother')
+    father = models.ForeignKey(Parent, null=True, blank=True, on_delete=models.CASCADE, related_name='children_father')
+    guardian = models.ForeignKey(Guardian, null=True, blank=True, on_delete=models.CASCADE)
 
     def clean(self):
         if self.submission.status == 'draft':

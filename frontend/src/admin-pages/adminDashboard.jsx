@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import {
-  Box, Stack, Typography, Grid, CardContent, Divider
+  Box, Stack, Typography, Grid, CardContent, Divider, Card
 } from '@mui/material';
 import DefaultLayout from '../components/DefaultLayout';
 import StatCard from '../components/StatCard';
@@ -18,6 +18,7 @@ export const AdminDashboard = () => {
   const [summaryData, setSummaryData] = useState([]);
   const [recentSubmissions, setRecentSubmissions] = useState([]);
   const [recentDrafts, setRecentDrafts] = useState([]);
+  const [totalStudents, setTotalStudents] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -32,14 +33,18 @@ export const AdminDashboard = () => {
           request('http://localhost:8000/api/dashboard/recent-drafts/'),
         ]);
 
-        if (barRes?.ok) setBarData(await barRes.json());
+        if (barRes?.ok) {
+          const json = await barRes.json();
+          setBarData(json.barData || []);
+          setTotalStudents(json.totalStudents || 0);  
+        }
         if (summaryRes?.ok) {
           const json = await summaryRes.json();
           setSummaryData(json.summary || []);
         }
         if (recentSubsRes?.ok) {
           const json = await recentSubsRes.json();
-          setRecentSubmissions(json.results || []);
+          setRecentSubmissions(json || []);
         }
         if (recentDraftsRes?.ok) {
           const json = await recentDraftsRes.json();
@@ -54,12 +59,14 @@ export const AdminDashboard = () => {
     fetchDashboardData();
   }, [role, request]);
 
+  console.log(recentSubmissions);
   if (loading) return <Typography variant="h6">Loading...</Typography>;
   if (!user || role !== 'admin') return <Navigate to="/" replace />;
 
   const recentSubmissionColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'submitted_by', headerName: 'Submitted By', flex: 1 },
+    { field: 'id', headerName: 'ID', flex: 1 },
+    { field: 'student_name', headerName: 'Submitted By', flex: 1 },
+    { field: 'student_number', headerName: 'Student Number', width: 70 },
     { field: 'submitted_on', headerName: 'Date', flex: 1 },
     { field: 'form_type', headerName: 'Form Type', flex: 1 },
   ];
@@ -97,7 +104,7 @@ export const AdminDashboard = () => {
                 keys={['Female', 'Male']}
                 xKey="name"
                 title="Students per Degree Program"
-                totalValue="1,245"
+                totalValue={totalStudents}
                 trendLabel="+3.2%"
                 trendColor="success"
                 subtitle="Enrollment per program as of May 2025"
@@ -111,7 +118,7 @@ export const AdminDashboard = () => {
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
                   <GridTable
-                    rows={recentSubmissionRows}
+                    rows={recentSubmissions}
                     columns={recentSubmissionColumns}
                   />
                 </CardContent>
@@ -127,7 +134,7 @@ export const AdminDashboard = () => {
               </Typography>
               <Divider sx={{ mb: 2 }} />
               <GridTable
-                rows={recentDraftRows}
+                rows={recentDrafts}
                 columns={recentDraftColumns}
               />
             </CardContent>

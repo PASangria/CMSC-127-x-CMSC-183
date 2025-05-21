@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from forms.models import (
     Student, Address, Submission, Preferences, HealthData,
-    PersonalityTraits, SocioEconomicStatus, FamilyData, Support, StudentSupport, PresentScholasticStatus
+    PersonalityTraits, SocioEconomicStatus, FamilyData, Support, StudentSupport, PresentScholasticStatus, PrivacyConsent
 )
 from users.models import CustomUser, Role
 from forms.models import (
@@ -191,3 +191,10 @@ class PresentScholasticStatusFactory(factory.django.DjangoModelFactory):
         if self.first_choice_course != self.admitted_course:
             return fake.sentence()
         return ""
+    
+class PrivacyConsentFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PrivacyConsent
+        
+    student = None
+    has_consented = True

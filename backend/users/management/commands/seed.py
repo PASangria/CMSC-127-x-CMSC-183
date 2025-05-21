@@ -5,10 +5,11 @@ from .factories import (
     PreferencesFactory,
     StudentSupportFactory,
     SocioEconomicStatusFactory,
-    PresentScholasticStatusFactory
+    PresentScholasticStatusFactory,
+    PrivacyConsentFactory,
 )
 
-NUM_STUDENTS = 10
+NUM_STUDENTS = 50
 
 class Command(BaseCommand):
     help = 'Seeds the database with fake student data and form submissions.'
@@ -22,5 +23,6 @@ class Command(BaseCommand):
             StudentSupportFactory(student_number=student, submission=submission)
             SocioEconomicStatusFactory(student_number=student, submission=submission)
             PresentScholasticStatusFactory(student=student, submission=submission)
+            PrivacyConsentFactory(student=student, submission=submission)
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created {NUM_STUDENTS} students and related form data.'))
