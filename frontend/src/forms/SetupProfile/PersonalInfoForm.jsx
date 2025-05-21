@@ -69,8 +69,8 @@ const PersonalInfoForm = ({ formData, setFormData }) => {
           required
           options={[
             { value: '', label: 'Select Sex' },
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' }
+            { value: 'Male', label: 'Male' },
+            { value: 'Female', label: 'Female' }
           ]}
         />
         <FormField

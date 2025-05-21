@@ -122,3 +122,9 @@ class FamilyDataAdmin(admin.ModelAdmin):
     search_fields = ('student__first_name', 'student__last_name', 'mother__first_name', 'father__first_name', 'guardian__first_name')
 
 admin.site.register(FamilyData, FamilyDataAdmin)
+
+class PrivacyConsentAdmin(admin.ModelAdmin):
+    list_display = ('student', 'has_consented')
+    search_fields = ('student__first_name', 'student__last_name')
+
+admin.site.register(PrivacyConsent, PrivacyConsentAdmin)

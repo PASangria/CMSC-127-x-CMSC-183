@@ -24,13 +24,31 @@ function getCurrentMonthLabels() {
     return days;
 }
 
+// Function to calculate the trend percentage based on data
+function calculateTrendPercentage(data) {
+    if (data.length < 2) return 0; 
+
+    const lastValue = data[data.length - 1];
+    const secondLastValue = data[data.length - 2];
+
+    if (secondLastValue === 0 && lastValue !== 0) {
+        return 100;  
+    }
+
+    const change = lastValue - secondLastValue;
+    const percentage = (change / secondLastValue) * 100;
+    return Math.round(percentage);
+}
+
+
+// Gradient for the area chart
 function AreaGradient({ color, id }) {
     return (
         <defs>
-        <linearGradient id={id} x1="50%" y1="0%" x2="50%" y2="100%">
-            <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-            <stop offset="100%" stopColor={color} stopOpacity={0} />
-        </linearGradient>
+            <linearGradient id={id} x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+                <stop offset="100%" stopColor={color} stopOpacity={0} />
+            </linearGradient>
         </defs>
     );
 }
@@ -40,11 +58,13 @@ AreaGradient.propTypes = {
     id: PropTypes.string.isRequired,
 };
 
-function StatCard({ title, value, interval, trend, data }) {
+// StatCard Component
+function StatCard({ title, value, interval, trend, trendData, trendPercent }) {
     const theme = useTheme();
-    const currentLabels = getCurrentMonthLabels();
-
-    // Pad data with 0 if missing
+    const currentLabels = trendData.labels; // Dynamically use labels from backend
+    const data = trendData.values; // Dynamically use data from backend
+    
+    // Pad data with 0 if missing (to ensure data length matches labels)
     const paddedData = currentLabels.map((_, i) => data[i] ?? 0);
 
     const trendColors = {
@@ -59,10 +79,14 @@ function StatCard({ title, value, interval, trend, data }) {
         neutral: 'default',
     };
 
+    // Calculate trend percentage dynamically if not provided from the backend
+    const dynamicTrendPercent = trendPercent || calculateTrendPercentage(data);
+
+    // Update trend and trend value dynamically based on percentage change
     const trendValues = {
-        up: '+25%',
-        down: '-25%',
-        neutral: '+5%',
+        up: `${dynamicTrendPercent > 0 ? '+' : ''}${dynamicTrendPercent}%`,
+        down: `${dynamicTrendPercent < 0 ? '' : '-'}${Math.abs(dynamicTrendPercent)}%`,
+        neutral: '0%',
     };
 
     const color = labelColors[trend];
@@ -93,7 +117,7 @@ function StatCard({ title, value, interval, trend, data }) {
                             <Chip size="small" color={color} label={trendValues[trend]} />
                         </Stack>
                         <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-                        {interval}
+                            {interval}
                         </Typography>
                     </Box>
 
@@ -114,12 +138,10 @@ function StatCard({ title, value, interval, trend, data }) {
                             }}
                             sx={{
                                 [`& .${areaElementClasses.root}`]: {
-                                fill: `url(#${gradientId})`,
+                                    fill: `url(#${gradientId})`,
                                 },
                             }}
-                        >
-                            <AreaGradient color={chartColor} id={gradientId} />
-                        </SparkLineChart>
+                        />
                     </Box>
                 </Stack>
             </CardContent>
@@ -133,6 +155,11 @@ StatCard.propTypes = {
     title: PropTypes.string.isRequired,
     trend: PropTypes.oneOf(['down', 'neutral', 'up']).isRequired,
     value: PropTypes.string.isRequired,
+    trendData: PropTypes.shape({
+        labels: PropTypes.arrayOf(PropTypes.string).isRequired,
+        values: PropTypes.arrayOf(PropTypes.number).isRequired,
+    }).isRequired,
+    trendPercent: PropTypes.number,
 };
 
 export default StatCard;
