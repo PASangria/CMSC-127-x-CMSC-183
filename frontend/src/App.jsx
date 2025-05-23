@@ -1,6 +1,6 @@
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
 import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage, ChangePassword } from "./pages";
-import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList } from "./admin-pages";
+import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView } from "./admin-pages";
 import { UserDashboard, SetUpProfile, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
@@ -17,6 +17,7 @@ import BISForm from "./forms/BIS/BIS";
 import SCIF from "./forms/SCIF/SCIF";
 import { AdminStudentView } from "./admin-pages/AdminStudentView";
 import BISProfilePage from "./student-pages/BISProfilePage";
+import SCIFProfilePage from "./student-pages/SCIFProfilePage";
 
 
 
@@ -94,7 +95,7 @@ function App() {
         <Route
           path="/submitted-forms/basic-information-sheet"
           element={
-            <ProtectedRoute requireAdmin={false} requireUser={true}>
+            <ProtectedRoute requireAdmin={false}>
               <BISProfilePage />
             </ProtectedRoute>
           }
@@ -104,6 +105,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
               <SCIF/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/submitted-forms/student-cumulative-information-file"
+          element={
+            <ProtectedRoute requireAdmin={false}>
+              <SCIFProfilePage />
             </ProtectedRoute>
           }
         />
@@ -146,6 +155,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
               <AdminStudentView  />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/student-forms/:studentId/student-cumulative-information-file"
+          element={
+            <ProtectedRoute requireAdmin={true} requireUser={false}>
+              <AdminSCIFView  />
             </ProtectedRoute>
           }
         />

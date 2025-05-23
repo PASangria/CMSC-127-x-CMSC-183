@@ -11,7 +11,7 @@ export const validateParent = (formData) => {
     if (!mother.contact_number) {
       errors.push("Mother's contact number is required.");
     } else if (!/^\+?\d{9,15}$/.test(mother.contact_number)) {
-      errors.push("Mother's contact number must be a valid phone number.");
+      errors.push("Mother's contact  must be a valid phone number.");
     }
   }
 
@@ -173,8 +173,12 @@ export const validatePersonalityTraits = (formData) => {
     ];
 
     requiredFields.forEach(field => {
-      if (!formData[field]) errors.push(`${field.replace(/_/g, ' ')} is required.`);
-    });
+    const value = formData[field];
+    if (value === undefined || value === null || value === '') {
+      errors.push(`${field.replace(/_/g, ' ')} is required.`);
+    }
+  });
+
 
     if (formData.degree_program_aspiration === false && !formData.aspiration_explanation) {
       errors.push("Aspiration explanation is required if degree program aspiration is false.");
@@ -186,7 +190,7 @@ export const validateFamilyRelationship = (formData) => {
   const errors = [];
     if (!formData.closest_to) errors.push("Closest to is required.");
 
-    if (formData.closest_to === 'Other' && !relationship.specify_other) {
+    if (formData.closest_to === 'Other' && !formData.specify_other) {
       errors.push("Please specify the relationship when 'Other' is selected.");
     }
   return errors;

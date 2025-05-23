@@ -93,6 +93,7 @@ class CounselingInformation(models.Model):
     confidant_reason = models.TextField(verbose_name="Why?", null=True, blank=True)
     anticipated_problems = models.TextField(verbose_name="Any problem that you might encounter later while in UP?", null=True, blank=True)
     previous_counseling = models.BooleanField(null=True, blank=True, default=False, verbose_name="Any previous counseling?")
+    counseling_counselor = models.CharField(max_length=100, null=True, blank=True, verbose_name="To whom?")
     counseling_location = models.CharField(max_length=100, null=True, blank=True, verbose_name="If yes, where?")
     counseling_reason = models.TextField(null=True, blank=True, verbose_name="Why?")
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
@@ -122,6 +123,8 @@ class CounselingInformation(models.Model):
                     raise ValidationError({'counseling_location': 'This field is required when there is previous counseling.'})
                 if not self.counseling_reason:
                     raise ValidationError({'counseling_reason': 'This field is required when there is previous counseling.'})
+                if not self.counseling_counselor:
+                    raise ValidationError({'counseling_counselor': 'This field is required when there is previous counseling.'})
 
     def __str__(self):
         return f"Counseling Information for {self.student.first_name} {self.student.last_name} ({self.student.student_number})"

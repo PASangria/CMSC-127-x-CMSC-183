@@ -5,26 +5,24 @@ import StudentSideInfo from '../student-pages/IndividualStudent';
 import DefaultLayout from '../components/DefaultLayout';
 
 export const AdminStudentView = () => {
-  const { studentId } = useParams(); // Getting studentId from URL params
-  const { request } = useApiRequest(); // Getting the request function from context
-  const [student, setStudent] = useState(null); // State for storing student data
-  const [submittedForms, setSubmittedForms] = useState({}); // State for submitted forms, now an object
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const { studentId } = useParams();
+  const { request } = useApiRequest(); 
+  const [student, setStudent] = useState(null);
+  const [submittedForms, setSubmittedForms] = useState({}); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
   useEffect(() => {
     const fetchStudent = async () => {
       try {
         console.log(studentId);
 
-        // Fetching student data
         const res = await request(`http://localhost:8000/api/forms/admin/students/${studentId}/`);
 
         if (res.ok) {
           const data = await res.json();
           setStudent(data);
 
-          // Fetching all form submissions for this student
           const formRes = await request(`http://localhost:8000/api/forms/admin/student-forms/${studentId}/`);
           if (formRes.ok) {
             const forms = await formRes.json();
@@ -55,7 +53,7 @@ export const AdminStudentView = () => {
   return (
     <div>
       <DefaultLayout variant="admin">
-        <StudentSideInfo profileData={student} submittedForms={submittedForms} />
+        <StudentSideInfo profileData={student} submittedForms={submittedForms} isAdmin={true}/>
       </DefaultLayout>
     </div>
   );

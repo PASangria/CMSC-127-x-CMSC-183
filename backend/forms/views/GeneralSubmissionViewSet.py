@@ -9,7 +9,7 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import ValidationError
-from forms.map import FORM_SECTIONS_MAP, FORM_TYPE_SLUG_MAP, FORM_TYPE_UNSLUG_MAP
+from forms.map import FORM_SECTIONS_MAP, FORM_TYPE_SLUG_MAP, FORM_TYPE_UNSLUG_MAP, OPTIONAL_SECTIONS
 
 
 class PrivacyConsentViewSet(viewsets.ModelViewSet):
@@ -86,7 +86,7 @@ class FormBundleView(APIView):
         student = request.user.student
         submission, created = Submission.objects.get_or_create(
             student=student,
-            form_type=form_type_display,  # Save the actual display name, not the slug
+            form_type=form_type_display,  
             defaults={'status': 'draft'}
         )
 
@@ -244,7 +244,8 @@ class FinalizeSubmissionView(APIView):
                 except ValidationError as e:
                     errors[key] = e.message_dict
             else:
-                errors[key] = ['Section is missing.']
+                if key not in OPTIONAL_SECTIONS.get(form_type_slug, []):
+                    errors[key] = ['Section is missing.']
 
         # Step 7: Return validation errors if any
         if errors:

@@ -55,6 +55,14 @@
   position: relative;
 }
 
+.step-info.school{
+  text-align: left;
+}
+
+.school-record.subsection-form{
+  margin-top: 1rem;
+}
+
 fieldset {
   border: none; 
   padding: 0; 
@@ -224,8 +232,6 @@ textarea:focus {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 9999;
 }
 
@@ -238,6 +244,17 @@ textarea:focus {
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
+}
+
+.modal-content .form-section{
+  padding: 0 !important;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.modal-content h2{
+  font-size: 18px !important; 
+  text-align: left !important;
 }
 
 .modal-close {

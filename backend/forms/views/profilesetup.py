@@ -82,3 +82,54 @@ def get_student_profile(request):
         return Response(serializer.data)
     except Student.DoesNotExist:
         return Response({'error': 'Student profile not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+@api_view(['PATCH'])
+def update_student_profile(request):
+    try:
+        student = Student.objects.get(user=request.user)
+    except Student.DoesNotExist:
+        return Response({'error': 'Student profile not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    student_data = request.data
+    is_partial = request.method == 'PATCH'
+
+    def get_or_create_address(address_data):
+        if not address_data:
+            return None
+        address_data = address_data.copy()  # To avoid modifying the original dict
+        address_data.pop('id', None)  # Remove 'id' if it exists
+
+        try:
+            address = Address.objects.get(
+                address_line_1=address_data['address_line_1'],
+                barangay=address_data['barangay'],
+                city_municipality=address_data['city_municipality'],
+                province=address_data['province'],
+                region=address_data['region'],
+                zip_code=address_data['zip_code']
+            )
+        except Address.DoesNotExist:
+            address = Address.objects.create(**address_data)
+        return address
+
+    
+    if 'permanent_address' in student_data:
+        student.permanent_address = get_or_create_address(student_data['permanent_address'])
+    if 'address_while_in_up' in student_data:
+        student.address_while_in_up = get_or_create_address(student_data['address_while_in_up'])
+
+    updatable_fields = [
+        'college', 'current_year_level', 'degree_program',
+        'last_name', 'first_name', 'middle_name', 'nickname', 'sex', 'religion',
+        'birth_rank', 'birthdate', 'birthplace', 'contact_number', 'landline_number',
+    ]
+
+    for field in updatable_fields:
+        if field in student_data:
+            setattr(student, field, student_data[field])
+
+    student.save()
+
+    serializer = StudentSerializer(student)
+    return Response(serializer.data, status=status.HTTP_200_OK)

@@ -78,7 +78,7 @@ def summary_data_view(request):
 
     scif_counts = [
         Submission.objects.filter(
-            form_type='Student Cumulative Information Sheet',
+            form_type='Student Cumulative Information File',
             status='submitted',
             submitted_on__date=day
         ).count()
@@ -110,7 +110,7 @@ def summary_data_view(request):
         {
             "title": "SCIF Submissions",
             "value": Submission.objects.filter(
-                form_type='Student Cumulative Information Sheet',
+                form_type='Student Cumulative Information File',
                 status='submitted'
             ).count(),
             "trend": calculate_trend(scif_counts),

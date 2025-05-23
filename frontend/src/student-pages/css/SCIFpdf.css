@@ -1,0 +1,209 @@
+.SCIF-Name{
+    margin-bottom: 20px;
+}
+
+.SCIF-name-value, .SCIF-name-label{
+    display: flex;
+    text-align: center;
+    margin-bottom: -20px;
+}
+
+.SCIF-name-value input {
+    text-align: center;
+}
+
+.SCIF-inline {
+  display: flex;
+  gap: 1rem; 
+  flex-wrap: wrap; 
+  align-items: center;
+  margin-bottom: -30px;
+  width: 100%;
+  margin-top: -30px;
+
+}
+
+.SCIF-inline label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.SCIF-section-1, .SCIF-section-2{
+    display: flex;
+    gap: 30px;
+}
+
+.SCIF-right, .SCIF-right input{
+    text-align: center;
+}
+
+.SCIF-right label{
+    margin-top: -10px;
+}
+
+.pdf .graduation{
+    border: 1px black solid;
+    padding: 20px;
+}
+
+.SCIF-left {
+    width: 70%;
+}
+
+.SCIF-left input, .SCIF-right label{
+    height: auto;
+}
+
+.SCIF-section-2 .SCIF-left label{
+    margin-bottom: -40px;
+    display: flex;
+}
+
+.SCIF-section-2 .SCIF-inline  {
+    gap: 0.8rem;
+    display: flex;
+}
+
+.SCIF-section{
+    margin-top: 30px;
+}
+
+.graduation label{
+    margin-bottom: -10px;
+}
+
+.SCIF-section-2 .section-title{
+    margin-bottom: 20px;
+}
+
+.siblings-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 3rem;
+  font-size: 12px;
+}
+
+.siblings-table th,
+.siblings-table td {
+  border: 1px solid #000;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.siblings-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.health-condition-inline{
+  display: flex;
+  align-items: normal;
+  gap: 1rem;
+}
+
+.closest-to-inline {
+    margin: 10px 0;
+}
+.health-condition-inline label, .closest-to-inline label {
+    width: fit-content;
+    align-items: normal;
+}
+.radio-group-inline {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.input-other {
+  padding: 0.25rem;
+  width: 200px;
+}
+
+
+.school-records-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+
+.school-records-table th,
+.school-records-table td {
+  border: 1px solid #aaa;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.school-records-table th {
+  background-color: #f0f0f0;
+}
+
+.SCIF-section.school {
+    margin-top: 50px;
+}
+
+.school label{
+    text-align: right;
+    margin-top: 20px;
+}
+
+.scif-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.scif-table th,
+.scif-table td {
+  border: 1px solid #333;
+  padding: 8px;
+  text-align: left;
+}
+
+.scif-table th {
+  background-color: #f0f0f0;
+}
+
+.psychometric-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.psychometric-table th,
+.psychometric-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.psychometric-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+
+.guidance-notes {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  background-color: #fdfdfd;
+  color: #333;
+}
+
+
+.SCIF-section .section-title{
+    font-size: 14px;
+    padding-bottom: 10px;
+}

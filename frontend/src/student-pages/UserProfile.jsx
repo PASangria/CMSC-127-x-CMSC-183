@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Loader from '../components/Loader';
-import { AuthContext } from '../context/AuthContext';
-import { useApiRequest } from '../context/ApiRequestContext';
-import StudentSideInfo from './IndividualStudent';
-import './css/userDashboard.css';
-import DefaultLayout from '../components/DefaultLayout';
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import { AuthContext } from "../context/AuthContext";
+import { useApiRequest } from "../context/ApiRequestContext";
+import StudentSideInfo from "./IndividualStudent";
+import "./css/userDashboard.css";
+import DefaultLayout from "../components/DefaultLayout";
 
 export const UserProfile = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -17,51 +17,77 @@ export const UserProfile = () => {
 
   const [submittedForms, setSubmittedForms] = useState([]);
 
-useEffect(() => {
-  const fetchProfileData = async () => {
-    if (!isAuthenticated) return;
-
+  const handleUpdateProfile = async (updatedData) => {
     try {
-      const res = await request('http://localhost:8000/api/forms/student/profile/');
-      if (!res.ok) {
-        if (res.status === 404) {
-          setProfile({});
-          setLoading(false);
-          return;
+      const res = await request(
+        "http://localhost:8000/api/forms/student/profile/update/",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
         }
-        throw new Error('Failed to fetch profile data');
+      );
+
+      if (!res.ok) {
+        return;
       }
 
-      const data = await res.json();
-      setProfile(data);
-
-      // Fetch submitted forms after profile is fetched
-      const formRes = await request('http://localhost:8000/api/forms/display/submissions/');
-      if (formRes.ok) {
-        const allForms = await formRes.json();
-        const submitted = allForms.filter(f => f.status === 'submitted');
-        setSubmittedForms(submitted);
-      }
-    } catch (err) {
-      console.error('Error fetching profile or forms:', err);
-      setError('Error fetching profile. Please try again.');
-    } finally {
-      setLoading(false);
+      const updatedProfile = await res.json();
+      setProfile(updatedProfile);
+    } catch (error) {
+      
     }
   };
 
-  fetchProfileData();
-}, [isAuthenticated, request]);
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (!isAuthenticated) return;
 
+      try {
+        const res = await request(
+          "http://localhost:8000/api/forms/student/profile/"
+        );
+        if (!res.ok) {
+          if (res.status === 404) {
+            setProfile({});
+            setLoading(false);
+            return;
+          }
+          throw new Error("Failed to fetch profile data");
+        }
+
+        const data = await res.json();
+        setProfile(data);
+
+        // Fetch submitted forms after profile is fetched
+        const formRes = await request(
+          "http://localhost:8000/api/forms/display/submissions/"
+        );
+        if (formRes.ok) {
+          const allForms = await formRes.json();
+          const submitted = allForms.filter((f) => f.status === "submitted");
+          setSubmittedForms(submitted);
+        }
+      } catch (err) {
+        setError("Error fetching profile. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfileData();
+  }, [isAuthenticated, request]);
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login?role=student');
+      navigate("/login?role=student");
     }
   }, [isAuthenticated, navigate]);
 
   const handleCompleteProfile = () => {
-    navigate('/setup-profile');
+    navigate("/setup-profile");
   };
 
   if (!isAuthenticated || loading) {
@@ -72,7 +98,10 @@ useEffect(() => {
     return (
       <div className="no-profile">
         <p>{error}</p>
-        <button onClick={handleCompleteProfile} className="btn-complete-profile">
+        <button
+          onClick={handleCompleteProfile}
+          className="btn-complete-profile"
+        >
           Complete Your Profile
         </button>
       </div>
@@ -82,27 +111,34 @@ useEffect(() => {
   if (profile && Object.keys(profile).length === 0) {
     return (
       <div>
-      <DefaultLayout variant='student' >
-      <div className="protected_pages">
-      <div className="no-profile">
-        <p>No profile data available.</p>
-        <button onClick={handleCompleteProfile} className="btn-complete-profile">
-          Complete Your Profile
-        </button>
+        <DefaultLayout variant="student">
+          <div className="protected_pages">
+            <div className="no-profile">
+              <p>No profile data available.</p>
+              <button
+                onClick={handleCompleteProfile}
+                className="btn-complete-profile"
+              >
+                Complete Your Profile
+              </button>
+            </div>
+          </div>
+        </DefaultLayout>
       </div>
-      </div>
-      </DefaultLayout>
-    </div>
     );
   }
 
   return (
     <div>
       <div className="protected_pages">
-        <DefaultLayout variant='student'>
+        <DefaultLayout variant="student">
           <div className="profile-content">
             <h1>My Profile</h1>
-            <StudentSideInfo profileData={profile} submittedForms={submittedForms} />
+            <StudentSideInfo
+              profileData={profile}
+              submittedForms={submittedForms}
+              onUpdate={handleUpdateProfile}
+            />
           </div>
         </DefaultLayout>
       </div>

@@ -36,6 +36,12 @@ FORM_SECTIONS_MAP = {
     }
 }
 
+
+OPTIONAL_SECTIONS = {
+    'student-cumulative-information-file': ['siblings', 'scholarship', 'counseling_info'],
+    'basic-information-sheet': []
+}
+
 FORM_TYPE_SLUG_MAP = {
     'basic-information-sheet': 'Basic Information Sheet',
     'student-cumulative-information-file': 'Student Cumulative Information File'
