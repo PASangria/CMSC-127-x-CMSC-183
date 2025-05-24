@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import {
-  Box, Stack, Typography, Grid, CardContent, Divider, Card
+  Box, Stack, Typography, Divider, Grid
 } from '@mui/material';
 import DefaultLayout from '../components/DefaultLayout';
 import StatCard from '../components/StatCard';
@@ -11,136 +11,134 @@ import { AuthContext } from '../context/AuthContext';
 import { useApiRequest } from '../context/ApiRequestContext';
 
 export const AdminDashboard = () => {
-  const { user, role, loading } = useContext(AuthContext);
-  const { request } = useApiRequest();
+    const { user, role, loading } = useContext(AuthContext);
+    const { request } = useApiRequest();
 
-  const [barData, setBarData] = useState([]);
-  const [summaryData, setSummaryData] = useState([]);
-  const [recentSubmissions, setRecentSubmissions] = useState([]);
-  const [recentDrafts, setRecentDrafts] = useState([]);
-  const [totalStudents, setTotalStudents] = useState(0);
-  const [error, setError] = useState(null);
+    const [barData, setBarData] = useState([]);
+    const [summaryData, setSummaryData] = useState([]);
+    const [recentSubmissions, setRecentSubmissions] = useState([]);
+    const [totalStudents, setTotalStudents] = useState(0);
+    const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (role !== 'admin') return;
+    // new control states
+    const [filterText, setFilterText] = useState('');
+    const [sortField, setSortField] = useState('');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [selectedFilters, setSelectedFilters] = useState({
+        degree_program: [],
+        year_level: [],
+        form_type: [],
+    });
 
-    const fetchDashboardData = async () => {
-      try {
-        const [barRes, summaryRes, recentSubsRes, recentDraftsRes] = await Promise.all([
-          request('http://localhost:8000/api/dashboard/bar-data'),
-          request('http://localhost:8000/api/dashboard/summary/'),
-          request('http://localhost:8000/api/dashboard/recent-submissions/'),
-          request('http://localhost:8000/api/dashboard/recent-drafts/'),
-        ]);
+    // apply text + multi-select filters, then sort
+    const filteredSortedRows = recentSubmissions
+        .filter((row) => {
+        const matchesText = Object.values(row)
+            .some(val => String(val).toLowerCase().includes(filterText.toLowerCase()));
 
-        if (barRes?.ok) {
-          const json = await barRes.json();
-          setBarData(json.barData || []);
-          setTotalStudents(json.totalStudents || 0);  
+        const matchesFilters = Object.entries(selectedFilters).every(([key, values]) => {
+            if (values.length === 0) return true;
+            return values
+            .map(v => String(v).toLowerCase())
+            .includes(String(row[key]).toLowerCase());
+        });
+
+        return matchesText && matchesFilters;
+        })
+        .sort((a, b) => {
+        if (!sortField) return 0;
+        const aVal = a[sortField];
+        const bVal = b[sortField];
+        return sortDirection === 'asc'
+            ? (aVal > bVal ? 1 : -1)
+            : (aVal < bVal ? 1 : -1);
+        });
+
+    useEffect(() => {
+        if (role !== 'admin') return;
+        (async () => {
+        try {
+            const [barRes, summaryRes, recentRes] = await Promise.all([
+            request('/api/dashboard/bar-data'),
+            request('/api/dashboard/summary/'),
+            request('/api/dashboard/recent-submissions/'),
+            ]);
+
+            if (barRes.ok) {
+            const json = await barRes.json();
+            setBarData(json.barData || []);
+            setTotalStudents(json.totalStudents || 0);
+            }
+            if (summaryRes.ok) {
+            const json = await summaryRes.json();
+            setSummaryData(json.summary || []);
+            }
+            if (recentRes.ok) {
+            setRecentSubmissions(await recentRes.json() || []);
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Failed to load dashboard data.');
         }
-        if (summaryRes?.ok) {
-          const json = await summaryRes.json();
-          setSummaryData(json.summary || []);
-        }
-        if (recentSubsRes?.ok) {
-          const json = await recentSubsRes.json();
-          setRecentSubmissions(json || []);
-        }
-        if (recentDraftsRes?.ok) {
-          const json = await recentDraftsRes.json();
-          setRecentDrafts(json.results || []);
-        }
-      } catch (err) {
-        console.error("Dashboard data fetch failed", err);
-        setError("Failed to load dashboard data.");
-      }
-    };
+        })();
+    }, [role, request]);
 
-    fetchDashboardData();
-  }, [role, request]);
+    if (loading) return <Typography>Loading...</Typography>;
+    if (!user || role !== 'admin') return <Navigate to="/" replace />;
 
-  console.log(recentSubmissions);
-  if (loading) return <Typography variant="h6">Loading...</Typography>;
-  if (!user || role !== 'admin') return <Navigate to="/" replace />;
+    const columns = [
+        { field: 'id', headerName: 'ID', flex: 1 },
+        { field: 'student_name', headerName: 'Submitted By', flex: 1 },
+        { field: 'student_number', headerName: 'Student Number', flex: 1 },
+        { field: 'submitted_on', headerName: 'Date', flex: 1 },
+        { field: 'form_type', headerName: 'Form Type', flex: 1 },
+    ];
 
-  const recentSubmissionColumns = [
-    { field: 'id', headerName: 'ID', flex: 1 },
-    { field: 'student_name', headerName: 'Submitted By', flex: 1 },
-    { field: 'student_number', headerName: 'Student Number', width: 70 },
-    { field: 'submitted_on', headerName: 'Date', flex: 1 },
-    { field: 'form_type', headerName: 'Form Type', flex: 1 },
-  ];
+    return (
+        <DefaultLayout variant="admin">
+        <Box sx={{ p: { xs: 2, sm: 4 }, width: '100%', minHeight: '100vh' }}>
+            <Stack spacing={4}>
+            <Typography variant="h5" fontWeight="bold">
+                Welcome, {user.email}
+            </Typography>
+            {error && <Typography color="error">{error}</Typography>}
 
-  const recentDraftColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'form_type', headerName: 'Form Type', flex: 1 },
-    { field: 'student_name', headerName: 'Student Name', flex: 1 },
-  ];
+            {/* Summary Cards */}
+            <Grid container spacing={3}>
+                {summaryData.map((item, i) => (
+                <Grid key={i} item xs={12} sm={6} md={3}>
+                    <StatCard {...item} />
+                </Grid>
+                ))}
+            </Grid>
 
-  return (
-    <DefaultLayout variant="admin">
-      <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 3, md: 5 }, width: '100%' }}>
-        <Stack spacing={4}>
-          <Typography variant="h5" fontWeight="bold">
-            Welcome, {user.email}
-          </Typography>
-
-          {error && <Typography color="error">{error}</Typography>}
-
-          {/* Summary Cards */}
-          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
-            {summaryData.map((item, index) => (
-              <Box key={index} flex={1}>
-                <StatCard {...item} />
-              </Box>
-            ))}
-          </Box>
-
-          {/* Chart and Recent Submissions in Flex Layout */}
-          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
-            <Box flex={2}>
-              <GroupedBarChart
+            {/* Bar Chart */}
+            <GroupedBarChart
                 data={barData}
                 keys={['Female', 'Male']}
                 xKey="name"
                 title="Students per Degree Program"
                 totalValue={totalStudents}
-                trendLabel="+3.2%"
-                trendColor="success"
                 subtitle="Enrollment per program as of May 2025"
-              />
-            </Box>
-            <Box flex={1}>
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6" fontWeight={600} gutterBottom>
-                    Recent Submissions
-                  </Typography>
-                  <Divider sx={{ mb: 2 }} />
-                  <GridTable
-                    rows={recentSubmissions}
-                    columns={recentSubmissionColumns}
-                  />
-                </CardContent>
-              </Card>
-            </Box>
-          </Box>
+            />
 
-          {/* Recently Drafted in Card */}
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
-                Recently Drafted
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              <GridTable
-                rows={recentDrafts}
-                columns={recentDraftColumns}
-              />
-            </CardContent>
-          </Card>
-        </Stack>
-      </Box>
-    </DefaultLayout>
-  );
+            {/* Recent Submissions Table */}
+            <Box>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                Recent Submissions
+                </Typography>
+                <Divider sx={{ my: 2 }} />
+                <GridTable
+                    rows={filteredSortedRows.slice(0, 10)}
+                    columns={columns}
+                    pageSize={10}
+                    pagination={false}
+                    hidePaginationControls={true}
+                    showAllRows={true}
+                />
+            </Box>
+            </Stack>
+        </Box>
+        </DefaultLayout>
+    );
 };
