@@ -42,7 +42,7 @@
 
 /* --- Label Behavior when Filled --- */
 .display-group.filled .display-label {
-  top: -14px;
+  top: -7px;
   font-size: 11px;
   color: #1976D2;
   transform: none;
