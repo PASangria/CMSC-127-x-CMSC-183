@@ -1,3 +1,16 @@
+button {
+  all: unset;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 0;
+}
+
 /* Container */
 .admin-student-list {
   padding: 2rem;
@@ -21,6 +34,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   border-radius: 0.5rem;
   overflow: hidden;
+  margin-bottom: 2rem;
 }
 
 /* Table Headers */
@@ -47,7 +61,7 @@
 }
 
 /* Button styling */
-.admin-student-list button {
+.admin-student-list table button {
   background-color: #58514f;
   color: #fff;
   border: none;
@@ -58,7 +72,7 @@
   font-size: 0.85rem;
 }
 
-.admin-student-list button:hover {
+.admin-student-list table button:hover {
   background-color: #7B1113;
 }
 
@@ -98,5 +112,10 @@
     margin-bottom: 1rem;
     border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
+  }
+
+  .admin-student-list .MuiPagination-root {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
   }
 }
