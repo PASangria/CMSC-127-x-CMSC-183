@@ -3,6 +3,7 @@ import SCIFProfileView from './SCIFViewPage';
 import { useFormApi } from '../forms/SCIF/SCIFApi';
 import { AuthContext } from '../context/AuthContext';
 import DefaultLayout from '../components/DefaultLayout';
+import Loader from '../components/Loader';
 
 const SCIFProfilePage = () => {
   const { getFormBundle } = useFormApi(); 
@@ -37,7 +38,7 @@ const SCIFProfilePage = () => {
           personality_traits: data.personality_traits,
           family_relationship: data.family_relationship,
           counseling_info: data.counseling_info,
-          consent: data.privacy_consent,
+          privacy_consent: data.privacy_consent,
           submission: data.submission,
         };
 
@@ -53,7 +54,7 @@ const SCIFProfilePage = () => {
 
   }, [profileData?.student_number]); 
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div className="error">{error}</div>;
 
   return (

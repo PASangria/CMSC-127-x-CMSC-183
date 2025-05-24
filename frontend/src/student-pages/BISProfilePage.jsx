@@ -3,6 +3,7 @@ import BISProfileView from './BISViewPage';
 import { useFormApi } from '../forms/BIS/BISApi';
 import { AuthContext } from '../context/AuthContext';
 import DefaultLayout from '../components/DefaultLayout';
+import Loader from '../components/Loader';
 
 const BISProfilePage = () => {
   const { getFormBundle } = useFormApi(); 
@@ -35,7 +36,7 @@ const BISProfilePage = () => {
           scholastic_status: data.scholastic_status,
           privacy_consent: data.privacy_consent,
           submission: data.submission,
-          consent: data.privacy_consent,
+          privacy_consent: data.privacy_consent,
         };
 
         setFormData(transformedData);
@@ -50,7 +51,7 @@ const BISProfilePage = () => {
 
   }, [profileData?.student_number]); 
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div className="error">{error}</div>;
 
   return (

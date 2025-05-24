@@ -6,6 +6,7 @@ import { useApiRequest } from "../context/ApiRequestContext";
 import StudentSideInfo from "./IndividualStudent";
 import "./css/userDashboard.css";
 import DefaultLayout from "../components/DefaultLayout";
+import MultiStepForm from "../forms/SetupProfile/SetupProfile";
 
 export const UserProfile = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -61,7 +62,6 @@ export const UserProfile = () => {
         const data = await res.json();
         setProfile(data);
 
-        // Fetch submitted forms after profile is fetched
         const formRes = await request(
           "http://localhost:8000/api/forms/display/submissions/"
         );
@@ -86,6 +86,11 @@ export const UserProfile = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (profile && profile.is_complete) {
+      navigate("/myprofile"); 
+    }
+  }, [profile, navigate]);
   const handleCompleteProfile = () => {
     navigate("/setup-profile");
   };
