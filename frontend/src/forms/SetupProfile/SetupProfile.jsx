@@ -1,85 +1,102 @@
-import React, { useState } from 'react';
-import PersonalInfoForm from './PersonalInfoForm'; 
-import EducationInfoForm from './EducationInfoForm';
-import AddressInfoForm from './AddressInfoForm';
-import { validateStep } from '../../utils/formValidationUtils';
-import { apiRequest } from '../../utils/apiUtils';
-import Navbar from '../../components/NavBar';
-import Footer from '../../components/Footer';
-import ProgressBar from '../../components/ProgressBar';
-import PreviewModal from './PreviewForm';
-import Button from '../../components/UIButton';
-import ToastMessage from '../../components/ToastMessage';
-import ConfirmDialog from '../../components/ConfirmDialog';
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import PersonalInfoForm from "./PersonalInfoForm";
+import EducationInfoForm from "./EducationInfoForm";
+import AddressInfoForm from "./AddressInfoForm";
+import { validateStep } from "../../utils/formValidationUtils";
+import { apiRequest } from "../../utils/apiUtils";
+import Navbar from "../../components/NavBar";
+import Footer from "../../components/Footer";
+import ProgressBar from "../../components/ProgressBar";
+import PreviewModal from "./PreviewForm";
+import Button from "../../components/UIButton";
+import ToastMessage from "../../components/ToastMessage";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import { AuthContext } from "../../context/AuthContext";
+import Loader from "../../components/Loader";
 
 const MultiStepForm = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [step, setStep] = useState(1); 
-    const [sameAsPermanent, setSameAsPermanent] = useState(false);
-    const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [step, setStep] = useState(1);
+  const [sameAsPermanent, setSameAsPermanent] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const navigate = useNavigate();
+  const { profileData } = useContext(AuthContext);
 
-   const [formData, setFormData] = useState({
-      // Personal Information
-      family_name: '',
-      first_name: '',
-      middle_name: '',
-      nickname: '',
-      sex: '',
-      religion: '',
-      birth_rank: '',
-      birthdate: '',
-      birth_place: '',
-      landline_number: '',
-      mobile_number: '',
-      // Education
-      student_number: '',
-      college: '',
-      degree_program: '',
-      current_year_level: '',
-      date_initial_entry: '',
-      date_initial_entry_sem: '',
-      // Permanent Address
-      permanent_region: '',
-      permanent_province: '',
-      permanent_city_municipality: '',
-      permanent_barangay: '',
-      permanent_address_line_1: '',
-      permanent_address_line_2: '',
-      permanent_zip_code: '',
-      // Address While In UP
-      up_region: '',
-      up_province: '',
-      up_city_municipality: '',
-      up_barangay: '',
-      up_address_line_1: '',
-      up_address_line_2: '',
-      up_zip_code: '',
-    });
+  const [formData, setFormData] = useState({
+    family_name: "",
+    first_name: "",
+    middle_name: "",
+    nickname: "",
+    sex: "",
+    religion: "",
+    birth_rank: "",
+    birthdate: "",
+    birth_place: "",
+    landline_number: "",
+    mobile_number: "",
+    // Education
+    student_number: "",
+    college: "",
+    degree_program: "",
+    current_year_level: "",
+    date_initial_entry: "",
+    date_initial_entry_sem: "",
+    // Permanent Address
+    permanent_region: "",
+    permanent_province: "",
+    permanent_city_municipality: "",
+    permanent_barangay: "",
+    permanent_address_line_1: "",
+    permanent_address_line_2: "",
+    permanent_zip_code: "",
+    // Address While In UP
+    up_region: "",
+    up_province: "",
+    up_city_municipality: "",
+    up_barangay: "",
+    up_address_line_1: "",
+    up_address_line_2: "",
+    up_zip_code: "",
+  });
 
-  // Handle navigation to the next step
+  useEffect(() => {
+    if (profileData === undefined) return;
+
+    if (profileData?.is_complete) {
+      navigate("/myprofile");
+    } else {
+      setLoading(false);
+    }
+  }, [profileData]);
+
+  if (loading || profileData === undefined) {
+    return <Loader />;
+  }
+
   const handleNextStep = () => {
     const isValid = validateStep(step, formData);
 
     if (isValid) {
-      setStep(prevStep => prevStep + 1);
+      setStep((prevStep) => prevStep + 1);
     } else {
       alert("Please fill in all required fields correctly.");
     }
   };
 
   const handlePreviousStep = () => {
-    setStep(prevStep => prevStep - 1);
+    setStep((prevStep) => prevStep - 1);
   };
 
   const handleSameAsPermanentToggle = () => {
     const newValue = !sameAsPermanent;
     setSameAsPermanent(newValue);
-  
+
     if (newValue) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         up_region: prev.permanent_region,
         up_province: prev.permanent_province,
@@ -97,9 +114,10 @@ const MultiStepForm = () => {
   };
 
   const handleSubmit = async (e) => {
-  
-    const birthdate = `${formData.birthYear}-${String(formData.birthMonth).padStart(2, '0')}-${String(formData.birthDay).padStart(2, '0')}`;
-  
+    const birthdate = `${formData.birthYear}-${String(
+      formData.birthMonth
+    ).padStart(2, "0")}-${String(formData.birthDay).padStart(2, "0")}`;
+
     const payload = {
       student_number: formData.student_number,
       college: formData.college,
@@ -136,36 +154,38 @@ const MultiStepForm = () => {
         region: formData.up_region,
         zip_code: formData.up_zip_code,
       },
-      is_complete: true
+      is_complete: true,
     };
-  
+
     try {
       setLoading(true);
-  
-      const response = await apiRequest("http://localhost:8000/api/forms/student/profile/create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      });
-      
+
+      const response = await apiRequest(
+        "http://localhost:8000/api/forms/student/profile/create/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        }
+      );
+
       if (!response.ok) throw new Error("Failed to submit profile");
-  
+
       const result = await response.json();
       setLoading(false);
-      setShowSuccessToast(true); 
-      window.location.href = '/myprofile';
+      setShowSuccessToast(true);
+      window.location.href = "/myprofile";
     } catch (error) {
       setLoading(false);
       setError(error.message);
-      
     }
   };
 
-    const handleConfirmSubmit = () => {
-    setShowConfirmDialog(true); 
+  const handleConfirmSubmit = () => {
+    setShowConfirmDialog(true);
   };
 
   const handleConfirmCancel = () => {
@@ -173,90 +193,125 @@ const MultiStepForm = () => {
   };
 
   const handleConfirmAction = () => {
-    setShowConfirmDialog(false); 
-    handleSubmit(); 
+    setShowConfirmDialog(false);
+    handleSubmit();
   };
-  
+
   return (
     <div>
-        <Navbar />
-        
-        {/* Background Rectangle */}
-        <div className="background-rectangle"></div>
+      <Navbar />
 
-        <div className="content-wrapper">
+      {/* Background Rectangle */}
+      <div className="background-rectangle"></div>
 
-            <div className="mainStepForm">
-                <div className='main-form-info'>
-                    <h1 className="main-form-title">SETUP YOUR PROFILE</h1>
-                    <p className="main-form-subtitle">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                </div>
+      <div className="content-wrapper">
+        <div className="mainStepForm">
+          <div className="main-form-info">
+            <h1 className="main-form-title">SETUP YOUR PROFILE</h1>
+            <p className="main-form-subtitle">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
 
-                <div className="main-form-card">
-                    <div className='main-form'>
-                        <ProgressBar currentStep={step} className="progress-bar"/>
-                        {step === 1 && <PersonalInfoForm formData={formData} setFormData={setFormData} step={step}/>}
-                        {step === 2 && <EducationInfoForm formData={formData} setFormData={setFormData} step={step}/>}
-                        {step === 3 && <AddressInfoForm  formData={formData}
-                        setFormData={setFormData}
-                        addressLabel="Permanent Address"
-                        disabled={false}
-                        prefix="permanent"/>}
-                        {step === 4 && <AddressInfoForm    formData={formData}
-                        setFormData={setFormData}
-                        addressLabel="Address while in UP"
-                        checkboxLabel="Same as Permanent Address"
-                        sameAsPermanent={sameAsPermanent}
-                        handleSameAsPermanentToggle={handleSameAsPermanentToggle}
-                        disabled={sameAsPermanent}
-                        prefix="up"/>}
-                      <div className="main-form-buttons">
-                        {/* Step 1: Only 'Next' button */}
-                        {step === 1 && (
-                          <Button variant="primary" onClick={handleNextStep}>
-                            Next
-                          </Button>
-                        )}
+          <div className="main-form-card">
+            <div className="main-form">
+              <ProgressBar currentStep={step} className="progress-bar" />
+              {step === 1 && (
+                <PersonalInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  step={step}
+                />
+              )}
+              {step === 2 && (
+                <EducationInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  step={step}
+                />
+              )}
+              {step === 3 && (
+                <AddressInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  addressLabel="Permanent Address"
+                  disabled={false}
+                  prefix="permanent"
+                />
+              )}
+              {step === 4 && (
+                <AddressInfoForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  addressLabel="Address while in UP"
+                  checkboxLabel="Same as Permanent Address"
+                  sameAsPermanent={sameAsPermanent}
+                  handleSameAsPermanentToggle={handleSameAsPermanentToggle}
+                  disabled={sameAsPermanent}
+                  prefix="up"
+                />
+              )}
+              <div className="main-form-buttons">
+                {/* Step 1: Only 'Next' button */}
+                {step === 1 && (
+                  <Button variant="primary" onClick={handleNextStep}>
+                    Next
+                  </Button>
+                )}
 
-                        {/* Steps 2-4: 'Back' and 'Next' buttons */}
-                        {step >= 2 && step <= 3 && (
-                          <>
-                            <Button variant="secondary" onClick={handlePreviousStep}>
-                              Back
-                            </Button>
-                            <Button variant="primary" onClick={handleNextStep} style={{ marginLeft: '0.5rem' }}>
-                              Next
-                            </Button>
-                          </>
-                        )}
+                {/* Steps 2-4: 'Back' and 'Next' buttons */}
+                {step >= 2 && step <= 3 && (
+                  <>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={handleNextStep}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Next
+                    </Button>
+                  </>
+                )}
 
-                        {/* Step 5: 'Back', 'Preview', and 'Submit' buttons */}
-                        {step === 4 && (
-                          <>
-                            <Button variant="secondary" onClick={handlePreviousStep}>
-                              Back
-                            </Button>
-                            <Button variant="primary" onClick={handlePreview} style={{ marginLeft: '0.5rem' }}>
-                              Preview
-                            </Button>
-                            {isPreviewOpen && (
-                              <PreviewModal data={formData} onClose={() => setIsPreviewOpen(false)} />
-                            )}
-                              <Button variant="primary" onClick={handleConfirmSubmit} style={{ marginLeft: '0.5rem' }}>
-                                Submit
-                              </Button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                </div>
+                {/* Step 5: 'Back', 'Preview', and 'Submit' buttons */}
+                {step === 4 && (
+                  <>
+                    <Button variant="secondary" onClick={handlePreviousStep}>
+                      Back
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={handlePreview}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Preview
+                    </Button>
+                    {isPreviewOpen && (
+                      <PreviewModal
+                        data={formData}
+                        onClose={() => setIsPreviewOpen(false)}
+                      />
+                    )}
+                    <Button
+                      variant="primary"
+                      onClick={handleConfirmSubmit}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Submit
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <Footer />
-          {/* Confirmation Dialog */}
+      <Footer />
+      {/* Confirmation Dialog */}
       {showConfirmDialog && (
         <ConfirmDialog
           title="Are you sure?"
@@ -275,7 +330,7 @@ const MultiStepForm = () => {
         />
       )}
     </div>
-);
+  );
 };
 
 export default MultiStepForm;
