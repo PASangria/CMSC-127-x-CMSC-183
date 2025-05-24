@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import StudentFilterBar from '../components/StudentFilterBar';
 
 export const AdminBISList = () => {
   const navigate = useNavigate();
@@ -109,6 +110,21 @@ export const AdminBISList = () => {
         <Typography variant="h4" gutterBottom>
           Basic Information Sheet Submissions
         </Typography>
+
+        {/* Filters Bar */}
+          <StudentFilterBar
+            filterText={filterText}
+            setFilterText={setFilterText}
+            years={years}
+            setYears={setYears}
+            yearOptions={yearOptions}
+            programs={programs}
+            setPrograms={setPrograms}
+            programOptions={programOptions}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            onReset={handleResetFilters}
+          />
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="flex-end" sx={{ mb: 2, flexWrap: 'wrap' }}>
           <TextField
