@@ -240,6 +240,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
         <p className='step-info'><strong>SIBLINGS</strong></p>
         {Array.isArray(siblings) && siblings.map((sibling, index) => (
           <div key={index} className="sibling-section">
+          <p><strong>Sibling {index+1}</strong></p>
             <div className="form-row three-columns">
               <FormField
                 label="First Name"
@@ -293,24 +294,24 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false }) => {
                 onChange={(e) => handleSiblingChange(index, 'educational_attainment', e.target.value)}
               />
             </div>
-            <div className="step-button-form">
-              <Button
-                    variant="secondary"
-                    onClick={() => removeSibling(index)}
-                    style={{ marginLeft: '0.5rem' }}
-                  >
-                    Remove Sibling
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => addSibling}
-                    style={{ marginLeft: '0.5rem' }}
-                  >
-                    Add Sibling
-                  </Button>
-              </div>
+            <Button
+                  variant="secondary"
+                  onClick={() => removeSibling(index)}
+                  style={{ marginLeft: '0.5rem' }}
+                >
+                  Remove Sibling
+                </Button>
           </div>
-        ))}
+         ))}
+          <div className="step-button-form">
+                <Button
+                  variant="primary"
+                  onClick={addSibling}
+                  style={{ marginLeft: '0.5rem' }}
+                >
+                  Add Sibling
+                </Button>
+            </div>
       </section>
 
       {/* Guardian */}

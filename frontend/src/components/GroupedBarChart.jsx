@@ -13,7 +13,7 @@ export default function GroupedBarChart({
     xKey,
     title = 'Grouped Bar Chart',
     totalValue = '1,245',
-    trendLabel = '+3.2%',
+    trendLabel = '',
     trendColor = 'success',
     subtitle = 'Enrollment per program as of May 2025',
 }) {
@@ -50,7 +50,6 @@ export default function GroupedBarChart({
                 <Typography variant="h4" component="p">
                 {totalValue}
                 </Typography>
-                <Chip size="small" color={trendColor} label={trendLabel} />
             </Stack>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 {subtitle}

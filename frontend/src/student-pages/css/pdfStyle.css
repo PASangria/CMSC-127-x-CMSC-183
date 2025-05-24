@@ -105,13 +105,16 @@ input[type="date"] {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
   font-size: 12px;
+  align-content: end;
 }
 
 input[readonly],
 textarea[readonly] {
   border: 1px solid #ccc;
   padding: 0.5rem;
+  margin-bottom: 1rem;
   background-color: #f9f9f9;
+  align-content: end;
 }
 
 textarea {

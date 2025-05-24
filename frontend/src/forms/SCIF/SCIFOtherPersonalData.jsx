@@ -41,20 +41,27 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
         helperText="Please explain the reason why you chose to enroll at UP Mindanao."
       />
 
-      <FormField
-        label="Does your degree program lead to what you aspire in the future?"
-        type="select"
-        value={personality_traits.degree_program_aspiration}
-        onChange={(e) =>
-          handleFieldChange('personality_traits', 'degree_program_aspiration', e.target.value === 'true')
-        }
-        options={[
-          { value: '', label: 'Select' },
-          { value: 'true', label: 'Yes' },
-          { value: 'false', label: 'No' },
-        ]}
-        helperText="Select 'Yes' if your current degree program aligns with your future goals."
-      />
+      <label>Does your degree program lead to what you aspire in the future?</label>
+      <small className="helper-text">
+        Select "Yes" if your current degree program aligns with your future goals.
+      </small>
+      <div className="radio-group">
+        {[{ value: true, label: 'Yes' }, { value: false, label: 'No' }].map((option) => (
+          <label key={option.label} className="radio-label">
+            <input
+              type="radio"
+              name="degree_program_aspiration"
+              value={option.value.toString()}
+              checked={personality_traits.degree_program_aspiration === option.value}
+              onChange={() =>
+                handleFieldChange('personality_traits', 'degree_program_aspiration', option.value)
+              }
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+
 
       <FormField
         label="If not, why?"
@@ -139,7 +146,7 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
       </div>
       
 
-      {family_relationship.closest_to === 'other' && (
+      {family_relationship.closest_to === 'Other' && (
         <FormField
           label="Others (specify)"
           type="textarea"
@@ -192,17 +199,27 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
         helperText="Are there any problems or challenges you foresee while studying at UP?"
       />
 
-     <FormField
-          label="Any previous counseling?"
-          type="radio"
-          name="previous_counseling"
-          value={counseling_info.previous_counseling}
-          onChange={(e) =>
-            handleFieldChange('counseling_info', 'previous_counseling', e.target.value === 'true')
-          }
-          options={previousCounselingOptions}
-          helperText="Indicate if you have had any previous counseling sessions."
-        />
+      <label>Any previous counseling?</label>
+      <small className="helper-text">
+        Indicate if you have had any previous counseling sessions.
+      </small>
+      <div className="radio-group">
+        {previousCounselingOptions.map((option) => (
+          <label key={option.value.toString()} className="radio-label">
+            <input
+              type="radio"
+              name="previous_counseling"
+              value={option.value}
+              checked={counseling_info.previous_counseling === option.value}
+              onChange={() =>
+                handleFieldChange('counseling_info', 'previous_counseling', option.value)
+              }
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+
 
       {counseling_info.previous_counseling === true && (
         <>
@@ -214,6 +231,14 @@ const SCIFOtherPersonalData = ({ data, updateData, readOnly=false }) => {
               handleFieldChange('counseling_info', 'counseling_location', e.target.value)
             }
             helperText="If you have had previous counseling, please mention where."
+          />
+          <FormField
+            label="To whom?"
+            type="text"
+            value={counseling_info.counseling_counselor || ''}
+            onChange={(e) =>
+              handleFieldChange('counseling_info', 'counseling_counselor', e.target.value)
+            }
           />
           <FormField
             label="Why?"

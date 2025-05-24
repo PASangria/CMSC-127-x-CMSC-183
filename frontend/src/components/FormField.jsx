@@ -1,5 +1,6 @@
 import React from 'react';
 import './css/formfield.css';
+import './css/displayfield.css';
 
 const FormField = ({
   label,
@@ -9,12 +10,30 @@ const FormField = ({
   name,
   required,
   error,
-  options, // for select fields
+  options,
   disabled,
+  readOnly = false,
   ...rest
 }) => {
   const isFilled = value && value.toString().trim().length > 0;
 
+  if (readOnly) {
+    const displayValue =
+      type === "select"
+        ? options?.find((opt) => opt.value === value)?.label || "N/A"
+        : value || "N/A";
+
+    return (
+      <div className={`display-group ${isFilled ? 'filled' : ''}`}>
+        <label className="display-label">{label}</label>
+        <div className="display-value" style={{ color: 'black' }}>
+          {displayValue}
+        </div>
+      </div>
+    );
+  }
+
+  // Editable input or select
   return (
     <div className={`form-group ${error ? 'error' : ''}`}>
       {type === 'select' ? (
@@ -22,7 +41,6 @@ const FormField = ({
           name={name}
           value={value}
           onChange={onChange}
-          onInput={onChange}
           required={required}
           disabled={disabled}
           className={`form-input ${isFilled ? 'filled' : ''}`}
@@ -43,10 +61,13 @@ const FormField = ({
           name={name}
           required={required}
           className={`form-input ${isFilled ? 'filled' : ''}`}
+          disabled={disabled}
           {...rest}
         />
       )}
-      <label className={isFilled ? 'active' : ''}>{label} {required && '*'}</label>
+      <label className={isFilled ? 'active' : ''}>
+        {label} {required && '*'}
+      </label>
       {error && <div className="error-message">This field is required</div>}
     </div>
   );

@@ -164,6 +164,7 @@ const SCIF = () => {
       anticipated_problems: '',
       previous_counseling: '',
       counseling_location: '',
+      counseling_counselor: '',
       counseling_reason: '',
       submission: '',
     },

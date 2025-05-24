@@ -1,6 +1,7 @@
 import React from 'react';
 import './css/ConfirmDialog.css';
 
+
 const ConfirmDialog = ({
   title = 'Are you sure?',
   message = 'Please confirm your action.',

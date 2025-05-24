@@ -60,7 +60,6 @@ function StatCard({ title, value, interval, trend }) {
             <Box sx={{ flexGrow: 1, height: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                 <Typography variant="h4" fontWeight="bold">{value}</Typography>
-                <Chip size="small" color={color} label={trendValues[trend]} />
                 </Stack>
                 <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
                 {interval}

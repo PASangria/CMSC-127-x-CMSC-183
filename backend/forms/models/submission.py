@@ -4,7 +4,7 @@ from .student import Student
 class Submission(models.Model):
     FORM_CHOICES = [
         ('Basic Information Sheet', 'Basic Information Sheet'),
-        ('Student Cumulative Information Sheet', 'Student Cumulative Information Sheet'),
+        ('Student Cumulative Information File', 'Student Cumulative Information File'),
     ]
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 GET http://localhost:8000/auth/users/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODQyMjkzLCJpYXQiOjE3NDY4NDE5OTMsImp0aSI6IjkwMjJjZmRmNDJjMzQ2MzBhYmNlY2UzYzdiODc3YmUxIiwidXNlcl9pZCI6MSwicm9sZSI6ImFkbWluIn0.CDVO3nhFEUp_l_CN80y4l55QjV_JRfFdckEloKk3fxM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MDY2NzY5LCJpYXQiOjE3NDYwNjY0NjksImp0aSI6ImU1OWUwODU5YTIyMDRiNDdiMjVmODc1MDI1OGEwNzJmIiwidXNlcl9pZCI6MTd9.tYdYQQc7DC1gNxsZZbmGyziWFTzROO8jlLpqHjrC4Tk
 
 ###
 POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
@@ -482,3 +482,11 @@ GET http://localhost:8000/api/dashboard/recent-submissions/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3ODM1Nzk3LCJpYXQiOjE3NDc4Mjg1NDcsImp0aSI6IjNlOGRiY2JjZGFhZDQ0ZWJhMjc0ODViOTY1MzYwY2QxIiwidXNlcl9pZCI6MSwicm9sZSI6ImFkbWluIn0.SfK2GT-DTFSXlb-AKKl0HXcLHeX3QdVUJBZ9EQkoTHw
 
+###
+PATCH http://localhost:8000/api/forms/student/profile/update/ HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MDY2NzY5LCJpYXQiOjE3NDYwNjY0NjksImp0aSI6ImU1OWUwODU5YTIyMDRiNDdiMjVmODc1MDI1OGEwNzJmIiwidXNlcl9pZCI6MTd9.tYdYQQc7DC1gNxsZZbmGyziWFTzROO8jlLpqHjrC4Tk
+
+{
+  "degree_program": "BSCS",
+}
