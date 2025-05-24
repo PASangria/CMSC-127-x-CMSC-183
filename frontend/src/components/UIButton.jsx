@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/ui.css';
 
-const Button = ({ children, onClick, type = 'button', variant = 'primary', ...props }) => {
+const Button = ({ children, onClick, type = 'button', variant = 'primary', className, ...props }) => {
   const variantClass = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
@@ -13,7 +13,7 @@ const Button = ({ children, onClick, type = 'button', variant = 'primary', ...pr
     <button
       type={type}
       onClick={onClick}
-      className={`btn ${variantClass}`}
+      className={`btn ${variantClass} ${className}`}
       {...props}
     >
       {children}

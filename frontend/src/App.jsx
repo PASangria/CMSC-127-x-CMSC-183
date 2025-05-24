@@ -1,7 +1,7 @@
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
 import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage, ChangePassword } from "./pages";
-import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView } from "./admin-pages";
-import { UserDashboard, SetUpProfile, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
+import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView, AdminBISView } from "./admin-pages";
+import { UserDashboard, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
@@ -171,6 +171,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
               <AdminBISList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/student-forms/:studentId/basic-information-sheet"
+          element={
+            <ProtectedRoute requireAdmin={true} requireUser={false}>
+              <AdminBISView  />
             </ProtectedRoute>
           }
         />

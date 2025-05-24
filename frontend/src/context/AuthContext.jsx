@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       clearAuthData();
     }
   }, []);
-  const fetchUserData = async (token) => {
+const fetchUserData = async (token) => {
   try {
     const decoded = jwtDecode(token);
     const currentRole = decoded.role;
@@ -62,6 +62,10 @@ export const AuthProvider = ({ children }) => {
       if (profileRes.ok) {
         const profileJson = await profileRes.json();
         setProfileData(profileJson);
+      } else if (profileRes.status === 404) {
+        setProfileData({});
+      } else {
+        throw new Error("Failed to fetch student profile");
       }
     }
 
@@ -71,6 +75,7 @@ export const AuthProvider = ({ children }) => {
     clearAuthData();
   }
 };
+
 
   
 

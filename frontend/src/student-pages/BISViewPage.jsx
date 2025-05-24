@@ -2,13 +2,37 @@ import React from "react";
 import "./css/pdfStyle.css";
 import "../forms/SetupProfile/css/multistep.css";
 import FormHeader from "./FormHeader";
-import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, useContext } from "react";
 import AutoResizeTextarea from "../components/AutoResizeTextarea";
 import html2pdf from "html2pdf.js";
-import { AlignRight } from "react-feather";
+import Button from "../components/UIButton";
+import ToastMessage from "../components/ToastMessage";
+import ConfirmDialog from "../components/ConfirmDialog";
+import { AuthContext } from "../context/AuthContext";
+import BackToTopButton from "../components/BackToTop";
 
-const BISProfileView = ({ profileData, formData }) => {
+const BISProfileView = ({ profileData, formData, isAdmin = false }) => {
   const pdfRef = useRef();
+  const { role } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [showDownloadConfirm, setShowDownloadConfirm] = useState(false);
+  const [downloadToast, setDownloadToast] = useState(null);
+
+  const handleDownloadClick = () => {
+    setShowDownloadConfirm(true);
+  };
+
+  const handleConfirmDownload = () => {
+    setShowDownloadConfirm(false);
+    handleDownload();
+    setDownloadToast("Download started!");
+  };
+
+  const handleCancelDownload = () => {
+    setShowDownloadConfirm(false);
+    setDownloadToast("Download cancelled.");
+  };
 
   const handleDownload = () => {
     const element = pdfRef.current;
@@ -23,6 +47,14 @@ const BISProfileView = ({ profileData, formData }) => {
     html2pdf().set(opt).from(element).save();
   };
 
+  const handleReturn = () => {
+    if (role === "admin" && profileData.student_number) {
+      navigate(`/admin/students/${profileData.student_number}`);
+    } else {
+      navigate("/myprofile");
+    }
+  };
+
   if (!formData) return <div>Loading...</div>;
   console.log(formData);
   const {
@@ -31,7 +63,7 @@ const BISProfileView = ({ profileData, formData }) => {
     preferences,
     scholastic_status,
     submission,
-    consent,
+    privacy_consent,
   } = formData;
 
   const supportOptions = [
@@ -60,7 +92,19 @@ const BISProfileView = ({ profileData, formData }) => {
 
   return (
     <>
-      <button onClick={handleDownload}>Download as PDF</button>
+      <div className="pdf-buttons">
+        <Button
+          variant="secondary"
+          onClick={handleReturn}
+          style={{ marginLeft: "10px" }}
+          className="pdf-button"
+        >
+          Return to Profile
+        </Button>
+        <Button variant="primary" onClick={handleDownloadClick} className="pdf-button">
+          Download as PDF
+        </Button>
+      </div>
 
       <div className="pdf" ref={pdfRef}>
         <FormHeader />
@@ -287,7 +331,7 @@ const BISProfileView = ({ profileData, formData }) => {
             <input
               type="checkbox"
               name="has_consented"
-              checked={consent.has_consented === true}
+              checked={privacy_consent.has_consented === true}
               readOnly
               className="certify-checkbox"
             />
@@ -314,7 +358,11 @@ const BISProfileView = ({ profileData, formData }) => {
             />
           </label>
           <label>
-            Signature of Student:{" "}
+            Signature of Student:
+            <input type="text" />
+          </label>
+          <label>
+            Date Signed:{" "}
             <input
               type="date"
               value={new Date(submission.submitted_on).toLocaleDateString(
@@ -323,11 +371,26 @@ const BISProfileView = ({ profileData, formData }) => {
               readOnly
             />
           </label>
-          <label>
-            Date Signed: <input type=" " />
-          </label>
         </div>
       </div>
+      <BackToTopButton />
+      {showDownloadConfirm && (
+        <ConfirmDialog
+          title="Confirm Download"
+          message="Are you sure you want to download this file?"
+          onConfirm={handleConfirmDownload}
+          onCancel={handleCancelDownload}
+          confirmLabel="Download"
+          cancelLabel="Cancel"
+        />
+      )}
+
+      {downloadToast && (
+        <ToastMessage
+          message={downloadToast}
+          onClose={() => setDownloadToast(null)}
+        />
+      )}
     </>
   );
 };

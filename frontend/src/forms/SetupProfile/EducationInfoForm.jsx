@@ -13,27 +13,22 @@ const EducationInfoForm = ({ formData, setFormData }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Validation function
   const validateForm = () => {
     const validationErrors = {};
 
-    // Validate Student Number (e.g., "1234-12345")
     const studentNumberPattern = /^\d{4}-\d{5}$/;
     if (!formData.student_number || !studentNumberPattern.test(formData.student_number)) {
       validationErrors.student_number = 'Student number is required and must be in the format: 1234-12345';
     }
 
-    // Validate current_year_level
     if (!formData.current_year_level) {
       validationErrors.current_year_level = 'Please select your current year level.';
     }
 
-    // Validate college
     if (!formData.college) {
       validationErrors.college = 'Please select your college/department.';
     }
 
-    // Validate degreeProgram
     if (!formData.degree_program) {
       validationErrors.degree_program = 'Please select your degree program.';
     }
