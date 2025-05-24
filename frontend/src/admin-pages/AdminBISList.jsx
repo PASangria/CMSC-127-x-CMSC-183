@@ -18,9 +18,8 @@ import {
   Box,
   Typography
 } from '@mui/material';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import StudentFilterBar from '../components/StudentFilterBar';
+import PaginationControls from '../components/PaginationControls';
 
 export const AdminBISList = () => {
   const navigate = useNavigate();
@@ -126,84 +125,6 @@ export const AdminBISList = () => {
             onReset={handleResetFilters}
           />
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="flex-end" sx={{ mb: 2, flexWrap: 'wrap' }}>
-          <TextField
-            label="Search by name"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            size="small"
-            sx={{
-              flex: { xs: '1 1 100%', sm: '2 1 0%' },
-              minWidth: '200px',
-              maxWidth: '500px',
-              '& .MuiInputBase-root': { height: 40 },
-              '& .MuiInputLabel-root': { top: '-6px', left: '0px' },
-            }}
-          />
-
-          <FormControl size="small" sx={{ minWidth: 200, maxWidth: 300 }}>
-            <InputLabel id="year-level-label">Year Level</InputLabel>
-            <Select
-              labelId="year-level-label"
-              multiple
-              value={years}
-              onChange={(e) => setYears(e.target.value)}
-              renderValue={(selected) => selected.join(', ')}
-              sx={{ height: 40 }}
-            >
-              {yearOptions.map((year) => (
-                <MenuItem key={year} value={year}>
-                  <Checkbox checked={years.includes(year)} />
-                  <ListItemText primary={year} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl size="small" sx={{ minWidth: 200, maxWidth: 300 }}>
-            <InputLabel id="program-label">Degree Program</InputLabel>
-            <Select
-              labelId="program-label"
-              multiple
-              value={programs}
-              onChange={(e) => setPrograms(e.target.value)}
-              renderValue={(selected) => selected.join(', ')}
-              sx={{ height: 40 }}
-            >
-              {programOptions.map((prog) => (
-                <MenuItem key={prog} value={prog}>
-                  <Checkbox checked={programs.includes(prog)} />
-                  <ListItemText primary={prog} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Date Submitted"
-              value={selectedDate ? new Date(selectedDate) : null}
-              onChange={(newValue) => {
-                setSelectedDate(newValue ? newValue.toISOString().split('T')[0] : '');
-              }}
-              slotProps={{
-                textField: {
-                  size: 'small',
-                  sx: {
-                    minWidth: 200,
-                    '& .MuiInputBase-root': { height: 40 },
-                    '& .MuiInputLabel-root': { top: '-6px', left: '0px' }
-                  }
-                }
-              }}
-            />
-          </LocalizationProvider>
-
-          <Button variant="outlined" onClick={handleResetFilters} sx={{ height: 40 }}>
-            Reset Filters
-          </Button>
-        </Stack>
-
         <table>
           <thead>
             <tr>
@@ -236,18 +157,11 @@ export const AdminBISList = () => {
         </table>
 
         {/* Pagination Buttons */}
-        <Box sx={{ mt: 3, textAlign: 'center' }}>
-          {totalPages > 1 && Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <Button
-              key={page}
-              variant={page === currentPage ? "primary" : "outlined"}
-              onClick={() => setCurrentPage(page)}
-              sx={{ mx: 0.5 }}
-            >
-              {page}
-            </Button>
-          ))}
-        </Box>
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </Box>
     </DefaultLayout>
   );

@@ -85,7 +85,6 @@ const StudentFilterBar = ({
                     '& input': {
                         padding: '12px 8px', // vertically centers the text
                         fontSize: '1rem',
-                        marginTop: '15px',
                     },
                     '& input::placeholder': {
                         fontSize: '1rem',
@@ -137,7 +136,7 @@ const StudentFilterBar = ({
             >
                 {/* Year Level */}
                 <FormControl size="small" sx={{ minWidth: 180 }}>
-                <InputLabel id="year-level-label" sx={{ top: '-6px' }}>
+                <InputLabel id="year-level-label">
                     Year Level
                 </InputLabel>
                 <Select
@@ -167,7 +166,7 @@ const StudentFilterBar = ({
 
                 {/* Degree Program */}
                 <FormControl size="small" sx={{ minWidth: 200 }}>
-                <InputLabel id="program-label" sx={{ top: '-6px' }}>
+                <InputLabel id="program-label">
                     Degree Program
                 </InputLabel>
                 <Select
@@ -214,7 +213,6 @@ const StudentFilterBar = ({
                         sx: {
                         minWidth: 160,
                         '& .MuiInputBase-root': { height: 40 },
-                        '& .MuiInputLabel-root': { top: '-6px' },
                         '&:hover .MuiOutlinedInput-notchedOutline': {
                             borderWidth: '2px',
                         },
