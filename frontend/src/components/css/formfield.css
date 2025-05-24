@@ -34,9 +34,19 @@
   line-height: 1.2;
   box-sizing: border-box;
   transition: border-color 0.3s ease, padding-top 0.3s ease;
-  appearance: none;
-  /* Space at the top */
   padding-top: 10px;
+}
+
+.form-group select {
+  padding: 0.6rem 2.5rem 0.6rem 0.75rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
 }
 
 /* --- Floating Label Behavior for Focus or Filled --- */
@@ -76,12 +86,20 @@
   border-color: #D32F2F;
 }
 
-.form-group.error label,
-.form-group.error .form-input:focus + label,
-.form-group.error .form-input.filled + label,
-.form-group.error select:focus + label,
-.form-group.error select.filled + label {
+.form-group.error label {
   color: #D32F2F;
+}
+
+/* --- Override Error Border on Focus --- */
+.form-group.error .form-input:focus,
+.form-group.error select:focus {
+  border-color: #1976D2;
+}
+
+/* --- Optional: Override label color too on focus if needed --- */
+.form-group.error .form-input:focus + label,
+.form-group.error select:focus + label {
+  color: #1976D2;
 }
 
 /* --- Error Message --- */
@@ -108,24 +126,24 @@
   grid-column: span 2;
 }
 
-/* Textarea field styling: ensures overflow goes downwards and cursor starts at top left */
+/* --- Textarea Styling --- */
 .custom-form-row .custom-form-group textarea.custom-form-input {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
   border-radius: 4px;
   border: 1px solid #ccc;
-  resize: vertical; /* Allow resizing vertically */
-  min-height: 100px; /* Minimum height for the textarea */
-  height: auto; /* Allow textarea to grow in height */
-  overflow-y: auto; /* Show a scrollbar only when content exceeds the visible area */
-  text-align: left; /* Align text to the left */
-  vertical-align: top; /* Align text vertically to the top */
-  padding-top: 10px; /* Ensure enough space at the top for the cursor */
+  resize: vertical;
+  min-height: 100px;
+  height: auto;
+  overflow-y: auto;
+  text-align: left;
+  vertical-align: top;
+  padding-top: 10px;
   box-sizing: border-box;
 }
 
-/* --- Form Rows (Grid Layout) --- */
+/* --- Form Rows (Flex Layout) --- */
 .custom-form-row {
   display: flex;
   flex-direction: column;
@@ -138,7 +156,7 @@
   gap: 10px;
 }
 
-/* Style for input fields */
+/* --- Input and Select Styles --- */
 .custom-form-row .custom-form-group input.custom-form-input,
 .custom-form-row .custom-form-group select.custom-form-input {
   width: 100%;
@@ -148,14 +166,14 @@
   border-radius: 4px;
   box-sizing: border-box;
   margin-top: 5px;
-  text-align: left; /* Align text to the left */
-  vertical-align: top; /* Align text vertically to the top */
+  text-align: left;
+  vertical-align: top;
 }
 
 /* --- Radio Button Group --- */
 .radio-group {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -165,7 +183,7 @@
   font-size: 14px;
   color: rgba(0, 0, 0, 0.7);
   margin-bottom: 5px;
-  width: calc(25% - 10px); 
+  width: calc(25% - 10px);
 }
 
 .radio-label input[type="radio"] {
@@ -173,6 +191,11 @@
   cursor: pointer;
 }
 
-.helper-text{
+.helper-text {
   padding-bottom: 2em;
+}
+
+.form-group.error:has(.form-input:focus) .error-message,
+.form-group.error:has(select:focus) .error-message {
+  display: none;
 }
