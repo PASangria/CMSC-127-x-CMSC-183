@@ -69,10 +69,6 @@ export const useFormApi = () => {
       }
     }
   });
-    console.log("Form from main")
-    console.log(formData);
-    console.log("Payload");
-    console.log(payload);
     const response = await request(`${BASE_URL}/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -80,7 +76,6 @@ export const useFormApi = () => {
     });
 
     const responseData = await response.json();
-    console.log(responseData);
     return response;
   };
 
@@ -122,7 +117,6 @@ const finalizeSubmission = async (submissionId, studentNumber, formData) => {
       data,
     };
   } catch (error) {
-    console.error('Network or unexpected error:', error);
     return {
       success: false,
       status: 0,
