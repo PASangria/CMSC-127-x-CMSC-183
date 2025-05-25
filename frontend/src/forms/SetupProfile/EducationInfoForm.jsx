@@ -1,130 +1,165 @@
-import React, { useState, useEffect } from 'react';
-import FormField from '../../components/FormField'; // Adjust path as needed
-import './css/multistep.css';
-import { useEnumChoices } from '../../utils/enumChoices'  
+import React, { useState } from "react";
+import FormField from "../../components/FormField";
+import "./css/multistep.css";
+import { useEnumChoices } from "../../utils/enumChoices";
+import { clearError } from "../../utils/helperFunctions";
 
-const EducationInfoForm = ({ formData, setFormData }) => {
-  const { enums, loading, error } = useEnumChoices(); 
-  const [errors, setErrors] = useState({});
-  const academicYearPattern = /^20\d{2}-20\d{2}$/;
+const EducationInfoForm = ({ formData, setFormData, errors, setErrors }) => {
+  console.log(errors);
+  const { enums, loading, error } = useEnumChoices();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "degree_program" && enums?.degree_to_college) {
+      const mappedColleges = enums.degree_to_college[value];
+      if (mappedColleges?.length === 1) {
+        setFormData((prev) => ({
+          ...prev,
+          degree_program: value,
+          college: mappedColleges[0],
+        }));
+      } else {
+        setFormData((prev) => ({
+          ...prev,
+          degree_program: value,
+          college: "",
+        }));
+      }
+      return;
+    }
+
+    if (name === "college" && enums?.degree_to_college) {
+      // Get valid degrees for selected college
+      const validDegrees = Object.entries(enums.degree_to_college)
+        .filter(([_, colleges]) => colleges.includes(value))
+        .map(([degree]) => degree);
+
+      setFormData((prev) => ({
+        ...prev,
+        college: value,
+        degree_program: validDegrees.includes(prev.degree_program)
+          ? prev.degree_program
+          : "",
+      }));
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const validateForm = () => {
-    const validationErrors = {};
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching data: {error}</div>;
 
-    const studentNumberPattern = /^\d{4}-\d{5}$/;
-    if (!formData.student_number || !studentNumberPattern.test(formData.student_number)) {
-      validationErrors.student_number = 'Student number is required and must be in the format: 1234-12345';
-    }
+  // Filter college options based on selected degree_program
+  const filteredCollegeOptions = enums?.college?.filter((college) =>
+    formData.degree_program
+      ? enums?.degree_to_college?.[formData.degree_program]?.includes(
+          college.value
+        )
+      : true
+  );
 
-    if (!formData.current_year_level) {
-      validationErrors.current_year_level = 'Please select your current year level.';
-    }
-
-    if (!formData.college) {
-      validationErrors.college = 'Please select your college/department.';
-    }
-
-    if (!formData.degree_program) {
-      validationErrors.degree_program = 'Please select your degree program.';
-    }
-
-    if (!formData.date_initial_entry || !academicYearPattern.test(formData.date_initial_entry)) {
-      validationErrors.date_initial_entry = 'Format must be YYYY-YYYY using years from 2000 onward (e.g., 2023-2024).';
-    } else {
-      const [startYear, endYear] = formData.date_initial_entry.split('-').map(Number);
-      if (endYear !== startYear + 1) {
-        validationErrors.date_initial_entry = 'The second year must be the first year plus one (e.g., 2023-2024).';
-      } 
-    }
-
-    setErrors(validationErrors);
-    
-    return Object.keys(validationErrors).length === 0;
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching data: {error}</div>;
-  }
+  // Filter degree options based on selected college
+  const filteredDegreeOptions = enums?.degree_program?.filter((degree) =>
+    formData.college
+      ? enums?.degree_to_college?.[degree.value]?.includes(formData.college)
+      : true
+  );
 
   return (
-    <div className='form-container'>
-      <h2 className='step-title'>Education Information</h2>
+    <div className="form-container">
+      <h2 className="step-title">Education Information</h2>
 
       <div className="form-row">
         <div className="form-group">
           <FormField
-            label="Student Number "
+            label="Student Number"
             name="student_number"
             value={formData.student_number}
             onChange={handleChange}
+            onFocus={() =>
+              clearError(errors, setErrors, "education.student_number")
+            }
+            error={errors?.["education.student_number"]}
             required
-            error={errors.student_number}  
           />
         </div>
         <div className="form-group">
-        <FormField
-          label="Current Year Level"
-          name="current_year_level"
-          type="select"
-          value={formData.current_year_level}
-          onChange={handleChange}
-          required
-          error={errors.current_year_level}
-          options={
-            enums?.year_level?.map((opt) => ({ value: opt.value, label: opt.label })) || []
-          }
-        />
+          <FormField
+            label="Current Year Level"
+            name="current_year_level"
+            type="select"
+            value={formData.current_year_level}
+            onChange={handleChange}
+            onFocus={() =>
+              clearError(errors, setErrors, "education.current_year_level")
+            }
+            required
+            error={errors?.["education.current_year_level"]}
+            options={
+              enums?.year_level?.map((opt) => ({
+                value: opt.value,
+                label: opt.label,
+              })) || []
+            }
+          />
         </div>
       </div>
 
       <div className="form-row">
         <div className="form-group">
-        <FormField
-          label="College / Department"
-          name="college"
-          type="select"
-          value={formData.college}
-          onChange={handleChange}
-          required
-          error={errors.college}
-          options={
-            enums?.college?.map((opt) => ({ value: opt.value, label: opt.label })) || []
-          }
-        />
+          <FormField
+            label="College / Department"
+            name="college"
+            type="select"
+            value={formData.college}
+            onChange={handleChange}
+            onFocus={() => clearError(errors, setErrors, "education.college")}
+            required
+            error={errors?.["education.college"]}
+            options={
+              filteredCollegeOptions?.map((opt) => ({
+                value: opt.value,
+                label: opt.label,
+              })) || []
+            }
+          />
         </div>
-        <div className="form-group">
-                  <FormField
-          label="Degree Program"
-          name="degree_program"
-          type="select"
-          value={formData.degree_program}
-          onChange={handleChange}
-          required
-          error={errors.degree_program}
-          options={
-            enums?.degree_program?.map((opt) => ({ value: opt.value, label: opt.label })) || []
-          }
-        />
-        </div>
-      </div>
-       <div className="form-row">
         <div className="form-group">
           <FormField
-            label="Academic Year of Initial Entry (e.g., 2023-2024)"
+            label="Degree Program"
+            name="degree_program"
+            type="select"
+            value={formData.degree_program}
+            onChange={handleChange}
+            onFocus={() =>
+              clearError(errors, setErrors, "education.degree_program")
+            }
+            required
+            error={errors?.["education.degree_program"]}
+            options={
+              filteredDegreeOptions?.map((opt) => ({
+                value: opt.value,
+                label: opt.label,
+              })) || []
+            }
+          />
+        </div>
+      </div>
+
+      <div className="form-row">
+        <div className="form-group">
+          <FormField
+            label="Academic Year of Initial Entry"
             name="date_initial_entry"
             value={formData.date_initial_entry}
             onChange={handleChange}
+            onFocus={() =>
+              clearError(errors, setErrors, "education.date_initial_entry")
+            }
             required
-            error={errors.date_initial_entry}
+            error={errors?.["education.date_initial_entry"]}
             placeholder="2023-2024"
           />
         </div>
@@ -135,10 +170,16 @@ const EducationInfoForm = ({ formData, setFormData }) => {
             type="select"
             value={formData.date_initial_entry_sem}
             onChange={handleChange}
+            onFocus={() =>
+              clearError(errors, setErrors, "education.date_initial_entry_sem")
+            }
             required
-            error={errors.semester}
+            error={errors?.["education.date_initial_entry_sem"]}
             options={
-              enums?.semester?.map((opt) => ({ value: opt.value, label: opt.label })) || []
+              enums?.semester?.map((opt) => ({
+                value: opt.value,
+                label: opt.label,
+              })) || []
             }
           />
         </div>

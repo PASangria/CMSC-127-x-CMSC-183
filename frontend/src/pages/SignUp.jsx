@@ -4,8 +4,8 @@ import FormField from "../components/FormField";
 import Footer from "../components/Footer";
 import "./css_pages/SignUp.css";
 import { Link } from "react-router-dom";
-import Modal from "../components/Modal";
-import "../components/css/Modal.css";
+// import Modal from "../components/Modal";
+// import "../components/css/Modal.css";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");

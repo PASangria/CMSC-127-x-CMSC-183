@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from forms.models import Submission
 from forms.serializers import SubmissionSerializer
+from rest_framework.exceptions import PermissionDenied
 
 class SubmissionViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -23,6 +24,9 @@ class SubmissionViewSet(viewsets.ReadOnlyModelViewSet):
 
         if user.is_staff or user.is_superuser:
             return Submission.objects.all()
+        
+        if not hasattr(user, 'student'):
+            raise PermissionDenied("You must complete your student profile first.")
 
         # Assuming every non-admin user has a related student profile
         return Submission.objects.filter(student=user.student)

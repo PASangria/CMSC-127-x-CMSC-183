@@ -5,7 +5,7 @@
   height: 19.3125em;
   left: 0;
   top: 0;
-  background: #7B1113;
+  background: #7b1113;
   z-index: 0;
 }
 
@@ -40,11 +40,11 @@
 .main-form-subtitle {
   position: relative;
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .step-title {
-  color: #7B1113;
+  color: #7b1113;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
   padding-bottom: 0.25em;
@@ -55,25 +55,26 @@
   position: relative;
 }
 
-.step-info.school{
+.step-info.school {
   text-align: left;
+  margin-bottom: 10px;
 }
 
-.school-record.subsection-form{
+.school-record.subsection-form {
   margin-top: 1rem;
 }
 
+
 fieldset {
-  border: none; 
-  padding: 0; 
-  margin: 0; 
+  border: none;
+  padding: 0;
+  margin: 0;
   background: none;
 }
 
-
 /* ===== FORM CARD ===== */
 .main-form-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 0.9375em;
   padding: 2em;
   width: 62.25em;
@@ -91,7 +92,7 @@ fieldset {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
 }
 
-.subsection-form{
+.subsection-form {
   margin-top: 2.5rem;
 }
 
@@ -101,7 +102,6 @@ fieldset {
   font-weight: 600;
   color: #444;
 }
-
 
 textarea {
   width: 100%;
@@ -168,12 +168,11 @@ textarea:focus {
 }
 
 .certify-agreement .form-label {
-    display: flex
-;
-    margin-bottom: 0.5rem;
-    align-items: baseline;
-    font-weight: 600;
-    color: #444;
+  display: flex;
+  margin-bottom: 0.5rem;
+  align-items: baseline;
+  font-weight: 600;
+  color: #444;
 }
 
 .certify-checkbox {
@@ -187,12 +186,17 @@ textarea:focus {
   vertical-align: middle;
 }
 
-.step-button-form{
+.step-button-form {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
+.school-button {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
 
 /* Grid layout for dual inputs */
 .form-grid {
@@ -246,32 +250,32 @@ textarea:focus {
   position: relative;
 }
 
-.modal-content .form-section{
+.modal-content .form-section {
   padding: 0 !important;
   text-align: left;
   margin-bottom: 20px;
 }
 
-.modal-content h2{
-  font-size: 18px !important; 
+.modal-content h2 {
+  font-size: 18px !important;
   text-align: left !important;
 }
 
 .modal-close {
-    position: fixed;
-    padding: 0.3rem;
-    border: none;
-    cursor: pointer;
-    color: #4e4e4e;
-    background: transparent;
-    z-index: 20;
-    right: 9em;
-    bottom: 10.4em;
-    font-size: 3em;
-    border-radius: 1em;
-    scrollbar-width: 0;
-    -ms-overflow-style: none;
-    scroll-behavior: smooth;
+  position: fixed;
+  padding: 0.3rem;
+  border: none;
+  cursor: pointer;
+  color: #4e4e4e;
+  background: transparent;
+  z-index: 20;
+  right: 9em;
+  bottom: 10.4em;
+  font-size: 3em;
+  border-radius: 1em;
+  scrollbar-width: 0;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
 }
 
 .modal-content::-webkit-scrollbar {
@@ -283,7 +287,7 @@ textarea:focus {
   font-weight: 1000;
   font-size: 2rem;
   margin-bottom: 2rem;
-  color:#7B1113;
+  color: #7b1113;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -325,6 +329,11 @@ textarea:focus {
   box-sizing: border-box;
 }
 
+.line{
+  border-bottom: #7b1113 solid 1px;
+  margin: 10px 0;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 48em) {
   .mainStepForm {
@@ -337,8 +346,12 @@ textarea:focus {
     padding: 1.25em;
   }
 
-  .main-form-title { font-size: 1.75em; }
-  .main-form-subtitle { font-size: 1em; }
+  .main-form-title {
+    font-size: 1.75em;
+  }
+  .main-form-subtitle {
+    font-size: 1em;
+  }
 
   .main-form-buttons {
     gap: 0.625em;
@@ -365,8 +378,12 @@ textarea:focus {
     margin-top: 0.625em;
   }
 
-  .main-form-title { font-size: 1.5em; }
-  .main-form-subtitle { font-size: 0.875em; }
+  .main-form-title {
+    font-size: 1.5em;
+  }
+  .main-form-subtitle {
+    font-size: 0.875em;
+  }
 
   .main-form-card {
     padding: 1em;
@@ -377,7 +394,6 @@ textarea:focus {
     flex-direction: column;
   }
 }
-
 
 html {
   font-size: 100%;

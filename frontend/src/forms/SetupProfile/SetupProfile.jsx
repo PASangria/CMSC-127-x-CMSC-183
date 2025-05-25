@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PersonalInfoForm from "./PersonalInfoForm";
 import EducationInfoForm from "./EducationInfoForm";
 import AddressInfoForm from "./AddressInfoForm";
-import { validateStep } from "../../utils/formValidationUtils";
+
 import { apiRequest } from "../../utils/apiUtils";
 import Navbar from "../../components/NavBar";
 import Footer from "../../components/Footer";
@@ -14,8 +14,26 @@ import ToastMessage from "../../components/ToastMessage";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { AuthContext } from "../../context/AuthContext";
 import Loader from "../../components/Loader";
+import { useApiRequest } from "../../context/ApiRequestContext";
+import {
+  validatePersonalInfo,
+  validateEducation,
+  validateAddress
+} from "../../utils/formValidationUtils";
+
+function formatAddress(data, type) {
+  return {
+    line1: data[`${type}_address_line_1`],
+    barangay: data[`${type}_barangay`],
+    city_municipality: data[`${type}_city_municipality`],
+    province: data[`${type}_province`],
+    region: data[`${type}_region`],
+    zip: data[`${type}_zip_code`],
+  };
+}
 
 const MultiStepForm = () => {
+  const { request } = useApiRequest();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [step, setStep] = useState(1);
@@ -25,6 +43,7 @@ const MultiStepForm = () => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const navigate = useNavigate();
   const { profileData } = useContext(AuthContext);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     family_name: "",
@@ -77,15 +96,55 @@ const MultiStepForm = () => {
     return <Loader />;
   }
 
-  const handleNextStep = () => {
-    const isValid = validateStep(step, formData);
+  const validateStep = async (step, formData, sameAsPermanent = false, request) => {
+  switch (step) {
+    case 1:
+      return validatePersonalInfo(formData);
 
-    if (isValid) {
-      setStep((prevStep) => prevStep + 1);
-    } else {
-      alert("Please fill in all required fields correctly.");
+    case 2:
+      return await validateEducation(formData, request);
+
+    case 3:
+      return validateAddress(formatAddress(formData, 'permanent'), 'permanent');
+
+    case 4:
+      if (sameAsPermanent) return {};
+      return validateAddress(formatAddress(formData, 'up'), 'up');
+
+    case 5:
+      return {};
+
+    default:
+      return {};
+  }
+};
+
+  const handleNextStep = async() => {
+    const validationErrors = await validateStep(step, formData, sameAsPermanent, request);
+    if (
+      validationErrors &&
+      typeof validationErrors === "object" &&
+      !Array.isArray(validationErrors) &&
+      Object.keys(validationErrors).length > 0
+    ) {
+      setErrors(validationErrors);
+      return;
     }
+
+    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+      const errorObj = {};
+      validationErrors.forEach((err, index) => {
+        errorObj[`error_${index}`] = err;
+      });
+      setErrors(errorObj);
+      console.log(errors);
+      return;
+    }
+
+    setErrors(null);
+    setStep((prev) => prev + 1);
   };
+
 
   const handlePreviousStep = () => {
     setStep((prevStep) => prevStep - 1);
@@ -177,7 +236,9 @@ const MultiStepForm = () => {
       const result = await response.json();
       setLoading(false);
       setShowSuccessToast(true);
-      window.location.href = "/myprofile";
+      setTimeout(() => {
+        window.location.href = "/myprofile";
+      }, 2000);
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -222,6 +283,8 @@ const MultiStepForm = () => {
                   formData={formData}
                   setFormData={setFormData}
                   step={step}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 2 && (
@@ -229,6 +292,8 @@ const MultiStepForm = () => {
                   formData={formData}
                   setFormData={setFormData}
                   step={step}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 3 && (
@@ -238,6 +303,8 @@ const MultiStepForm = () => {
                   addressLabel="Permanent Address"
                   disabled={false}
                   prefix="permanent"
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 4 && (

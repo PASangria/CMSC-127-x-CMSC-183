@@ -33,7 +33,7 @@ const SCIFProfilePage = () => {
           siblings: data.siblings,
           family_data: data.family_data,
           health_data: data.health_data,
-          record: data.previous_school_record,
+          previous_school_record: data.previous_school_record,
           scholarship: data.scholarship,
           personality_traits: data.personality_traits,
           family_relationship: data.family_relationship,

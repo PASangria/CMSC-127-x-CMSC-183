@@ -27,6 +27,9 @@ import {
 } from "../../utils/SCIFValidation";
 import Loader from "../../components/Loader";
 import Button from "../../components/UIButton";
+import ToastMessage from "../../components/ToastMessage";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import ModalMessage from "../../components/ModalMessage";
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -48,6 +51,10 @@ const SCIF = () => {
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showDraftSuccessToast, setShowDraftSuccessToast] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const [formData, setFormData] = useState({
     family_data: {
@@ -196,11 +203,8 @@ const SCIF = () => {
           ...validateFamilyRelationship(formData.family_relationship),
           ...validateCounselingInfo(formData.counseling_info),
         };
-
-        if (personalDataErrors.length > 0) {
-          return personalDataErrors;
-        }
-        return true;
+        
+        return personalDataErrors;
 
       case 7:
         const consentErrors = validatePrivacyConsent(formData);
@@ -319,10 +323,8 @@ const SCIF = () => {
     setLoading(true);
     try {
       const response = await saveDraft(submissionId, studentNumber, formData);
-      console.log("Form from main");
-      console.log(formData);
       if (response?.ok) {
-        alert("Draft saved successfully!");
+        setShowDraftSuccessToast(true);
       } else {
         alert("Error saving draft.");
       }
@@ -333,34 +335,31 @@ const SCIF = () => {
     }
   };
 
-const handleNextStep = () => {
-  const validationErrors = validateStep(step, formData);
+  const handleNextStep = () => {
+    const validationErrors = validateStep(step, formData);
 
-  // If it's an object and has keys (like from validateParent)
-  if (
-    validationErrors &&
-    typeof validationErrors === 'object' &&
-    !Array.isArray(validationErrors) &&
-    Object.keys(validationErrors).length > 0
-  ) {
-    setErrors(validationErrors); // Set errors to pass into the step
-    return; // Stop progressing to next step
-  }
+    if (
+      validationErrors &&
+      typeof validationErrors === "object" &&
+      !Array.isArray(validationErrors) &&
+      Object.keys(validationErrors).length > 0
+    ) {
+      setErrors(validationErrors);
+      return;
+    }
 
-  // If it's an array of errors (like from validatePersonalityTraits etc.)
-  if (Array.isArray(validationErrors) && validationErrors.length > 0) {
-    const errorObj = {};
-    validationErrors.forEach((err, index) => {
-      errorObj[`error_${index}`] = err;
-    });
-    setErrors(errorObj);
-    return;
-  }
+    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+      const errorObj = {};
+      validationErrors.forEach((err, index) => {
+        errorObj[`error_${index}`] = err;
+      });
+      setErrors(errorObj);
+      return;
+    }
 
-  setErrors(null); // Clear errors if no issues
-  setStep((prev) => prev + 1);
-};
-
+    setErrors(null);
+    setStep((prev) => prev + 1);
+  };
 
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
@@ -368,9 +367,22 @@ const handleNextStep = () => {
     setIsPreviewOpen(true);
   };
 
+  const handleConfirmSubmit = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmCancel = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const handleConfirmAction = () => {
+    setShowConfirmDialog(false);
+    handleSubmit();
+  };
+
   const handleSubmit = async () => {
     if (!formData?.privacy_consent?.has_consented) {
-      alert("You must agree to the Privacy Statement to submit the form.");
+      setShowPrivacyModal(true);
       return;
     }
 
@@ -383,9 +395,11 @@ const handleNextStep = () => {
       );
 
       if (result.success) {
-        alert(result.data.message || "Form submitted successfully!");
+        setShowSuccessToast(true);
+        setTimeout(() => {
+          window.location.href = "/myprofile";
+        }, 2000);
       } else {
-        // Handle specific error messages based on response
         if (result.status === 400 && result.data.errors) {
           alert(
             "Validation errors:\n" + JSON.stringify(result.data.errors, null, 2)
@@ -441,9 +455,9 @@ const handleNextStep = () => {
                 }
                 readOnly={readOnly}
                 errors={errors}
+                setErrors = {setErrors}
               />
             )}
-            console.log(errors);
             {step === 3 && (
               <SCIFHealthData
                 data={{
@@ -462,6 +476,7 @@ const handleNextStep = () => {
                 }
                 readOnly={readOnly}
                 errors={errors}
+                setErrors={setErrors}
               />
             )}
             {step === 4 && (
@@ -475,6 +490,7 @@ const handleNextStep = () => {
                 }
                 readOnly={readOnly}
                 errors={errors}
+                setErrors={setErrors}
               />
             )}
             {step === 5 && (
@@ -505,6 +521,7 @@ const handleNextStep = () => {
                 }
                 readOnly={readOnly}
                 errors={errors}
+                setErrors={setErrors}
               />
             )}
             {step === 7 && (
@@ -595,7 +612,7 @@ const handleNextStep = () => {
                   {!readOnly && (
                     <Button
                       variant="primary"
-                      onClick={handleSubmit}
+                      onClick={handleConfirmSubmit}
                       style={{ marginLeft: "0.5rem" }}
                     >
                       Submit
@@ -614,6 +631,40 @@ const handleNextStep = () => {
         </div>
       </div>
       <Footer />
+
+      {showConfirmDialog && (
+        <ConfirmDialog
+          title="Are you sure?"
+          message="Please confirm that you want to submit your form."
+          onConfirm={handleConfirmAction}
+          onCancel={handleConfirmCancel}
+        />
+      )}
+
+      {showSuccessToast && (
+        <ToastMessage
+          message="Your form has been successfully submitted!"
+          onClose={() => setShowSuccessToast(false)}
+          duration={5000}
+        />
+      )}
+
+      {showDraftSuccessToast && (
+        <ToastMessage
+          message="Your draft has been saved successfully!"
+          onClose={() => setShowDraftSuccessToast(false)}
+          duration={5000}
+        />
+      )}
+      {showPrivacyModal && (
+          <ModalMessage
+            title="Privacy Consent Required"
+            message="You must agree to the Privacy Statement before submitting the form."
+            onClose={() => setShowPrivacyModal(false)}
+            showCloseButton={true}
+            buttons={[]}
+          />
+        )}
     </>
   );
 };

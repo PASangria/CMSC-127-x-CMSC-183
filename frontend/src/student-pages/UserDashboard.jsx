@@ -29,7 +29,7 @@ export const UserDashboard = () => {
     const fetchSubmittedForms = async () => {
       try {
         const response = await request('http://localhost:8000/api/forms/display/submissions/');
-        if (response) {
+        if (response && response.ok) {
           const data = await response.json();
 
           const submitted = data
@@ -41,9 +41,14 @@ export const UserDashboard = () => {
 
           setSubmittedForms(submitted);
           setPendingActions(pending);
+        } else {
+          // Treat failed API response as no submissions
+          setSubmittedForms([]);
+          setPendingActions([]);
         }
       } catch (err) {
-        console.error('Error fetching submissions:', err);
+        setSubmittedForms([]);
+        setPendingActions([]);
       } finally {
         setLoading(false);
       }
@@ -78,18 +83,17 @@ export const UserDashboard = () => {
     const slugify = (text) =>
       text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 
-    const slug = slugify(form.form_type);  // This should match the backend form types
+    const slug = slugify(form.form_type);
 
     try {
       const response = await request(
-        `http://localhost:8000/api/forms/${slug}/`,  // Make sure the slug is correctly formed
+        `http://localhost:8000/api/forms/${slug}/`,
         {
           method: 'DELETE',
         }
       );
 
-       const responseData = await response.json();
-        console.log(responseData);
+      const responseData = await response.json();
 
       if (response.ok) {
         setPendingActions(prev => prev.filter(item => item.id !== form.id));
@@ -98,7 +102,6 @@ export const UserDashboard = () => {
         setToastMessage(`Failed to delete "${form.form_type}".`);
       }
     } catch (err) {
-      console.error('Error deleting submission:', err);
       setToastMessage(`Error deleting "${form.form_type}".`);
     } finally {
       setConfirmDialog({ visible: false, form: null });
@@ -107,13 +110,15 @@ export const UserDashboard = () => {
 
   return (
     <DefaultLayout variant="student">
-      <DashboardTable
-        submittedForms={submittedForms}
-        pendingActions={pendingActions}
-        onView={handleView}
-        onDelete={promptDelete}
-      />
-      
+
+        <DashboardTable
+          submittedForms={submittedForms}
+          pendingActions={pendingActions}
+          onView={handleView}
+          onDelete={promptDelete}
+        />
+
+
       {confirmDialog.visible && (
         <ConfirmDialog
           title="Delete Draft"

@@ -1,214 +1,340 @@
 export const validateParent = (formData) => {
-  const errors = [];
+  const errors = {};
 
   const mother = formData.family_data.mother || {};
   const hasAnyInputMother = Object.entries(mother).some(
-    ([key, value]) => key !== 'id' && value !== null && value !== ''
+    ([key, value]) => key !== "id" && value !== null && value !== ""
   );
   if (hasAnyInputMother) {
-    if (!mother.first_name) errors.push("Mother's first name is required.");
-    if (!mother.last_name) errors.push("Mother's last name is required.");
+    if (!mother.first_name)
+      errors["mother.first_name"] = "Mother's first name is required.";
+    if (!mother.last_name)
+      errors["mother.last_name"] = "Mother's last name is required.";
+    if (!mother.age) errors["mother.age"] = "Mother's age is required.";
     if (!mother.contact_number) {
-      errors.push("Mother's contact number is required.");
+      errors["mother.contact_number"] = "Mother's contact number is required.";
     } else if (!/^\+?\d{9,15}$/.test(mother.contact_number)) {
-      errors.push("Mother's contact  must be a valid phone number.");
+      errors["mother.contact_number"] =
+        "Mother's contact must be a valid phone number.";
     }
   }
 
   const father = formData.family_data.father || {};
   const hasAnyInputFather = Object.entries(father).some(
-    ([key, value]) => key !== 'id' && value !== null && value !== ''
+    ([key, value]) => key !== "id" && value !== null && value !== ""
   );
   if (hasAnyInputFather) {
-    if (!father.first_name) errors.push("Father's first name is required.");
-    if (!father.last_name) errors.push("Father's last name is required.");
+    if (!father.first_name)
+      errors["father.first_name"] = "Father's first name is required.";
+    if (!father.last_name)
+      errors["father.last_name"] = "Father's last name is required.";
+    if (!father.age) errors["father.age"] = "Father's age is required.";
     if (!father.contact_number) {
-      errors.push("Father's contact number is required.");
+      errors["father.contact_number"] = "Father's contact number is required.";
     } else if (!/^\+?\d{9,15}$/.test(father.contact_number)) {
-      errors.push("Father's contact number must be a valid phone number.");
+      errors["father.contact_number"] =
+        "Father's contact number must be a valid phone number.";
     }
   }
 
   return errors;
 };
 
-
 export const validateGuardian = (formData) => {
-  const errors = [];
+  const errors = {};
 
-  const guardian = formData.family_data.guardian;
+  const guardian = formData.family_data.guardian || {};
 
   const hasAnyInputGuardian = Object.entries(guardian).some(
     ([key, value]) =>
-      key !== 'language_dialect' && 
-      typeof value === 'string' &&
-      value.trim() !== ''
+      key !== "language_dialect" &&
+      value !== null &&
+      typeof value === "string" &&
+      value.trim() !== ""
   );
 
   if (hasAnyInputGuardian) {
-    if (!guardian.first_name) errors.push("Guardian's first name is required.");
-    if (!guardian.last_name) errors.push("Guardian's last name is required.");
+    if (!guardian.first_name)
+      errors["guardian.first_name"] = "Guardian's first name is required.";
+    if (!guardian.last_name)
+      errors["guardian.last_name"] = "Guardian's last name is required.";
     if (!guardian.contact_number) {
-      errors.push("Guardian's contact number is required.");
+      errors["guardian.contact_number"] =
+        "Guardian's contact number is required.";
     } else if (!/^\+?\d{9,15}$/.test(guardian.contact_number)) {
-      errors.push("Guardian's contact number must be a valid phone number.");
+      errors["guardian.contact_number"] =
+        "Guardian's contact number must be a valid phone number.";
     }
-    if (!guardian.address) errors.push("Guardian's address is required.");
-    if (!guardian.relationship_to_guardian) errors.push("Relationship to guardian is required.");
+    if (!guardian.address)
+      errors["guardian.address"] = "Guardian's address is required.";
+    if (!guardian.relationship_to_guardian) {
+      errors["guardian.relationship_to_guardian"] =
+        "Relationship to guardian is required.";
+    }
   }
 
   return errors;
 };
 
 export const validateSibling = (formData) => {
-  const errors = [];
+  const errors = {};
 
   formData.siblings.forEach((sibling, index) => {
-    const hasAnyInput = Object.values(sibling).some(value => value !== null && value !== '');
+    const hasAnyInput = Object.entries(sibling).some(
+      ([_, value]) => value !== null && value !== ""
+    );
+
     if (hasAnyInput) {
-      if (!sibling.first_name) errors.push(`Sibling #${index + 1}'s first name is required.`);
-      if (!sibling.last_name) errors.push(`Sibling #${index + 1}'s last name is required.`);
-      if (!sibling.sex) errors.push(`Sibling #${index + 1}'s sex is required.`);
-      if (!sibling.age) errors.push(`Sibling #${index + 1}'s age is required.`);
-      if (!sibling.educational_attainment) errors.push(`Sibling #${index + 1}'s educational attainment is required.`);
+      const prefix = `siblings[${index}]`;
+
+      if (!sibling.first_name)
+        errors[`${prefix}.first_name`] = `Sibling #${
+          index + 1
+        }'s first name is required.`;
+      if (!sibling.last_name)
+        errors[`${prefix}.last_name`] = `Sibling #${
+          index + 1
+        }'s last name is required.`;
+      if (!sibling.sex)
+        errors[`${prefix}.sex`] = `Sibling #${index + 1}'s sex is required.`;
+      if (!sibling.age)
+        errors[`${prefix}.age`] = `Sibling #${index + 1}'s age is required.`;
+      if (!sibling.educational_attainment) {
+        errors[`${prefix}.educational_attainment`] = `Sibling #${
+          index + 1
+        }'s educational attainment is required.`;
+      }
     }
   });
 
   return errors;
 };
 
-
 export const validateHealthData = (formData) => {
-  const errors = [];
-  const healthData = formData.health_data;
+  const errors = {};
+  const healthData = formData.health_data || {};
 
   const requiredFields = [
-    'health_condition',
-    'height',
-    'weight',
-    'eye_sight',
-    'hearing',
+    "health_condition",
+    "height",
+    "weight",
+    "eye_sight",
+    "hearing",
   ];
 
-  requiredFields.forEach(field => {
+  requiredFields.forEach((field) => {
     if (
       healthData[field] === undefined ||
       healthData[field] === null ||
-      healthData[field] === ''
+      healthData[field] === ""
     ) {
-      const label = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      errors.push(`${label} is required.`);
+      const label = field
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+      errors[`health_data.${field}`] = `${label} is required.`;
     }
   });
 
-  if (healthData.last_hospitalization && !healthData.reason_of_hospitalization?.trim()) {
-    errors.push("Reason for hospitalization is required if last hospitalization is specified.");
+  if (
+    healthData.last_hospitalization &&
+    (!healthData.reason_of_hospitalization ||
+      healthData.reason_of_hospitalization.trim() === "")
+  ) {
+    errors["health_data.reason_of_hospitalization"] =
+      "Reason for hospitalization is required if last hospitalization is specified.";
   }
 
   return errors;
 };
 
 export const validatePreviousSchool = (records) => {
-  const errors = [];
-  if (Array.isArray(records)) {
-    records.forEach((record, index) => {
-      const recordErrors = [];
-      const requiredFields = ['education_level', 'start_year', 'end_year'];
+  const errors = {};
 
-      requiredFields.forEach(field => {
-        if (!record[field] && record[field] !== 0) {
-          const label = field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          recordErrors.push(`${label} is required.`);
-        }
-      });
+  if (!Array.isArray(records)) {
+    errors["previous_school"] = "Previous school records must be an array.";
+    return errors;
+  }
 
-      if (!record.school?.name) {
-        recordErrors.push("School name is required.");
-      }
+  const requiredLevels = {
+    "Primary": false,
+    "Junior High": false,
+    "Senior High": false,
+  };
 
-      const start = Number(record.start_year);
-      const end = Number(record.end_year);
+  records.forEach((record, index) => {
+    const prefix = `previous_school[${index}]`;
 
-      if (start && end && end < start) {
-        recordErrors.push("End year cannot be earlier than start year.");
-      }
-
-      if ((start > new Date().getFullYear() || end > new Date().getFullYear())) {
-        recordErrors.push("Start or end year cannot be in the future.");
-      }
-
-      // GPA requirement for Senior High
-      if (record.education_level === 'Senior High') {
-        if (!record.senior_high_gpa && record.senior_high_gpa !== 0) {
-          recordErrors.push("Senior High GPA is required.");
-        }
-      } else {
-        if (record.senior_high_gpa) {
-          recordErrors.push("GPA must not be provided for non-Senior High education levels.");
-        }
-      }
-
-      // Collect errors per record
-      if (recordErrors.length > 0) {
-        errors.push({
-          record: index + 1,
-          messages: recordErrors,
-        });
+    const requiredFields = ["education_level", "start_year", "end_year"];
+    requiredFields.forEach((field) => {
+      if (
+        record[field] === undefined ||
+        record[field] === null ||
+        record[field] === ""
+      ) {
+        const label = field
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+        errors[`${prefix}.${field}`] = `${label} is required.`;
       }
     });
-  } else {
-    errors.push("Previous school records must be an array.");
+
+    if (!record.school?.name) {
+      errors[`${prefix}.school.name`] = "School name is required.";
+    }
+
+    const address = record.school?.school_address;
+    const addressFields = [
+      "address_line_1",
+      "barangay",
+      "city_municipality",
+      "province",
+      "region",
+      "zip_code",
+    ];
+
+    if (!address) {
+      errors[`${prefix}.school.school_address`] = "School address is required.";
+    } else {
+      addressFields.forEach((field) => {
+        if (!address[field]) {
+          const label = field
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+          errors[`${prefix}.school.school_address.${field}`] = `${label} is required.`;
+        }
+      });
+    }
+
+    const start = Number(record.start_year);
+    const end = Number(record.end_year);
+    const currentYear = new Date().getFullYear();
+
+    if (!isNaN(start) && !isNaN(end)) {
+      if (end < start) {
+        errors[`${prefix}.end_year`] = "End year cannot be earlier than start year.";
+      }
+      if (start > currentYear || end > currentYear) {
+        errors[`${prefix}.start_year`] = "Start or end year cannot be in the future.";
+        errors[`${prefix}.end_year`] = "Start or end year cannot be in the future.";
+      }
+    }
+
+    if (record.education_level === "Senior High") {
+      if (
+        record.senior_high_gpa === undefined ||
+        record.senior_high_gpa === null ||
+        record.senior_high_gpa === ""
+      ) {
+        errors[`${prefix}.senior_high_gpa`] = "Senior High GPA is required.";
+      }
+    } else {
+      if (record.senior_high_gpa) {
+        errors[`${prefix}.senior_high_gpa`] =
+          "GPA must not be provided for non-Senior High education levels.";
+      }
+    }
+
+    if (record.education_level in requiredLevels) {
+      requiredLevels[record.education_level] = true;
+    }
+  });
+
+  Object.entries(requiredLevels).forEach(([level, found]) => {
+    if (!found) {
+      errors[`previous_school_missing_${level.replace(/\s/g, "_").toLowerCase()}`] =
+        `At least one record for ${level} is required.`;
+    }
+  });
+
+  return errors;
+};
+
+export const validatePersonalityTraits = (formData) => {
+  const errors = {};
+
+  const requiredFields = [
+    "enrollment_reason",
+    "degree_program_aspiration",
+    "special_talents",
+    "musical_instruments",
+    "hobbies",
+    "likes_in_people",
+    "dislikes_in_people",
+  ];
+
+  requiredFields.forEach((field) => {
+    const value = formData[field];
+    if (value === undefined || value === null || value === "") {
+      const label = field.replace(/_/g, " ");
+      errors[`personality_traits.${field}`] = `${
+        label.charAt(0).toUpperCase() + label.slice(1)
+      } is required.`;
+    }
+  });
+
+  if (
+    formData.degree_program_aspiration === false &&
+    (!formData.aspiration_explanation ||
+      formData.aspiration_explanation.trim() === "")
+  ) {
+    errors["personality_traits.aspiration_explanation"] =
+      "Aspiration explanation is required if degree program aspiration is false.";
   }
 
   return errors;
 };
 
-
-export const validatePersonalityTraits = (formData) => {
-  const errors = [];
-    const requiredFields = [
-      'enrollment_reason', 'degree_program_aspiration',
-      'special_talents', 'musical_instruments', 'hobbies',
-      'likes_in_people', 'dislikes_in_people'
-    ];
-
-    requiredFields.forEach(field => {
-    const value = formData[field];
-    if (value === undefined || value === null || value === '') {
-      errors.push(`${field.replace(/_/g, ' ')} is required.`);
-    }
-  });
-
-
-    if (formData.degree_program_aspiration === false && !formData.aspiration_explanation) {
-      errors.push("Aspiration explanation is required if degree program aspiration is false.");
-    }
-  return errors;
-};
-
 export const validateFamilyRelationship = (formData) => {
-  const errors = [];
-    if (!formData.closest_to) errors.push("Closest to is required.");
+  const errors = {};
 
-    if (formData.closest_to === 'Other' && !formData.specify_other) {
-      errors.push("Please specify the relationship when 'Other' is selected.");
-    }
+  if (!formData.closest_to) {
+    errors["family_relationship.closest_to"] = "Closest to is required.";
+  }
+
+  if (
+    formData.closest_to === "Other" &&
+    (!formData.specify_other || formData.specify_other.trim() === "")
+  ) {
+    errors["family_relationship.specify_other"] =
+      "Please specify the relationship when 'Other' is selected.";
+  }
+
   return errors;
 };
 
 export const validateCounselingInfo = (formData) => {
-  const errors = [];
-    const requiredFields = [
-      'personal_characteristics', 'problem_confidant', 'confidant_reason', 'anticipated_problems'
-    ];
+  const errors = {};
 
-    requiredFields.forEach(field => {
-      if (!formData[field]) errors.push(`${field.replace(/_/g, ' ')} is required.`);
-    });
+  const requiredFields = [
+    "personal_characteristics",
+    "problem_confidant",
+    "confidant_reason",
+    "anticipated_problems",
+  ];
 
-    if (formData.previous_counseling) {
-      if (!formData.counseling_location) errors.push("Counseling location is required.");
-      if (!formData.counseling_reason) errors.push("Counseling reason is required.");
+  requiredFields.forEach((field) => {
+    if (!formData[field]) {
+      const label = field.replace(/_/g, " ");
+      errors[`counseling_info.${field}`] = `${
+        label.charAt(0).toUpperCase() + label.slice(1)
+      } is required.`;
     }
+  });
+
+  if (formData.previous_counseling) {
+    if (!formData.counseling_location) {
+      errors["counseling_info.counseling_location"] =
+        "Counseling location is required.";
+    }
+    if (!formData.counseling_reason) {
+      errors["counseling_info.counseling_reason"] =
+        "Counseling reason is required.";
+    }
+    if (!formData.counseling_counselor) {
+      errors["counseling_info.counseling_counselor"] =
+        "Counseling reason is required.";
+    }
+  }
+
   return errors;
 };

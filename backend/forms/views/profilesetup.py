@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from forms.models import Student, Address
 from forms.serializers import StudentSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
 
 @api_view(['POST'])
 def create_student_profile(request):
@@ -132,8 +134,10 @@ def update_student_profile(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def check_student_number(request):
     student_number = request.query_params.get('student_number')
+    student_number = student_number.strip().rstrip('/')
     if not student_number:
         return Response({'error': 'student_number query parameter is required'}, status=400)
 

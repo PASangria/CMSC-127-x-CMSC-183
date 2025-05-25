@@ -39,3 +39,12 @@ export function calculateAge(birthdate) {
   return age;
 }
 
+export const clearError = (errors, setErrors, key) => {
+  if (errors?.[key]) {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[key];
+      return newErrors;
+    });
+  }
+};

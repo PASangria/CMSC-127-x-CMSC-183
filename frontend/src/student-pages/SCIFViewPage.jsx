@@ -62,7 +62,7 @@ const SCIFProfileView = ({ profileData, formData, isAdmin }) => {
     family_data,
     personality_traits,
     health_data,
-    record,
+    previous_school_record,
     scholarship,
     siblings,
     family_relationship,
@@ -190,8 +190,8 @@ const SCIFProfileView = ({ profileData, formData, isAdmin }) => {
       </table>
     );
   };
-  const seniorHighRecord = Array.isArray(record)
-    ? record.find((r) => r.education_level === "Senior High")
+  const seniorHighRecord = Array.isArray(previous_school_record)
+    ? previous_school_record.find((r) => r.education_level === "Senior High")
     : null;
 
   const seniorHighGPA = seniorHighRecord?.senior_high_gpa || "";
@@ -629,7 +629,7 @@ const SCIFProfileView = ({ profileData, formData, isAdmin }) => {
 
         <div className="SCIF-section school">
           <div className="section-title">PREVIOUS SCHOOL RECORD</div>
-          <PreviousSchoolRecordsTable records={record} />
+          <PreviousSchoolRecordsTable records={previous_school_record} />
           <div className="SCIF-inline">
             <label>
               <span

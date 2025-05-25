@@ -8,8 +8,9 @@
 .form-group label {
   position: absolute;
   left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 18px;  
+  transform: none; 
+  transition: all 0.2s ease;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.6);
   pointer-events: none;
@@ -91,16 +92,17 @@
 }
 
 /* --- Override Error Border on Focus --- */
-.form-group.error .form-input:focus,
-.form-group.error select:focus {
+/* .form-group.error .form-input:focus,
+.form-group.error select:focus, .form-group.error .form-input.filled,
+.form-group.error select.filled {
   border-color: #1976D2;
 }
 
 /* --- Optional: Override label color too on focus if needed --- */
-.form-group.error .form-input:focus + label,
-.form-group.error select:focus + label {
+/* .form-group.error .form-input:focus + label, .form-group.error .form-input.filled + label,
+.form-group.error select:focus + label, .form-group.error select.filled + label {
   color: #1976D2;
-}
+} */ 
 
 /* --- Error Message --- */
 .form-group .error-message {
@@ -195,7 +197,27 @@
   padding-bottom: 2em;
 }
 
-.form-group.error:has(.form-input:focus) .error-message,
-.form-group.error:has(select:focus) .error-message {
+/* .form-group.error:has(.form-input:focus) .error-message,
+.form-group.error:has(.form-input.filled) .error-message,
+.form-group.error:has(select:focus) .error-message,
+.form-group.error:has(select.filled) .error-message {
   display: none;
+} */
+
+.form-group.error textarea.custom-form-input {
+  border-color: #D32F2F;
+}
+
+.form-group.error textarea.custom-form-input:focus,
+.form-group.error textarea.custom-form-input.filled {
+  border-color: #1976D2;
+}
+
+.form-group.error textarea.custom-form-input:focus + label,
+.form-group.error textarea.custom-form-input.filled + label {
+  color: #1976D2;
+}
+
+.form-input.error {
+  border-color: #D32F2F !important;
 }

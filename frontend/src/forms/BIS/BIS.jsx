@@ -19,18 +19,25 @@ import {
   validateSupport,
 } from "../../utils/BISValidation";
 import Button from "../../components/UIButton";
+import ToastMessage from "../../components/ToastMessage";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import ModalMessage from "../../components/ModalMessage";
 
 const BISForm = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [errors, setErrors] = useState(null);
   const {
     createDraftSubmission,
     getFormBundle,
     saveDraft,
     finalizeSubmission,
   } = useFormApi();
-
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showDraftSuccessToast, setShowDraftSuccessToast] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [formData, setFormData] = useState({
     socio_economic_status: {
       student_number: "",
@@ -83,10 +90,10 @@ const BISForm = () => {
   const validateStep = (step, formData) => {
     switch (step) {
       case 1:
-        const errors = [
+        const errors = {
           ...validateSocioEconomicStatus(formData),
           ...validateSupport(formData),
-        ];
+        };
         return errors;
       case 2:
         return validatePreferences(formData);
@@ -94,8 +101,8 @@ const BISForm = () => {
         return validateScholasticStatus(formData);
       case 4:
         if (!formData.privacy_consent.has_consented) {
-          alert("You must agree to the Privacy Notice to proceed.");
-          return false;
+            setShowPrivacyModal(true);
+            return false;
         }
         return true;
       default:
@@ -151,7 +158,7 @@ const BISForm = () => {
       const response = await saveDraft(submissionId, studentNumber, formData);
 
       if (response?.ok) {
-        alert("Draft saved successfully!");
+        setShowDraftSuccessToast(true);
       } else {
         alert("Error saving draft.");
       }
@@ -163,13 +170,28 @@ const BISForm = () => {
   };
 
   const handleNextStep = () => {
-    const errors = validateStep(step, formData);
+    const validationErrors = validateStep(step, formData);
 
-    if (errors.length > 0) {
-      alert("Please fix the following errors:\n\n" + errors.join("\n"));
+    if (
+      validationErrors &&
+      typeof validationErrors === "object" &&
+      !Array.isArray(validationErrors) &&
+      Object.keys(validationErrors).length > 0
+    ) {
+      setErrors(validationErrors);
       return;
     }
 
+    if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+      const errorObj = {};
+      validationErrors.forEach((err, index) => {
+        errorObj[`error_${index}`] = err;
+      });
+      setErrors(errorObj);
+      return;
+    }
+
+    setErrors(null);
     setStep((prev) => prev + 1);
   };
 
@@ -179,9 +201,22 @@ const BISForm = () => {
     setIsPreviewOpen(true);
   };
 
+  const handleConfirmSubmit = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmCancel = () => {
+    setShowConfirmDialog(false);
+  };
+
+  const handleConfirmAction = () => {
+    setShowConfirmDialog(false);
+    handleSubmit();
+  };
+
   const handleSubmit = async () => {
     if (!formData?.privacy_consent?.has_consented) {
-      alert("You must agree to the Privacy Statement to submit the form.");
+      setShowPrivacyModal(true);
       return;
     }
 
@@ -194,9 +229,11 @@ const BISForm = () => {
       );
 
       if (result.success) {
-        alert(result.data.message || "Form submitted successfully!");
+        setShowSuccessToast(true);
+        setTimeout(() => {
+          window.location.href = "/myprofile";
+        }, 2000);
       } else {
-        // Handle specific error messages based on response
         if (result.status === 400 && result.data.errors) {
           alert(
             "Validation errors:\n" + JSON.stringify(result.data.errors, null, 2)
@@ -262,6 +299,8 @@ const BISForm = () => {
                     }))
                   }
                   readOnly={readOnly}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 2 && (
@@ -274,6 +313,8 @@ const BISForm = () => {
                     }))
                   }
                   readOnly={readOnly}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 3 && (
@@ -289,6 +330,8 @@ const BISForm = () => {
                     }))
                   }
                   readOnly={readOnly}
+                  errors={errors}
+                  setErrors={setErrors}
                 />
               )}
               {step === 4 && (
@@ -377,7 +420,7 @@ const BISForm = () => {
                     {!readOnly && (
                       <Button
                         variant="primary"
-                        onClick={handleSubmit}
+                        onClick={handleConfirmSubmit}
                         style={{ marginLeft: "0.5rem" }}
                       >
                         Submit
@@ -396,6 +439,39 @@ const BISForm = () => {
           </div>
         </div>
         <Footer />
+        {showConfirmDialog && (
+          <ConfirmDialog
+            title="Are you sure?"
+            message="Please confirm that you want to submit your form."
+            onConfirm={handleConfirmAction}
+            onCancel={handleConfirmCancel}
+          />
+        )}
+
+        {showSuccessToast && (
+          <ToastMessage
+            message="Your form has been successfully submitted!"
+            onClose={() => setShowSuccessToast(false)}
+            duration={5000}
+          />
+        )}
+
+        {showDraftSuccessToast && (
+          <ToastMessage
+            message="Your draft has been saved successfully!"
+            onClose={() => setShowDraftSuccessToast(false)}
+            duration={2000}
+          />
+        )}
+        {showPrivacyModal && (
+          <ModalMessage
+            title="Privacy Consent Required"
+            message="You must agree to the Privacy Statement before submitting the form."
+            onClose={() => setShowPrivacyModal(false)}
+            showCloseButton={true}
+            buttons={[]}
+          />
+        )}
       </div>
     </>
   );
