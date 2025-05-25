@@ -8,7 +8,8 @@ import StatCard from "../components/StatCard1";
 import PieChartCard from "../components/PieChartCard";
 import GroupedBarChart from "../components/GroupedBarChart";
 import { apiRequest } from "../utils/apiUtils";
-
+import Loader from "../components/Loader";
+  
 export const AdminReports = () => {
   const { user, loading } = useContext(AuthContext);
   const [reportData, setReportData] = useState(null);
@@ -23,9 +24,7 @@ export const AdminReports = () => {
         if (!res.ok) throw new Error("Failed to fetch report data");
         const data = await res.json();
         setReportData(data);
-        console.log(data);
       } catch (err) {
-        console.error("Error loading report data:", err);
       } finally {
         setIsLoading(false);
       }
@@ -34,7 +33,7 @@ export const AdminReports = () => {
     fetchReports();
   }, []);
 
-  if (loading || isLoading) return <CircularProgress sx={{ m: 4 }} />;
+  if (loading || isLoading) return <Loader />;
   if (!user) return <Navigate to="/" replace />;
   if (!reportData) return <Typography>Error loading reports.</Typography>;
 

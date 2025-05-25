@@ -10,6 +10,7 @@ import { Box, Typography, Pagination } from "@mui/material";
 import StudentFilterBar from "../components/StudentFilterBar";
 import PaginationButtons from "../components/PaginationControls";
 import SortableTableHeader from "../components/SortableTableHeader";
+import Loader from "../components/Loader";
 
 export const AdminBISList = () => {
   const navigate = useNavigate();
@@ -143,7 +144,6 @@ export const AdminBISList = () => {
           throw new Error("Failed to fetch BIS students");
         }
       } catch (err) {
-        console.error("Error fetching data:", err);
         setError("Error fetching data. Please try again.");
       } finally {
         setLoadingData(false);
@@ -161,7 +161,7 @@ export const AdminBISList = () => {
     );
   };
 
-  if (loadingData || loading) return <div>Loading...</div>;
+  if (loading || loadingData) return <Loader />;
   if (role !== "admin") return <div>Access denied. Admins only.</div>;
   if (error) return <div>{error}</div>;
 

@@ -42,45 +42,12 @@ export const UserDashboard = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error(err);
         setError('You are not authenticated. Redirecting to the home page...');
         setTimeout(() => {
           window.location.href = '/';
         }, 3000);
       });
   }, []); 
-
-
-  // just remove the (/**/) if you want to see the data table;
-  /*useEffect(() => {
-    //Use mock data for development
-    fetch('/mock-profile.json')
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to load mock profile data');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setUser(data);
-  
-        const submitted = data.submitted_forms?.map((form) => [
-          form[0], form[1], form[2]
-        ]) || [];
-  
-        const pending = data.pending_actions?.map((form) => [
-          form[0], form[1], form[2]
-        ]) || [];
-  
-        setSubmittedForms(submitted);
-        setPendingActions(pending);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError('Failed to load mock data.');
-      });
-  }, []); */
 
   if (loading) return <Loader />;
   if (error) return <p>{error}</p>;

@@ -29,7 +29,6 @@ export const ResetPassword = () => {
             setError('');
             setTimeout(() => navigate('/'), 3000); 
         } catch (err) {
-            console.error(err.response?.data);
             setError('Invalid link or password. Please try again.');
             setMessage('');
         }

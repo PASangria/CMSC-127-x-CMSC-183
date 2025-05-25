@@ -39,7 +39,6 @@ export const VerifiedPage = () => {
           setIcon(<AlertCircle className="alert-icon" size={80} />);
         }
       } catch (error) {
-        console.error("Verification error:", error);
         setMessage("An error occurred during verification.");
         setIcon(<AlertCircle className="alert-icon" size={80} />);
       } finally {

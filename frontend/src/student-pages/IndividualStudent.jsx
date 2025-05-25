@@ -206,7 +206,7 @@ const handleView = (form, isAdmin = false, studentId = null) => {
                 />
                 <FormField
                   label="Religion"
-                  value={formData.religion}
+                  value={formData.religion || "N/A"}
                   onChange={(e) =>
                     updateProfileData({ religion: e.target.value })
                   }

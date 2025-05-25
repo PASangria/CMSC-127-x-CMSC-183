@@ -20,7 +20,7 @@ const SCIFPreview = ({ profileData, formData, onClose }) => {
           <X size={24} />
         </button>
           <h1 className="step-title">Student Cumulative Information File</h1>
-          <p className="step-info">(Preview)</p>
+          <p className="step-info" style={{textAlign: "left"}}>(Preview)</p>
           <SCIFCredentials data={profileData} />
           <SCIFPersonalData data={profileData} />
           <SCIFFamilyData

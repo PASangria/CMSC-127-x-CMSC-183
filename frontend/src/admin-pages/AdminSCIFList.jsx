@@ -10,6 +10,7 @@ import PaginationControls from "../components/PaginationControls";
 import { formatDate } from "../utils/helperFunctions";
 import "./css/studentList.css";
 import SortableTableHeader from "../components/SortableTableHeader";
+import Loader from "../components/Loader";
 
 export const AdminSCIFList = () => {
   const navigate = useNavigate();
@@ -66,7 +67,6 @@ export const AdminSCIFList = () => {
         setSubmissions(data);
         setFiltered(data);
       } catch (err) {
-        console.error(err);
         setError("Error fetching data. Please try again.");
       } finally {
         setLoadingData(false);
@@ -92,7 +92,7 @@ export const AdminSCIFList = () => {
     setCurrentPage(1);
   }, [filterText, years, programs, selectedDate, submissions]);
 
-  if (loadingData || loading) return <div>Loading...</div>;
+  if (loading || loadingData) return <Loader />;
   if (role !== "admin")       return <div>Access denied. Admins only.</div>;
   if (error)                   return <div>{error}</div>;
 

@@ -4,8 +4,8 @@ import FormField from "../components/FormField";
 import Footer from "../components/Footer";
 import "./css_pages/SignUp.css";
 import { Link } from "react-router-dom";
-import Modal from "../components/Modal";
-import "../components/css/Modal.css";
+// import Modal from "../components/Modal";
+// import "../components/css/Modal.css";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -113,7 +113,6 @@ export const SignUp = () => {
         setShowMessageModal(true); 
       }
     } catch (error) {
-      console.error("Error during registration:", error);
       setMessage("An error occurred. Please try again later.");
       setIsError(true);
       setShowMessageModal(true); 

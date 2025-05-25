@@ -8,9 +8,8 @@
 .display-value {
   box-sizing: border-box;
   width: 100%;
-  height: auto; /* Allow resizing height */
   min-height: 50px;
-  height: auto; /* Minimum height for the field */
+  height: auto; 
   padding: 18px 12px 6px 12px;
   border: 1px solid gray;
   border-radius: 4px;
@@ -18,10 +17,12 @@
   font-size: 16px;
   line-height: 1.2;
   background-color: #f9f9f9;
-  overflow-y: auto; /* Allow scroll if content overflows */
-  text-align: left; /* Align text to the left */
-  vertical-align: top; /* Align text vertically to the top */
-  padding-top: 10px; /* Add space at the top of the field */
+  overflow-y: auto; 
+  text-align: left; 
+  vertical-align: top; 
+  padding-top: 10px; 
+  display: flex;
+  align-items: center;
   box-sizing: border-box;
 }
 

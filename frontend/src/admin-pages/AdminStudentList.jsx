@@ -9,30 +9,39 @@ import Button from '../components/UIButton';
 import "./css/studentList.css"
 import { useNavigate } from 'react-router-dom';
 import DefaultLayout from '../components/DefaultLayout';
+import Loader from '../components/Loader';
 
 export const AdminStudentList = () => {
   const navigate = useNavigate();
   const { request } = useApiRequest();
   const { role, loading, isAuthenticated, User } = useAuth();
   const [students, setStudents] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      if (!loading && role === 'admin') {
-        const res = await request('http://localhost:8000/api/forms/admin/students/');
-        if (res && res.ok) {
-          const data = await res.json();
-          setStudents(data);
-        } else {
-          console.error("Failed to fetch students");
-        }
-      }
-    };
+useEffect(() => {
+  const fetchStudents = async () => {
+    try {
+      const res = await request("http://localhost:8000/api/forms/admin/students/");
+      if (!res.ok) throw new Error("Failed to fetch students");
+      const data = await res.json();
 
-    fetchStudents();
-  }, [role, loading]);
+       data.sort((a, b) =>
+        a.last_name.localeCompare(b.last_name)
+      );
 
-  if (loading) return <div>Loading...</div>;
+      setStudents(data);
+    } catch (err) {
+      setError("Error fetching student data. Please try again.");
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  if (!loading && role === "admin") fetchStudents();
+}, [loading, role, request]);
+
+
+  if (loading || loadingData) return <Loader />;
   if (role !== 'admin') return <div>Access denied. Admins only.</div>;
 
   const handleViewStudent = (student) => {

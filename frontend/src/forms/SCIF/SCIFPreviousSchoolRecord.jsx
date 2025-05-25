@@ -3,10 +3,17 @@ import FormField from "../../components/FormField";
 import "../SetupProfile/css/multistep.css";
 import { useEnumChoices } from "../../utils/enumChoices";
 import Button from "../../components/UIButton";
+import { clearError } from "../../utils/helperFunctions";
 
 const REQUIRED_LEVELS = ["Primary", "Junior High", "Senior High"];
 
-const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
+const SCIFPreviousSchoolRecord = ({
+  data,
+  updateData,
+  readOnly = false,
+  errors,
+  setErrors,
+}) => {
   const [schoolRecords, setSchoolRecords] = useState(data || []);
   const { enums, loading, error } = useEnumChoices();
 
@@ -19,6 +26,36 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
       target = target[path[i]] ||= {};
     }
     target[path[path.length - 1]] = value;
+
+    // Clear GPA if not Senior High
+    if (field === "education_level" && value !== "Senior High") {
+      updated[index].senior_high_gpa = "";
+    }
+
+    const errorKey = `previous_school[${index}].${field}`;
+    if (errors?.[errorKey]) {
+      setErrors((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[errorKey];
+        return updatedErrors;
+      });
+    }
+
+    const recordLevel =
+      field === "education_level" ? value : updated[index].education_level;
+
+    const missingLevelKey = `previous_school_missing_${recordLevel
+      .replace(/\s/g, "_")
+      .toLowerCase()}`;
+
+    if (errors?.[missingLevelKey]) {
+      setErrors((prev) => {
+        const updatedErrors = { ...prev };
+        delete updatedErrors[missingLevelKey];
+        return updatedErrors;
+      });
+    }
+
     setSchoolRecords(updated);
     updateData(updated);
   };
@@ -81,104 +118,67 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
     const records = schoolRecords.filter((r) => r.education_level === level);
     return (
       <div className="school-section">
-        <h2>{level} School</h2>
+        <div className="line"></div>
+        <h2 className="step-info school">{level} School</h2>
         {records.map((record, index) => {
           const globalIndex = schoolRecords.findIndex((r) => r === record);
           return (
             <div key={globalIndex} className="school-record subsection-form">
+              <h3 className="step-info school">{level} School Data</h3>
               <FormField
                 label="School Name"
                 type="text"
                 value={record.school.name}
+                onFocus={() => clearError(globalIndex, "school.name")}
                 onChange={(e) =>
                   handleFieldChange(globalIndex, "school.name", e.target.value)
                 }
+                error={errors?.[`previous_school[${globalIndex}].school.name`]}
               />
+
               <h3 className="step-info school">{level} School Address</h3>
               <div className="form-row three-columns">
-                <FormField
-                  label="Address Line 1"
-                  type="text"
-                  value={record.school.school_address.address_line_1}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.address_line_1",
-                      e.target.value
-                    )
-                  }
-                />
-                <FormField
-                  label="Barangay"
-                  type="text"
-                  value={record.school.school_address.barangay}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.barangay",
-                      e.target.value
-                    )
-                  }
-                />
-                <FormField
-                  label="City/Municipality"
-                  type="text"
-                  value={record.school.school_address.city_municipality}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.city_municipality",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <div className="form-row three-columns">
-                <FormField
-                  label="Province"
-                  type="text"
-                  value={record.school.school_address.province}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.province",
-                      e.target.value
-                    )
-                  }
-                />
-                <FormField
-                  label="Region"
-                  type="select"
-                  value={record.school.school_address.region}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.region",
-                      e.target.value
-                    )
-                  }
-                  required
-                  error={error}
-                  options={
-                    loading
-                      ? [{ value: "", label: "Loading regions..." }]
-                      : error
-                      ? [{ value: "", label: "Error loading regions" }]
-                      : enums?.region || []
-                  }
-                />
-                <FormField
-                  label="ZIP Code"
-                  type="text"
-                  value={record.school.school_address.zip_code}
-                  onChange={(e) =>
-                    handleFieldChange(
-                      globalIndex,
-                      "school.school_address.zip_code",
-                      e.target.value
-                    )
-                  }
-                />
+                {[
+                  "address_line_1",
+                  "barangay",
+                  "city_municipality",
+                  "province",
+                  "region",
+                  "zip_code",
+                ].map((field) => (
+                  <FormField
+                    key={field}
+                    label={field
+                      .replace(/_/g, " ")
+                      .replace(/\b\w/g, (l) => l.toUpperCase())}
+                    type={field === "region" ? "select" : "text"}
+                    value={record.school.school_address[field]}
+                    onFocus={() =>
+                      clearError(globalIndex, `school.school_address.${field}`)
+                    }
+                    onChange={(e) =>
+                      handleFieldChange(
+                        globalIndex,
+                        `school.school_address.${field}`,
+                        e.target.value
+                      )
+                    }
+                    error={
+                      errors?.[
+                        `previous_school[${globalIndex}].school.school_address.${field}`
+                      ]
+                    }
+                    options={
+                      field === "region"
+                        ? loading
+                          ? [{ value: "", label: "Loading regions..." }]
+                          : error
+                          ? [{ value: "", label: "Error loading regions" }]
+                          : enums?.region || []
+                        : undefined
+                    }
+                  />
+                ))}
               </div>
 
               <h3 className="step-info school">
@@ -189,6 +189,7 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
                   label="Start Year"
                   type="number"
                   value={record.start_year}
+                  onFocus={() => clearError(globalIndex, "start_year")}
                   onChange={(e) =>
                     handleFieldChange(
                       globalIndex,
@@ -196,25 +197,32 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
                       +e.target.value
                     )
                   }
+                  error={errors?.[`previous_school[${globalIndex}].start_year`]}
                 />
                 <FormField
                   label="End Year"
                   type="number"
                   value={record.end_year}
+                  onFocus={() => clearError(globalIndex, "end_year")}
                   onChange={(e) =>
                     handleFieldChange(globalIndex, "end_year", +e.target.value)
                   }
+                  error={errors?.[`previous_school[${globalIndex}].end_year`]}
                 />
                 <FormField
                   label="Honors Received"
                   type="text"
                   value={record.honors_received}
+                  onFocus={() => clearError(globalIndex, "honors_received")}
                   onChange={(e) =>
                     handleFieldChange(
                       globalIndex,
                       "honors_received",
                       e.target.value
                     )
+                  }
+                  error={
+                    errors?.[`previous_school[${globalIndex}].honors_received`]
                   }
                 />
               </div>
@@ -224,12 +232,16 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
                   label="Senior High GPA"
                   type="number"
                   value={record.senior_high_gpa}
+                  onFocus={() => clearError(globalIndex, "senior_high_gpa")}
                   onChange={(e) =>
                     handleFieldChange(
                       globalIndex,
                       "senior_high_gpa",
                       e.target.value
                     )
+                  }
+                  error={
+                    errors?.[`previous_school[${globalIndex}].senior_high_gpa`]
                   }
                 />
               )}
@@ -238,7 +250,8 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
                 <Button
                   variant="secondary"
                   onClick={() => removeRecord(globalIndex)}
-                  style={{ marginBottom: "2rem" }}
+                  style={{ marginBottom: "1rem" }}
+                  className={"school-button"}
                 >
                   Remove Record
                 </Button>
@@ -246,16 +259,16 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
             </div>
           );
         })}
-        {records.length === 0 && (
-          readOnly ? (
-            <p style={{ color: '#666' }}>None</p>
-          ) : (
-            (!isRequired || records.length === 0) && (
-              <Button variant="primary" onClick={() => addRecord(level)}>
-                Add {level} Record
-              </Button>
-            )
-          )
+        {readOnly ? (
+          <p style={{ color: "#666" }}>None</p>
+        ) : (
+          <Button
+            variant="primary"
+            onClick={() => addRecord(level)}
+            className={"school-button"}
+          >
+            Add Another {level} School Record
+          </Button>
         )}
       </div>
     );
@@ -268,8 +281,15 @@ const SCIFPreviousSchoolRecord = ({ data, updateData, readOnly = false }) => {
         {renderSection("Primary")}
         {renderSection("Junior High")}
         {renderSection("Senior High")}
-        {renderSection("College", false)} {/* College is optional */}
+        {renderSection("College", false)}
       </fieldset>
+      {Object.entries(errors || {})
+        .filter(([key]) => key.startsWith("previous_school_missing_"))
+        .map(([key, message]) => (
+          <p key={key} className="error-message" style={{marginLeft: "2rem"}}>
+            {message}
+          </p>
+        ))}
     </div>
   );
 };

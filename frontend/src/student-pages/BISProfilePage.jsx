@@ -22,7 +22,6 @@ const BISProfilePage = () => {
 
       try {
         const data = await getFormBundle(profileData.student_number);
-        console.log(data);
         if (!data) {
           setError('Failed to load form data.');
           setLoading(false);

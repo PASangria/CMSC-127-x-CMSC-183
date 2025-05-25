@@ -9,14 +9,13 @@
 .main-section {
   display: flex;
   flex: 1;
-  overflow: hidden; /* Prevents overflow */
+  overflow: hidden; 
 }
 
 /* Sidebar styling */
 .side-navigator {
   background-color: #fff;
   padding: 1rem;
-  border-right: 1px solid #e5e7eb;
   overflow-y: auto;
 }
 
@@ -50,7 +49,6 @@
   }
 }
 
-
 /* Styles when there is no user profile */
 /* Error container styled like your verified page */
 .no-profile {
@@ -73,14 +71,14 @@
 /* Error text styling */
 .no-profile p {
   font-size: 1rem;
-  color: #7B1113;
+  color: #7b1113;
   margin-bottom: 1.25rem;
   font-weight: 500;
 }
 
 /* Styled CTA button, matching your continue-button */
 .btn-complete-profile {
-  background-color: #7B1113;
+  background-color: #7b1113;
   color: #ffffff;
   font-weight: bold;
   font-size: 1rem;
@@ -88,7 +86,8 @@
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +99,6 @@
   transform: scale(1.03);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
-
 
 @keyframes fadeIn {
   from {

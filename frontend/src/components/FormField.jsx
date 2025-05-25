@@ -33,7 +33,6 @@ const FormField = ({
     );
   }
 
-  // Editable input or select
   return (
     <div className={`form-group ${error ? 'error' : ''}`}>
       {type === 'select' ? (
@@ -68,7 +67,7 @@ const FormField = ({
       <label className={isFilled ? 'active' : ''}>
         {label} {required && '*'}
       </label>
-      {error && <div className="error-message">This field is required</div>}
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

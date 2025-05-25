@@ -7,7 +7,6 @@ const SignUp = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -32,19 +31,13 @@ const SignUp = () => {
         const data = await response.json();
 
         if (response.ok) {
-            // Display the success message
             setMessage(data.message || "Registration successful! Please check your email to verify your account.");
             setIsError(false);
-            // Optionally, show the verification URL in development mode
-            if (data.verification_url) {
-                console.log("[DEBUG] Verification URL:", data.verification_url);
-            }
         } else {
             setMessage(data.detail || "Something went wrong. Please try again.");
             setIsError(true);
         }
     } catch (error) {
-        console.error("Error during registration:", error);
         setMessage("An error occurred. Please try again later.");
         setIsError(true);
     }
