@@ -6,40 +6,52 @@ import Button from "../components/UIButton";
 import DefaultLayout from "../components/DefaultLayout";
 import "./css/studentList.css";
 import { formatDate } from "../utils/helperFunctions";
-import {
-  Box,
-  Typography,
-  Pagination,
-} from "@mui/material";
+import { Box, Typography, Pagination } from "@mui/material";
 import StudentFilterBar from "../components/StudentFilterBar";
 import PaginationButtons from "../components/PaginationControls";
+import SortableTableHeader from "../components/SortableTableHeader";
 
 export const AdminBISList = () => {
   const navigate = useNavigate();
   const { request } = useApiRequest();
   const { role, loading } = useAuth();
 
+  // State for raw and filtered submissions
   const [submissions, setSubmissions] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [error, setError] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
 
+  // Filter state
   const [filterText, setFilterText] = useState("");
   const [years, setYears] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  // Apply filters
+  useEffect(() => {
+    let temp = submissions.filter(({ student, submitted_on }) => {
+      const fullName =
+        `${student.first_name} ${student.last_name}`.toLowerCase();
+      if (filterText && !fullName.includes(filterText.toLowerCase()))
+        return false;
+      if (years.length > 0 && !years.includes(student.current_year_level))
+        return false;
+      if (programs.length > 0 && !programs.includes(student.degree_program))
+        return false;
+      if (selectedDate) {
+        const submissionDate = new Date(submitted_on)
+          .toISOString()
+          .split("T")[0];
+        if (submissionDate !== selectedDate) return false;
+      }
+      return true;
+    });
+    setFiltered(temp);
+    setCurrentPage(1);
+  }, [filterText, years, programs, selectedDate, submissions]);
 
-  const yearOptions = Array.from(
-    new Set(submissions.map((s) => s.student.current_year_level))
-  );
-  const programOptions = Array.from(
-    new Set(submissions.map((s) => s.student.degree_program))
-  );
-
+  // Reset filters
   const handleResetFilters = () => {
     setFilterText("");
     setYears([]);
@@ -47,6 +59,73 @@ export const AdminBISList = () => {
     setSelectedDate("");
   };
 
+  // Sorting state
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const handleSort = (key, direction = null) => {
+    setSortConfig((prev) => {
+      if (direction) {
+        return { key, direction };
+      }
+      if (prev.key === key) {
+        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+  const handleClearSort = (key) => {
+    if (sortConfig.key === key) {
+      setSortConfig({ key: null, direction: "asc" });
+    }
+  };
+
+  // Sort filtered items
+  const sorted = [...filtered].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+    let aVal, bVal;
+    switch (sortConfig.key) {
+      case "name":
+        aVal = `${a.student.first_name} ${a.student.last_name}`.toLowerCase();
+        bVal = `${b.student.first_name} ${b.student.last_name}`.toLowerCase();
+        break;
+      case "date":
+        aVal = new Date(a.submitted_on);
+        bVal = new Date(b.submitted_on);
+        break;
+      case "yearProgram":
+        aVal =
+          `${a.student.current_year_level}-${a.student.degree_program}`.toLowerCase();
+        bVal =
+          `${b.student.current_year_level}-${b.student.degree_program}`.toLowerCase();
+        break;
+      default:
+        return 0;
+    }
+    if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  // filter dropdown options
+  const yearOptions = Array.from(
+    new Set(submissions.map((s) => s.student.current_year_level))
+  );
+  const programOptions = Array.from(
+    new Set(submissions.map((s) => s.student.degree_program))
+  );
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const handlePageChange = (_, value) => setCurrentPage(value);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sorted.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Fetch all BIS submissions
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,48 +155,10 @@ export const AdminBISList = () => {
     }
   }, [loading, role, request]);
 
-  useEffect(() => {
-    let temp = submissions.filter(({ student, submitted_on }) => {
-      const fullName =
-        `${student.first_name} ${student.last_name}`.toLowerCase();
-      if (filterText && !fullName.includes(filterText.toLowerCase()))
-        return false;
-      if (years.length > 0 && !years.includes(student.current_year_level))
-        return false;
-      if (
-        programs.length > 0 &&
-        !programs.includes(student.degree_program)
-      )
-        return false;
-      if (selectedDate) {
-        const submissionDate = new Date(submitted_on)
-          .toISOString()
-          .split("T")[0];
-        if (submissionDate !== selectedDate) return false;
-      }
-      return true;
-    });
-    setFiltered(temp);
-    setCurrentPage(1);
-  }, [filterText, years, programs, selectedDate, submissions]);
-
-  // Calculate pagination values
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filtered.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
   const handleViewStudent = (student) => {
     navigate(
       `/admin/student-forms/${student.student_number}/basic-information-sheet/`
     );
-  };
-
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
   };
 
   if (loadingData || loading) return <div>Loading...</div>;
@@ -149,10 +190,28 @@ export const AdminBISList = () => {
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>Date Submitted</th>
-              <th>Year – Degree Program</th>
-              <th>Actions</th>
+              <SortableTableHeader
+                label="Student Name"
+                sortKey="name"
+                currentSort={sortConfig}
+                onSort={handleSort}
+                onClearSort={handleClearSort}
+              />
+              <SortableTableHeader
+                label="Date Submitted"
+                sortKey="date"
+                currentSort={sortConfig}
+                onSort={handleSort}
+                onClearSort={handleClearSort}
+              />
+              <SortableTableHeader
+                label="Year – Degree Program"
+                sortKey="yearProgram"
+                currentSort={sortConfig}
+                onSort={handleSort}
+                onClearSort={handleClearSort}
+              />
+              <th>Actions</th> {/* This can remain static, no sorting needed */}
             </tr>
           </thead>
           <tbody>
@@ -188,12 +247,12 @@ export const AdminBISList = () => {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-            <PaginationButtons
-              count={totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-            />
-          )}
+          <PaginationButtons
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+          />
+        )}
       </Box>
     </DefaultLayout>
   );

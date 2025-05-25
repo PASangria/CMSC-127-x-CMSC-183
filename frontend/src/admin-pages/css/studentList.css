@@ -11,6 +11,11 @@ li {
   margin: 0;
 }
 
+th {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
 /* Container */
 .admin-student-list {
   padding: 2rem;

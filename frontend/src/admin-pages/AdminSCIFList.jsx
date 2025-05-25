@@ -9,6 +9,7 @@ import StudentFilterBar from "../components/StudentFilterBar";
 import PaginationControls from "../components/PaginationControls";
 import { formatDate } from "../utils/helperFunctions";
 import "./css/studentList.css";
+import SortableTableHeader from "../components/SortableTableHeader";
 
 export const AdminSCIFList = () => {
   const navigate = useNavigate();
@@ -17,15 +18,15 @@ export const AdminSCIFList = () => {
 
   // raw + filtered submissions
   const [submissions, setSubmissions] = useState([]);
-  const [filtered, setFiltered]     = useState([]);
+  const [filtered, setFiltered] = useState([]);
 
-  const [error, setError]       = useState(null);
+  const [error, setError] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
 
-  // filters
-  const [filterText, setFilterText]     = useState("");
-  const [years, setYears]               = useState([]);
-  const [programs, setPrograms]         = useState([]);
+  // filtering state
+  const [filterText, setFilterText] = useState("");
+  const [years, setYears] = useState([]);
+  const [programs, setPrograms] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const handleResetFilters = () => {
     setFilterText("");
@@ -34,20 +35,34 @@ export const AdminSCIFList = () => {
     setSelectedDate("");
   };
 
-  // pagination
+  // sorting state
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+  // pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const handlePageChange = (e, value) => setCurrentPage(value);
 
   // fetch all SCIF submissions
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const res = await request(
           "/api/forms/admin/student-cumulative-information-file-submissions"
         );
         if (!res.ok) throw new Error("Failed to fetch SCIF submissions");
         const data = await res.json();
-        data.sort((a, b) => new Date(b.submitted_on) - new Date(a.submitted_on));
+        data.sort(
+          (a, b) => new Date(b.submitted_on) - new Date(a.submitted_on)
+        );
         setSubmissions(data);
         setFiltered(data);
       } catch (err) {
@@ -56,8 +71,9 @@ export const AdminSCIFList = () => {
       } finally {
         setLoadingData(false);
       }
-    })();
-  }, [request]);
+    };
+    if (!loading && role === "admin") fetchData();
+  }, [loading, role, request]);
 
   // apply filters
   useEffect(() => {
@@ -81,20 +97,23 @@ export const AdminSCIFList = () => {
   if (error)                   return <div>{error}</div>;
 
   // pagination math
-  const totalPages   = Math.ceil(filtered.length / itemsPerPage);
-  const startIdx     = (currentPage - 1) * itemsPerPage;
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIdx = (currentPage - 1) * itemsPerPage;
   const currentSlice = filtered.slice(startIdx, startIdx + itemsPerPage);
 
-  // options for filter dropdowns
-  const yearOptions    = Array.from(new Set(submissions.map(s => s.student.current_year_level)));
-  const programOptions = Array.from(new Set(submissions.map(s => s.student.degree_program)));
+  // filter dropdown options
+  const yearOptions = Array.from(
+    new Set(submissions.map((s) => s.student.current_year_level))
+  );
+  const programOptions = Array.from(
+    new Set(submissions.map((s) => s.student.degree_program))
+  );
 
   const handleViewStudent = (student) => {
     navigate(
       `/admin/student-forms/${student.student_number}/student-cumulative-information-file/`
     );
   };
-  const handlePageChange = (e, value) => setCurrentPage(value);
 
   return (
     <DefaultLayout variant="admin">
@@ -122,9 +141,24 @@ export const AdminSCIFList = () => {
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>Date Submitted</th>
-              <th>Year – Degree Program</th>
+              <SortableTableHeader
+                label="Student Name"
+                sortKey="name"
+                currentSort={sortConfig}
+                onSort={handleSort}
+              />
+              <SortableTableHeader
+                label="Date Submitted"
+                sortKey="date"
+                currentSort={sortConfig}
+                onSort={handleSort}
+              />
+              <SortableTableHeader
+                label="Year – Degree Program"
+                sortKey="yearProgram"
+                currentSort={sortConfig}
+                onSort={handleSort}
+              />
               <th>Actions</th>
             </tr>
           </thead>
