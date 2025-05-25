@@ -1,73 +1,74 @@
 /* Layout styling */
 .verified-page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;  
-    justify-content: space-between; 
-  }
-  
-  .content-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center; 
-    flex-grow: 1;  
-    text-align: center;
-    padding: 20px;
-    height: 90vh;
-  }
-  
-.check-icon, .alert-icon {
-    color: #7B1113;  
-    margin-bottom: 20px;
-    animation: moveUpDown 2s ease-in-out infinite; 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+  padding: 20px;
+  height: 90vh;
+}
+
+.check-icon,
+.alert-icon {
+  color: #7B1113;
+  margin-bottom: 20px;
+  animation: moveUpDown 2s ease-in-out infinite;
+}
+
+
+h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  color: #555;
+}
+
+.continue-button {
+  background-color: #7B1113;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.continue-button:hover {
+  background-color: #8d1c1e;
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes moveUpDown {
+  0% {
+    transform: translateY(0);
   }
 
-  
-  h2 {
-    font-size: 24px;
-    color: #333;  
-    margin-bottom: 10px;
-  }
-  
-  p {
-    font-size: 16px;
-    color: #555; 
+  50% {
+    transform: translateY(-10px);
   }
 
-  .continue-button {
-    background-color: #7B1113;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    margin-top: 1.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 48px;
+  100% {
+    transform: translateY(0);
   }
-  
-  .continue-button:hover {
-    background-color: #8d1c1e;
-    transform: scale(1.03);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-  }  
-  
-  @keyframes moveUpDown {
-    0% {
-      transform: translateY(0); 
-    }
-    50% {
-      transform: translateY(-10px); 
-    }
-    100% {
-      transform: translateY(0); 
-    }
-  }
-  
-  
+}
