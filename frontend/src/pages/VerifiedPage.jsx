@@ -4,7 +4,6 @@ import { CheckCircle, AlertCircle } from "react-feather";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 import "./css_pages/VerifiedPage.css";
-import Loader from "../components/Loader";
 
 export const VerifiedPage = () => {
   const { uid, token } = useParams();
@@ -53,13 +52,24 @@ export const VerifiedPage = () => {
     }
   }, [uid, token]);
 
+// Modal component for waiting message (copied style from SignUp.jsx)
+const WaitingModal = () => (
+  <div className="modal-overlay">
+    <div className="modal-content modal-message-with-spinner">
+      <div className="loading-spinner" />
+      <p className="loading-text">Waiting for authentication...</p>
+    </div>
+  </div>
+);
+
   return (
     <div>
       <Navbar />
       <div className="verified-page">
         <div className="content-container">
           {loading ? (
-            <Loader />
+            <WaitingModal />
+
           ) : (
             <>
               {icon}

@@ -3,7 +3,9 @@ import NavBar from "../components/NavBar";
 import FormField from "../components/FormField";
 import Footer from "../components/Footer";
 import "./css_pages/SignUp.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import Modal from "../components/Modal";
+import "../components/css/Modal.css";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -17,18 +19,32 @@ export const SignUp = () => {
     rePassword: false,
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false); 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
     setIsError(false);
+    setShowMessageModal(false); 
+    setIsLoading(true);
 
     const errors = {};
     let hasError = false;
 
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
     if (!email) {
       errors.email = true;
       hasError = true;
+    } else if (!gmailRegex.test(email)) {
+      setMessage("Invalid email. Please try again.");
+      setIsError(true);
+      setIsLoading(false);
+      setShowMessageModal(true); 
+      return;
     }
+
     if (!password) {
       errors.password = true;
       hasError = true;
@@ -42,14 +58,17 @@ export const SignUp = () => {
       setFormErrors({
         email: !email,
         password: !password,
-        rePassword: !(rePassword),
+        rePassword: !rePassword,
       });
+      setIsLoading(false);
       return;
     }
 
     if (password !== rePassword) {
       setMessage("Passwords do not match.");
       setIsError(true);
+      setIsLoading(false);
+      setShowMessageModal(true); 
       return;
     }
 
@@ -73,19 +92,33 @@ export const SignUp = () => {
       if (response.ok) {
         setMessage("Registration successful! Please check your email.");
         setIsError(false);
+        setShowMessageModal(true); 
       } else {
-        const errorMessages = Object.entries(data)
-          .map(([field, messages]) =>
-            `${field}: ${Array.isArray(messages) ? messages.join(", ") : messages}`
-          )
-          .join(" ");
+        let errorMessages = "";
+        if (data.email && Array.isArray(data.email)) {
+          if (data.email.some(msg => msg.toLowerCase().includes("already"))) {
+            errorMessages = "This email is already registered.";
+          } else {
+            errorMessages = data.email.join(", ");
+          }
+        } else {
+          errorMessages = Object.entries(data)
+            .map(([field, messages]) =>
+              `${field}: ${Array.isArray(messages) ? messages.join(", ") : messages}`
+            )
+            .join(" ");
+        }
         setMessage(errorMessages || "Something went wrong.");
         setIsError(true);
+        setShowMessageModal(true); 
       }
     } catch (error) {
       console.error("Error during registration:", error);
       setMessage("An error occurred. Please try again later.");
       setIsError(true);
+      setShowMessageModal(true); 
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -139,18 +172,36 @@ export const SignUp = () => {
                   <div className="signup__links">
                     Already have an account? <Link to="/login">Log in</Link>
                   </div>
-                  {message && (
-                    <div className={`message ${isError ? "error" : "success"}`}>
-                      {message}
-                    </div>
-                  )}
                 </form>
               </section>
             </div>
           </div>
         </div>
+
+        {isLoading && (
+          <Modal>
+            <div className="modal-message-with-spinner">
+              <div className="loading-spinner" />
+              <p className="loading-text">Signing up... Please wait.</p>
+            </div>
+          </Modal>
+        )}
+
+        {showMessageModal && !isLoading && (
+          <Modal>
+            <div className="modal-message-with-spinner">
+              <p className="loading-text" style={{ fontWeight: "bold" }}>
+                {isError ? "Error" : "Success"}
+              </p>
+              <p>{message}</p>
+              <button className="okay-button"onClick={() => setShowMessageModal(false)}>OK</button>
+            </div>
+          </Modal>
+        )}
+
         <Footer />
       </main>
     </>
   );
 };
+
