@@ -268,9 +268,10 @@ const MultiStepForm = () => {
         <div className="mainStepForm">
           <div className="main-form-info">
             <h1 className="main-form-title">SETUP YOUR PROFILE</h1>
-            <p className="main-form-subtitle">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <p className="main-form-subtitle" style={{margin: "20px 0"}}>
+              Please complete this profile accurately. 
+              Your information will help the Office of Student Affairs provide the 
+              appropriate guidance, support, and services during your stay at UP Mindanao.
             </p>
           </div>
 

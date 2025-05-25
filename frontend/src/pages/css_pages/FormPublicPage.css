@@ -5,8 +5,9 @@ html, body {
 }
 
 .form-body {
-    background-color: #E5E5E5;
-    min-height: 100vh; /* Full height */
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
 }

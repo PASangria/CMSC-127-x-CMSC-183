@@ -22,8 +22,7 @@ export const useEnumChoices = () => {
         const data = await res.json();
         setEnums(data);
       } catch (err) {
-        console.error("Enum fetch error:", err);
-        setError(err.message); // Optional
+        setError(err.message);
       } finally {
         setLoading(false);
       }

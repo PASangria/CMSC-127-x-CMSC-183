@@ -42,7 +42,6 @@ export const UserDashboard = () => {
           setSubmittedForms(submitted);
           setPendingActions(pending);
         } else {
-          // Treat failed API response as no submissions
           setSubmittedForms([]);
           setPendingActions([]);
         }

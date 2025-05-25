@@ -18,7 +18,6 @@ export const apiRequest = async (url, options = {}) => {
   let response = await fetchWithToken(token);
 
   if (response.status === 401) {
-    console.log('Access token expired, attempting refresh...');
     
     const { success } = await refreshToken();
     

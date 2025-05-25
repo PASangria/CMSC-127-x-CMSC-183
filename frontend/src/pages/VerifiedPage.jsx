@@ -51,7 +51,6 @@ export const VerifiedPage = () => {
     }
   }, [uid, token]);
 
-// Modal component for waiting message (copied style from SignUp.jsx)
 const WaitingModal = () => (
   <div className="modal-overlay">
     <div className="modal-content modal-message-with-spinner">

@@ -460,7 +460,7 @@ const handleView = (form, isAdmin = false, studentId = null) => {
 
       {/* Submitted Forms Section */}
       <div className="submitted-forms-section">
-        <h2>Submitted Forms</h2>
+        <h2>SUBMITTED FORMS</h2>
         {submittedForms.length === 0 ? (
           <p>No submitted forms yet.</p>
         ) : (
