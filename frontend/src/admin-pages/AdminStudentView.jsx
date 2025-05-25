@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useApiRequest } from '../context/ApiRequestContext';
 import StudentSideInfo from '../student-pages/IndividualStudent';
 import DefaultLayout from '../components/DefaultLayout';
+import Loader from '../components/Loader';
 
 export const AdminStudentView = () => {
   const { studentId } = useParams();
@@ -47,7 +48,7 @@ export const AdminStudentView = () => {
     fetchStudent();
   }, [studentId, request]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
 
   return (

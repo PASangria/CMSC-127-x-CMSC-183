@@ -19,7 +19,7 @@ def get_phone_validator():
 class Student(models.Model):
     # Education
     student_number = models.CharField(max_length=10, unique=True,  primary_key=True, validators=[validate_student_number])
-    college = models.CharField(max_length=10, choices=CollegeEnum.choices)
+    college = models.CharField(max_length=20, choices=CollegeEnum.choices)
     current_year_level = models.CharField(max_length=10, choices=YearLevelEnum.choices)
     degree_program = models.CharField(max_length=50, choices=DegreeProgramEnum.choices)
     date_initial_entry = models.CharField(

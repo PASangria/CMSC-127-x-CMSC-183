@@ -3,7 +3,8 @@ from django.db import models
 class CollegeEnum(models.TextChoices):
     CSM = 'CSM', 'College of Science and Mathematics'
     CHSS = 'CHSS', 'College of Humanities and Social Sciences'
-    SOM = 'SOM', 'School of Management'
+    SOM = 'SOM', 'School of Management',
+    GRADUATE_PROGRAM = 'Graduate Program', 'Graduate Programs'
 
 class YearLevelEnum(models.TextChoices):
     FIRST_YEAR = '1st Year', '1st Year'
@@ -68,3 +69,25 @@ class SupportChoices(models.TextChoices):
     COMBINATION = 'combination', 'Combination'
     OTHERS = 'others', 'Others'
     GOV_FUNDED = 'gov_funded', 'Government Funded'
+    
+DEGREE_TO_COLLEGE = {
+    DegreeProgramEnum.BS_ARCHITECTURE: [CollegeEnum.CHSS],
+    DegreeProgramEnum.MA_URBAN_PLANNING: [CollegeEnum.CHSS, CollegeEnum.GRADUATE_PROGRAM],
+    DegreeProgramEnum.BA_ENGLISH: [CollegeEnum.CHSS],
+    DegreeProgramEnum.BA_COMMUNICATION: [CollegeEnum.CHSS],
+    DegreeProgramEnum.AA_SPORTS_STUDIES: [CollegeEnum.CHSS],
+    DegreeProgramEnum.BS_SPORTS_SCIENCE: [CollegeEnum.CHSS],
+    DegreeProgramEnum.DIPLOMA_EXERCISE_SPORTS_SCIENCE: [CollegeEnum.GRADUATE_PROGRAM],
+    DegreeProgramEnum.DIPLOMA_URBAN_AND_REGIONAL_PLANNING: [CollegeEnum.GRADUATE_PROGRAM],
+    DegreeProgramEnum.BS_ANTHROPOLOGY: [CollegeEnum.CHSS],
+    DegreeProgramEnum.BS_APPLIED_MATH: [CollegeEnum.CSM],
+    DegreeProgramEnum.BS_BIOLOGY: [CollegeEnum.CSM],
+    DegreeProgramEnum.BS_COMPUTER_SCIENCE: [CollegeEnum.CSM],
+    DegreeProgramEnum.BS_FOOD_TECHNOLOGY: [CollegeEnum.CSM],
+    DegreeProgramEnum.BS_DATA_SCIENCE: [CollegeEnum.CSM],
+    DegreeProgramEnum.MS_FOOD_SCIENCE: [CollegeEnum.CSM, CollegeEnum.GRADUATE_PROGRAM],
+    DegreeProgramEnum.MS_HUMAN_MOVEMENT_SCIENCE: [CollegeEnum.CHSS],
+    DegreeProgramEnum.BS_AGRIBUSINESS_ECONOMICS: [CollegeEnum.SOM],
+    DegreeProgramEnum.MASTER_MANAGEMENT: [CollegeEnum.SOM, CollegeEnum.GRADUATE_PROGRAM],
+    DegreeProgramEnum.PHD_RESEARCH: [CollegeEnum.SOM, CollegeEnum.GRADUATE_PROGRAM],
+}

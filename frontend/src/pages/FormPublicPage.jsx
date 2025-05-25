@@ -4,24 +4,79 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import ToastMessage from '../components/ToastMessage';
 import ModalMessage from '../components/ModalMessage';
-import DefaultLayout from '../components/DefaultLayout'; // 👈 Import this
+import DefaultLayout from '../components/DefaultLayout';
 import './css_pages/FormPublicPage.css';
 import { AuthContext } from '../context/AuthContext';
+import Button from '../components/UIButton';
 
 export const FormPublicPage = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({});
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, profileData, loading } = useContext(AuthContext);
 
   const handleCardClick = (form) => {
     if (form === 'referral') {
       setToastMessage('Counseling Referral Slip is coming soon!');
-    } else if (!user) {
-      setShowModal(true);
-    } else {
-      navigate(`/forms/${form}`);
+      return;
     }
+
+    if (!user) {
+      setModalConfig({
+        title: 'Access Restricted',
+        message: 'You need to log in to access this form.',
+        buttons: [
+          {
+            label: 'Log In',
+            onClick: () => {
+              setShowModal(false);
+              navigate('/login');
+            },
+            className: 'login-btn',
+          },
+        ],
+        footer: (
+          <p className="signup-text">
+            Don't have an account yet?{' '}
+            <span
+              className="signup-link"
+              onClick={() => {
+                setShowModal(false);
+                navigate('/signup');
+              }}
+            >
+              Sign Up
+            </span>
+            .
+          </p>
+        ),
+      });
+      setShowModal(true);
+      return;
+    }
+
+    if (!loading && (!profileData || !profileData.is_complete)) {
+      setModalConfig({
+        title: 'Complete Your Profile',
+        message:
+          'Before accessing this form, please complete your student profile.',
+        buttons: [
+          {
+            label: 'Set Up Profile',
+            onClick: () => {
+              setShowModal(false);
+              navigate('/setup-profile'); 
+            },
+            className: 'login-btn',
+          },
+        ],
+      });
+      setShowModal(true);
+      return;
+    }
+
+    navigate(`/forms/${form}`);
   };
 
   const formCards = [
@@ -88,40 +143,16 @@ export const FormPublicPage = () => {
 
       {showModal && (
         <ModalMessage
-          title="Access Restricted"
-          message="You need to log in to access this form."
+          title={modalConfig.title}
+          message={modalConfig.message}
           onClose={() => setShowModal(false)}
-          buttons={[
-            {
-              label: 'Log In',
-              onClick: () => {
-                setShowModal(false);
-                navigate('/login');
-              },
-              className: 'login-btn',
-            },
-          ]}
-          footer={
-            <p className="signup-text">
-              Don't have an account yet?{' '}
-              <span
-                className="signup-link"
-                onClick={() => {
-                  setShowModal(false);
-                  navigate('/signup');
-                }}
-              >
-                Sign Up
-              </span>
-              .
-            </p>
-          }
+          buttons={modalConfig.buttons}
+          footer={modalConfig.footer}
         />
       )}
     </div>
   );
 
-  // ⬇️ Conditionally render with layout based on auth state
   return user ? (
     <DefaultLayout>{formContent}</DefaultLayout>
   ) : (
