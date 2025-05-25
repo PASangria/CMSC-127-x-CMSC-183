@@ -1,20 +1,20 @@
-import React, { useState, useContext, useEffect } from 'react';
-import Navbar from '../../components/NavBar';
-import Footer from '../../components/Footer';
-import ProgressBar from '../../components/ProgressBar';
-import SCIFCredentials from './SCIFCredentials';
-import SCIFPersonalData from './SCIFPersonalData';
-import SCIFFamilyData from './SCIFFamilyData';
-import SCIFHealthData from './SCIFHealthData';
-import SCIFPreviousSchoolRecord from './SCIFPreviousSchoolRecord';
-import SCIFScholarships from './SCIFScholarships';
-import SCIFOtherPersonalData from './SCIFOtherPersonalData';
-import SCIFCertify from './SCIFCertify';
-import SCIFPreview from './SCIFPreview';
-import '../SetupProfile/css/multistep.css';
-import { useApiRequest } from '../../context/ApiRequestContext';
-import { AuthContext } from '../../context/AuthContext';
-import { useFormApi } from '../SCIF/SCIFApi';
+import React, { useState, useContext, useEffect } from "react";
+import Navbar from "../../components/NavBar";
+import Footer from "../../components/Footer";
+import ProgressBar from "../../components/ProgressBar";
+import SCIFCredentials from "./SCIFCredentials";
+import SCIFPersonalData from "./SCIFPersonalData";
+import SCIFFamilyData from "./SCIFFamilyData";
+import SCIFHealthData from "./SCIFHealthData";
+import SCIFPreviousSchoolRecord from "./SCIFPreviousSchoolRecord";
+import SCIFScholarships from "./SCIFScholarships";
+import SCIFOtherPersonalData from "./SCIFOtherPersonalData";
+import SCIFCertify from "./SCIFCertify";
+import SCIFPreview from "./SCIFPreview";
+import "../SetupProfile/css/multistep.css";
+import { useApiRequest } from "../../context/ApiRequestContext";
+import { AuthContext } from "../../context/AuthContext";
+import { useFormApi } from "../SCIF/SCIFApi";
 import {
   validateParent,
   validateGuardian,
@@ -23,180 +23,179 @@ import {
   validatePreviousSchool,
   validatePersonalityTraits,
   validateFamilyRelationship,
-  validateCounselingInfo
-} from '../../utils/SCIFValidation';
-import Loader from '../../components/Loader';
-import Button from '../../components/UIButton';
+  validateCounselingInfo,
+} from "../../utils/SCIFValidation";
+import Loader from "../../components/Loader";
+import Button from "../../components/UIButton";
 
 const SCIF = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
-   const [isPreviewOpen, setIsPreviewOpen] = useState(false);  
-    const {
-      createDraftSubmission,
-      getFormBundle,
-      saveDraft,
-      finalizeSubmission,
-    } = useFormApi();
-      const [step, setStep] = useState(0);
-      const [submissionId, setSubmissionId] = useState(null);
-      const [studentNumber, setStudentNumber] = useState(profileData?.student_number);
-      const [readOnly, setReadOnly] = useState(false);
-      const [loading, setLoading] = useState(false);
-      const [error, setError] = useState(null);
-      const [submissionStatus, setSubmissionStatus] = useState(null);
-  
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const {
+    createDraftSubmission,
+    getFormBundle,
+    saveDraft,
+    finalizeSubmission,
+  } = useFormApi();
+  const [step, setStep] = useState(0);
+  const [submissionId, setSubmissionId] = useState(null);
+  const [studentNumber, setStudentNumber] = useState(
+    profileData?.student_number
+  );
+  const [readOnly, setReadOnly] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState(null);
+  const [submissionStatus, setSubmissionStatus] = useState(null);
 
-
-  
   const [formData, setFormData] = useState({
     family_data: {
-      student_number: '',
+      student_number: "",
       mother: {
-        first_name: '',
-        last_name: '',
-        age: '',
-        job_occupation: '',
-        company_agency: '',
-        company_address: '',
-        highest_educational_attainment: '',
-        contact_number: '',
-        submission: '',
+        first_name: "",
+        last_name: "",
+        age: "",
+        job_occupation: "",
+        company_agency: "",
+        company_address: "",
+        highest_educational_attainment: "",
+        contact_number: "",
+        submission: "",
       },
       father: {
-        first_name: '',
-        last_name: '',
-        age: '',
-        job_occupation: '',
-        company_agency: '',
-        company_address: '',
-        highest_educational_attainment: '',
-        contact_number: '',
-        submission: '',
+        first_name: "",
+        last_name: "",
+        age: "",
+        job_occupation: "",
+        company_agency: "",
+        company_address: "",
+        highest_educational_attainment: "",
+        contact_number: "",
+        submission: "",
       },
       guardian: {
-        first_name: '',
-        last_name: '',
-        contact_number: '',
-        address: '',
-        relationship_to_guardian: '',
+        first_name: "",
+        last_name: "",
+        contact_number: "",
+        address: "",
+        relationship_to_guardian: "",
         language_dialect: [],
-        submission: '',
+        submission: "",
       },
     },
     siblings: [
       {
-        first_name: '',
-        last_name: '',
-        sex: '',
-        age: '',
-        job_occupation: '',
-        company_school: '',
-        educational_attainment: '',
-        students: [], 
-        submission: '',
+        first_name: "",
+        last_name: "",
+        sex: "",
+        age: "",
+        job_occupation: "",
+        company_school: "",
+        educational_attainment: "",
+        students: [],
+        submission: "",
       },
     ],
     previous_school_record: [
-    {
-      student_number: '',
-      school: {
-        name: '',
-        school_address: {
-          address_line_1: '',
-          barangay: '',
-          city_municipality: '',
-          province: '',
-          region: '',
-          zip_code: '',
+      {
+        student_number: "",
+        school: {
+          name: "",
+          school_address: {
+            address_line_1: "",
+            barangay: "",
+            city_municipality: "",
+            province: "",
+            region: "",
+            zip_code: "",
+          },
         },
+        education_level: "",
+        start_year: "",
+        end_year: "",
+        honors_received: "",
+        senior_high_gpa: "",
+        submission: "",
       },
-      education_level: '',
-      start_year: '',
-      end_year: '',
-      honors_received: '',
-      senior_high_gpa: '',
-      submission: '',
-
-    },
     ],
     health_data: {
-      student_number: '',
-      health_condition: '',
-      height: '',
-      weight: '',
-      eye_sight: '',
-      hearing: '',
+      student_number: "",
+      health_condition: "",
+      height: "",
+      weight: "",
+      eye_sight: "",
+      hearing: "",
       physical_disabilities: [],
       common_ailments: [],
-      last_hospitalization: '',
-      reason_of_hospitalization: '',
-      submission: '',
+      last_hospitalization: "",
+      reason_of_hospitalization: "",
+      submission: "",
     },
     scholarship: {
-      student_number: '',
+      student_number: "",
       scholarships_and_assistance: [],
-      submission: '',
+      submission: "",
     },
     personality_traits: {
-      student_number: '',
-      enrollment_reason: '',
-      degree_program_aspiration: '',
-      aspiration_explanation: '',
-      special_talents: '',
-      musical_instruments: '',
-      hobbies: '',
-      likes_in_people: '',
-      dislikes_in_people: '',
-      submission: '',
+      student_number: "",
+      enrollment_reason: "",
+      degree_program_aspiration: "",
+      aspiration_explanation: "",
+      special_talents: "",
+      musical_instruments: "",
+      hobbies: "",
+      likes_in_people: "",
+      dislikes_in_people: "",
+      submission: "",
     },
     family_relationship: {
-      student_number: '',
-      closest_to: '',
-      specify_other: '',
-      submission: '',
+      student_number: "",
+      closest_to: "",
+      specify_other: "",
+      submission: "",
     },
     counseling_info: {
-      student_number: '',
-      personal_characteristics: '',
-      problem_confidant: '',
-      confidant_reason: '',
-      anticipated_problems: '',
-      previous_counseling: '',
-      counseling_location: '',
-      counseling_counselor: '',
-      counseling_reason: '',
-      submission: '',
+      student_number: "",
+      personal_characteristics: "",
+      problem_confidant: "",
+      confidant_reason: "",
+      anticipated_problems: "",
+      previous_counseling: "",
+      counseling_location: "",
+      counseling_counselor: "",
+      counseling_reason: "",
+      submission: "",
     },
     privacy_consent: {
-      student_number: '',
+      student_number: "",
       has_consented: false,
-      submission: '',
+      submission: "",
     },
   });
 
   const validateStep = (step, formData) => {
     switch (step) {
       case 2:
-        const errors = [
-              ...validateParent(formData),
-              ...validateGuardian(formData),
-              ...validateSibling(formData)
-            ];
-        
+        const errors = {
+          ...validateParent(formData),
+          ...validateGuardian(formData),
+          ...validateSibling(formData),
+        };
+
         return errors;
       case 3:
-          return validateHealthData(formData);
+        return validateHealthData(formData);
       case 4:
-           return validatePreviousSchool(formData.previous_school_record);
+        return validatePreviousSchool(formData.previous_school_record);
       case 5:
         return true;
       case 6:
-        const personalDataErrors = [
+        const personalDataErrors = {
           ...validatePersonalityTraits(formData.personality_traits),
           ...validateFamilyRelationship(formData.family_relationship),
           ...validateCounselingInfo(formData.counseling_info),
-        ];
+        };
 
         if (personalDataErrors.length > 0) {
           return personalDataErrors;
@@ -214,7 +213,7 @@ const SCIF = () => {
         return true;
     }
   };
- 
+
   useEffect(() => {
     const fetchFormData = async () => {
       setLoading(true);
@@ -222,78 +221,80 @@ const SCIF = () => {
         let response = await getFormBundle(studentNumber);
 
         if (!response) {
-          const submissionId = await createDraftSubmission(studentNumber);
-
-          if (submissionId) {
-            response = await getFormBundle(studentNumber);
-          }
-        } else {
-          if (response.submission) {
-            const submissionId = response.submission?.id;
-            setSubmissionId(submissionId);
-            setSubmissionStatus(response.submission.status); 
-          }
+          await createDraftSubmission(studentNumber);
+          response = await getFormBundle(studentNumber);
         }
-        setFormData((prev) => ({
-          family_data: {
-            ...prev.family_data,
-            ...response.family_data,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          siblings: Array.isArray(response.siblings)
-            ? response.siblings.map((sibling) => ({
-                ...sibling,
-                submission: submissionId,
-                students: sibling.students?.length ? sibling.students : [studentNumber],
-              }))
-            : [],
-            previous_school_record: Array.isArray(response.previous_school_record)
+
+        if (response?.submission) {
+          const newSubmissionId = response.submission.id;
+          setSubmissionId(newSubmissionId);
+          setSubmissionStatus(response.submission.status);
+
+          setFormData((prev) => ({
+            family_data: {
+              ...prev.family_data,
+              ...response.family_data,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            siblings: Array.isArray(response.siblings)
+              ? response.siblings.map((sibling) => ({
+                  ...sibling,
+                  submission: newSubmissionId,
+                  students: sibling.students?.length
+                    ? sibling.students
+                    : [studentNumber],
+                }))
+              : [],
+            previous_school_record: Array.isArray(
+              response.previous_school_record
+            )
               ? response.previous_school_record.map((record) => ({
                   ...record,
-                  submission: submissionId,
+                  submission: newSubmissionId,
                   student_number: studentNumber,
                 }))
-              : [], 
-          health_data: {
-            ...prev.health_data,
-            ...response.health_data,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          scholarship: {
-            ...prev.scholarship,
-            ...response.scholarship,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          personality_traits: {
-            ...prev.personality_traits,
-            ...response.personality_traits,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          family_relationship: {
-            ...prev.family_relationship,
-            ...response.family_relationship,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          counseling_info: {
-            ...prev.counseling_info,
-            ...response.counseling_info,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-          privacy_consent: {
-            ...prev.privacy_consent,
-            ...response.privacy_consent,
-            submission: submissionId,
-            student_number: studentNumber,
-          },
-        }));
+              : [],
+            health_data: {
+              ...prev.health_data,
+              ...response.health_data,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            scholarship: {
+              ...prev.scholarship,
+              ...response.scholarship,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            personality_traits: {
+              ...prev.personality_traits,
+              ...response.personality_traits,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            family_relationship: {
+              ...prev.family_relationship,
+              ...response.family_relationship,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            counseling_info: {
+              ...prev.counseling_info,
+              ...response.counseling_info,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+            privacy_consent: {
+              ...prev.privacy_consent,
+              ...response.privacy_consent,
+              submission: newSubmissionId,
+              student_number: studentNumber,
+            },
+          }));
+        }
       } catch (err) {
-        setError('Error fetching or creating form.');
+        setError("Error fetching or creating form.");
       } finally {
         setLoading(false);
       }
@@ -303,7 +304,7 @@ const SCIF = () => {
   }, [studentNumber]);
 
   useEffect(() => {
-    if (submissionStatus === 'submitted') {
+    if (submissionStatus === "submitted") {
       setReadOnly(true);
     } else {
       setReadOnly(false);
@@ -311,48 +312,55 @@ const SCIF = () => {
   }, [submissionStatus]);
 
   const handleSaveDraft = async () => {
-  if (!submissionId) {
-    alert('Submission ID is missing. Try reloading the page.');
-    return;
-  }
-  setLoading(true);
-  try {
-    const response = await saveDraft(submissionId, studentNumber, formData);
-    console.log("Form from main");
-    console.log(formData)
-    if (response?.ok) {
-      alert('Draft saved successfully!');
-    } else {
-      alert('Error saving draft.');
+    if (!submissionId) {
+      alert("Submission ID is missing. Try reloading the page.");
+      return;
     }
-  } catch (err) {
-    alert('Failed to save draft.');
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    try {
+      const response = await saveDraft(submissionId, studentNumber, formData);
+      console.log("Form from main");
+      console.log(formData);
+      if (response?.ok) {
+        alert("Draft saved successfully!");
+      } else {
+        alert("Error saving draft.");
+      }
+    } catch (err) {
+      alert("Failed to save draft.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 const handleNextStep = () => {
-  const errors = validateStep(step, formData);
+  const validationErrors = validateStep(step, formData);
 
-  if (Array.isArray(errors) && errors.length > 0) {
-    // Format errors for display
-    const formattedErrors = errors.map(error => {
-      if (typeof error === 'string') {
-        return error;
-      } else if (typeof error === 'object' && error.record && error.messages) {
-        return `Record ${error.record}:\n - ${error.messages.join("\n - ")}`;
-      } else {
-        return JSON.stringify(error);
-      }
+  // If it's an object and has keys (like from validateParent)
+  if (
+    validationErrors &&
+    typeof validationErrors === 'object' &&
+    !Array.isArray(validationErrors) &&
+    Object.keys(validationErrors).length > 0
+  ) {
+    setErrors(validationErrors); // Set errors to pass into the step
+    return; // Stop progressing to next step
+  }
+
+  // If it's an array of errors (like from validatePersonalityTraits etc.)
+  if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+    const errorObj = {};
+    validationErrors.forEach((err, index) => {
+      errorObj[`error_${index}`] = err;
     });
-
-    alert("Please fix the following errors:\n\n" + formattedErrors.join("\n\n"));
+    setErrors(errorObj);
     return;
   }
 
-  setStep(prev => prev + 1);
+  setErrors(null); // Clear errors if no issues
+  setStep((prev) => prev + 1);
 };
+
 
   const handlePreviousStep = () => setStep((prev) => prev - 1);
 
@@ -361,39 +369,45 @@ const handleNextStep = () => {
   };
 
   const handleSubmit = async () => {
-  if (!formData?.privacy_consent?.has_consented) {
-    alert('You must agree to the Privacy Statement to submit the form.');
-    return; 
-  }
-
-  setLoading(true);
-  try {
-    const result = await finalizeSubmission(submissionId, studentNumber, formData);
-
-    if (result.success) {
-      alert(result.data.message || 'Form submitted successfully!');
-    } else {
-      // Handle specific error messages based on response
-      if (result.status === 400 && result.data.errors) {
-        alert('Validation errors:\n' + JSON.stringify(result.data.errors, null, 2));
-      } else if (result.data.error) {
-        alert(`Error: ${result.data.error}`);
-      } else if (result.data.message) {
-        alert(`Error: ${result.data.message}`);
-      } else {
-        alert('Unknown error occurred.');
-      }
+    if (!formData?.privacy_consent?.has_consented) {
+      alert("You must agree to the Privacy Statement to submit the form.");
+      return;
     }
-  } catch (err) {
-    alert('Failed to submit form.');
-  } finally {
-    setLoading(false);
-  }
-};
 
-if (loading || !submissionId) {
-  return <Loader />
-}
+    setLoading(true);
+    try {
+      const result = await finalizeSubmission(
+        submissionId,
+        studentNumber,
+        formData
+      );
+
+      if (result.success) {
+        alert(result.data.message || "Form submitted successfully!");
+      } else {
+        // Handle specific error messages based on response
+        if (result.status === 400 && result.data.errors) {
+          alert(
+            "Validation errors:\n" + JSON.stringify(result.data.errors, null, 2)
+          );
+        } else if (result.data.error) {
+          alert(`Error: ${result.data.error}`);
+        } else if (result.data.message) {
+          alert(`Error: ${result.data.message}`);
+        } else {
+          alert("Unknown error occurred.");
+        }
+      }
+    } catch (err) {
+      alert("Failed to submit form.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading || !submissionId) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -402,23 +416,17 @@ if (loading || !submissionId) {
       <div className="content-wrapper">
         <div className="mainStepForm">
           <div className="main-form-info">
-            <h1 className="main-form-title">Student Cumulative Information Sheet</h1>
+            <h1 className="main-form-title">
+              Student Cumulative Information Sheet
+            </h1>
             <p className="main-form-subtitle">
               Please fill out the form below to complete your profile.
             </p>
           </div>
           <div className="main-form-card">
             <ProgressBar currentStep={step} totalSteps={8} />
-            {step === 0 && (
-              <SCIFCredentials
-                data={profileData}
-              />
-            )}
-            {step === 1 && (
-              <SCIFPersonalData
-                data={profileData}
-              />
-            )}
+            {step === 0 && <SCIFCredentials data={profileData} />}
+            {step === 1 && <SCIFPersonalData data={profileData} />}
             {step === 2 && (
               <SCIFFamilyData
                 data={{
@@ -432,8 +440,10 @@ if (loading || !submissionId) {
                   }))
                 }
                 readOnly={readOnly}
+                errors={errors}
               />
-          )}
+            )}
+            console.log(errors);
             {step === 3 && (
               <SCIFHealthData
                 data={{
@@ -451,8 +461,8 @@ if (loading || !submissionId) {
                   }))
                 }
                 readOnly={readOnly}
+                errors={errors}
               />
-             
             )}
             {step === 4 && (
               <SCIFPreviousSchoolRecord
@@ -460,10 +470,11 @@ if (loading || !submissionId) {
                 updateData={(newData) =>
                   setFormData((prev) => ({
                     ...prev,
-                    previous_school_record: newData, // Update the array with the new data
+                    previous_school_record: newData,
                   }))
                 }
                 readOnly={readOnly}
+                errors={errors}
               />
             )}
             {step === 5 && (
@@ -476,6 +487,7 @@ if (loading || !submissionId) {
                   }))
                 }
                 readOnly={readOnly}
+                errors={errors}
               />
             )}
             {step === 6 && (
@@ -492,113 +504,112 @@ if (loading || !submissionId) {
                   }))
                 }
                 readOnly={readOnly}
+                errors={errors}
               />
             )}
             {step === 7 && (
-                <SCIFCertify
-                  data={formData}
-                  updateData={(isChecked) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      privacy_consent: {
-                        ...prev.privacy_consent,
-                        has_consented: isChecked, 
-                      },
-                    }))
-                  }
-                  readOnly={readOnly}
-                />
-              )}
-          <div className="main-form-buttons">
-            {/* Step 0: Only 'Next' button */}
-            {step === 0 && !loading && (
-              <Button variant="primary" onClick={handleNextStep}>
-                Next
-              </Button>
+              <SCIFCertify
+                data={formData}
+                updateData={(isChecked) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    privacy_consent: {
+                      ...prev.privacy_consent,
+                      has_consented: isChecked,
+                    },
+                  }))
+                }
+                readOnly={readOnly}
+              />
             )}
-
-            {/* Steps 1-6: 'Back', 'Save Draft', and 'Next' buttons */}
-            {step >= 1 && step <= 6 && !loading && (
-              <>
-                <Button variant="secondary" onClick={handlePreviousStep}>
-                  Back
-                </Button>
-
-                {!readOnly && (
-                  <Button
-                    variant="tertiary"
-                    onClick={handleSaveDraft}
-                    disabled={loading}
-                    style={{ marginLeft: '0.5rem' }}
-                  >
-                    {loading ? 'Saving Draft...' : 'Save Draft'}
-                  </Button>
-                )}
-
-                <Button
-                  variant="primary"
-                  onClick={handleNextStep}
-                  style={{ marginLeft: '0.5rem' }}
-                >
+            <div className="main-form-buttons">
+              {/* Step 0: Only 'Next' button */}
+              {step === 0 && !loading && (
+                <Button variant="primary" onClick={handleNextStep}>
                   Next
                 </Button>
-              </>
-            )}
+              )}
 
-            {/* Step 7: 'Back', 'Save Draft', 'Preview', and 'Submit' buttons */}
-            {step === 7 && !loading && (
-              <>
-                <Button variant="secondary" onClick={handlePreviousStep}>
-                  Back
-                </Button>
-
-                {!readOnly && (
-                  <Button
-                    variant="tertiary"
-                    onClick={handleSaveDraft}
-                    disabled={loading}
-                    style={{ marginLeft: '0.5rem' }}
-                  >
-                    {loading ? 'Saving Draft...' : 'Save Draft'}
+              {/* Steps 1-6: 'Back', 'Save Draft', and 'Next' buttons */}
+              {step >= 1 && step <= 6 && !loading && (
+                <>
+                  <Button variant="secondary" onClick={handlePreviousStep}>
+                    Back
                   </Button>
-                )}
 
-                <Button
-                  variant="tertiary"
-                  onClick={handlePreview}
-                  style={{ marginLeft: '0.5rem' }}
-                >
-                  Preview
-                </Button>
+                  {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      {loading ? "Saving Draft..." : "Save Draft"}
+                    </Button>
+                  )}
 
-                {isPreviewOpen && (
-                  <SCIFPreview
-                    profileData={profileData}
-                    formData={formData}
-                    onClose={() => setIsPreviewOpen(false)}
-                  />
-                )}
-
-                {!readOnly && (
                   <Button
                     variant="primary"
-                    onClick={handleSubmit}
-                    style={{ marginLeft: '0.5rem' }}
+                    onClick={handleNextStep}
+                    style={{ marginLeft: "0.5rem" }}
                   >
-                    Submit
+                    Next
                   </Button>
-                )}
-              </>
-            )}
+                </>
+              )}
 
-            {/* Loading Indicator */}
-            {loading && <div>Loading...</div>}
+              {/* Step 7: 'Back', 'Save Draft', 'Preview', and 'Submit' buttons */}
+              {step === 7 && !loading && (
+                <>
+                  <Button variant="secondary" onClick={handlePreviousStep}>
+                    Back
+                  </Button>
 
-            {/* Error Message */}
-            {error && <div className="error-message">{error}</div>}
-          </div>
+                  {!readOnly && (
+                    <Button
+                      variant="tertiary"
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      {loading ? "Saving Draft..." : "Save Draft"}
+                    </Button>
+                  )}
 
+                  <Button
+                    variant="tertiary"
+                    onClick={handlePreview}
+                    style={{ marginLeft: "0.5rem" }}
+                  >
+                    Preview
+                  </Button>
 
+                  {isPreviewOpen && (
+                    <SCIFPreview
+                      profileData={profileData}
+                      formData={formData}
+                      onClose={() => setIsPreviewOpen(false)}
+                    />
+                  )}
+
+                  {!readOnly && (
+                    <Button
+                      variant="primary"
+                      onClick={handleSubmit}
+                      style={{ marginLeft: "0.5rem" }}
+                    >
+                      Submit
+                    </Button>
+                  )}
+                </>
+              )}
+
+              {/* Loading Indicator */}
+              {loading && <div>Loading...</div>}
+
+              {/* Error Message */}
+              {error && <div className="error-message">{error}</div>}
+            </div>
           </div>
         </div>
       </div>

@@ -49,7 +49,6 @@ const handleView = (form, isAdmin = false, studentId = null) => {
       navigate(`/admin/student-forms/${studentId}/${slug}/`);
     }
   } else {
-    // Normal user routes
     if (form.status === "draft") {
       navigate(`/forms/${slug}`);
     } else if (form.status === "submitted") {

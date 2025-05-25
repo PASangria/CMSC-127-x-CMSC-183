@@ -83,7 +83,7 @@ const PersonalInfoForm = ({ formData, setFormData }) => {
 
       <div className="birthdate-group">
         <label className="birthdate-label">Birthdate *</label>
-        <div className="birthdate-inputs">
+        <div className="birthdate-inputs form-row three-columns">
           <FormField
             label="Month"
             name="birthMonth"

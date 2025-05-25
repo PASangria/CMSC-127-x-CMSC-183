@@ -1,23 +1,23 @@
-import { useApiRequest } from '../../context/ApiRequestContext';
+import { useApiRequest } from "../../context/ApiRequestContext";
 
-const BASE_URL = 'http://localhost:8000/api/forms/basic-information-sheet';
+const BASE_URL = "http://localhost:8000/api/forms/basic-information-sheet";
 
 const sectionKeys = [
-  'preferences',
-  'socio_economic_status',
-  'scholastic_status',
-  'student_support',
-  'privacy_consent',
+  "preferences",
+  "socio_economic_status",
+  "scholastic_status",
+  "student_support",
+  "privacy_consent",
 ];
 
 export const useFormApi = () => {
   const { request } = useApiRequest();
-  const arraySections = []; 
+  const arraySections = [];
 
   const createDraftSubmission = async (studentNumber) => {
     const response = await request(`${BASE_URL}/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ student_number: studentNumber }),
     });
 
@@ -25,10 +25,13 @@ export const useFormApi = () => {
   };
 
   const getFormBundle = async (studentNumber) => {
-    const response = await request(`${BASE_URL}/?student_number=${studentNumber}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const response = await request(
+      `${BASE_URL}/?student_number=${studentNumber}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (response?.status === 404) return null;
     return response?.ok ? await response.json() : null;
@@ -55,8 +58,8 @@ export const useFormApi = () => {
       }
     });
     const response = await request(`${BASE_URL}/`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
@@ -65,7 +68,11 @@ export const useFormApi = () => {
 
   const finalizeSubmission = async (submissionId, studentNumber, formData) => {
     try {
-      const draftResponse = await saveDraft(submissionId, studentNumber, formData);
+      const draftResponse = await saveDraft(
+        submissionId,
+        studentNumber,
+        formData
+      );
 
       if (!draftResponse.ok) {
         const draftError = await draftResponse.json();
@@ -73,15 +80,15 @@ export const useFormApi = () => {
           success: false,
           status: draftResponse.status,
           data: draftError,
-          message: 'Failed to save draft before finalizing.',
+          message: "Failed to save draft before finalizing.",
         };
       }
 
       const response = await request(
         `http://localhost:8000/api/forms/finalize/${submissionId}/`,
         {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
         }
       );
 
@@ -101,11 +108,10 @@ export const useFormApi = () => {
         data,
       };
     } catch (error) {
-      console.error('Network or unexpected error:', error);
       return {
         success: false,
         status: 0,
-        data: { error: 'Network error or unexpected issue occurred.' },
+        data: { error: "Network error or unexpected issue occurred." },
       };
     }
   };

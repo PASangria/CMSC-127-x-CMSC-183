@@ -6,17 +6,21 @@ from forms.serializers import StudentSerializer
 
 @api_view(['POST'])
 def create_student_profile(request):
-    # Ensure the required data is in the request
     required_fields = ['student_number', 'college', 'current_year_level', 'degree_program', 'last_name', 
                        'first_name', 'sex', 'birth_rank', 'birthdate', 'birthplace', 'contact_number', 
                        'permanent_address', 'address_while_in_up']
     
-    # Validate that all required fields are present
     for field in required_fields:
         if field not in request.data:
             return Response({ 'error': f'{field} is required' }, status=status.HTTP_400_BAD_REQUEST)
     
     student_data = request.data
+    
+    if Student.objects.filter(student_number=student_data['student_number']).exists():
+        return Response(
+            {'error': 'Student number must be unique. This student number already exists.'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
     
     permanent_address_data = student_data.get('permanent_address')
     address_while_in_up_data = student_data.get('address_while_in_up')
@@ -36,12 +40,9 @@ def create_student_profile(request):
         
         return address
 
-
-    # Get or create the permanent and UP addresses
     permanent_address = get_or_create_address(permanent_address_data)
     address_while_in_up = get_or_create_address(address_while_in_up_data)
 
-    # Create the student profile
     student = Student.objects.create(
         student_number=student_data['student_number'],
         college=student_data['college'],
@@ -66,18 +67,14 @@ def create_student_profile(request):
         date_initial_entry_sem = student_data.get('date_initial_entry_sem')
     )
 
-    # Serialize the student profile (to return in the response)
     serializer = StudentSerializer(student)
 
-    # Return the response with the serialized student profile data
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 def get_student_profile(request):
     try:
-        # Get the student profile for the authenticated user
         student = Student.objects.get(user=request.user)
-        # Serialize the student profile
         serializer = StudentSerializer(student)
         return Response(serializer.data)
     except Student.DoesNotExist:
@@ -133,3 +130,12 @@ def update_student_profile(request):
 
     serializer = StudentSerializer(student)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def check_student_number(request):
+    student_number = request.query_params.get('student_number')
+    if not student_number:
+        return Response({'error': 'student_number query parameter is required'}, status=400)
+
+    exists = Student.objects.filter(student_number=student_number).exists()
+    return Response({'exists': exists})

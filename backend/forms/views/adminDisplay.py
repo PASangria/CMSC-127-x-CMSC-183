@@ -73,12 +73,10 @@ class AdminStudentFormView(APIView):
     permission_classes = [IsAdminUser]  
 
     def get(self, request, student_id, form_type):
-        # Map slug to internal form_type display name
         form_type_display = FORM_TYPE_SLUG_MAP.get(form_type)
         if not form_type_display:
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Try to get the student's submission for the form type
         try:
             submission = Submission.objects.select_related('student').get(
                 student__student_number=student_id,
@@ -88,19 +86,16 @@ class AdminStudentFormView(APIView):
         except Submission.DoesNotExist:
             return Response({'error': 'No submission found for this student and form type.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Get the form sections map
         sections = FORM_SECTIONS_MAP.get(form_type)
         if not sections:
             return Response({'error': 'Invalid form type sections.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Prepare data dictionary with serialized submission and sections
         data = {
             'submission': SubmissionSerializer(submission).data,
         }
 
-        # Serialize each section associated with the submission
         for key, (model, serializer) in sections.items():
-            many = model._meta.model_name in ['sibling', 'previousschoolrecord']  # Adjust as needed
+            many = model._meta.model_name in ['sibling', 'previousschoolrecord'] 
 
             if any(field.name == 'submission' for field in model._meta.fields):
                 queryset = model.objects.filter(submission=submission)

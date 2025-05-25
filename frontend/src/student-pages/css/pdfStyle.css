@@ -96,10 +96,10 @@
 }
 
 /* Input styles */
-label,
-textarea,
-input[type="text"],
-input[type="date"] {
+.pdf label,
+.pdf textarea,
+.pdf input[type="text"],
+.pdf input[type="date"] {
   display: block;
   width: 100%;
   margin-top: 0.5rem;
@@ -255,6 +255,16 @@ textarea {
   font-size: 0.875rem;
 }
 
+.pdf-buttons{
+  display: flex;
+  justify-content: space-between;
+}
+
+.pdf-button {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
 /* Print-friendly tweaks */
 @media print {

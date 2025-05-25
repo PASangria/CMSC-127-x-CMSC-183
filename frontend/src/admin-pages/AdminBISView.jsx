@@ -3,10 +3,9 @@ import { useParams } from "react-router-dom";
 import { useApiRequest } from "../context/ApiRequestContext";
 import DefaultLayout from "../components/DefaultLayout";
 import BISProfileView from "../student-pages/BISViewPage";
-import SCIFProfileView from "../student-pages/SCIFViewPage";
 import Loader from "../components/Loader";
 
-export const AdminSCIFView = () => {
+export const AdminBISView = () => {
   const { studentId } = useParams();
   const { request } = useApiRequest();
 
@@ -23,7 +22,7 @@ export const AdminSCIFView = () => {
         const profile = await profileRes.json();
         setProfileData(profile);
 
-        const formRes = await request(`http://localhost:8000/api/forms/admin/student-forms/${studentId}/student-cumulative-information-file/`);
+        const formRes = await request(`http://localhost:8000/api/forms/admin/student-forms/${studentId}/basic-information-sheet/`);
         if (!formRes.ok) throw new Error("Failed to fetch form data");
         const form = await formRes.json();
         setFormData(form);
@@ -37,12 +36,12 @@ export const AdminSCIFView = () => {
     fetchData();
   }, [studentId, request]);
 
-  if (loading) return <Loader />;
+    if (loading) return <Loader />;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <DefaultLayout variant="admin">
-      <SCIFProfileView profileData={profileData} formData={formData} />
+      <BISProfileView profileData={profileData} formData={formData} />
     </DefaultLayout>
   );
 };
