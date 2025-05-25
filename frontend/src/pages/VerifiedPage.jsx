@@ -69,6 +69,7 @@ const WaitingModal = () => (
         <div className="content-container">
           {loading ? (
             <WaitingModal />
+
           ) : (
             <>
               {icon}
