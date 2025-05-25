@@ -6,7 +6,6 @@ export const isRefreshTokenExpired = (refreshToken) => {
     const decoded = jwtDecode(refreshToken);
     return decoded.exp < Date.now() / 1000;
   } catch (err) {
-    console.error("Error decoding refresh token:", err);
     return true;
   }
 };
@@ -15,7 +14,6 @@ export const refreshToken = async () => {
   const refresh = getRefreshToken();
   
   if (!refresh || isRefreshTokenExpired(refresh)) {
-    console.error('Refresh token is missing or expired.');
     return { success: false, message: 'Refresh token is invalid or expired.' };
   }
 
@@ -39,7 +37,6 @@ export const refreshToken = async () => {
     setRefreshToken(data.refresh || refresh); 
     return { success: true, message: 'Token refresh successful' };
   } catch (err) {
-    console.error('Refresh token failed:', err);
     removeToken();
     removeRefreshToken();
 

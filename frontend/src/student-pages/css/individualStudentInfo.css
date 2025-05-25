@@ -8,6 +8,8 @@
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   overflow: auto;
+  animation: fadeIn 0.5s ease;
+  border-radius: 20px;
 }
 
 
@@ -73,7 +75,7 @@
 .info-group p {
   font-size: 1.2rem;
   color: #7B1113;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 1rem;
 }
 
@@ -81,6 +83,18 @@ h3 {
   color: #333;
   font-size: 1rem;
   margin-top: 1.5rem;
+}
+
+.profile-content h1{
+  text-align: left;
+  color: #7b1113;
+  font-size: 2rem;
+  padding: 0.5em;
+  font-weight: bold;
+}
+
+.student_profile_wrapper h2{
+  color: #7B1113;
 }
 
 /* Responsive: Stack on small screens */

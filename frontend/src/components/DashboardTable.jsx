@@ -57,13 +57,13 @@ const DashboardTable = ({ submittedForms, pendingActions, onView, onDelete }) =>
     <div className="dashboard-container">
       <h1 className="dashboard-title">Dashboard</h1>
       <TableSection
-        title="Submitted Forms"
+        title="SUBMITTED FORMS"
         headers={submittedHeaders}
         rows={submittedForms}
         onView={onView}
       />
       <TableSection
-        title="Pending Actions"
+        title="PENDING ACTIONS"
         headers={pendingHeaders}
         rows={pendingActions}
         onView={onView}

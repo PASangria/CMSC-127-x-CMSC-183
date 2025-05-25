@@ -138,10 +138,10 @@ class SocioEconomicStatus(models.Model):
 
 class PresentScholasticStatus(models.Model):
     student = models.ForeignKey('Student', to_field='student_number', on_delete=models.CASCADE)
-    intended_course = models.CharField(max_length=255)
+    intended_course = models.CharField(max_length=255, blank=True, null=True)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    first_choice_course = models.CharField(max_length=255)
-    admitted_course = models.CharField(max_length=255)
+    first_choice_course = models.CharField(max_length=255, blank=True, null=True)
+    admitted_course = models.CharField(max_length=255, blank=True, null=True)
     next_plan = models.TextField(null=True, blank=True)
 
     def clean(self):

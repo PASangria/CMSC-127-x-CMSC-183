@@ -6,7 +6,6 @@ export const isTokenExpired = (token) => {
     const decoded = jwtDecode(token);
     return decoded.exp < Date.now() / 1000;
   } catch (err) {
-    console.error("Token decode error:", err);
     return true; 
   }
 };
@@ -23,7 +22,6 @@ export const apiRequest = async (url, options = {}, context) => {
   });
 
   if (response.status === 401) {
-    console.log('Access token expired, attempting refresh...');
     const success = await refreshToken();
 
     if (success) {

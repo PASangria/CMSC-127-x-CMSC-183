@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
-// import './css_pages/FAQPublicPage.css';
+import './css_pages/FAQPublicPage.css';
 
 // Reusable FAQ item component
 const FAQItem = ({ number, question, answer }) => (

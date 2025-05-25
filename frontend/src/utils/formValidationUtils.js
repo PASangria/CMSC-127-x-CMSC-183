@@ -47,7 +47,6 @@ async function checkStudentNumberExists(studentNumber, request) {
     const data = await response.json();
     return data.exists;
   } catch (err) {
-    console.error('checkStudentNumberExists:', err);
     throw err;
   }
 }
@@ -93,8 +92,6 @@ export async function validateEducation(data, request) {
 
 export function validateAddress(address, prefix) {
   const errors = {};
-  console.log(address);
-
   if (!address.line1) errors[`${prefix}.address_line_1`] = 'This field is required.';
   if (!address.barangay) errors[`${prefix}.barangay`] = 'This field is required.';
   if (!address.city_municipality) errors[`${prefix}.city_municipality`] = 'This field is required.';
@@ -102,7 +99,6 @@ export function validateAddress(address, prefix) {
   if (!address.region) errors[`${prefix}.region`] = 'This field is required.';
   if (!address.zip) errors[`${prefix}.zip_code`] = 'This field is required.';
 
-  console.log(errors);
   return errors;
 }
 
