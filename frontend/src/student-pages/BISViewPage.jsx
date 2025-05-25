@@ -11,6 +11,7 @@ import ToastMessage from "../components/ToastMessage";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { AuthContext } from "../context/AuthContext";
 import BackToTopButton from "../components/BackToTop";
+import Loader from "../components/Loader";
 
 const BISProfileView = ({ profileData, formData, isAdmin = false }) => {
   const pdfRef = useRef();
@@ -55,8 +56,7 @@ const BISProfileView = ({ profileData, formData, isAdmin = false }) => {
     }
   };
 
-  if (!formData) return <div>Loading...</div>;
-  console.log(formData);
+  if (!formData) return <Loader />;
   const {
     student_support,
     socio_economic_status,

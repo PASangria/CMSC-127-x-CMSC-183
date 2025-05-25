@@ -5,7 +5,6 @@ import { useEnumChoices } from "../../utils/enumChoices";
 import { clearError } from "../../utils/helperFunctions";
 
 const EducationInfoForm = ({ formData, setFormData, errors, setErrors }) => {
-  console.log(errors);
   const { enums, loading, error } = useEnumChoices();
 
   const handleChange = (e) => {

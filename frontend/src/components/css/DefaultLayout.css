@@ -11,7 +11,8 @@
 
 /* Side navigation */
 .side-nav {
-  width: 240px;
+  width: auto;
+  max-width: 300px;
   flex-shrink: 0;
   background-color: white;
   border-right: 1px solid #ccc;
@@ -27,7 +28,8 @@
 }
 
 /* Footer */
-.Footer, .NavBar {
+.Footer,
+.NavBar {
   flex-shrink: 0;
 }
 

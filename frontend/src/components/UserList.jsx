@@ -11,7 +11,6 @@ const UserList = () => {
         const response = await api.get('users/');
         setUsers(response.data); 
       } catch (error) {
-        console.error('Error fetching users:', error);
       }
     };
 
@@ -22,7 +21,7 @@ const UserList = () => {
     <div>
       <h2>Users List</h2>
       {users.length === 0 ? (
-        <p>No users found.</p>  // Display this message if users list is empty
+        <p>No users found.</p>  
       ) : (
         <ul>
           {users.map((user) => (

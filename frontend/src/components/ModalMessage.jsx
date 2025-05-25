@@ -6,8 +6,8 @@ const ModalMessage = ({
   message,
   onClose,
   showCloseButton = true,
-  buttons = [], // array of { label: string, onClick: function, className?: string }
-  footer = null, // new optional prop for additional content (e.g. signup prompt)
+  buttons = [], 
+  footer = null,
 }) => {
   return (
     <div className="modal-overlay">

@@ -22,7 +22,7 @@ const BISPreview = ({ profileData, formData, onClose }) => {
           <h2 className="step-title" style={{ marginBottom: "10px" }}>
             Basic Information Sheet
           </h2>
-          <p className="step-info">(Preview)</p>
+          <p className="step-info" style={{textAlign: "left"}}>(Preview)</p>
 
           {/* PERSONAL DATA */}
           <div className="form-section">

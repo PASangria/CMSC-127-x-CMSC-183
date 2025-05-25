@@ -67,7 +67,6 @@ export const AdminSCIFList = () => {
         setSubmissions(data);
         setFiltered(data);
       } catch (err) {
-        console.error(err);
         setError("Error fetching data. Please try again.");
       } finally {
         setLoadingData(false);

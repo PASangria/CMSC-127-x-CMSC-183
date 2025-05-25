@@ -113,7 +113,6 @@ export const SignUp = () => {
         setShowMessageModal(true); 
       }
     } catch (error) {
-      console.error("Error during registration:", error);
       setMessage("An error occurred. Please try again later.");
       setIsError(true);
       setShowMessageModal(true); 

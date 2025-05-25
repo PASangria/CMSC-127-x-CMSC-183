@@ -16,8 +16,6 @@ export const AdminStudentView = () => {
   useEffect(() => {
     const fetchStudent = async () => {
       try {
-        console.log(studentId);
-
         const res = await request(`http://localhost:8000/api/forms/admin/students/${studentId}/`);
 
         if (res.ok) {
@@ -28,17 +26,13 @@ export const AdminStudentView = () => {
           if (formRes.ok) {
             const forms = await formRes.json();
             setSubmittedForms(forms); 
-            console.log(forms); 
           } else {
-            console.error("Failed to fetch form submissions");
             setError('Failed to fetch form submissions.');
           }
         } else {
-          console.error("Failed to fetch student data");
           setError('Failed to fetch student data.');
         }
       } catch (err) {
-        console.error("Error fetching student data:", err);
         setError('Error fetching student data. Please try again.');
       } finally {
         setLoading(false); 

@@ -1,6 +1,6 @@
 import React from 'react';
-import './Logo.css'; // Import CSS for styling
-import logo from '../assets/UPMin_logo.png'; // Adjust the path to your logo file
+import './Logo.css'; 
+import logo from '../assets/UPMin_logo.png'; 
 
 const Logo = () => {
   return (

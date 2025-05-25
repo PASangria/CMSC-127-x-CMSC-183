@@ -144,7 +144,6 @@ export const AdminBISList = () => {
           throw new Error("Failed to fetch BIS students");
         }
       } catch (err) {
-        console.error("Error fetching data:", err);
         setError("Error fetching data. Please try again.");
       } finally {
         setLoadingData(false);

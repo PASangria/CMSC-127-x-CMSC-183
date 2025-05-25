@@ -31,7 +31,6 @@ useEffect(() => {
 
       setStudents(data);
     } catch (err) {
-      console.error(err);
       setError("Error fetching student data. Please try again.");
     } finally {
       setLoadingData(false);

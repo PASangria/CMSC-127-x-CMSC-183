@@ -52,7 +52,6 @@ export const ChangePassword = () => {
             logout(); 
 
         } catch (err) {
-            console.error(err);
             setError('An unexpected error occurred.');
         }
     };

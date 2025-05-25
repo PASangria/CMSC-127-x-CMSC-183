@@ -24,9 +24,7 @@ export const AdminReports = () => {
         if (!res.ok) throw new Error("Failed to fetch report data");
         const data = await res.json();
         setReportData(data);
-        console.log(data);
       } catch (err) {
-        console.error("Error loading report data:", err);
       } finally {
         setIsLoading(false);
       }

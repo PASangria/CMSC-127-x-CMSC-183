@@ -137,7 +137,6 @@ const MultiStepForm = () => {
         errorObj[`error_${index}`] = err;
       });
       setErrors(errorObj);
-      console.log(errors);
       return;
     }
 

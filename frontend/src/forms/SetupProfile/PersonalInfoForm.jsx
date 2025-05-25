@@ -177,10 +177,7 @@ const PersonalInfoForm = ({ formData, setFormData, errors, setErrors }) => {
           onChange={handleChange}
           error={errors?.["personal_info.birth_rank"]}
           onBlur={() => {
-            console.log("All errors on blur:", errors);
-            console.log("Error on blur:", errors?.["personal_info.birth_rank"]);
             clearError(errors, setErrors, "personal_info.birth_rank")
-            console.log("Error after blur:", errors?.["personal_info.birth_rank"]);
           }}
           required
         />

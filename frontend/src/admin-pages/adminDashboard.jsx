@@ -78,7 +78,6 @@ export const AdminDashboard = () => {
           setBarData(json.barData || []);
           setTotalStudents(json.totalStudents || 0);
         } else {
-          console.warn("Failed to fetch bar data.");
         }
 
         // Process summary data
@@ -86,7 +85,6 @@ export const AdminDashboard = () => {
           const json = await summaryRes.json();
           setSummaryData(json.summary || []);
         } else {
-          console.warn("Failed to fetch summary data.");
         }
 
         // Process recent submissions
@@ -94,10 +92,8 @@ export const AdminDashboard = () => {
           const json = await recentRes.json();
           setRecentSubmissions(json || []);
         } else {
-          console.warn("Failed to fetch recent submissions.");
         }
       } catch (err) {
-        console.error(err);
         setError("Failed to load dashboard data.");
       } finally {
         setLoadingData(false);
