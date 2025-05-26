@@ -1,18 +1,17 @@
 /* General container */
 .side-navigator {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    background-color: #fff;
-    overflow: hidden;
-    height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: #ffffff;
+  overflow: hidden;
+  height: 100%;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
-
 
 /* Avatar section */
 .avatar-section {
@@ -34,6 +33,7 @@ a {
   align-items: center;
   justify-content: center;
   margin-right: 0.5rem;
+  font-weight: bold;
 }
 
 .user-info {
@@ -49,11 +49,17 @@ a {
 
 .user-info p {
   margin: 0;
-  font-size: 0.85rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #666;
 }
 
-
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
 
 /* Navigation buttons */
 .nav-buttons {
@@ -62,6 +68,19 @@ a {
   justify-content: space-between;
   flex-grow: 1;
   width: 100%;
+}
+
+.nav-buttons button {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: transparent;
+  text-align: left;
+  padding-left: 22px;
 }
 
 .nav-buttons-top {
@@ -79,38 +98,37 @@ a {
 /* Menu button styling */
 .nav-buttons-top button,
 .nav-buttons-bottom button {
-    background: none;
-    border: none;
-    padding: 0.7rem 1rem;
-    text-align: left;
-    font-size: 0.95rem;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.2s;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-} 
-
-
-.nav-buttons-top button:hover,
-.nav-buttons-bottom button:hover {
-  background-color: #e0e7ff;
-  color: #1d4ed8;
+.nav-buttons button:hover {
+  background-color: #7b1113;
+  color: #fff;
 }
 
 .nav-buttons .active,
 .nav-buttons-bottom .active {
-  background-color: #e0e7ff;
-  color: #1d4ed8;
+  background-color: #7b1113;
+  color: #fff;
 }
 
 /* Dropdown section */
 .dropdown {
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
 }
 
 .dropdown-button {
@@ -126,20 +144,37 @@ a {
   gap: 0.5rem;
   transition: background 0.2s;
   width: 100%;
+  color: white;
 }
 
 .dropdown-button:hover {
-  background-color: #e0e7ff;  /* Hover background */
-  color: #1d4ed8;  /* Hover text color */
+  background-color: #7b1113;
+  color: #fff;
 }
 
 /* Add active state to dropdown items for consistency */
 .dropdown-content .active {
-  background-color: #e0e7ff;
-  color: #1d4ed8;
+  background-color: #7b1113;
+  color: #fff;
 }
 
 /* Apply similar button style to all buttons inside the dropdown */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 .dropdown-content button {
   background: none;
   border: none;
@@ -153,12 +188,15 @@ a {
   gap: 0.5rem;
   transition: background 0.2s;
   width: 100%;
+  background-color: white;
 }
 
 .dropdown-content button:hover {
-  background-color: #e0e7ff;
-  color: #1d4ed8;
+  background-color: #7b1113;
+  color: #fff;
 }
+
+
 
 /* Help, logout, toggle section */
 .toggle-section {

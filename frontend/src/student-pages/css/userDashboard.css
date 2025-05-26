@@ -9,22 +9,14 @@
 .main-section {
   display: flex;
   flex: 1;
-  overflow: hidden; 
-}
-
-/* Sidebar styling */
-.side-navigator {
-  background-color: #fff;
-  padding: 1rem;
-  overflow-y: hidden;
-  height: auto;
+  overflow: hidden;
 }
 
 /* Dashboard content area */
 .dashboard-content {
   flex: 1;
   padding: 20px;
-  background-color: #f9fafb;
+  background-color: #ffffff;
   overflow-y: auto;
 }
 
