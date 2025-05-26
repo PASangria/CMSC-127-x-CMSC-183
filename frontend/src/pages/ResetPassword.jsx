@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css_pages/resetpassword.css';
+import Navbar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 export const ResetPassword = () => {
     const { uid, token } = useParams();
@@ -27,7 +29,7 @@ export const ResetPassword = () => {
 
             setMessage('Password has been reset successfully.');
             setError('');
-            setTimeout(() => navigate('/'), 3000); 
+            window.location.href = "/login"; 
         } catch (err) {
             setError('Invalid link or password. Please try again.');
             setMessage('');
@@ -36,6 +38,7 @@ export const ResetPassword = () => {
 
     return (
         <div className="signup-page-wrapper">
+            <Navbar />
             <div className="signup">
                 <div className="signup__container">
                     <div className="signup__content fade-in-up">
@@ -54,6 +57,7 @@ export const ResetPassword = () => {
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     required
                                     className="form-input"
+                                    style={{ marginBottom: '20px' }}
                                 />
                                 <input
                                     type="password"
@@ -62,6 +66,7 @@ export const ResetPassword = () => {
                                     onChange={(e) => setReNewPassword(e.target.value)}
                                     required
                                     className="form-input"
+                                    style={{ marginBottom: '20px' }}
                                 />
                                 <button type="submit" className="submit-button">
                                     Set New Password
@@ -73,6 +78,7 @@ export const ResetPassword = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

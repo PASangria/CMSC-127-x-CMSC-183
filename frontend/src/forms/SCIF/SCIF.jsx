@@ -30,6 +30,7 @@ import Button from "../../components/UIButton";
 import ToastMessage from "../../components/ToastMessage";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import ModalMessage from "../../components/ModalMessage";
+import { useNavigate } from "react-router-dom";
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -55,6 +56,7 @@ const SCIF = () => {
   const [showDraftSuccessToast, setShowDraftSuccessToast] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     family_data: {
@@ -397,7 +399,7 @@ const SCIF = () => {
       if (result.success) {
         setShowSuccessToast(true);
         setTimeout(() => {
-          window.location.href = "/myprofile";
+          navigate("/myprofile");
         }, 2000);
       } else {
         if (result.status === 400 && result.data.errors) {

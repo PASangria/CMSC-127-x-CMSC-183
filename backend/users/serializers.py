@@ -30,11 +30,24 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         return value
     
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        role_from_client = self.initial_data.get("role", None)
+        data = super().validate(attrs)
+        user = self.user  
+
+        if role_from_client and role_from_client != user.role:
+            raise serializers.ValidationError("Role mismatch. Unauthorized login attempt.")
+
+        data["role"] = user.role
+        data["email"] = user.email
+        return data
+    
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token['role'] = user.role  
         return token
+    
 
 
 @receiver(post_save, sender=CustomUser)

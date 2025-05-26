@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Box, Stack, Typography, Divider, Grid } from "@mui/material";
 import DefaultLayout from "../components/DefaultLayout";
 import StatCard from "../components/StatCard";
@@ -13,7 +13,7 @@ import { formatDate } from "../utils/helperFunctions";
 export const AdminDashboard = () => {
   const { user, role, loading } = useContext(AuthContext);
   const { request } = useApiRequest();
-
+  const navigate = useNavigate();
   const [barData, setBarData] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
   const [recentSubmissions, setRecentSubmissions] = useState([]);
@@ -28,6 +28,13 @@ export const AdminDashboard = () => {
     year_level: [],
     form_type: [],
   });
+
+  const handleRowClick = (params) => {
+    const { id, form_type, student_number } = params.row;
+
+    const slug = form_type.toLowerCase().replace(/\s+/g, "-");
+    navigate(`/admin/student-forms/${student_number}/${slug}/`);
+  };
 
   const filteredSortedRows = recentSubmissions
     .filter((row) => {
@@ -68,7 +75,7 @@ export const AdminDashboard = () => {
     (async () => {
       try {
         const [barRes, summaryRes, recentRes] = await Promise.all([
-          request("/api/dashboard/bar-data"),
+          request("/api/dashboard/bar-data/"),
           request("/api/dashboard/summary/"),
           request("/api/dashboard/recent-submissions/"),
         ]);
@@ -110,7 +117,25 @@ export const AdminDashboard = () => {
     { field: "student_name", headerName: "Submitted By", flex: 1 },
     { field: "student_number", headerName: "Student Number", flex: 1 },
     { field: "submitted_on", headerName: "Date", flex: 1 },
-    { field: "form_type", headerName: "Form Type", flex: 1 },
+     {
+      field: "form_type",
+      headerName: "Form Type",
+      flex: 1,
+      renderCell: (params) => {
+        const formSlug = params.value.toLowerCase().replace(/\s+/g, "-");
+        const studentNum = params.row.student_number;
+        return (
+          <span
+            onClick={() =>
+              navigate(`/admin/student-forms/${studentNum}/${formSlug}/`)
+            }
+            style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }}
+          >
+            {params.value}
+          </span>
+        );
+      },
+    },
   ];
 
   return (
@@ -154,6 +179,7 @@ export const AdminDashboard = () => {
               pagination={false}
               hidePaginationControls={true}
               showAllRows={true}
+              onRowClick={handleRowClick}
             />
           </Box>
         </Stack>

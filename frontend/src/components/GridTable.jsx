@@ -8,7 +8,8 @@ export default function GridTable({
     pageSizeOptions = [5, 10, 20],
     pagination = true,
     hidePaginationControls = false,
-    showAllRows = false, // new flag to show all rows without pagination
+    showAllRows = false,
+    onRowClick
 }) {
     const finalRows = showAllRows ? rows.slice(0, pageSize) : rows;
 
@@ -35,6 +36,7 @@ export default function GridTable({
                 '& .even': { backgroundColor: '#f9f9f9' },
                 '& .odd': { backgroundColor: '#fff' },
             }}
+            onRowClick={onRowClick}
         />
     );
 }

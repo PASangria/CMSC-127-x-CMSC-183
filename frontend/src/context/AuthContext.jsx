@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => getStoredRole() || null);
   const [loading, setLoading] = useState(true); 
   const [profileData, setProfileData] = useState(null);
+  const [authError, setAuthError] = useState(null);
 
   useEffect(() => {
     const token = getToken();
@@ -96,23 +97,35 @@ const fetchUserData = async (token) => {
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (email, password, loginRole) => {
+    setAuthError(null); 
     try {
-      const res = await fetch('http://localhost:8000/api/users/auth/jwt/create/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-      if (!res.ok) throw new Error('Login failed');
+      const res = await fetch('http://localhost:8000/api/users/auth/jwt/create/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: loginRole }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        setAuthError(errData?.detail || 'Login failed');
+        throw new Error(errData?.detail || 'Login failed');
+      }
+
       const data = await res.json();
       if (!data.access) throw new Error('No access token received');
 
       setToken(data.access);
       setRefreshToken(data.refresh);
       setRoleFromToken(data.access);
-      fetchUserData(data.access);
+      await fetchUserData(data.access);
       return true;
     } catch (err) {
       console.error("Login error:", err);
       return false;
     }
   };
+
 
   const setRoleFromToken = (token) => {
     try {
@@ -150,7 +163,7 @@ const fetchUserData = async (token) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role, profileData, login, logout, isAuthenticated: !!user, loading }}>
+    <AuthContext.Provider value={{ user, role, profileData, setProfileData, login, logout, authError, isAuthenticated: !!user, loading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -161,3 +174,5 @@ AuthProvider.propTypes = {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+export default AuthProvider;

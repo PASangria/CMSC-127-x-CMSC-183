@@ -42,7 +42,7 @@ const MultiStepForm = () => {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const navigate = useNavigate();
-  const { profileData } = useContext(AuthContext);
+  const { profileData, setProfileData } = useContext(AuthContext);
   const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
@@ -233,10 +233,11 @@ const MultiStepForm = () => {
       if (!response.ok) throw new Error("Failed to submit profile");
 
       const result = await response.json();
+      setProfileData(result);
       setLoading(false);
       setShowSuccessToast(true);
       setTimeout(() => {
-        window.location.href = "/myprofile";
+        navigate("/myprofile", { state: { showSuccess: true } });
       }, 2000);
     } catch (error) {
       setLoading(false);

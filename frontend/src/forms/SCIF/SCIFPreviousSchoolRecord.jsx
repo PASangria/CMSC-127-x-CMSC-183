@@ -197,6 +197,8 @@ const SCIFPreviousSchoolRecord = ({
                       +e.target.value
                     )
                   }
+                  min={1970}
+                  max={new Date().getFullYear()}
                   error={errors?.[`previous_school[${globalIndex}].start_year`]}
                 />
                 <FormField
@@ -207,6 +209,8 @@ const SCIFPreviousSchoolRecord = ({
                   onChange={(e) =>
                     handleFieldChange(globalIndex, "end_year", +e.target.value)
                   }
+                  min={1970}
+                  max={new Date().getFullYear()}
                   error={errors?.[`previous_school[${globalIndex}].end_year`]}
                 />
                 <FormField

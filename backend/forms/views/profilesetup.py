@@ -74,8 +74,8 @@ def create_student_profile(request):
     log_action(
         request,
         "profile",
-        "Student profile completed/updated",
-        f"Student ID: {student.id}, Name: {student.first_name} {student.last_name}"
+        "Student profile completed",
+        f"Student ID: {student.student_number}, Name: {student.first_name} {student.last_name}"
     )
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)

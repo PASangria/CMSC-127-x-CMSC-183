@@ -16,6 +16,7 @@ from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from django.http import JsonResponse
+from rest_framework.response import Response
 
 def test_connection(request):
     return JsonResponse({'status': 'Django connected successfully'})
@@ -32,16 +33,38 @@ class CustomUserViewSet(UserViewSet):
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-    
+
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        if response.status_code == status.HTTP_200_OK:
-            serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
+
+        try:
             serializer.is_valid(raise_exception=True)
             user = serializer.user
-            request.user = user  
-            log_action(request, 'auth', 'User logged in')
-        return response
+            request.user = user
+            log_action(request, 'auth', f'Successful login for {user.email} as {user.role}')
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+        except ValidationError as ve:
+            email = request.data.get("email") or "Unknown"
+            role = request.data.get("role") or "Unknown"
+            log_action(
+                request,
+                'auth',
+                f'Login failed for {email} with role={role}: {ve.detail}'
+            )
+            raise ve  
+        except Exception as e:
+            email = request.data.get("email") or "Unknown"
+            role = request.data.get("role") or "Unknown"
+            log_action(
+                request,
+                'auth',
+                f'Unexpected login error for {email} with role={role}: {str(e)}'
+            )
+            return Response(
+                {"detail": "Internal server error."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
     
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AuditLog.objects.all().order_by('-timestamp')
