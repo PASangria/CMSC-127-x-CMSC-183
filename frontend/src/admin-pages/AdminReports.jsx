@@ -45,7 +45,6 @@ export const AdminReports = () => {
     ageData = [],
   } = reportData;
   const totalNumberofStudents = summaryData.find((d) => d.title === "Total Number of Students")?.value
-  console.log(totalNumberofStudents);
   const top3ProgramsCard = summaryData.find((item) =>
     item.title.includes("Top 3 Programs")
   );

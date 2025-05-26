@@ -77,13 +77,16 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
     <div className="form-section">
       <fieldset className="form-section" disabled={readOnly}>
       <h2 className="step-title">Family Data</h2>
+      <small>Provide complete details of your parents and siblings; indicate “N/A” or “Deceased” if applicable. 
+        If your guardians are also your parents, write “N/A” or leave the guardian section blank; 
+        otherwise, specify your guardian while staying in UP.</small>
 
       {/* Father */}
 <section className='subsection-form family-data-father'>
   <p className='step-info'><strong>FATHER</strong></p>
   <div className="form-row three-columns">
     <FormField
-      label="Father's Name"
+      label="Father's First Name"
       type="text"
       value={family_data.father?.first_name || ''}
       onFocus={() => clearError(errors, setErrors, 'father.first_name')}
@@ -91,6 +94,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('father', 'first_name', e.target.value)
       }
       error={errors?.['father.first_name']}
+      required
     />
     <FormField
       label="Father's Last Name"
@@ -101,6 +105,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('father', 'last_name', e.target.value)
       }
       error={errors?.['father.last_name']}
+      required
     />
     <FormField
       label="Age"
@@ -111,6 +116,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('father', 'age', normalizeNumber(e.target.value))
       }
       error={errors?.['father.age']}
+      required
     />
   </div>
   <div className="form-row three-columns">
@@ -143,6 +149,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('father', 'contact_number', e.target.value)
       }
       error={errors?.['father.contact_number']}
+      required
     />
   </div>
   <div className="form-row three-columns">
@@ -179,7 +186,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
   <p className='step-info'><strong>MOTHER</strong></p>
   <div className="form-row three-columns">
     <FormField
-      label="Mother's Name"
+      label="Mother's First Name"
       type="text"
       value={family_data.mother?.first_name || ''}
       onFocus={() => clearError(errors, setErrors, 'mother.first_name')}
@@ -187,6 +194,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('mother', 'first_name', e.target.value)
       }
       error={errors?.['mother.first_name']}
+      required
     />
     <FormField
       label="Mother's Last Name"
@@ -197,6 +205,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('mother', 'last_name', e.target.value)
       }
       error={errors?.['mother.last_name']}
+      required
     />
     <FormField
       label="Age"
@@ -207,6 +216,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('mother', 'age', normalizeNumber(e.target.value))
       }
       error={errors?.['mother.age']}
+      required
     />
   </div>
   <div className="form-row three-columns">
@@ -239,6 +249,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('mother', 'contact_number', e.target.value)
       }
       error={errors?.['mother.contact_number']}
+      required
     />
   </div>
   <div className="form-row three-columns">
@@ -285,6 +296,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].first_name`)}
           onChange={(e) => handleSiblingChange(index, 'first_name', e.target.value)}
           error={errors?.[`siblings[${index}].first_name`]}
+          required
         />
         <FormField
           label="Last Name"
@@ -293,6 +305,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].last_name`)}
           onChange={(e) => handleSiblingChange(index, 'last_name', e.target.value)}
           error={errors?.[`siblings[${index}].last_name`]}
+          required
         />
         <FormField
           label="Sex"
@@ -306,6 +319,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
             { value: 'Female', label: 'Female' },
           ]}
           error={errors?.[`siblings[${index}].sex`]}
+          required
         />
       </div>
       <div className="form-row">
@@ -316,6 +330,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].age`)}
           onChange={(e) => handleSiblingChange(index, 'age', normalizeNumber(e.target.value))}
           error={errors?.[`siblings[${index}].age`]}
+          required
         />
         <FormField
           label="Job/Occupation"
@@ -324,6 +339,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].job_occupation`)}
           onChange={(e) => handleSiblingChange(index, 'job_occupation', e.target.value)}
           error={errors?.[`siblings[${index}].job_occupation`]}
+          required
         />
       </div>
       <div className="form-row">
@@ -334,6 +350,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].company_school`)}
           onChange={(e) => handleSiblingChange(index, 'company_school', e.target.value)}
           error={errors?.[`siblings[${index}].company_school`]}
+          required
         />
         <FormField
           label="Educational Attainment"
@@ -342,6 +359,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].educational_attainment`)}
           onChange={(e) => handleSiblingChange(index, 'educational_attainment', e.target.value)}
           error={errors?.[`siblings[${index}].educational_attainment`]}
+          required
         />
       </div>
       {!readOnly && (
@@ -372,7 +390,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
 
       {/* Guardian */}
 <section className='subsection-form family-data-guardian'>
-  <p className='step-info'><strong>GUARDIAN</strong></p>
+  <p className='step-info'><strong>GUARDIAN WHILE STAYING IN UP</strong></p>
   <div className="form-row">
     <FormField
       label="Guardian's First Name"
@@ -383,6 +401,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('guardian', 'first_name', e.target.value)
       }
       error={errors?.['guardian.first_name']}
+      required
     />
     <FormField
       label="Guardian's Last Name"
@@ -393,6 +412,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('guardian', 'last_name', e.target.value)
       }
       error={errors?.['guardian.last_name']}
+      required
     />
   </div>
   <div className="form-row">
@@ -405,6 +425,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('guardian', 'contact_number', e.target.value)
       }
       error={errors?.['guardian.contact_number']}
+      required
     />
     <FormField
       label="Address"
@@ -415,6 +436,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('guardian', 'address', e.target.value)
       }
       error={errors?.['guardian.address']}
+      required
     />
   </div>
   <div className="form-row">
@@ -427,6 +449,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
         handleFieldChange('guardian', 'relationship_to_guardian', e.target.value)
       }
       error={errors?.['guardian.relationship_to_guardian']}
+      required
     />
     <FormField
       label="Languages/Dialect Spoken at Home"
@@ -434,6 +457,8 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
       value={languageInput}
       onChange={handleLanguageChange}
       helpertext="e.g., Tagalog, English"
+      required
+      error={errors?.['guardian.language_dialect']}
     />
   </div>
 </section>

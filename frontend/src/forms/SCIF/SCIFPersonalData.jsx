@@ -2,17 +2,19 @@ import React from 'react';
 import DisplayField from '../../components/DisplayField'; 
 import '../SetupProfile/css/multistep.css';
 import { calculateAge } from '../../utils/helperFunctions';
+import Loader from '../../components/Loader';
 
 const SCIFPersonalData = ({ data }) => {
   if (!data) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
     <div className='student_personal_info_wrapper'>
       <div className="student_personal_info">
         <p className='step-info subsection-form'><strong>PERSONAL INFORMATION</strong></p>
-        <div className='form-row three-columns'>
+        <small>To update this information, please visit your <a href="/myprofile" target="_blank" rel="noopener noreferrer">Profile</a> page.</small>
+        <div className='form-row three-columns'  style={{marginTop: "20px"}}>
           <div className='form-group'>
             <DisplayField label="First Name" value={data.first_name} />
           </div>

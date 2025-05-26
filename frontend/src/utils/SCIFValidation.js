@@ -2,39 +2,29 @@ export const validateParent = (formData) => {
   const errors = {};
 
   const mother = formData.family_data.mother || {};
-  const hasAnyInputMother = Object.entries(mother).some(
-    ([key, value]) => key !== "id" && value !== null && value !== ""
-  );
-  if (hasAnyInputMother) {
-    if (!mother.first_name)
-      errors["mother.first_name"] = "Mother's first name is required.";
-    if (!mother.last_name)
-      errors["mother.last_name"] = "Mother's last name is required.";
-    if (!mother.age) errors["mother.age"] = "Mother's age is required.";
-    if (!mother.contact_number) {
-      errors["mother.contact_number"] = "Mother's contact number is required.";
-    } else if (!/^\+?\d{9,15}$/.test(mother.contact_number)) {
-      errors["mother.contact_number"] =
-        "Mother's contact must be a valid phone number.";
-    }
+  if (!mother.first_name)
+    errors["mother.first_name"] = "Mother's first name is required.";
+  if (!mother.last_name)
+    errors["mother.last_name"] = "Mother's last name is required.";
+  if (!mother.age) errors["mother.age"] = "Mother's age is required.";
+  if (!mother.contact_number) {
+    errors["mother.contact_number"] = "Mother's contact number is required.";
+  } else if (!/^\+?\d{9,15}$/.test(mother.contact_number)) {
+    errors["mother.contact_number"] =
+      "Mother's contact must be a valid phone number.";
   }
 
   const father = formData.family_data.father || {};
-  const hasAnyInputFather = Object.entries(father).some(
-    ([key, value]) => key !== "id" && value !== null && value !== ""
-  );
-  if (hasAnyInputFather) {
-    if (!father.first_name)
-      errors["father.first_name"] = "Father's first name is required.";
-    if (!father.last_name)
-      errors["father.last_name"] = "Father's last name is required.";
-    if (!father.age) errors["father.age"] = "Father's age is required.";
-    if (!father.contact_number) {
-      errors["father.contact_number"] = "Father's contact number is required.";
-    } else if (!/^\+?\d{9,15}$/.test(father.contact_number)) {
-      errors["father.contact_number"] =
-        "Father's contact number must be a valid phone number.";
-    }
+  if (!father.first_name)
+    errors["father.first_name"] = "Father's first name is required.";
+  if (!father.last_name)
+    errors["father.last_name"] = "Father's last name is required.";
+  if (!father.age) errors["father.age"] = "Father's age is required.";
+  if (!father.contact_number) {
+    errors["father.contact_number"] = "Father's contact number is required.";
+  } else if (!/^\+?\d{9,15}$/.test(father.contact_number)) {
+    errors["father.contact_number"] =
+      "Father's contact number must be a valid phone number.";
   }
 
   return errors;
@@ -71,8 +61,14 @@ export const validateGuardian = (formData) => {
       errors["guardian.relationship_to_guardian"] =
         "Relationship to guardian is required.";
     }
+    if (
+      !Array.isArray(guardian.language_dialect) ||
+      guardian.language_dialect.length === 0
+    ) {
+      errors["guardian.language_dialect"] =
+        "Guardian's language dialect is required.";
+    }
   }
-
   return errors;
 };
 
@@ -156,7 +152,7 @@ export const validatePreviousSchool = (records) => {
   }
 
   const requiredLevels = {
-    "Primary": false,
+    Primary: false,
     "Junior High": false,
     "Senior High": false,
   };
@@ -200,7 +196,9 @@ export const validatePreviousSchool = (records) => {
           const label = field
             .replace(/_/g, " ")
             .replace(/\b\w/g, (l) => l.toUpperCase());
-          errors[`${prefix}.school.school_address.${field}`] = `${label} is required.`;
+          errors[
+            `${prefix}.school.school_address.${field}`
+          ] = `${label} is required.`;
         }
       });
     }
@@ -211,11 +209,14 @@ export const validatePreviousSchool = (records) => {
 
     if (!isNaN(start) && !isNaN(end)) {
       if (end < start) {
-        errors[`${prefix}.end_year`] = "End year cannot be earlier than start year.";
+        errors[`${prefix}.end_year`] =
+          "End year cannot be earlier than start year.";
       }
       if (start > currentYear || end > currentYear) {
-        errors[`${prefix}.start_year`] = "Start or end year cannot be in the future.";
-        errors[`${prefix}.end_year`] = "Start or end year cannot be in the future.";
+        errors[`${prefix}.start_year`] =
+          "Start or end year cannot be in the future.";
+        errors[`${prefix}.end_year`] =
+          "Start or end year cannot be in the future.";
       }
     }
 
@@ -241,8 +242,9 @@ export const validatePreviousSchool = (records) => {
 
   Object.entries(requiredLevels).forEach(([level, found]) => {
     if (!found) {
-      errors[`previous_school_missing_${level.replace(/\s/g, "_").toLowerCase()}`] =
-        `At least one record for ${level} is required.`;
+      errors[
+        `previous_school_missing_${level.replace(/\s/g, "_").toLowerCase()}`
+      ] = `At least one record for ${level} is required.`;
     }
   });
 

@@ -354,10 +354,6 @@ textarea:focus {
     font-size: 1em;
   }
 
-  .main-form-buttons {
-    gap: 0.625em;
-    flex-direction: column;
-  }
 
   .form-grid {
     grid-template-columns: 1fr;
@@ -417,11 +413,6 @@ html {
   .radio-options {
     gap: 1rem;
     margin-left: 0;
-  }
-
-  .step-button-form {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
 

@@ -6,7 +6,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
 import { MoreVertical } from "react-feather";
-import Test from "./App";
 import { ResetPassword } from "./pages/ResetPassword";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import LoginPage from "./pages/LoginPage";

@@ -25,7 +25,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         return attrs
 
     def validate_email(self, value):
-        if not value.endswith('@gmail.com'):
+        if not value.endswith('@up.edu.ph'):
             raise serializers.ValidationError("Email must be a university email.")
         return value
     
