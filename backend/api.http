@@ -6,8 +6,8 @@ POST http://localhost:8000/api/users/auth/jwt/create/ HTTP/1.1
 Content-Type:  application/json
 
 {
-    "email": "katherine58@example.com",
-    "password": "testpass123"
+    "email": "presapp11@gmail.com",
+    "password": "lunalovegood"
 }
 
 ###
@@ -495,3 +495,8 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNz
 GET http://localhost:8000/api/forms/check-student-number/?student_number=2018-05043/ HTTP/1.1
 Content-Type: application/application/application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4MTQ3NzY1LCJpYXQiOjE3NDgxMzcxNzQsImp0aSI6IjBlMjdiOGNmZmM1MDQxZjA4Mjk1YTM1OTc5YjBjOTFhIiwidXNlcl9pZCI6NDY5LCJyb2xlIjoic3R1ZGVudCJ9.gDVdjj-6AaFEnIEOVc1PEAwuQYohOtayG71DB6YODj4
+
+###
+GET http://localhost:8000/api/users/records/auditlog/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4MjM3NjE0LCJpYXQiOjE3NDgyMzQwMTQsImp0aSI6IjhlZDgzMTJlODQ2MjQ0MDA4MDE2YjBmOTYyNzVjYTcwIiwidXNlcl9pZCI6MSwicm9sZSI6ImFkbWluIn0.fus6fM9_8jH63JIv2FkbkBRhjA-mOCzZ8NEn_D8eE9s

@@ -5,6 +5,7 @@ from forms.models import Student, Address
 from forms.serializers import StudentSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
+from users.utils import log_action
 
 @api_view(['POST'])
 def create_student_profile(request):
@@ -70,6 +71,12 @@ def create_student_profile(request):
     )
 
     serializer = StudentSerializer(student)
+    log_action(
+        request,
+        "profile",
+        "Student profile completed/updated",
+        f"Student ID: {student.id}, Name: {student.first_name} {student.last_name}"
+    )
 
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -124,12 +131,28 @@ def update_student_profile(request):
         'birth_rank', 'birthdate', 'birthplace', 'contact_number', 'landline_number',
     ]
 
+    changed_fields = {}
     for field in updatable_fields:
         if field in student_data:
-            setattr(student, field, student_data[field])
+            old_value = getattr(student, field)
+            new_value = student_data[field]
+            if old_value != new_value:
+                changed_fields[field] = {"old": old_value, "new": new_value}
+            setattr(student, field, new_value)
 
     student.save()
 
+    serializer = StudentSerializer(student)
+    details = (
+        f"Student ID: {student.student_number}, Name: {student.first_name} {student.last_name}. "
+        f"Changed fields: {changed_fields if changed_fields else 'None'}"
+    )
+    log_action(
+        request,
+        "profile",
+        "Student profile updated",
+        details
+    )
     serializer = StudentSerializer(student)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

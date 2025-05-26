@@ -1,6 +1,6 @@
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
 import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage, ChangePassword } from "./pages";
-import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView, AdminBISView } from "./admin-pages";
+import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView, AdminBISView, AdminAuditLog } from "./admin-pages";
 import { UserDashboard, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
 import ProtectedRoute from './components/ProtectedRoute';
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
@@ -127,7 +127,7 @@ function App() {
           path="/privacy-setting"
           element={
             <ProtectedRoute requireAdmin={false} requireUser={true}>
-              <ChangePassword />
+              <UserPrivacySetting />
             </ProtectedRoute>
           }
         />
@@ -194,6 +194,14 @@ function App() {
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
               <AdminReferral />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-audit-log"
+          element={
+            <ProtectedRoute requireAdmin={true} requireUser={false}>
+              <AdminAuditLog />
             </ProtectedRoute>
           }
         />

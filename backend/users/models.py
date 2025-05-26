@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 import uuid
+from django.utils.timezone import now
+from django.conf import settings
 
 class Role(models.TextChoices):
     ADMIN = 'admin', 'Administrator'
@@ -38,3 +40,23 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class AuditLog(models.Model):
+    LOG_TYPES = [
+        ('auth', 'Authentication'),
+        ('submission', 'Form Submission'),
+        ('profile', 'Profile Update'),
+        ('password', 'Password Change'),
+        ('other', 'Other'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    log_type = models.CharField(max_length=20, choices=LOG_TYPES)
+    action = models.CharField(max_length=255)
+    details = models.TextField(null=True, blank=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return f"[{self.log_type}] {self.action} by {self.user} at {self.timestamp}"

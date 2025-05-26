@@ -123,14 +123,26 @@ const fetchUserData = async (token) => {
     }
   };
 
-  const logout = (navigate) => {
+  const logout = async (navigate) => {
+    const refresh = getRefreshToken();
+    if (refresh) {
+      try {
+        await fetch('http://localhost:8000/api/users/auth/jwt/logout/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh })
+        });
+      } catch (err) {
+        console.error("Logout API error:", err);
+      }
+    }
     removeRefreshToken();
     removeToken();  
     setUser(null);
     setRole(null);
     setProfileData(null);
     setLoading(false);
-  
+
     if (navigate) {
       navigate('/');
       window.location.reload();
