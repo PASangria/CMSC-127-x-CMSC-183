@@ -33,7 +33,6 @@ const BISProfilePage = () => {
           socio_economic_status: data.socio_economic_status,
           preferences: data.preferences,
           scholastic_status: data.scholastic_status,
-          privacy_consent: data.privacy_consent,
           submission: data.submission,
           privacy_consent: data.privacy_consent,
         };

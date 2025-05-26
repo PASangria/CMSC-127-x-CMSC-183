@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./../SetupProfile/css/multistep.css";
-import "./../../components/css/modal.css";
+import "./../../components/css/Modal.css";
 import DisplayField from "../../components/DisplayField";
 import BISSocioeconomic from "./BISSocioeconomic";
 import BISCertify from "./BISCertify";

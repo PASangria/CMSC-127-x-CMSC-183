@@ -8,6 +8,7 @@ import GridTable from "../components/GridTable";
 import { AuthContext } from "../context/AuthContext";
 import { useApiRequest } from "../context/ApiRequestContext";
 import Loader from "../components/Loader";
+import { formatDate } from "../utils/helperFunctions";
 
 export const AdminDashboard = () => {
   const { user, role, loading } = useContext(AuthContext);

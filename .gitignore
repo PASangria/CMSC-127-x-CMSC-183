@@ -38,3 +38,6 @@ htmlcov/
 *.tar
 docker-compose.override.yml
 .env.docker
+
+# ==== PostgreSQL ====
+data/db/

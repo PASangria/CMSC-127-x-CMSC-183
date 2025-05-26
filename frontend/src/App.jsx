@@ -1,10 +1,4 @@
 import { BrowserRouter, Router, Routes, Route, Link } from "react-router-dom";
-<<<<<<< Updated upstream
-import { HomePage, SignUp, VerifiedPage, FormPublicPage, FAQPublicPage, ChangePassword } from "./pages";
-import { AdminDashboard, AdminSCIFList, AdminReferral, AdminStudentList, AdminSystemSettings, AdminReports, AdminBISList, AdminSCIFView, AdminBISView, AdminAuditLog } from "./admin-pages";
-import { UserDashboard, UserPrivacySetting, UserSubmittedForms, UserProfile } from "./student-pages";
-import ProtectedRoute from './components/ProtectedRoute';
-=======
 import {
   HomePage,
   SignUp,
@@ -12,6 +6,7 @@ import {
   FormPublicPage,
   FAQPublicPage,
   ChangePassword,
+  Help,
 } from "./pages";
 import {
   AdminDashboard,
@@ -23,6 +18,7 @@ import {
   AdminBISList,
   AdminSCIFView,
   AdminBISView,
+  AdminAuditLog,
 } from "./admin-pages";
 import {
   UserDashboard,
@@ -31,7 +27,6 @@ import {
   UserProfile,
 } from "./student-pages";
 import ProtectedRoute from "./components/ProtectedRoute";
->>>>>>> Stashed changes
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import Unauthorized from "./pages/Unauthorized";
 import { MoreVertical } from "react-feather";
@@ -84,6 +79,14 @@ function App() {
         <Route path="/verify/:uid/:token" element={<VerifiedPage />} />
 
         {/* User dashboard, block access for admins */}
+        <Route
+          path="/help"
+          element={
+            <ProtectedRoute requireAdmin={false} requireUser={false}>
+              <Help />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/student"
           element={
@@ -251,7 +254,7 @@ function App() {
           path="/admin-system-settings"
           element={
             <ProtectedRoute requireAdmin={true} requireUser={false}>
-              <ChangePassword />
+              <AdminSystemSettings />
             </ProtectedRoute>
           }
         />

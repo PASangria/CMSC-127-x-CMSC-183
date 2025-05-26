@@ -73,7 +73,6 @@ const SideNav = ({ variant, onLogoutClick }) => {
                                     <div className="dropdown-content">
                                         <Link to="/admin-bis-list"><button><DescriptionOutlined /> Basic Info Sheets</button></Link>
                                         <Link to="/admin-scif-list"><button><DescriptionOutlined /> SCIF</button></Link>
-                                        <Link to="/admin-referral-list"><button><DescriptionOutlined /> Referral Forms</button></Link>
                                     </div>
                                 </div>
                                 <Link to="/admin-reports"><button><AnalyticsOutlined /> Report Analytics</button></Link>

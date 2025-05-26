@@ -3,6 +3,7 @@ from django.db import models
 import uuid
 from django.utils.timezone import now
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 class Role(models.TextChoices):
     ADMIN = 'admin', 'Administrator'
@@ -23,7 +24,13 @@ class CustomUserManager(BaseUserManager):
         """Create and return a superuser."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+        extra_fields.setdefault('role', Role.ADMIN)
+        user = self.create_user(email, password, **extra_fields)
+        
+        admin_group, created = Group.objects.get_or_create(name='admin')
+        user.groups.add(admin_group)
+        
+        return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)

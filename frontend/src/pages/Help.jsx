@@ -1,10 +1,12 @@
 import React from 'react';
 import DefaultLayout from '../components/DefaultLayout';
 import './css_pages/Help.css';
+import { AuthContext } from '../context/AuthContext';
 
-export default function Help() {
+export const Help = () => {
+    const { role } = React.useContext(AuthContext);
     return (
-        <DefaultLayout variant='admin'>
+        <DefaultLayout variant={role}>
             <div className="admin-help-page">
                 <h1 className="help-title">Help Page</h1>
                 <p className="help-intro">
