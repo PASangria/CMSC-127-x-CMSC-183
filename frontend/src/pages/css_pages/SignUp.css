@@ -32,7 +32,7 @@
   color: white;
   font-family: 'Optima', sans-serif;
   display: flex;
-  align-items: center;**
+  align-items: center;
   background: #800000;
 }
 
@@ -84,25 +84,6 @@
   border-radius: 8px;
   font-size: 0.9rem;
   text-align: center;
-}
-
-.submit-button {
-  background-color: #800000;
-  color: #ffffff;
-  padding: 12px 28px;
-  border: 1px solid #ffffff;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-family: 'Arial', sans-serif;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.submit-button:hover {
-  background-color: #a00000;
-  color: white;
 }
 
 .hero-title {
