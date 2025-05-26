@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom'; 
-import "./css/sideNav.css";
+import "./css/SideNav1.css";
 
 const SideNav_admin = () => {
   const { user, loading } = useContext(AuthContext);

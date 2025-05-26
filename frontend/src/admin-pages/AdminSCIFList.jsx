@@ -4,7 +4,7 @@ import { useApiRequest } from "../context/ApiRequestContext";
 import { useAuth } from "../context/AuthContext";
 import DefaultLayout from "../components/DefaultLayout";
 import Button from "../components/UIButton";
-import { Box, Typography, Pagination } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import StudentFilterBar from "../components/StudentFilterBar";
 import PaginationControls from "../components/PaginationControls";
 import { formatDate } from "../utils/helperFunctions";
@@ -162,7 +162,7 @@ export const AdminSCIFList = () => {
 
   return (
     <DefaultLayout variant="admin">
-      <Box className="admin-student-list" sx={{ p: 3 }}>
+      <Box className="admin-student-list" sx={{ p: 3 }} style={{ padding: 50 }}>
         <Typography variant="h4" gutterBottom>
           Student Cumulative Information File Submissions
         </Typography>

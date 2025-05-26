@@ -168,7 +168,7 @@ export const AdminBISList = () => {
 
   return (
     <DefaultLayout variant="admin">
-      <Box className="admin-student-list" sx={{ p: 3 }}>
+      <Box className="admin-student-list" sx={{ p: 3 }} style={{ padding: 50 }}>
         <Typography variant="h4" gutterBottom>
           Basic Information Sheet Submissions
         </Typography>
