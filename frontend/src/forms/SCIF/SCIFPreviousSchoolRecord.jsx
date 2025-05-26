@@ -134,6 +134,7 @@ const SCIFPreviousSchoolRecord = ({
                   handleFieldChange(globalIndex, "school.name", e.target.value)
                 }
                 error={errors?.[`previous_school[${globalIndex}].school.name`]}
+                required
               />
 
               <h3 className="step-info school">{level} School Address</h3>
@@ -177,6 +178,7 @@ const SCIFPreviousSchoolRecord = ({
                           : enums?.region || []
                         : undefined
                     }
+                    required
                   />
                 ))}
               </div>
@@ -198,6 +200,7 @@ const SCIFPreviousSchoolRecord = ({
                     )
                   }
                   error={errors?.[`previous_school[${globalIndex}].start_year`]}
+                  required
                 />
                 <FormField
                   label="End Year"
@@ -208,6 +211,7 @@ const SCIFPreviousSchoolRecord = ({
                     handleFieldChange(globalIndex, "end_year", +e.target.value)
                   }
                   error={errors?.[`previous_school[${globalIndex}].end_year`]}
+                  required
                 />
                 <FormField
                   label="Honors Received"
@@ -243,6 +247,7 @@ const SCIFPreviousSchoolRecord = ({
                   error={
                     errors?.[`previous_school[${globalIndex}].senior_high_gpa`]
                   }
+                  required
                 />
               )}
 

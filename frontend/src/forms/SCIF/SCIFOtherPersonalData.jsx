@@ -56,6 +56,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.enrollment_reason"]}
           helperText="Please explain the reason why you chose to enroll at UP Mindanao."
+          required
         />
 
         <label>
@@ -125,6 +126,7 @@ const SCIFOtherPersonalData = ({
             }
             error={errors?.["personality_traits.aspiration_explanation"]}
             helperText="Please provide the reason if your degree program does not align with your future goals."
+            required
           />
         )}
 
@@ -144,6 +146,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.special_talents"]}
           helperText="Describe any special talents or abilities you possess."
+          required
         />
 
         <FormField
@@ -166,6 +169,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.musical_instruments"]}
           helperText="List any musical instruments you can play and provide any relevant experience."
+          required
         />
 
         <FormField
@@ -180,6 +184,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.hobbies"]}
           helperText="Share what activities or hobbies you enjoy in your free time."
+          required
         />
 
         <FormField
@@ -198,6 +203,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.likes_in_people"]}
           helperText="Describe the positive traits or qualities you appreciate in others."
+          required
         />
 
         <FormField
@@ -220,6 +226,7 @@ const SCIFOtherPersonalData = ({
           }
           error={errors?.["personality_traits.dislikes_in_people"]}
           helperText="Describe the negative traits or qualities you dislike in others."
+          required
         />
 
         <label>With whom are you closest to?</label>
@@ -277,6 +284,7 @@ const SCIFOtherPersonalData = ({
             }
             helperText="If 'Other' is selected, please specify."
             error={errors?.["family_relationship.specify_other"]}
+            required
           />
         )}
 
@@ -301,6 +309,7 @@ const SCIFOtherPersonalData = ({
           }
           helperText="Describe your personal characteristics or traits that define who you are."
           error={errors?.["counseling_info.personal_characteristics"]}
+          required
         />
 
         <FormField
@@ -319,6 +328,7 @@ const SCIFOtherPersonalData = ({
           }
           helperText="Mention the person or people you trust and open up to with your problems."
           error={errors?.["counseling_info.problem_confidant"]}
+          required
         />
 
         <FormField
@@ -337,6 +347,7 @@ const SCIFOtherPersonalData = ({
           }
           helperText="Explain why you open up to that person."
           error={errors?.["counseling_info.confidant_reason"]}
+          required
         />
 
         <FormField
@@ -359,6 +370,7 @@ const SCIFOtherPersonalData = ({
           }
           helperText="Are there any problems or challenges you foresee while studying at UP?"
           error={errors?.["counseling_info.anticipated_problems"]}
+          required
         />
 
         <label>Any previous counseling?</label>
@@ -415,6 +427,7 @@ const SCIFOtherPersonalData = ({
               }
               helperText="If you have had previous counseling, please mention where."
               error={errors?.["counseling_info.counseling_location"]}
+              required
             />
 
             <FormField
@@ -436,6 +449,7 @@ const SCIFOtherPersonalData = ({
                 )
               }
               error={errors?.["counseling_info.counseling_counselor"]}
+              required
             />
 
             <FormField
@@ -458,6 +472,7 @@ const SCIFOtherPersonalData = ({
               }
               helperText="Mention the reason for the previous counseling."
               error={errors?.["counseling_info.counseling_reason"]}
+              required
             />
           </>
         )}
