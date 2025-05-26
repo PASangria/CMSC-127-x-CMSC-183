@@ -470,7 +470,7 @@ const handleView = (form, isAdmin = false, studentId = null) => {
                 <th>Form Type</th>
                 <th>Date Submitted</th>
                 <th>Status</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>

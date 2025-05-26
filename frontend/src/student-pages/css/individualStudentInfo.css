@@ -97,27 +97,13 @@ h3 {
   color: #7B1113;
 }
 
-/* Responsive: Stack on small screens */
-@media (max-width: 768px) {
-  .student_profile_wrapper {
-    flex-direction: column;
-    height: auto; /* Let height expand naturally */
-    padding: 1rem;
-  }
-
-  .student_side_info,
-  .right-student-profile {
-    width: 100%;
-  }
-}
-
 /* Group left and right sections side by side */
 .info-sections-container {
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
   margin-bottom: 2rem;
 }
+
 
 /* Submitted forms now below both sections */
 .submitted-forms-section {
@@ -126,4 +112,25 @@ h3 {
   padding: 2rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   width: 100%;
+}
+
+/* Responsive: Stack on small screens */
+@media (max-width: 768px) {
+  .student_profile_wrapper {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem;
+  }
+  .profile-content h1{
+    text-align: center;
+  }
+
+  .student_side_info,
+  .right-student-profile {
+    width: 100%;
+  }
+
+  .info-sections-container {
+    display: block;
+  }
 }

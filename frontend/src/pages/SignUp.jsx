@@ -32,13 +32,13 @@ export const SignUp = () => {
     const errors = {};
     let hasError = false;
 
-    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@up\.edu\.ph$/;
 
     if (!email) {
       errors.email = true;
       hasError = true;
     } else if (!gmailRegex.test(email)) {
-      setMessage("Invalid email. Please try again.");
+      setMessage("Invalid email. Please use your UP Mail and try again. ");
       setIsError(true);
       setIsLoading(false);
       setShowMessageModal(true); 

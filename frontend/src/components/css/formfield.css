@@ -91,19 +91,6 @@
   color: #D32F2F;
 }
 
-/* --- Override Error Border on Focus --- */
-/* .form-group.error .form-input:focus,
-.form-group.error select:focus, .form-group.error .form-input.filled,
-.form-group.error select.filled {
-  border-color: #1976D2;
-}
-
-/* --- Optional: Override label color too on focus if needed --- */
-/* .form-group.error .form-input:focus + label, .form-group.error .form-input.filled + label,
-.form-group.error select:focus + label, .form-group.error select.filled + label {
-  color: #1976D2;
-} */ 
-
 /* --- Error Message --- */
 .form-group .error-message {
   font-size: 12px;
@@ -197,13 +184,6 @@
   padding-bottom: 2em;
 }
 
-/* .form-group.error:has(.form-input:focus) .error-message,
-.form-group.error:has(.form-input.filled) .error-message,
-.form-group.error:has(select:focus) .error-message,
-.form-group.error:has(select.filled) .error-message {
-  display: none;
-} */
-
 .form-group.error textarea.custom-form-input {
   border-color: #D32F2F;
 }
@@ -220,4 +200,10 @@
 
 .form-input.error {
   border-color: #D32F2F !important;
+}
+
+@media (max-width: 768px) {
+  .form-row, .form-row.three-columns {
+    display: block;
+  }
 }
