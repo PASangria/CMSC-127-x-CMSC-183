@@ -17,9 +17,10 @@ export const AdminBISList = () => {
   const { request } = useApiRequest();
   const { role, loading } = useAuth();
 
-  // State for raw and filtered submissions
+  // raw and filtered submissions
   const [submissions, setSubmissions] = useState([]);
   const [filtered, setFiltered] = useState([]);
+
   const [error, setError] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
 
@@ -59,6 +60,14 @@ export const AdminBISList = () => {
     setPrograms([]);
     setSelectedDate("");
   };
+
+  // filter dropdown options
+  const yearOptions = Array.from(
+    new Set(submissions.map((s) => s.student.current_year_level))
+  );
+  const programOptions = Array.from(
+    new Set(submissions.map((s) => s.student.degree_program))
+  );
 
   // Sorting state
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -107,14 +116,6 @@ export const AdminBISList = () => {
     return 0;
   });
 
-  // filter dropdown options
-  const yearOptions = Array.from(
-    new Set(submissions.map((s) => s.student.current_year_level))
-  );
-  const programOptions = Array.from(
-    new Set(submissions.map((s) => s.student.degree_program))
-  );
-
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -155,15 +156,15 @@ export const AdminBISList = () => {
     }
   }, [loading, role, request]);
 
+  if (loading || loadingData) return <Loader />;
+  if (role !== "admin") return <div>Access denied. Admins only.</div>;
+  if (error) return <div>{error}</div>;
+
   const handleViewStudent = (student) => {
     navigate(
       `/admin/student-forms/${student.student_number}/basic-information-sheet/`
     );
   };
-
-  if (loading || loadingData) return <Loader />;
-  if (role !== "admin") return <div>Access denied. Admins only.</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <DefaultLayout variant="admin">
@@ -211,7 +212,7 @@ export const AdminBISList = () => {
                 onSort={handleSort}
                 onClearSort={handleClearSort}
               />
-              <th>Actions</th> {/* This can remain static, no sorting needed */}
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
