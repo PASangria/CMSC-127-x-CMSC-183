@@ -191,7 +191,6 @@ export default function Navbar() {
                                             <>
                                                 <Link to="/myprofile"><div className='dropdown-choice'>My Profile</div></Link>
                                                 <Link to="/public-forms"><div className='dropdown-choice'>Forms</div></Link>
-                                                <Link to="/submitted-forms"><div className='dropdown-choice'>Submitted Forms</div></Link>
                                                 <Link to="/privacy-setting"><div className='dropdown-choice'>Privacy Setting</div></Link>
                                             </>
                                         )}

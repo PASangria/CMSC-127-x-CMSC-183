@@ -3,15 +3,16 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import '../components/SideNav_admin'
 import SideNav_admin from '../components/SideNav_admin';
+import DefaultLayout from '../components/DefaultLayout';
+import { ChangePassword } from '../pages/ChangePassword';
 
 export const AdminSystemSettings = () => {
 
   return (
-    <div>
-      <Navbar />
-      <SideNav_admin />
-      <h1>System Settings</h1>
-      <Footer />
-    </div>
+    <>
+    <DefaultLayout variant="admin">
+      <ChangePassword />
+    </DefaultLayout>
+    </>
   );
 };

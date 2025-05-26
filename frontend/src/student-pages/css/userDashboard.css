@@ -16,7 +16,8 @@
 .side-navigator {
   background-color: #fff;
   padding: 1rem;
-  overflow-y: auto;
+  overflow-y: hidden;
+  height: auto;
 }
 
 /* Dashboard content area */

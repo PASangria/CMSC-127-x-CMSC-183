@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CheckCircle, AlertCircle } from "react-feather";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
-import "./css_pages/VerifiedPage.css";
+import "./css_pages/verifiedPage.css";
 
 export const VerifiedPage = () => {
   const { uid, token } = useParams();

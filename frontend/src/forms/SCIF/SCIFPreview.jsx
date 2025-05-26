@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./../SetupProfile/css/multistep.css";
-import "./../../components/css/modal.css";
+import "./../../components/css/Modal.css";
 import SCIFCredentials from "./SCIFCredentials";
 import SCIFPersonalData from "./SCIFPersonalData";
 import SCIFFamilyData from "./SCIFFamilyData";

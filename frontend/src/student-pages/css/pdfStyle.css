@@ -258,10 +258,11 @@ textarea {
 .pdf-buttons{
   display: flex;
   justify-content: space-between;
+  margin: 20px;
 }
 
 .pdf-button {
-  padding: 0.3rem 0.5rem;
+  padding: 0.5rem 0.6rem;
   font-size: 0.8rem;
   font-weight: 600;
 }
