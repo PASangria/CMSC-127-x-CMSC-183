@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'; // Import the Link component
 import { AuthContext } from '../context/AuthContext'; // Import the AuthContext
 import './css/SideNav1.css';
 
+
 const SideNav_student = () => {
   const { user, profileData } = useContext(AuthContext);
 

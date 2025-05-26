@@ -54,8 +54,8 @@ export const ForgotPassword = () => {
                                 />
                                 {message && <p className="success-message">{message}</p>}
                                 {error && <p className="error-message">{error}</p>}
-                                <div className="button-group">
-                                    <button type="submit" className="submit-button">Send Reset Link</button>
+                                <div className="button-group" style={{marginTop: "20px"}}>
+                                    <button type="submit" className="submit-button" style={{marginBottom: "0"}}>Send Reset Link</button>
                                     <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
                                 </div>
                             </form>

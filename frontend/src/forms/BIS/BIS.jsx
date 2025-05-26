@@ -22,12 +22,14 @@ import Button from "../../components/UIButton";
 import ToastMessage from "../../components/ToastMessage";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import ModalMessage from "../../components/ModalMessage";
+import { useNavigate } from "react-router-dom";
 
 const BISForm = () => {
   const { request } = useApiRequest();
   const { profileData } = useContext(AuthContext);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [errors, setErrors] = useState(null);
+  const navigate = useNavigate();
   const {
     createDraftSubmission,
     getFormBundle,
@@ -41,7 +43,7 @@ const BISForm = () => {
   const [formData, setFormData] = useState({
     socio_economic_status: {
       student_number: "",
-      has_scholarship: false,
+      has_scholarship: "",
       scholarships: "",
       scholarship_privileges: "",
       monthly_allowance: "",
@@ -58,9 +60,9 @@ const BISForm = () => {
       student_number: "",
       influence: "",
       reason_for_enrolling: "",
-      transfer_plans: false,
+      transfer_plans: "",
       transfer_reason: "",
-      shift_plans: false,
+      shift_plans: "",
       planned_shift_degree: "",
       reason_for_shifting: "",
     },
@@ -73,7 +75,7 @@ const BISForm = () => {
     },
     privacy_consent: {
       student_number: "",
-      has_consented: false,
+      has_consented: "",
     },
   });
 
@@ -231,7 +233,7 @@ const BISForm = () => {
       if (result.success) {
         setShowSuccessToast(true);
         setTimeout(() => {
-          window.location.href = "/myprofile";
+          navigate("/myprofile");
         }, 2000);
       } else {
         if (result.status === 400 && result.data.errors) {

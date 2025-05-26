@@ -203,21 +203,32 @@ export const validatePreviousSchool = (records) => {
       });
     }
 
+    const yearRegex = /^\d{4}$/;
+
+    if (!yearRegex.test(record.start_year)) {
+      errors[`${prefix}.start_year`] = "Start year must be a 4-digit year (e.g., 2024).";
+    }
+    if (!yearRegex.test(record.end_year)) {
+      errors[`${prefix}.end_year`] = "End year must be a 4-digit year (e.g., 2024).";
+    }
+
     const start = Number(record.start_year);
     const end = Number(record.end_year);
     const currentYear = new Date().getFullYear();
 
-    if (!isNaN(start) && !isNaN(end)) {
-      if (end < start) {
-        errors[`${prefix}.end_year`] =
-          "End year cannot be earlier than start year.";
-      }
-      if (start > currentYear || end > currentYear) {
-        errors[`${prefix}.start_year`] =
-          "Start or end year cannot be in the future.";
-        errors[`${prefix}.end_year`] =
-          "Start or end year cannot be in the future.";
-      }
+    if (isNaN(start) || isNaN(end)) {
+      return;
+    }
+
+    if (end < start) {
+      errors[`${prefix}.end_year`] =
+        "End year cannot be earlier than start year.";
+    }
+    if (start > currentYear) {
+      errors[`${prefix}.start_year`] = "Start year cannot be in the future.";
+    }
+    if (end > currentYear) {
+      errors[`${prefix}.end_year`] = "End year cannot be in the future.";
     }
 
     if (record.education_level === "Senior High") {

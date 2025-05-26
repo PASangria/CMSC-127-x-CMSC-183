@@ -6,7 +6,7 @@
 
 .login {
   position: relative;
-  background: #800000;
+  background: #7b1113;
   background-size: cover;
   flex-grow: 1;
   overflow: hidden;
@@ -36,7 +36,6 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  background: #800000;
 }
 
 .hero-title {

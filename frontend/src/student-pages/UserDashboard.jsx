@@ -92,7 +92,11 @@ export const UserDashboard = () => {
         }
       );
 
-      const responseData = await response.json();
+      let responseData = null;
+ 
+      if (response.status !== 204) {
+        responseData = await response.json();
+      }
 
       if (response.ok) {
         setPendingActions(prev => prev.filter(item => item.id !== form.id));

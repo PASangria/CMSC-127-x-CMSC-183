@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import DisplayField from "../components/DisplayField";
 import Button from "../components/UIButton";
@@ -8,6 +9,7 @@ import "./css/individualStudentInfo.css";
 import { useEnumChoices } from "../utils/enumChoices";
 import ToastMessage from "../components/ToastMessage";
 import ConfirmDialog from "../components/ConfirmDialog";
+import Loader from "../components/Loader";
 
 const StudentSideInfo = ({
   profileData,
@@ -22,8 +24,10 @@ const StudentSideInfo = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [toast, setToast] = useState(null);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const location = useLocation();
   if (!profileData) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   const {
@@ -102,6 +106,13 @@ const handleView = (form, isAdmin = false, studentId = null) => {
   useEffect(() => {
     setFormData(profileData);
   }, [profileData]);
+
+  
+  useEffect(() => {
+    if (location.state?.showSuccess) {
+      setShowSuccessToast(true);
+    }
+  }, [location.state]);
 
   return (
     <div className="student_profile_wrapper">
@@ -518,6 +529,13 @@ const handleView = (form, isAdmin = false, studentId = null) => {
             setShowConfirm(false);
             setConfirmAction(null);
           }}
+        />
+      )}
+      {showSuccessToast && (
+        <ToastMessage
+          message="Your profile has been successfully set up!"
+          onClose={() => setShowSuccessToast(false)}
+          duration={5000}
         />
       )}
 

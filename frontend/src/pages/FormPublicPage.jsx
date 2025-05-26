@@ -1,49 +1,49 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/NavBar';
-import Footer from '../components/Footer';
-import ToastMessage from '../components/ToastMessage';
-import ModalMessage from '../components/ModalMessage';
-import DefaultLayout from '../components/DefaultLayout';
-import './css_pages/FormPublicPage.css';
-import { AuthContext } from '../context/AuthContext';
-import Button from '../components/UIButton';
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/NavBar";
+import Footer from "../components/Footer";
+import ToastMessage from "../components/ToastMessage";
+import ModalMessage from "../components/ModalMessage";
+import DefaultLayout from "../components/DefaultLayout";
+import "./css_pages/FormPublicPage.css";
+import { AuthContext } from "../context/AuthContext";
+import Button from "../components/UIButton";
 
 export const FormPublicPage = () => {
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalConfig, setModalConfig] = useState({});
   const navigate = useNavigate();
   const { user, profileData, loading } = useContext(AuthContext);
 
   const handleCardClick = (form) => {
-    if (form === 'referral') {
-      setToastMessage('Counseling Referral Slip is coming soon!');
+    if (form === "referral") {
+      setToastMessage("Counseling Referral Slip is coming soon!");
       return;
     }
 
     if (!user) {
       setModalConfig({
-        title: 'Access Restricted',
-        message: 'You need to log in to access this form.',
+        title: "Access Restricted",
+        message: "You need to log in to access this form.",
         buttons: [
           {
-            label: 'Log In',
+            label: "Log In",
             onClick: () => {
               setShowModal(false);
-              navigate('/login');
+              navigate("/login");
             },
-            className: 'login-btn',
+            className: "login-btn",
           },
         ],
         footer: (
           <p className="signup-text">
-            Don't have an account yet?{' '}
+            Don't have an account yet?{" "}
             <span
               className="signup-link"
               onClick={() => {
                 setShowModal(false);
-                navigate('/signup');
+                navigate("/signup");
               }}
             >
               Sign Up
@@ -58,17 +58,17 @@ export const FormPublicPage = () => {
 
     if (!loading && (!profileData || !profileData.is_complete)) {
       setModalConfig({
-        title: 'Complete Your Profile',
+        title: "Complete Your Profile",
         message:
-          'Before accessing this form, please complete your student profile.',
+          "Before accessing this form, please complete your student profile.",
         buttons: [
           {
-            label: 'Set Up Profile',
+            label: "Set Up Profile",
             onClick: () => {
               setShowModal(false);
-              navigate('/setup-profile'); 
+              navigate("/setup-profile");
             },
-            className: 'login-btn',
+            className: "login-btn",
           },
         ],
       });
@@ -81,22 +81,22 @@ export const FormPublicPage = () => {
 
   const formCards = [
     {
-      title: 'Basic Information Sheet',
-      desc: 'Brief details for student registration.',
-      id: 'basic-information-sheet',
-      bg: 'white',
+      title: "Basic Information Sheet",
+      desc: "Brief details for student registration.",
+      id: "basic-information-sheet",
+      bg: "white",
     },
     {
-      title: 'Student Cumulative Information Sheet',
-      desc: 'Collects cumulative academic and personal data.',
-      id: 'student-cumulative-information-file',
-      bg: 'white',
+      title: "Student Cumulative Information Sheet",
+      desc: "Collects cumulative academic and personal data.",
+      id: "student-cumulative-information-file",
+      bg: "white",
     },
     {
-      title: 'Counseling Referral Slip',
-      desc: 'This form will be available soon.',
-      id: 'referral',
-      bg: 'maroon',
+      title: "Counseling Referral Slip",
+      desc: "This form will be available soon.",
+      id: "referral",
+      bg: "maroon",
       comingSoon: true,
     },
   ];
@@ -109,7 +109,11 @@ export const FormPublicPage = () => {
             <div className="form-header-line"></div>
             <div className="form-header-top">
               <h1>Forms</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+              <p>
+                {user
+                  ? "Welcome back! Browse and access the available student forms below. Make sure your profile is complete to unlock all features."
+                  : "These forms help collect important student information, including personal details and academic records. Please log in to access them."}
+              </p>
             </div>
           </div>
 
@@ -117,7 +121,7 @@ export const FormPublicPage = () => {
             {formCards.map((form, index) => (
               <div
                 key={form.id}
-                className={`form-card ${form.comingSoon ? 'coming-soon' : ''}`}
+                className={`form-card ${form.comingSoon ? "coming-soon" : ""}`}
                 onClick={() => handleCardClick(form.id)}
                 style={{ animationDelay: `${0.2 + index * 0.2}s` }}
               >
@@ -127,8 +131,8 @@ export const FormPublicPage = () => {
                     <p className="card-desc">{form.desc}</p>
                   </div>
                   <h3 className="form-card-title">{form.title}</h3>
-                  <button className={form.comingSoon ? 'disabled' : 'active'}>
-                    {form.comingSoon ? 'Coming Soon' : 'Fill Out'}
+                  <button className={form.comingSoon ? "disabled" : "active"}>
+                    {form.comingSoon ? "Coming Soon" : "Fill Out"}
                   </button>
                 </div>
               </div>
@@ -138,7 +142,10 @@ export const FormPublicPage = () => {
       </div>
 
       {toastMessage && (
-        <ToastMessage message={toastMessage} onClose={() => setToastMessage('')} />
+        <ToastMessage
+          message={toastMessage}
+          onClose={() => setToastMessage("")}
+        />
       )}
 
       {showModal && (

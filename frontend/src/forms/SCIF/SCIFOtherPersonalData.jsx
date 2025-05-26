@@ -362,7 +362,7 @@ const SCIFOtherPersonalData = ({
         />
 
         <label>Any previous counseling?</label>
-        <small className="helper-text">
+        <small className="helper-text" style={{display: "block"}}>
           Indicate if you have had any previous counseling sessions.
         </small>
         <div className="radio-group">

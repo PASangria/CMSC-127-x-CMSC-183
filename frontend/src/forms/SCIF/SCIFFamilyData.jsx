@@ -339,7 +339,6 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].job_occupation`)}
           onChange={(e) => handleSiblingChange(index, 'job_occupation', e.target.value)}
           error={errors?.[`siblings[${index}].job_occupation`]}
-          required
         />
       </div>
       <div className="form-row">
@@ -350,7 +349,6 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
           onFocus={() => clearError(errors, setErrors, `siblings[${index}].company_school`)}
           onChange={(e) => handleSiblingChange(index, 'company_school', e.target.value)}
           error={errors?.[`siblings[${index}].company_school`]}
-          required
         />
         <FormField
           label="Educational Attainment"
