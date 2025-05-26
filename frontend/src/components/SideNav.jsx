@@ -77,8 +77,8 @@ const SideNav = ({ variant, onLogoutClick }) => {
                                         <Link to="/admin-referral-list"><button><DescriptionOutlined /> Referral Forms</button></Link>
                                     </div>
                                 </div>
-
                                 <Link to="/admin-reports"><button><AnalyticsOutlined /> Report Analytics</button></Link>
+                                <Link to="/admin-audit-log"><button><SettingsOutlined /> System Logs</button></Link>
                                 <Link to="/admin-system-settings"><button><BuildOutlined /> System Settings</button></Link>
                             </>
                         )}

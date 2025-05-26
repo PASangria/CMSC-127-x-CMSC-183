@@ -5,7 +5,7 @@ from djoser.serializers import UserCreateSerializer
 from .models import Role 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import CustomUser
+from .models import CustomUser, AuditLog
 from .signals import assign_group
 from django.db.models.signals import post_save
 
@@ -41,3 +41,14 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 def assign_group_on_user_creation(sender, instance, created, **kwargs):
     if created:
         assign_group(instance)
+        
+        
+class AuditLogSerializer(serializers.ModelSerializer):
+    user_email = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AuditLog
+        fields = '__all__'
+
+    def get_user_email(self, obj):
+        return obj.user.email if obj.user else None

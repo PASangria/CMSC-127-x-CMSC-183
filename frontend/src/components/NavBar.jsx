@@ -203,6 +203,7 @@ export default function Navbar() {
                                                 <Link to="/admin-scif-list"><div className='dropdown-choice'>Student Cumulative Info</div></Link>
                                                 <Link to="/admin-referral-list"><div className='dropdown-choice'>Referral Form</div></Link>
                                                 <Link to="/admin-reports"><div className='dropdown-choice'>Report Analytics</div></Link>
+                                                <Link to="/admin-audit-log"><div className='dropdown-choice'>System Logs</div></Link>
                                                 <Link to="/admin-system-settings"><div className='dropdown-choice'>System Settings</div></Link>
                                             </>
                                         )}

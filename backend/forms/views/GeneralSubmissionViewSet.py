@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import ValidationError
 from forms.map import FORM_SECTIONS_MAP, FORM_TYPE_SLUG_MAP, FORM_TYPE_UNSLUG_MAP, OPTIONAL_SECTIONS
-
+from users.utils import log_action
 
 class PrivacyConsentViewSet(viewsets.ModelViewSet):
     queryset = PrivacyConsent.objects.all()
@@ -196,23 +196,19 @@ class FinalizeSubmissionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, submission_id):
-        # Step 1: Get the Submission object
         try:
             submission = Submission.objects.get(id=submission_id)
         except Submission.DoesNotExist:
             return Response({'error': 'Submission not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Step 2: Ensure the user owns the submission
         if submission.student != request.user.student:
             return Response({'error': 'You do not have permission to submit this form.'},
                             status=status.HTTP_403_FORBIDDEN)
 
-        # Step 3: Prevent submission if it's already finalized
         if submission.status == 'submitted':
             return Response({'message': 'Submission has already been finalized.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Step 4: Get form type and sections
         form_type_slug = FORM_TYPE_UNSLUG_MAP.get(submission.form_type)
         if not form_type_slug:
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -221,12 +217,9 @@ class FinalizeSubmissionView(APIView):
         if not sections:
             return Response({'error': 'Invalid form type.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Step 5: Initialize error tracking
         errors = {}
 
-        # Step 6: Validate sections
         for key, (model, _) in sections.items():
-            # Prepare filter conditions for models that are related to the submission
             filter_kwargs = {}
             if any(field.name == 'submission' for field in model._meta.fields):
                 filter_kwargs['submission'] = submission
@@ -234,26 +227,28 @@ class FinalizeSubmissionView(APIView):
             if any(field.name == 'student' for field in model._meta.fields):
                 filter_kwargs['student'] = request.user.student
 
-            # Dynamically fetch the instance
             instance = model.objects.filter(**filter_kwargs).first()
 
-            # If we have the instance, validate it, otherwise handle missing data
             if instance:
                 try:
-                    instance.clean()  # Perform custom model validation (if any)
+                    instance.clean() 
                 except ValidationError as e:
                     errors[key] = e.message_dict
             else:
                 if key not in OPTIONAL_SECTIONS.get(form_type_slug, []):
                     errors[key] = ['Section is missing.']
 
-        # Step 7: Return validation errors if any
         if errors:
             return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Step 8: Finalize the submission (mark as 'submitted')
         submission.status = 'submitted'
         submission.submitted_on = timezone.now()
         submission.save()
+        log_action(
+            request,
+            "submission",
+            "Form finalized and submitted",
+            f"Submission ID: {submission.id}, Form type: {submission.form_type}"
+        )
 
         return Response({'message': 'Submission finalized successfully.'}, status=status.HTTP_200_OK)
