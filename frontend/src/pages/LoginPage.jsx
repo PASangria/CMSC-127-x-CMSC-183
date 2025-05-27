@@ -19,7 +19,7 @@ const LoginPage = () => {
 
   const [isError, setIsError] = useState(false);
   const [message, setMessage] = useState("");
-  const [showMessageModal, setShowMessageModal] = useState(false); 
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const role = new URLSearchParams(location.search).get("role");
   const roleLabel = role === "admin" ? "Admin" : "Student";
 
@@ -27,7 +27,7 @@ const LoginPage = () => {
     e.preventDefault();
     setMessage("");
     setIsError(false);
-    setShowMessageModal(false); 
+    setShowMessageModal(false);
     setLoading(true);
     setError(null);
 
@@ -36,9 +36,9 @@ const LoginPage = () => {
       if (success) {
         setShowMessageModal(true);
         setMessage(`Welcome back! ${email}`);
-        setIsError(false); 
+        setIsError(false);
         setLoading(false);
-        setTimeout(() => {  
+        setTimeout(() => {
           navigate(role === "admin" ? "/admin" : "/student");
         }, 5000);
       } else {
@@ -113,7 +113,7 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
-        
+
         {loading && (
           <Modal>
             <div className="modal-message-with-spinner">
@@ -130,7 +130,12 @@ const LoginPage = () => {
                 {isError ? "Error" : "Success"}
               </p>
               <p>{message}</p>
-              <button className="okay-button"onClick={() => setShowMessageModal(false)}>OK</button>
+              <button
+                className="okay-button"
+                onClick={() => setShowMessageModal(false)}
+              >
+                OK
+              </button>
             </div>
           </Modal>
         )}
