@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, requireAdmin = false, requireUser = false, r
   }
 
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to="/login?role=student" />;
+    return <Navigate to="/" />;
   }
 
   if (requireAdmin && role !== 'admin') {

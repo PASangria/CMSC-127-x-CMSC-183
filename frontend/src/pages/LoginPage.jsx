@@ -40,7 +40,7 @@ const LoginPage = () => {
         setLoading(false);
         setTimeout(() => {
           navigate(role === "admin" ? "/admin" : "/student");
-        }, 5000);
+        }, 500);
       } else {
         setShowMessageModal(true);
         setMessage("Invalid email or password. Please try again.");
