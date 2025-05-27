@@ -19,10 +19,10 @@ const BISPreview = ({ profileData, formData, onClose }) => {
           <X size={24} />
         </button>
         <div className="form-container">
-          <h2 className="step-title" style={{ marginBottom: "10px" }}>
+          <h1 className="step-title" style={{ marginBottom: "10px", textAlign: "center" }}>
             Basic Information Sheet
-          </h2>
-          <p className="step-info" style={{textAlign: "left"}}>(Preview)</p>
+          </h1>
+          <p className="step-info">(Preview)</p>
 
           {/* PERSONAL DATA */}
           <div className="form-section">

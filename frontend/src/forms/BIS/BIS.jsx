@@ -240,7 +240,7 @@ const BISForm = () => {
       if (result.success) {
         setShowSuccessToast(true);
         setTimeout(() => {
-          navigate("/myprofile");
+          navigate("/submitted-forms/basic-information-sheet");
         }, 2000);
       } else {
         if (result.status === 400 && result.data.errors) {
@@ -365,7 +365,6 @@ const BISForm = () => {
                   </Button>
                 )}
 
-                {/* Steps 2-4: 'Back', 'Save Draft', and 'Next' buttons */}
                 {step >= 1 && step <= 3 && !loading && (
                   <>
                     <Button variant="secondary" onClick={handlePreviousStep}>

@@ -109,12 +109,12 @@ export const FormPublicPage = () => {
 
   const formContent = (
     <div className="form-page form-fade">
-      <div className="form-body">
+      <div className="form-body" style={{paddingTop: user? "20px" : "2rem"}}>
         <div className="form-body-content">
           <div className="form-header">
-            <div className="form-header-line"></div>
+            <div className="form-header-line" style={{display: user? "none" : "block"}}></div>
             <div className="form-header-top">
-              <h1>Forms</h1>
+              <h1 style={{color: user? "#7B1113" : "#000"}}>Forms</h1>
               <p>
                 {user
                   ? "Welcome back! Browse and access the available student forms below. Make sure your profile is complete to unlock all features."

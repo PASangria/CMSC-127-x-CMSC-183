@@ -4,6 +4,8 @@ import axios from 'axios';
 import './css_pages/resetpassword.css';
 import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
+import Modal from '../components/Modal'; 
+import '../components/css/Modal.css';
 
 export const ResetPassword = () => {
     const { uid, token } = useParams();
@@ -11,12 +13,22 @@ export const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [reNewPassword, setReNewPassword] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
+    const [isError, setIsError] = useState(false);
+    const [showMessageModal, setShowMessageModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage('');
+        setIsError(false);
+        setShowMessageModal(false);
+        setIsLoading(true);
+
         if (newPassword !== reNewPassword) {
-            setError('Passwords do not match.');
+            setMessage('Passwords do not match.');
+            setIsError(true);
+            setShowMessageModal(true);
+            setIsLoading(false);
             return;
         }
 
@@ -28,11 +40,21 @@ export const ResetPassword = () => {
             });
 
             setMessage('Password has been reset successfully.');
-            setError('');
-            window.location.href = "/login"; 
+            setIsError(false);
+            setShowMessageModal(true);
         } catch (err) {
-            setError('Invalid link or password. Please try again.');
-            setMessage('');
+            setMessage('Invalid link or password. Please try again.');
+            setIsError(true);
+            setShowMessageModal(true);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleModalClose = () => {
+        setShowMessageModal(false);
+        if (!isError) {
+            navigate('/login');
         }
     };
 
@@ -72,12 +94,32 @@ export const ResetPassword = () => {
                                     Set New Password
                                 </button>
                             </form>
-                            {message && <p className="message success">{message}</p>}
-                            {error && <p className="message error">{error}</p>}
                         </div>
                     </div>
                 </div>
             </div>
+
+            {isLoading && (
+                <Modal>
+                    <div className="modal-message-with-spinner">
+                        <div className="loading-spinner" />
+                        <p className="loading-text">Resetting password... Please wait.</p>
+                    </div>
+                </Modal>
+            )}
+
+            {showMessageModal && !isLoading && (
+                <Modal>
+                    <div className="modal-message-with-spinner">
+                        <p className="loading-text" style={{ fontWeight: 'bold' }}>
+                            {isError ? 'Error' : 'Success'}
+                        </p>
+                        <p>{message}</p>
+                        <button className="okay-button" onClick={handleModalClose}>OK</button>
+                    </div>
+                </Modal>
+            )}
+
             <Footer />
         </div>
     );

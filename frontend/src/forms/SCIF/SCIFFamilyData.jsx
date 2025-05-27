@@ -286,7 +286,7 @@ const SCIFFamilyData = ({ data, updateData, readOnly = false, errors, setErrors 
 <section className="subsection-form family-data-sibling">
   <p className='step-info'><strong>SIBLINGS</strong></p>
   {Array.isArray(siblings) && siblings.map((sibling, index) => (
-    <div key={index} className="sibling-section">
+    <div key={index} className="sibling-section" style={{ marginBottom: '2rem' }}>
       <p><strong>Sibling {index + 1}</strong></p>
       <div className="form-row three-columns" style={{ marginTop: "2rem" }}>
         <FormField
