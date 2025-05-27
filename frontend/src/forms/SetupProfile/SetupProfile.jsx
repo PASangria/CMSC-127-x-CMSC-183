@@ -5,8 +5,6 @@ import EducationInfoForm from "./EducationInfoForm";
 import AddressInfoForm from "./AddressInfoForm";
 
 import { apiRequest } from "../../utils/apiUtils";
-import Navbar from "../../components/NavBar";
-import Footer from "../../components/Footer";
 import ProgressBar from "../../components/ProgressBar";
 import PreviewModal from "./PreviewForm";
 import Button from "../../components/UIButton";
@@ -20,6 +18,7 @@ import {
   validateEducation,
   validateAddress
 } from "../../utils/formValidationUtils";
+import DefaultLayout from "../../components/DefaultLayout";
 
 function formatAddress(data, type) {
   return {
@@ -259,8 +258,7 @@ const MultiStepForm = () => {
   };
 
   return (
-    <div>
-      <Navbar />
+      <DefaultLayout variant="student">
 
       {/* Background Rectangle */}
       <div className="background-rectangle"></div>
@@ -378,7 +376,6 @@ const MultiStepForm = () => {
         </div>
       </div>
 
-      <Footer />
       {/* Confirmation Dialog */}
       {showConfirmDialog && (
         <ConfirmDialog
@@ -397,7 +394,7 @@ const MultiStepForm = () => {
           duration={5000}
         />
       )}
-    </div>
+    </DefaultLayout>
   );
 };
 

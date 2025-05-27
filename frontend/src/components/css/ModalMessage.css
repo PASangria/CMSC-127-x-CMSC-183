@@ -1,123 +1,168 @@
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(33, 33, 33, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-  }
-  
-  .modal-box {
-    background-color: #fff;
-    padding: 2.5rem 2rem;
-    border-radius: 1rem;
-    max-width: 420px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.3s ease-in-out;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  .modal-box h2 {
-    color: #800000;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-  
-  .modal-box p {
-    margin-bottom: 1.8rem;
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.5;
-  }
-  
-  .login-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #800000;
-    color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 0.5rem;
-    margin-bottom: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-btn:hover {
-    background-color: #a00000;
-  }
-  
-  .signup-text {
-    font-size: 0.95rem;
-    color: #333;
-  }
-  
-  .signup-link {
-    color: #800000;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.2s ease;
-  }
-  
-  .signup-link:hover {
-    color: #a00000;
-  }
-  
-  .close-btn {
-    position: absolute;
-    top: 0.75rem;
-    right: 1rem;
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    color: #999;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .close-btn:hover {
-    color: #333;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(33, 33, 33, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
 
-  .modal-footer {
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    color: #333;
+.modal-box {
+  background-color: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.modal-box h2 {
+  color: #800000;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.modal-box p {
+  margin-bottom: 1.8rem;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #800000;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #a00000;
+}
+
+.signup-text {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.signup-link {
+  color: #800000;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.signup-link:hover {
+  color: #a00000;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* space between buttons */
+  margin-top: 1.5rem;
+  flex-wrap: wrap; /* allows wrapping on small screens */
+}
+
+.modal-default-btn,
+.modal-cancel-btn,
+.modal-confirm-btn {
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 120px;
+}
+
+/* ===== default button (same as login button) ===== */
+.modal-default-btn {
+  background-color: #7b1113;
+  color: #ffffff;
+}
+
+/* ===== cancel button (same shape but grey color) ===== */
+.modal-cancel-btn {
+  background-color: #333333;
+  color: #fff;
+}
+
+/* ===== confirm button (same red confirm style) ===== */
+.modal-confirm-btn {
+  background-color: #7b1113;
+  color: #fff;
+}
+
+.modal-default-btn:hover,
+.modal-cancel-btn:hover,
+.modal-confirm-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .signup-link {
-    color: #800000;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.2s ease;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .signup-link:hover {
-    color: #a00000;
-  }
-  
+}
+
+.modal-footer {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.signup-link {
+  color: #800000;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.signup-link:hover {
+  color: #a00000;
+}

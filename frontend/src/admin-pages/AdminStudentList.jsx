@@ -4,12 +4,12 @@ import { useApiRequest } from "../context/ApiRequestContext";
 import { useAuth } from "../context/AuthContext";
 import DefaultLayout from "../components/DefaultLayout";
 import Button from "../components/UIButton";
-import StudentFilterBar from "../components/StudentFilterBar";
+import StudentFilterBar1 from "../components/StudentFilterBar1";
 import SortableTableHeader from "../components/SortableTableHeader";
 import PaginationButtons from "../components/PaginationControls";
 import Loader from "../components/Loader";
 import "./css/studentList.css";
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 export const AdminStudentList = () => {
   const navigate = useNavigate();
@@ -20,21 +20,38 @@ export const AdminStudentList = () => {
   const [students, setStudents] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-  const [error, setError] = useState(null);
-  const [loadingData, setLoadingData] = useState(true);
-
-  // --- Filter state ---
+  // filtering state
   const [filterText, setFilterText] = useState("");
   const [years, setYears] = useState([]);
   const [programs, setPrograms] = useState([]);
 
-  // apply filters
+  // sorting state
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // loading / error
+  const [loadingData, setLoadingData] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 1) FILTER
   useEffect(() => {
-    const temp = students.filter(({ first_name, last_name, current_year_level, degree_program }) => {
-      const fullName = `${first_name} ${last_name}`.toLowerCase();
-      if (filterText && !fullName.includes(filterText.toLowerCase())) return false;
-      if (years.length > 0 && !years.includes(current_year_level)) return false;
-      if (programs.length > 0 && !programs.includes(degree_program)) return false;
+    const searchText = filterText.toLowerCase();
+    const temp = students.filter((stu) => {
+      const fullName = `${stu.first_name} ${stu.last_name}`.toLowerCase();
+      const studentId = stu.student_number.toLowerCase();
+
+      if (
+        filterText &&
+        !(fullName.includes(searchText) || studentId.includes(searchText))
+      )
+        return false;
+      if (years.length > 0 && !years.includes(stu.current_year_level))
+        return false;
+      if (programs.length > 0 && !programs.includes(stu.degree_program))
+        return false;
+
       return true;
     });
     setFiltered(temp);
@@ -47,30 +64,30 @@ export const AdminStudentList = () => {
     setPrograms([]);
   };
 
+  // dropdown options
   const yearOptions = Array.from(new Set(students.map((s) => s.current_year_level)));
   const programOptions = Array.from(new Set(students.map((s) => s.degree_program)));
 
-  // --- Sorting state ---
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  // 2) SORT
   const handleSort = (key, direction = null) => {
     setSortConfig((prev) => {
       if (direction) return { key, direction };
-      if (prev.key === key) {
-        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
-      }
+      if (prev.key === key) return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
       return { key, direction: "asc" };
     });
   };
   const handleClearSort = (key) => {
-    if (sortConfig.key === key) {
-      setSortConfig({ key: null, direction: "asc" });
-    }
+    if (sortConfig.key === key) setSortConfig({ key: null, direction: "asc" });
   };
 
   const sorted = [...filtered].sort((a, b) => {
     if (!sortConfig.key) return 0;
     let aVal, bVal;
     switch (sortConfig.key) {
+      case "id":
+        aVal = a.student_number.toLowerCase();
+        bVal = b.student_number.toLowerCase();
+        break;
       case "name":
         aVal = `${a.first_name} ${a.last_name}`.toLowerCase();
         bVal = `${b.first_name} ${b.last_name}`.toLowerCase();
@@ -87,28 +104,24 @@ export const AdminStudentList = () => {
     return 0;
   });
 
-  // --- Pagination state ---
-  const [currentPage, setCurrentPage] = useState(1);
+  // 3) PAGINATION
   const itemsPerPage = 10;
   const handlePageChange = (_, value) => setCurrentPage(value);
-
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const indexOfLast = currentPage * itemsPerPage;
-  const indexOfFirst = indexOfLast - itemsPerPage;
-  const currentItems = sorted.slice(indexOfFirst, indexOfLast);
+  const startIdx = (currentPage - 1) * itemsPerPage;
+  const currentItems = sorted.slice(startIdx, startIdx + itemsPerPage);
 
-  // --- Fetch students ---
+  // 4) FETCH
   useEffect(() => {
     const fetchStudents = async () => {
       try {
         const res = await request("/api/forms/admin/students/");
         if (!res.ok) throw new Error("Failed to fetch students");
         const data = await res.json();
-        // initial sort by last name
         data.sort((a, b) => a.last_name.localeCompare(b.last_name));
         setStudents(data);
         setFiltered(data);
-      } catch (err) {
+      } catch {
         setError("Error fetching student data. Please try again.");
       } finally {
         setLoadingData(false);
@@ -117,21 +130,24 @@ export const AdminStudentList = () => {
     if (!loading && role === "admin") fetchStudents();
   }, [loading, role, request]);
 
+  // guards
   if (loading || loadingData) return <Loader />;
   if (role !== "admin") return <div>Access denied. Admins only.</div>;
   if (error) return <div>{error}</div>;
 
-  const handleViewStudent = (student) =>
-    navigate(`/admin/students/${student.student_number}`);
+  // render
+  const handleViewStudent = (stu) =>
+    navigate(`/admin/students/${stu.student_number}`);
 
   return (
     <DefaultLayout variant="admin">
-      <div className="admin-student-list" sx={{ p: 3 }} style={{ padding: 50 }}>
+      <div className="admin-student-list" style={{ padding: 50 }}>
         <Typography variant="h4" gutterBottom>
           Student List
         </Typography>
 
-        <StudentFilterBar
+        {/* Filter Bar */}
+        <StudentFilterBar1
           filterText={filterText}
           setFilterText={setFilterText}
           years={years}
@@ -143,9 +159,17 @@ export const AdminStudentList = () => {
           onReset={handleResetFilters}
         />
 
+        {/* Table */}
         <table>
           <thead>
             <tr>
+              <SortableTableHeader
+                label="Student ID"
+                sortKey="id"
+                currentSort={sortConfig}
+                onSort={handleSort}
+                onClearSort={handleClearSort}
+              />
               <SortableTableHeader
                 label="Student Name"
                 sortKey="name"
@@ -168,6 +192,7 @@ export const AdminStudentList = () => {
             {currentItems.length > 0 ? (
               currentItems.map((stu) => (
                 <tr key={stu.student_number}>
+                  <td data-label="Student ID">{stu.student_number}</td>
                   <td data-label="Student Name">
                     {stu.first_name} {stu.last_name}
                   </td>
@@ -187,7 +212,7 @@ export const AdminStudentList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
+                <td colSpan="5" style={{ textAlign: "center" }}>
                   No students match your filters.
                 </td>
               </tr>
@@ -195,6 +220,7 @@ export const AdminStudentList = () => {
           </tbody>
         </table>
 
+        {/* Pagination */}
         {totalPages > 1 && (
           <PaginationButtons
             count={totalPages}
