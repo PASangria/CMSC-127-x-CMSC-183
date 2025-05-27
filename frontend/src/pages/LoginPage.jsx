@@ -76,7 +76,6 @@ const LoginPage = () => {
                     text={loading ? "Logging in..." : "Log In"}
                     disabled={loading}
                   />
-                  
                   {error && <div className="login__error">{error}</div>}
                   <div className="login__links">
                     <Link to="/forgot-password">Forgot password?</Link>
