@@ -1,19 +1,19 @@
-from djoser.email import ActivationEmail, PasswordResetEmail
-from django.conf import settings
+from djoser import email 
+from django.utils import timezone
 
-class CustomBaseEmail:
-    def get_context_data(self, user, *args, **kwargs):
-        context = super().get_context_data(user, *args, **kwargs)
-        # Replace the URLs with the correct frontend URL base (e.g., Vite URL or production URL)
-        context['url'] = self.get_custom_url(user, context['url'])
+class ActivationEmail(email.ActivationEmail):
+    template_name = "email/activation.html"
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['year'] = timezone.now().year  
         return context
+    
+class ConfirmationEmail(email.ConfirmationEmail):
+    template_name = "email/confirmation.html"
 
-    def get_custom_url(self, user, url):
-        # General method to replace the domain part of the URL with the frontend URL
-        return url.replace("localhost:8000", settings.SITE_URL)
+class PasswordResetEmail(email.PasswordResetEmail):
+    template_name = "email/password_reset.html"
 
-class CustomActivationEmail(CustomBaseEmail, ActivationEmail):
-    pass
-
-class CustomPasswordResetEmail(CustomBaseEmail, PasswordResetEmail):
-    pass
+class PasswordChangedConfirmationEmail(email.PasswordChangedConfirmationEmail):
+    template_name = "email/password_changed_confirmation.html"

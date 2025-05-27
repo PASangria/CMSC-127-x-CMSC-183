@@ -14,6 +14,7 @@ from users.utils import log_action
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+import json
 
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -50,7 +51,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             log_action(
                 request,
                 'auth',
-                f'Login failed for {email} with role={role}: {ve.detail}'
+                f'Login failed for {email} with role={role}:',
+                f'{json.dumps(ve.detail)}'
             )
             raise ve  
         except Exception as e:
@@ -59,7 +61,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             log_action(
                 request,
                 'auth',
-                f'Unexpected login error for {email} with role={role}: {str(e)}'
+                f'Unexpected login error for {email} with role={role}',
+                f'{json.dumps(str(e))}'
             )
             return Response(
                 {"detail": "Internal server error."},

@@ -45,6 +45,7 @@ if os.environ.get('DJANGO_ENV') == 'development':
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,7 +58,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'djoser',
-    'users',
     'forms.apps.FormsConfig',
     'analytics',
 ]
@@ -192,15 +192,13 @@ SITE_NAME = 'Counseling and Testing Section - University of the Philippines Mind
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'verify/{uid}/{token}',
-    'EMAIL': {
-        'VERIFICATION': {
-            'ENABLED': True,
-            'FROM_EMAIL': 'celeszhaianna@gmail.com',  # Change to UP mail when in production
-            'SUBJECT': 'Verify your email address',
-            'MESSAGE': 'Please click the following link to verify your email address: {SITE_URL}/verify/{uid}/{token}',
-        },
-    },
     'SEND_ACTIVATION_EMAIL': True,
+    'EMAIL': {
+        'activation': 'users.email.ActivationEmail',
+        'confirmation': 'users.email.ConfirmationEmail',
+        'password_reset': 'users.email.PasswordResetEmail',
+        'password_changed_confirmation': 'users.email.PasswordChangedConfirmationEmail',
+    },
     'SERIALIZERS': {
         'user_create': 'users.serializers.CustomUserCreateSerializer',
         'token_obtain_pair': 'users.serializers.CustomTokenObtainPairSerializer',
@@ -210,8 +208,6 @@ DJOSER = {
     'SET_PASSWORD_RETYPE': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'SEND_PASSWORD_RESET_EMAIL': True,
-    'ACTIVATION_EMAIL': 'users.email.CustomActivationEmail',
-    'PASSWORD_RESET_EMAIL': 'users.email.CustomPasswordResetEmail',
     
 }
 

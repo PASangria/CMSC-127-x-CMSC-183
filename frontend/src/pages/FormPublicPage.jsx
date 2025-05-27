@@ -8,12 +8,14 @@ import DefaultLayout from "../components/DefaultLayout";
 import "./css_pages/FormPublicPage.css";
 import { AuthContext } from "../context/AuthContext";
 import Button from "../components/UIButton";
+import Loader from "../components/Loader";
 
 export const FormPublicPage = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalConfig, setModalConfig] = useState({});
   const navigate = useNavigate();
+  const [pageLoading, setPageLoading] = useState(false);
   const { user, profileData, loading } = useContext(AuthContext);
 
   const handleCardClick = (form) => {
@@ -31,6 +33,7 @@ export const FormPublicPage = () => {
             label: "Log In",
             onClick: () => {
               setShowModal(false);
+              setPageLoading(true);
               navigate("/login");
             },
             className: "login-btn",
@@ -66,7 +69,10 @@ export const FormPublicPage = () => {
             label: "Set Up Profile",
             onClick: () => {
               setShowModal(false);
-              navigate("/setup-profile");
+              setPageLoading(true);
+              setTimeout(() => {
+                navigate("/setup-profile");
+              }, 500); 
             },
             className: "login-btn",
           },
@@ -159,6 +165,10 @@ export const FormPublicPage = () => {
       )}
     </div>
   );
+
+  if (pageLoading) {
+    return <Loader />;
+  }
 
   return user ? (
     <DefaultLayout>{formContent}</DefaultLayout>

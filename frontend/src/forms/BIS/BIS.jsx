@@ -113,6 +113,12 @@ const BISForm = () => {
   };
 
   useEffect(() => {
+  if (profileData?.is_complete !== true) {
+    navigate("/myprofile");
+  }
+}, [profileData, navigate]);
+
+  useEffect(() => {
     const fetchFormData = async () => {
       setLoading(true);
       try {
