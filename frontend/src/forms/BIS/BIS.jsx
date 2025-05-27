@@ -23,6 +23,7 @@ import ToastMessage from "../../components/ToastMessage";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import ModalMessage from "../../components/ModalMessage";
 import { useNavigate } from "react-router-dom";
+import DefaultLayout from "../../components/DefaultLayout";
 
 const BISForm = () => {
   const { request } = useApiRequest();
@@ -266,9 +267,7 @@ const BISForm = () => {
       {/* Background rectangle */}
       <div className="background-rectangle"></div>
 
-      <div className="content-wrapper">
-        <Navbar />
-
+      <DefaultLayout variant="student">
         <div
           className="content"
           style={{ paddingTop: "60px", paddingBottom: "60px" }}
@@ -446,7 +445,7 @@ const BISForm = () => {
             </div>
           </div>
         </div>
-        <Footer />
+
         {showConfirmDialog && (
           <ConfirmDialog
             title="Are you sure?"
@@ -480,7 +479,7 @@ const BISForm = () => {
             buttons={[]}
           />
         )}
-      </div>
+      </DefaultLayout>
     </>
   );
 };

@@ -31,6 +31,7 @@ import ToastMessage from "../../components/ToastMessage";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import ModalMessage from "../../components/ModalMessage";
 import { useNavigate } from "react-router-dom";
+import DefaultLayout from "../../components/DefaultLayout";
 
 const SCIF = () => {
   const { request } = useApiRequest();
@@ -432,8 +433,9 @@ const SCIF = () => {
 
   return (
     <>
-      <Navbar />
       <div className="background-rectangle"></div>
+
+      <DefaultLayout variant="student">
       <div className="content-wrapper">
         <div className="mainStepForm">
           <div className="main-form-info">
@@ -637,7 +639,6 @@ const SCIF = () => {
           </div>
         </div>
       </div>
-      <Footer />
 
       {showConfirmDialog && (
         <ConfirmDialog
@@ -672,6 +673,7 @@ const SCIF = () => {
           buttons={[]}
         />
       )}
+      </DefaultLayout>
     </>
   );
 };
