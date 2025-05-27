@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import "./css_pages/loginPage.css";
+import Modal from "../components/Modal";
 
 const LoginPage = () => {
   const { login, authError } = useContext(AuthContext);
@@ -16,19 +17,35 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const role = new URLSearchParams(location.search).get("role");
   const roleLabel = role === "admin" ? "Admin" : "Student";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setIsError(false);
+    setShowMessageModal(false);
     setLoading(true);
     setError(null);
+
     try {
       const success = await login(email, password, role);
       if (success) {
-        navigate(role === "admin" ? "/admin" : "/student");
+        setShowMessageModal(true);
+        setMessage(`Welcome back! ${email}`);
+        setIsError(false);
+        setLoading(false);
+        setTimeout(() => {
+          navigate(role === "admin" ? "/admin" : "/student");
+        }, 5000);
       } else {
-        setError("Invalid email or password. Please try again.");
+        setShowMessageModal(true);
+        setMessage("Invalid email or password. Please try again.");
+        setIsError(true);
+        setLoading(false);
         setPassword("");
       }
     } catch {
@@ -81,11 +98,6 @@ const LoginPage = () => {
                     text={loading ? "Logging in..." : "Log In"}
                     disabled={loading}
                   />
-                  {(error || authError) && (
-                    <div className="login__error">
-                      {error || authError}
-                    </div>
-                  )}
                   <div className="login__links">
                     <Link to="/forgot-password">Forgot password?</Link>
                     <br />
@@ -101,6 +113,32 @@ const LoginPage = () => {
             </div>
           </div>
         </div>
+
+        {loading && (
+          <Modal>
+            <div className="modal-message-with-spinner">
+              <div className="loading-spinner" />
+              <p className="loading-text">Logging in... Please wait.</p>
+            </div>
+          </Modal>
+        )}
+
+        {showMessageModal && !loading && (
+          <Modal>
+            <div className="modal-message-with-spinner">
+              <p className="loading-text" style={{ fontWeight: "bold" }}>
+                {isError ? "Error" : "Success"}
+              </p>
+              <p>{message}</p>
+              <button
+                className="okay-button"
+                onClick={() => setShowMessageModal(false)}
+              >
+                OK
+              </button>
+            </div>
+          </Modal>
+        )}
         <Footer />
       </main>
     </>
