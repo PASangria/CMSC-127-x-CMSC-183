@@ -78,6 +78,7 @@ const SCIFHealthData = ({ data, updateData, readOnly = false, errors, setErrors 
               updateData({ ...data, height: normalizeNumber(e.target.value) })
             }
             error={errors?.["health_data.height"]}
+            required
           />
 
           <FormField
@@ -89,6 +90,7 @@ const SCIFHealthData = ({ data, updateData, readOnly = false, errors, setErrors 
               updateData({ ...data, weight: normalizeNumber(e.target.value) })
             }
             error={errors?.["health_data.weight"]}
+            required
           />
         </div>
 
@@ -109,6 +111,7 @@ const SCIFHealthData = ({ data, updateData, readOnly = false, errors, setErrors 
               { value: "Poor", label: "Poor" },
             ]}
             error={errors?.["health_data.eye_sight"]}
+            required
           />
 
           <FormField
@@ -126,6 +129,7 @@ const SCIFHealthData = ({ data, updateData, readOnly = false, errors, setErrors 
               { value: "Poor", label: "Poor" },
             ]}
             error={errors?.["health_data.hearing"]}
+            required
           />
         </div>
 
