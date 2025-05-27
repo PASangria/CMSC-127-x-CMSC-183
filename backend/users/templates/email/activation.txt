@@ -1,0 +1,4 @@
+Please use the HTML version of this email to activate your account.
+
+If you cannot see the button, copy and paste this link into your browser:
+{{ url }}

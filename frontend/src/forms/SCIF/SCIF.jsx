@@ -205,7 +205,7 @@ const SCIF = () => {
           ...validateFamilyRelationship(formData.family_relationship),
           ...validateCounselingInfo(formData.counseling_info),
         };
-        
+
         return personalDataErrors;
 
       case 7:
@@ -219,6 +219,11 @@ const SCIF = () => {
         return true;
     }
   };
+  useEffect(() => {
+    if (profileData?.is_complete !== true) {
+      navigate("/myprofile");
+    }
+  }, [profileData, navigate]);
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -457,7 +462,7 @@ const SCIF = () => {
                 }
                 readOnly={readOnly}
                 errors={errors}
-                setErrors = {setErrors}
+                setErrors={setErrors}
               />
             )}
             {step === 3 && (
@@ -659,14 +664,14 @@ const SCIF = () => {
         />
       )}
       {showPrivacyModal && (
-          <ModalMessage
-            title="Privacy Consent Required"
-            message="You must agree to the Privacy Statement before submitting the form."
-            onClose={() => setShowPrivacyModal(false)}
-            showCloseButton={true}
-            buttons={[]}
-          />
-        )}
+        <ModalMessage
+          title="Privacy Consent Required"
+          message="You must agree to the Privacy Statement before submitting the form."
+          onClose={() => setShowPrivacyModal(false)}
+          showCloseButton={true}
+          buttons={[]}
+        />
+      )}
     </>
   );
 };
