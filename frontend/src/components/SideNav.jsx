@@ -14,11 +14,14 @@ import {
   LogoutOutlined,
 } from "@mui/icons-material";
 import ModalMessage from './ModalMessage';
+import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const SideNav = ({ variant }) => {
   const { user, profileData, loading, logout } = useContext(AuthContext);
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
 
   const firstName = profileData?.first_name || user?.first_name || "First";
@@ -27,9 +30,7 @@ const SideNav = ({ variant }) => {
 
   useEffect(() => {
     if (!loading && !user) {
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 3000);
+      navigate("/");
     }
   }, [user, loading]);
 
@@ -44,8 +45,8 @@ const SideNav = ({ variant }) => {
   }
 
   const confirmLogout = () => {
-    logout();
-    setShowLogoutModal(false); // close the modal
+    logout(navigate);
+    setShowLogoutModal(false);
   };
 
   return (
