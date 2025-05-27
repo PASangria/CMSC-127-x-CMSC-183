@@ -4,27 +4,47 @@ import Navbar from '../components/NavBar';
 import Footer from '../components/Footer';
 import './css_pages/forgotpassword.css';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal';
+import '../components/css/Modal.css';
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showMessageModal, setShowMessageModal] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMessage('');
+        setIsError(false);
+        setShowMessageModal(false);
+        setIsLoading(true);
+
         try {
             await axios.post('http://localhost:8000/auth/users/reset_password/', {
                 email,
             });
             setMessage('Password reset email sent. Check your inbox.');
-            setError('');
+            setIsError(false);
+            setShowMessageModal(true);
         } catch (err) {
-            setError('Something went wrong. Please try again.');
-            setMessage('');
+            setMessage('Something went wrong. Please try again.');
+            setIsError(true);
+            setShowMessageModal(true);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const navigate = useNavigate();
+    const handleModalClose = () => {
+        setShowMessageModal(false);
+        if (!isError) {
+            navigate('/login');
+        }
+    };
 
     const handleCancel = () => {
         navigate('/login');
@@ -50,21 +70,44 @@ export const ForgotPassword = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
-                                    className={`form-input ${error ? 'error' : ''}`}
+                                    className={`form-input ${isError ? 'error' : ''}`}
                                 />
-                                {message && <p className="success-message">{message}</p>}
-                                {error && <p className="error-message">{error}</p>}
-                                <div className="button-group" style={{marginTop: "20px"}}>
-                                    <button type="submit" className="submit-button" style={{marginBottom: "0"}}>Send Reset Link</button>
-                                    <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
+                                <div className="button-group" style={{ marginTop: "20px" }}>
+                                    <button type="submit" className="submit-button" style={{ marginBottom: "0" }}>
+                                        Send Reset Link
+                                    </button>
+                                    <button type="button" className="cancel-button" onClick={handleCancel}>
+                                        Cancel
+                                    </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {isLoading && (
+                <Modal>
+                    <div className="modal-message-with-spinner">
+                        <div className="loading-spinner" />
+                        <p className="loading-text">Sending reset link... Please wait.</p>
+                    </div>
+                </Modal>
+            )}
+
+            {showMessageModal && !isLoading && (
+                <Modal>
+                    <div className="modal-message-with-spinner">
+                        <p className="loading-text" style={{ fontWeight: 'bold' }}>
+                            {isError ? 'Error' : 'Success'}
+                        </p>
+                        <p>{message}</p>
+                        <button className="okay-button" onClick={handleModalClose}>OK</button>
+                    </div>
+                </Modal>
+            )}
+
             <Footer />
         </>
-
     );
 };

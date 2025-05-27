@@ -405,7 +405,7 @@ const SCIF = () => {
       if (result.success) {
         setShowSuccessToast(true);
         setTimeout(() => {
-          navigate("/myprofile");
+          navigate("/submitted-forms/student-cumulative-information-file");
         }, 2000);
       } else {
         if (result.status === 400 && result.data.errors) {
@@ -661,7 +661,7 @@ const SCIF = () => {
         <ToastMessage
           message="Your draft has been saved successfully!"
           onClose={() => setShowDraftSuccessToast(false)}
-          duration={5000}
+          duration={2000}
         />
       )}
       {showPrivacyModal && (

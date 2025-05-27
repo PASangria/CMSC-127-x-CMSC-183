@@ -137,7 +137,7 @@ export const UserProfile = () => {
     <div>
       <div className="protected_pages">
         <DefaultLayout variant="student">
-          <div className="profile-content">
+          <div className="profile-content" style={{ padding: "30px"}}>
             <h1>My Profile</h1>
             <StudentSideInfo
               profileData={profile}
