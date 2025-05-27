@@ -33,10 +33,13 @@ export const AdminSCIFList = () => {
   // apply filters
   useEffect(() => {
     let temp = submissions.filter(({ student, submitted_on }) => {
-      const fullName =
-        `${student.first_name} ${student.last_name}`.toLowerCase();
-      if (filterText && !fullName.includes(filterText.toLowerCase()))
-        return false;
+      const fullName = `${student.first_name} ${student.last_name}`.toLowerCase();
+      const studentId = student.student_number.toLowerCase();
+      const searchText = filterText.toLowerCase();
+      if (
+        filterText &&
+        !(fullName.includes(searchText) || studentId.includes(searchText))
+      ) return false;
       if (years.length > 0 && !years.includes(student.current_year_level))
         return false;
       if (programs.length > 0 && !programs.includes(student.degree_program))
@@ -107,6 +110,10 @@ export const AdminSCIFList = () => {
           `${a.student.current_year_level}-${a.student.degree_program}`.toLowerCase();
         bVal =
           `${b.student.current_year_level}-${b.student.degree_program}`.toLowerCase();
+        break;
+      case "id":
+        aVal = a.student.student_number.toLowerCase();
+        bVal = b.student.student_number.toLowerCase();
         break;
       default:
         return 0;
@@ -187,6 +194,13 @@ export const AdminSCIFList = () => {
           <thead>
             <tr>
               <SortableTableHeader
+                label="Student ID"
+                sortKey="id"
+                currentSort={sortConfig}
+                onSort={handleSort}
+                onClearSort={handleClearSort}
+              />
+              <SortableTableHeader
                 label="Student Name"
                 sortKey="name"
                 currentSort={sortConfig}
@@ -215,6 +229,9 @@ export const AdminSCIFList = () => {
               currentItems.map(({ student, submitted_on }) => (
                 <tr key={student.student_number}>
                   <td>
+                    {student.student_number}
+                  </td>
+                  <td>
                     {student.first_name} {student.last_name}
                   </td>
                   <td>{formatDate(submitted_on)}</td>
@@ -233,7 +250,7 @@ export const AdminSCIFList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
+                <td colSpan="5" style={{ textAlign: "center" }}>
                   No submissions match your filters.
                 </td>
               </tr>

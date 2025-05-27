@@ -6,7 +6,7 @@
   left: 0;
   top: 0;
   background: #7b1113;
-  z-index: 0;
+  z-index: -1;
 }
 
 .content-wrapper {
@@ -121,10 +121,6 @@ textarea:focus {
   outline: none;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
 /* Radio Group */
 .radio-question-group {
   margin-bottom: 1.5rem;
@@ -234,8 +230,8 @@ textarea:focus {
   width: 100vw;
   height: 100vh;
   background: rgba(33, 33, 33, 0.6);
-  backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
   display: flex;
   z-index: 9999;
 }
@@ -274,7 +270,6 @@ textarea:focus {
   bottom: 10.4em;
   font-size: 3em;
   border-radius: 1em;
-  scrollbar-width: 0;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
 }

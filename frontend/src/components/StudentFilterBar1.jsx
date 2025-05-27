@@ -11,15 +11,13 @@ import {
     IconButton,
     Popover,
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import FilterListAltIcon from '@mui/icons-material/FilterListAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from './UIButton';
 
-const StudentFilterBar = ({
+const StudentFilterBar1 = ({
     filterText,
     setFilterText,
     years,
@@ -28,8 +26,6 @@ const StudentFilterBar = ({
     programs,
     setPrograms,
     programOptions,
-    selectedDate,
-    setSelectedDate,
     onReset
 }) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -129,7 +125,6 @@ const StudentFilterBar = ({
                 alignItems="center"
                 sx={{
                 p: 2,
-                minWidth: 700,
                 flexWrap: 'nowrap', // Prevent wrapping
                 }}
             >
@@ -193,34 +188,6 @@ const StudentFilterBar = ({
                 </Select>
                 </FormControl>
 
-                {/* Date Submitted */}
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                    label="Date Submitted"
-                    value={selectedDate ? new Date(selectedDate) : null}
-                    onChange={(newValue) => {
-                    if (newValue) {
-                        const formattedDate = newValue.toISOString().split('T')[0];
-                        setSelectedDate(formattedDate);
-                    } else {
-                        setSelectedDate('');
-                    }
-                    }}
-                    slotProps={{
-                    textField: {
-                        size: 'small',
-                        sx: {
-                        minWidth: 160,
-                        '& .MuiInputBase-root': { height: 40 },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderWidth: '2px',
-                        },
-                        },
-                    },
-                    }}
-                />
-                </LocalizationProvider>
-
                 {/* Reset Button */}
                 <Button
                     variant="outlined"
@@ -240,4 +207,4 @@ const StudentFilterBar = ({
     );
 };
 
-export default StudentFilterBar;
+export default StudentFilterBar1;
