@@ -56,7 +56,7 @@ The frontend will be available at: http://localhost:5173/
 
 Make sure your React app is calling the Django API (e.g., http://127.0.0.1:8000/api/...)
 
-### 🐳 Docker (Coming Soon)
+### 🐳 Docker 
 
 ### 1. Configure the .env File
 Modify the DATABASE_URL based on you environment 
