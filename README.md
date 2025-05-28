@@ -58,7 +58,52 @@ Make sure your React app is calling the Django API (e.g., http://127.0.0.1:8000/
 
 ### 🐳 Docker (Coming Soon)
 
-Docker setup is currently under development. For now, please use virtual environments for development.
+### 1. Configure the .env File
+Modify the DATABASE_URL based on you environment 
+
+```bash
+# For Docker
+DATABASE_URL=postgres://user:password@db:5432/dbname
+
+# For Local Development
+DATABASE_URL=postgres://user:password@localhost:5432/dbname
+```
+
+### 2. Add wait-for-it.sh Scripts
+
+This ensures the backend waits for the database to be ready.
+Run this from the root directory (or adjust path as needed):
+```bash
+curl -o backend/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+```
+
+### 3. Build Docker Containers
+Use the --no-cache flag for a clean build
+```bash
+docker-compose build --no-cache
+```
+
+#### 4. Run Database Migrations
+In a separate terminal, run:
+```bash
+docker exec -it cmsc-127-x-cmsc-183-backend python manage.py migrate
+```
+Then start the app:
+```bash
+docker-compose up --build
+```
+### 5. Create a superuser (optional)
+
+### Common Commandes:
+Start the application
+```bash
+docker-compose up
+```
+
+Stop all Docker containers 
+```bash
+docker-compose down
+```
 
 ### 📁 Project Structure (WIP)
 ```bash
@@ -66,14 +111,21 @@ osa/
 ├── backend/
 │   ├── OSA/          # Django project root
 │   ├── users/        # app directory for registering and logging in users
+|   |__ forms/
+|   |__ analytics/
 │   └── manage.py
 │   └── requirements.txt
+|   |__ .dockerignore
+|   |__ Dockerfile
 ├── frontend/
 │   ├── components/
 │   ├── src/
 │   └── index.html
+|   |__ .dockerignore
+|   |__ Dockerfile
 ├── README.md
 └── .gitignore
+|__ docker-compose.yml
 ```
 
 ### 🧪 Notes for Developers
