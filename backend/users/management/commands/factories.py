@@ -43,7 +43,9 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CustomUser
 
-    email = factory.LazyAttribute(lambda x: fake.email())
+    email = factory.LazyAttribute(
+        lambda x: f"{fake.user_name()}@up.edu.ph"
+    )
     password = factory.PostGenerationMethodCall('set_password', 'testpass123')
     role = Role.STUDENT
 
