@@ -3,6 +3,9 @@ import { useApiRequest } from "../context/ApiRequestContext";
 import { useAuth } from "../context/AuthContext";
 import "./css_pages/resetpassword.css";
 import FormField from "../components/FormField";
+import Modal from "../components/Modal";
+import "../components/css/Modal.css";
+import { useNavigate } from "react-router-dom";
 
 export const ChangePassword = () => {
   const { request } = useApiRequest();
@@ -12,11 +15,23 @@ export const ChangePassword = () => {
   const [reNewPassword, setReNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowModal(false);
+    setMessage("");
+    setError("");
+    setIsLoading(true);
+
     if (newPassword !== reNewPassword) {
-      setError("Passwords do not match.");
+      setMessage("Passwords do not match.");
+      setIsError(true);
+      setIsLoading(false);
+      setShowModal(true);
       return;
     }
 
@@ -40,20 +55,32 @@ export const ChangePassword = () => {
         const errData = await res.json();
         const firstError =
           Object.values(errData)[0]?.[0] || "Password change failed.";
-        setError(firstError);
-        setMessage("");
+        setMessage(firstError);
+        setIsError(true);
+        setShowModal(true);
         return;
       }
 
       setMessage("Password changed successfully.");
-      setError("");
+      setIsError(false);
+      setIsLoading(false);
+      setShowModal(true);
       setCurrentPassword("");
       setNewPassword("");
       setReNewPassword("");
 
-      logout();
     } catch (err) {
-      setError("An unexpected error occurred.");
+      setMessage("An unexpected error occurred.");
+      setIsError(true);
+      setIsLoading(false);
+      setShowModal(true);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    if (!isError) {
+      logout(navigate);
     }
   };
 
@@ -94,11 +121,32 @@ export const ChangePassword = () => {
               CONFIRM
             </button>
           </form>
-
-          {message && <p className="message success">{message}</p>}
-          {error && <p className="message error">{error}</p>}
         </div>
       </div>
+
+      {isLoading && (
+          <Modal>
+            <div className="modal-message-with-spinner">
+              <div className="loading-spinner" />
+              <p className="loading-text">Currently in progress... Please wait.</p>
+            </div>
+          </Modal>
+        )}
+
+      {/* Modal for success or error */}
+      {showModal && !isLoading && (
+        <Modal>
+          <div className="modal-message-with-spinner">
+            <p className="loading-text" style={{ fontWeight: "bold" }}>
+              {isError ? "Error" : "Success"}
+            </p>
+            <p>{message}</p>
+            <button className="okay-button" onClick={handleModalClose}>
+              OK
+            </button>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };
