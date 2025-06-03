@@ -94,7 +94,7 @@ docker-compose up --build
 ```
 ### 5. Create a superuser (optional)
 
-### Common Commandes:
+### Common Commands:
 Start the application
 ```bash
 docker-compose up
