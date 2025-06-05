@@ -16,27 +16,26 @@ from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
 
-load_dotenv()  
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+dotenv_path = BASE_DIR.parent / '.env'
+load_dotenv(dotenv_path)
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("The SECRET_KEY setting must not be empty!")
 
-DEBUG = os.getenv("DEBUG", default="True") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
-
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 if os.environ.get('DJANGO_ENV') == 'development':
@@ -218,5 +217,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-
-
