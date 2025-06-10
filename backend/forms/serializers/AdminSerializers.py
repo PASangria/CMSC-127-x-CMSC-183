@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from forms.models import Submission
-from .ProfileSetupSerializers import StudentSerializer  
+from .ProfileSetupSerializers import StudentSummarySerializer  
 
 class AdminSubmissionDetailSerializer(serializers.ModelSerializer):
-    student = StudentSerializer(read_only=True)
+    student = StudentSummarySerializer(read_only=True)
 
     class Meta:
         model = Submission

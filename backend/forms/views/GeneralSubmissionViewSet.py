@@ -252,3 +252,4 @@ class FinalizeSubmissionView(APIView):
         )
 
         return Response({'message': 'Submission finalized successfully.'}, status=status.HTTP_200_OK)
+    

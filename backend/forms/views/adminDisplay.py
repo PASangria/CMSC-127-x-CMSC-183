@@ -60,10 +60,8 @@ class AdminSCIFList(APIView):
 class AdminStudentFormsView(APIView):
     def get(self, request, student_id):
         try:
-            # Filter submissions by student_id
             submissions = Submission.objects.filter(student__student_number=student_id, status='submitted')
 
-            # Serialize the data
             serializer = AdminSubmissionDetailSerializer(submissions, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
