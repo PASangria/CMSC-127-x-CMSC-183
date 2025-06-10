@@ -19,14 +19,14 @@ const renderDetails = (details) => {
       if (changedMatch) {
         let jsonLike = changedMatch[1]
           .replace(/datetime\.date\((\d+), (\d+), (\d+)\)/g, '"$1-$2-$3"')
-          .replace(/'/g, '"'); // Python dict to JSON
+          .replace(/'/g, '"'); 
 
         changes = JSON.parse(jsonLike);
       }
     } catch (err) {
       console.warn("Failed to parse changes:", err);
     }
-    // Render base info and changes
+    
     return (
       <span>
         {baseInfo}

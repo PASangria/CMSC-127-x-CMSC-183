@@ -103,8 +103,8 @@ def update_student_profile(request):
     def get_or_create_address(address_data):
         if not address_data:
             return None
-        address_data = address_data.copy()  # To avoid modifying the original dict
-        address_data.pop('id', None)  # Remove 'id' if it exists
+        address_data = address_data.copy()
+        address_data.pop('id', None)
 
         try:
             address = Address.objects.get(

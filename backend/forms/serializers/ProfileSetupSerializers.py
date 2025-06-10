@@ -24,3 +24,7 @@ class StudentSerializer(serializers.ModelSerializer):
             'permanent_address', 'address_while_in_up', 'email', 'date_initial_entry', 'date_initial_entry_sem', 'is_complete'
         ]
     
+class StudentSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['student_number', 'first_name', 'last_name', 'current_year_level', 'degree_program']

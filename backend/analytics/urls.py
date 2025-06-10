@@ -12,5 +12,5 @@ urlpatterns = [
     path('bar-data/', bar_data_view),
     path('recent-submissions/', recent_submissions_view),
     path('recent-drafts/', recent_drafts_view),
-     path('admin-reports/', admin_reports),
+    path('admin-reports/', admin_reports),
 ]

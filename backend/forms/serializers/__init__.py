@@ -8,6 +8,7 @@ from .SerializerBIS import (
 from .ProfileSetupSerializers import (
     StudentSerializer,
     AddressSerializer,
+    StudentSummarySerializer,
 )
 
 from .SerializerGeneralForm import (
